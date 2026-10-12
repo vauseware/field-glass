@@ -80,8 +80,8 @@ export function shape(u, pose, mpd) {
   if (s === 'rout') return { nd, ranks: Math.ceil(nd / 6), F: Math.max(10, men * 0.25), rankD: 6 };
   if (s === 'skirmish') return { nd, ranks: 1, F: Math.max(10, men * 2.5), rankD: 3 };
   if (u.loose) return { nd, ranks: 1, F: Math.max(10, men * 1.5), rankD: 3 }; // open order, as backwoods riflemen fought
-  const cav = u.type === 'cavalry';
-  return { nd, ranks: 2, F: Math.max(4, (men / 2) * (cav ? 1.0 : 0.7)), rankD: cav ? 3 : 2 };
+  const cav = u.type === 'cavalry', r = u.ranks ?? 2;
+  return { nd, ranks: r, F: Math.max(4, (men / r) * (cav ? 1.0 : 0.7)), rankD: cav ? 3 : 2 };
 }
 
 // Dot positions [x0,y0,x1,y1,...] in world metres. Pose is the centre of the front rank; jitter is stable per unit.

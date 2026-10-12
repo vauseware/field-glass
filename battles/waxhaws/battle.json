@@ -1,0 +1,1719 @@
+{
+ "id": "waxhaws",
+ "name": "Battle of the Waxhaws",
+ "date": "1780-05-29",
+ "dateText": "29 May 1780",
+ "place": "Buford's Battleground, Lancaster County, South Carolina",
+ "origin": {
+  "lat": 34.742,
+  "lon": -80.6262
+ },
+ "extent": 2000,
+ "start": "14:45",
+ "end": "16:10",
+ "speed": 5,
+ "menPerDot": 2,
+ "terrainExaggeration": 3,
+ "contourInterval": 2,
+ "trees": {
+  "density": 0.0035
+ },
+ "wind": {
+  "x": 0.3,
+  "y": 0.6
+ },
+ "palette": {
+  "ground": "#9fb07a",
+  "high": "#cbd09a",
+  "tree": "rgba(50,95,45,0.5)"
+ },
+ "sides": {
+  "american": {
+   "name": "Virginians (Buford)",
+   "color": "#1f55c4",
+   "light": "#4a83e6",
+   "dark": "#122c66"
+  },
+  "british": {
+   "name": "British Legion (Tarleton)",
+   "color": "#c02a1f",
+   "light": "#e2584a",
+   "dark": "#5e1510"
+  }
+ },
+ "features": [
+  {
+   "type": "road",
+   "name": "Rocky River Road",
+   "pts": [
+    [
+     306,
+     -1387
+    ],
+    [
+     54,
+     -410
+    ],
+    [
+     40,
+     -200
+    ],
+    [
+     15,
+     -36
+    ],
+    [
+     20,
+     215
+    ],
+    [
+     25,
+     265
+    ],
+    [
+     20,
+     1000
+    ]
+   ]
+  },
+  {
+   "type": "creek",
+   "name": "drainage",
+   "pts": [
+    [
+     -159,
+     -45
+    ],
+    [
+     -192,
+     -97
+    ],
+    [
+     -260,
+     -200
+    ],
+    [
+     -350,
+     -350
+    ],
+    [
+     -450,
+     -550
+    ]
+   ]
+  },
+  {
+   "name": "Rocky River Road: the Camden to Salisbury road",
+   "at": [
+    -150,
+    -700
+   ],
+   "rot": 75
+  },
+  {
+   "name": "to Camden, 34 miles",
+   "at": [
+    330,
+    -960
+   ],
+   "rot": 75
+  },
+  {
+   "name": "to the Waxhaws and Charlotte",
+   "at": [
+    90,
+    900
+   ],
+   "rot": 88
+  },
+  {
+   "name": "mass grave and 1860 obelisk",
+   "at": [
+    -5,
+    -62
+   ]
+  },
+  {
+   "name": "Tarleton's rise",
+   "at": [
+    160,
+    -340
+   ]
+  },
+  {
+   "name": "SC 9 junction",
+   "at": [
+    90,
+    270
+   ]
+  },
+  {
+   "name": "Waxhaw meeting house, 12 miles west",
+   "at": [
+    -760,
+    60
+   ]
+  }
+ ],
+ "units": [
+  {
+   "id": "wallace",
+   "side": "american",
+   "name": "Wallace's company, 3rd Virginia Detachment",
+   "short": "Wallace",
+   "commander": "Capt. Adam Wallace (killed)",
+   "type": "infantry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 140,
+     "y": -760,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 50,
+     "y": -380
+    },
+    {
+     "t": "15:02",
+     "x": 50,
+     "y": -380,
+     "state": "line"
+    },
+    {
+     "t": "15:12",
+     "x": 30,
+     "y": -36,
+     "h": 180
+    },
+    {
+     "t": "15:31:45",
+     "x": 30,
+     "y": -36,
+     "state": "firing"
+    },
+    {
+     "t": "15:32:15",
+     "x": 30,
+     "y": -36,
+     "state": "line"
+    },
+    {
+     "t": "15:32:30",
+     "x": 30,
+     "y": -36,
+     "h": 0,
+     "state": "retreat",
+     "strength": 42
+    },
+    {
+     "t": "15:33:30",
+     "x": 30,
+     "y": 14,
+     "h": 180,
+     "state": "line",
+     "strength": 38
+    },
+    {
+     "t": "15:34:30",
+     "x": 30,
+     "y": 14,
+     "state": "rout",
+     "strength": 34
+    },
+    {
+     "t": "15:35:30",
+     "x": 30,
+     "y": 14,
+     "state": "surrender",
+     "strength": 32
+    },
+    {
+     "t": "15:38",
+     "x": 30,
+     "y": 14,
+     "strength": 28
+    },
+    {
+     "t": "15:45",
+     "x": 30,
+     "y": 14,
+     "strength": 18
+    },
+    {
+     "t": "15:50",
+     "x": 30,
+     "y": 14,
+     "strength": 15
+    },
+    {
+     "t": "16:10",
+     "x": 30,
+     "y": 14
+    }
+   ],
+   "ranks": 1
+  },
+  {
+   "id": "stokes",
+   "side": "american",
+   "name": "Stokes's company, 3rd Virginia Detachment",
+   "short": "Stokes",
+   "commander": "Capt. John Stokes (23 wounds, survived)",
+   "type": "infantry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 110,
+     "y": -640,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 38,
+     "y": -250
+    },
+    {
+     "t": "15:02",
+     "x": 38,
+     "y": -250,
+     "state": "line"
+    },
+    {
+     "t": "15:10",
+     "x": 66,
+     "y": -36,
+     "h": 180
+    },
+    {
+     "t": "15:31:45",
+     "x": 66,
+     "y": -36,
+     "state": "firing"
+    },
+    {
+     "t": "15:32:15",
+     "x": 66,
+     "y": -36,
+     "state": "line"
+    },
+    {
+     "t": "15:32:30",
+     "x": 66,
+     "y": -36,
+     "h": 0,
+     "state": "retreat",
+     "strength": 42
+    },
+    {
+     "t": "15:33:30",
+     "x": 66,
+     "y": 14,
+     "h": 180,
+     "state": "line",
+     "strength": 38
+    },
+    {
+     "t": "15:34:30",
+     "x": 66,
+     "y": 14,
+     "state": "rout",
+     "strength": 34
+    },
+    {
+     "t": "15:35:30",
+     "x": 66,
+     "y": 14,
+     "state": "surrender",
+     "strength": 32
+    },
+    {
+     "t": "15:38",
+     "x": 66,
+     "y": 14,
+     "strength": 28
+    },
+    {
+     "t": "15:45",
+     "x": 66,
+     "y": 14,
+     "strength": 18
+    },
+    {
+     "t": "15:50",
+     "x": 66,
+     "y": 14,
+     "strength": 15
+    },
+    {
+     "t": "16:10",
+     "x": 66,
+     "y": 14
+    }
+   ],
+   "ranks": 1
+  },
+  {
+   "id": "hord",
+   "side": "american",
+   "name": "Hord's company, 3rd Virginia Detachment",
+   "short": "Hord",
+   "commander": "Capt. Thomas Hord",
+   "type": "infantry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 80,
+     "y": -520,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 28,
+     "y": -160
+    },
+    {
+     "t": "15:02",
+     "x": 28,
+     "y": -160,
+     "state": "line"
+    },
+    {
+     "t": "15:09",
+     "x": 102,
+     "y": -36,
+     "h": 180
+    },
+    {
+     "t": "15:31:45",
+     "x": 102,
+     "y": -36,
+     "state": "firing"
+    },
+    {
+     "t": "15:32:15",
+     "x": 102,
+     "y": -36,
+     "state": "line"
+    },
+    {
+     "t": "15:32:30",
+     "x": 102,
+     "y": -36,
+     "h": 0,
+     "state": "retreat",
+     "strength": 42
+    },
+    {
+     "t": "15:33:30",
+     "x": 102,
+     "y": 14,
+     "h": 180,
+     "state": "line",
+     "strength": 38
+    },
+    {
+     "t": "15:34:30",
+     "x": 102,
+     "y": 14,
+     "state": "rout",
+     "strength": 34
+    },
+    {
+     "t": "15:35:30",
+     "x": 102,
+     "y": 14,
+     "state": "surrender",
+     "strength": 32
+    },
+    {
+     "t": "15:38",
+     "x": 102,
+     "y": 14,
+     "strength": 28
+    },
+    {
+     "t": "15:45",
+     "x": 102,
+     "y": 14,
+     "strength": 18
+    },
+    {
+     "t": "15:50",
+     "x": 102,
+     "y": 14,
+     "strength": 15
+    },
+    {
+     "t": "16:10",
+     "x": 102,
+     "y": 14
+    }
+   ],
+   "ranks": 1
+  },
+  {
+   "id": "marks",
+   "side": "american",
+   "name": "Marks's company, 3rd Virginia Detachment",
+   "short": "Marks",
+   "commander": "Capt. Isaiah Marks (captured)",
+   "type": "infantry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 51,
+     "y": -410,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 22,
+     "y": -120
+    },
+    {
+     "t": "15:02",
+     "x": 22,
+     "y": -120,
+     "state": "line"
+    },
+    {
+     "t": "15:08",
+     "x": 138,
+     "y": -36,
+     "h": 180
+    },
+    {
+     "t": "15:31:45",
+     "x": 138,
+     "y": -36,
+     "state": "firing"
+    },
+    {
+     "t": "15:32:15",
+     "x": 138,
+     "y": -36,
+     "state": "line"
+    },
+    {
+     "t": "15:32:30",
+     "x": 138,
+     "y": -36,
+     "h": 0,
+     "state": "retreat",
+     "strength": 42
+    },
+    {
+     "t": "15:33:30",
+     "x": 138,
+     "y": 14,
+     "h": 180,
+     "state": "line",
+     "strength": 38
+    },
+    {
+     "t": "15:34:30",
+     "x": 138,
+     "y": 14,
+     "state": "rout",
+     "strength": 34
+    },
+    {
+     "t": "15:35:30",
+     "x": 138,
+     "y": 14,
+     "state": "surrender",
+     "strength": 32
+    },
+    {
+     "t": "15:38",
+     "x": 138,
+     "y": 14,
+     "strength": 28
+    },
+    {
+     "t": "15:45",
+     "x": 138,
+     "y": 14,
+     "strength": 18
+    },
+    {
+     "t": "15:50",
+     "x": 138,
+     "y": 14,
+     "strength": 15
+    },
+    {
+     "t": "16:10",
+     "x": 138,
+     "y": 14
+    }
+   ],
+   "ranks": 1
+  },
+  {
+   "id": "lawson",
+   "side": "american",
+   "name": "Lawson's company, 3rd Virginia Detachment",
+   "short": "Lawson",
+   "commander": "Capt. Claiborne Lawson (mortally wounded)",
+   "type": "infantry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 48,
+     "y": -370,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 18,
+     "y": -80
+    },
+    {
+     "t": "15:02",
+     "x": 18,
+     "y": -80,
+     "state": "line"
+    },
+    {
+     "t": "15:07",
+     "x": 174,
+     "y": -36,
+     "h": 180
+    },
+    {
+     "t": "15:31:45",
+     "x": 174,
+     "y": -36,
+     "state": "firing"
+    },
+    {
+     "t": "15:32:15",
+     "x": 174,
+     "y": -36,
+     "state": "line"
+    },
+    {
+     "t": "15:32:30",
+     "x": 174,
+     "y": -36,
+     "h": 0,
+     "state": "rout",
+     "strength": 42
+    },
+    {
+     "t": "15:33:30",
+     "x": 164,
+     "y": 10,
+     "strength": 36
+    },
+    {
+     "t": "15:35",
+     "x": 164,
+     "y": 10,
+     "state": "surrender",
+     "strength": 32
+    },
+    {
+     "t": "15:38",
+     "x": 164,
+     "y": 10,
+     "strength": 28
+    },
+    {
+     "t": "15:45",
+     "x": 164,
+     "y": 10,
+     "strength": 18
+    },
+    {
+     "t": "15:50",
+     "x": 164,
+     "y": 10,
+     "strength": 15
+    },
+    {
+     "t": "16:10",
+     "x": 164,
+     "y": 10
+    }
+   ],
+   "ranks": 1
+  },
+  {
+   "id": "woodson",
+   "side": "american",
+   "name": "Woodson's company, 3rd Virginia Detachment",
+   "short": "Woodson",
+   "commander": "Capt. Hughes Woodson (captured)",
+   "type": "infantry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 45,
+     "y": -330,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 16,
+     "y": -40
+    },
+    {
+     "t": "15:02",
+     "x": 16,
+     "y": -40,
+     "state": "line"
+    },
+    {
+     "t": "15:06",
+     "x": 210,
+     "y": -36,
+     "h": 180
+    },
+    {
+     "t": "15:31:45",
+     "x": 210,
+     "y": -36,
+     "state": "firing"
+    },
+    {
+     "t": "15:32:15",
+     "x": 210,
+     "y": -36,
+     "state": "line"
+    },
+    {
+     "t": "15:32:30",
+     "x": 210,
+     "y": -36,
+     "h": 0,
+     "state": "rout",
+     "strength": 42
+    },
+    {
+     "t": "15:33:30",
+     "x": 200,
+     "y": 10,
+     "strength": 36
+    },
+    {
+     "t": "15:35",
+     "x": 200,
+     "y": 10,
+     "state": "surrender",
+     "strength": 32
+    },
+    {
+     "t": "15:38",
+     "x": 200,
+     "y": 10,
+     "strength": 28
+    },
+    {
+     "t": "15:45",
+     "x": 200,
+     "y": 10,
+     "strength": 18
+    },
+    {
+     "t": "15:50",
+     "x": 200,
+     "y": 10,
+     "strength": 15
+    },
+    {
+     "t": "16:10",
+     "x": 200,
+     "y": 10
+    }
+   ],
+   "ranks": 1
+  },
+  {
+   "id": "reserve",
+   "side": "american",
+   "name": "The colours and a small reserve behind the centre",
+   "short": "Colours and reserve",
+   "commander": "Col. Abraham Buford; Lt. Col. Samuel Hawes",
+   "type": "infantry",
+   "strength": 30,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 60,
+     "y": -450,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 32,
+     "y": -200
+    },
+    {
+     "t": "15:02",
+     "x": 32,
+     "y": -200,
+     "state": "line"
+    },
+    {
+     "t": "15:11",
+     "x": 120,
+     "y": 14,
+     "h": 180
+    },
+    {
+     "t": "15:33",
+     "x": 120,
+     "y": 14,
+     "state": "firing"
+    },
+    {
+     "t": "15:34",
+     "x": 120,
+     "y": 14,
+     "state": "rout",
+     "strength": 24
+    },
+    {
+     "t": "15:36",
+     "x": 120,
+     "y": 14,
+     "state": "surrender",
+     "strength": 18
+    },
+    {
+     "t": "15:45",
+     "x": 120,
+     "y": 14,
+     "strength": 12
+    },
+    {
+     "t": "15:50",
+     "x": 120,
+     "y": 14,
+     "strength": 10
+    },
+    {
+     "t": "16:10",
+     "x": 120,
+     "y": 14
+    }
+   ]
+  },
+  {
+   "id": "cav",
+   "side": "american",
+   "name": "Virginia light dragoons with remnants of Washington's 3rd Continental Light Dragoons",
+   "short": "Virginia dragoons",
+   "commander": "",
+   "type": "cavalry",
+   "strength": 40,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 170,
+     "y": -870,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 62,
+     "y": -440
+    },
+    {
+     "t": "15:03",
+     "x": 62,
+     "y": -440,
+     "state": "line"
+    },
+    {
+     "t": "15:13",
+     "x": 150,
+     "y": 30,
+     "h": 180
+    },
+    {
+     "t": "15:32:30",
+     "x": 150,
+     "y": 30,
+     "h": 0,
+     "state": "retreat",
+     "strength": 36
+    },
+    {
+     "t": "15:36",
+     "x": 25,
+     "y": 600,
+     "strength": 34
+    },
+    {
+     "t": "15:42",
+     "x": 20,
+     "y": 1000
+    },
+    {
+     "t": "15:43",
+     "x": 20,
+     "y": 1000,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "rearguard",
+   "side": "american",
+   "name": "Rear guard: a sergeant and four light dragoons",
+   "short": "Rear guard",
+   "commander": "Lt. Thomas Pearson",
+   "type": "cavalry",
+   "strength": 5,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 200,
+     "y": -980,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 90,
+     "y": -560,
+     "state": "line"
+    },
+    {
+     "t": "15:01",
+     "x": 90,
+     "y": -560,
+     "h": 0,
+     "state": "rout",
+     "strength": 2
+    },
+    {
+     "t": "15:03",
+     "x": 90,
+     "y": -560,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "guns",
+   "side": "american",
+   "name": "Two brass 6-pounders and two royals, ordered to keep marching",
+   "short": "Buford's guns",
+   "commander": "Capt. John Champe Carter",
+   "type": "artillery",
+   "strength": 30,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 40,
+     "y": -230,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 16,
+     "y": 10
+    },
+    {
+     "t": "15:30",
+     "x": 18,
+     "y": 60
+    },
+    {
+     "t": "15:35",
+     "x": 18,
+     "y": 60,
+     "state": "surrender",
+     "strength": 22
+    },
+    {
+     "t": "16:10",
+     "x": 18,
+     "y": 60
+    }
+   ],
+   "guns": 2
+  },
+  {
+   "id": "catlett",
+   "side": "american",
+   "name": "Capt-Lt Catlett's company, guarding the guns; every officer killed",
+   "short": "Catlett",
+   "commander": "Capt-Lt Thomas Catlett (killed)",
+   "type": "infantry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 42,
+     "y": -190,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 18,
+     "y": 50
+    },
+    {
+     "t": "15:30",
+     "x": 19,
+     "y": 100
+    },
+    {
+     "t": "15:33",
+     "x": 40,
+     "y": 100,
+     "h": 180,
+     "state": "firing"
+    },
+    {
+     "t": "15:34",
+     "x": 40,
+     "y": 100,
+     "state": "rout",
+     "strength": 40
+    },
+    {
+     "t": "15:36",
+     "x": 40,
+     "y": 100,
+     "state": "surrender",
+     "strength": 30
+    },
+    {
+     "t": "15:45",
+     "x": 40,
+     "y": 100,
+     "strength": 15
+    },
+    {
+     "t": "15:50",
+     "x": 40,
+     "y": 100,
+     "strength": 12
+    },
+    {
+     "t": "16:10",
+     "x": 40,
+     "y": 100
+    }
+   ]
+  },
+  {
+   "id": "train",
+   "side": "american",
+   "name": "Thirty wagons of stores, ammunition and a forge cart",
+   "short": "Wagon train",
+   "commander": "Obed Britt, wagon master",
+   "type": "infantry",
+   "strength": 60,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 44,
+     "y": -150,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 20,
+     "y": 160
+    },
+    {
+     "t": "15:30",
+     "x": 20,
+     "y": 210
+    },
+    {
+     "t": "15:38",
+     "x": 20,
+     "y": 210,
+     "state": "surrender",
+     "strength": 50
+    },
+    {
+     "t": "16:10",
+     "x": 20,
+     "y": 210
+    }
+   ]
+  },
+  {
+   "id": "bowen",
+   "side": "american",
+   "name": "Advance guard with two dozen Loyalist prisoners",
+   "short": "Advance guard",
+   "commander": "Lt. John Bowen",
+   "type": "infantry",
+   "strength": 20,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 46,
+     "y": -110,
+     "h": 350,
+     "state": "column"
+    },
+    {
+     "t": "15:00",
+     "x": 24,
+     "y": 330
+    },
+    {
+     "t": "15:30",
+     "x": 22,
+     "y": 420
+    },
+    {
+     "t": "15:33",
+     "x": 40,
+     "y": 420,
+     "h": 180,
+     "state": "line"
+    },
+    {
+     "t": "15:36",
+     "x": 40,
+     "y": 420,
+     "h": 0,
+     "state": "rout"
+    },
+    {
+     "t": "15:42",
+     "x": 25,
+     "y": 900
+    },
+    {
+     "t": "15:44",
+     "x": 25,
+     "y": 900,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "cochrane",
+   "side": "british",
+   "name": "British Legion cavalry, right wing: sixty dragoons",
+   "short": "Cochrane's dragoons",
+   "commander": "Maj. Charles Cochrane",
+   "type": "cavalry",
+   "strength": 60,
+   "keys": [
+    {
+     "t": "14:45",
+     "x": 206,
+     "y": -1000,
+     "h": 345,
+     "state": "column"
+    },
+    {
+     "t": "15:20",
+     "x": 230,
+     "y": -280,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "15:00",
+     "x": 110,
+     "y": -620,
+     "state": "charge"
+    },
+    {
+     "t": "15:02",
+     "x": 90,
+     "y": -560
+    },
+    {
+     "t": "15:04",
+     "x": 90,
+     "y": -560,
+     "state": "line"
+    },
+    {
+     "t": "15:20",
+     "x": 230,
+     "y": -280
+    },
+    {
+     "t": "15:31",
+     "x": 230,
+     "y": -280,
+     "state": "charge"
+    },
+    {
+     "t": "15:32",
+     "x": 235,
+     "y": -55,
+     "strength": 58
+    },
+    {
+     "t": "15:37",
+     "x": 200,
+     "y": -20
+    },
+    {
+     "t": "15:42",
+     "x": 150,
+     "y": 10
+    },
+    {
+     "t": "15:48",
+     "x": 240,
+     "y": 20
+    },
+    {
+     "t": "15:52",
+     "x": 200,
+     "y": -60,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "16:10",
+     "x": 200,
+     "y": -60
+    }
+   ]
+  },
+  {
+   "id": "cochraneinf",
+   "side": "british",
+   "name": "British Legion infantry, dismounted to gall the American left",
+   "short": "Legion infantry",
+   "commander": "Maj. Charles Cochrane",
+   "type": "light_infantry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "14:55",
+     "x": 206,
+     "y": -1000,
+     "h": 345,
+     "state": "column"
+    },
+    {
+     "t": "15:22",
+     "x": 265,
+     "y": -250,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "15:22",
+     "x": 265,
+     "y": -250,
+     "state": "skirmish"
+    },
+    {
+     "t": "15:31",
+     "x": 265,
+     "y": -250,
+     "state": "charge"
+    },
+    {
+     "t": "15:33",
+     "x": 255,
+     "y": -45,
+     "strength": 48
+    },
+    {
+     "t": "15:36",
+     "x": 230,
+     "y": -20
+    },
+    {
+     "t": "15:44",
+     "x": 190,
+     "y": 10
+    },
+    {
+     "t": "15:52",
+     "x": 260,
+     "y": -40,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "16:10",
+     "x": 260,
+     "y": -40
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "ld17",
+   "side": "british",
+   "name": "17th Light Dragoons detachment, the centre",
+   "short": "17th Light Dragoons",
+   "commander": "Capt. Erasmus Corbet",
+   "type": "cavalry",
+   "strength": 40,
+   "keys": [
+    {
+     "t": "14:47",
+     "x": 206,
+     "y": -1000,
+     "h": 345,
+     "state": "column"
+    },
+    {
+     "t": "15:18",
+     "x": 140,
+     "y": -300,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "15:31",
+     "x": 140,
+     "y": -300,
+     "state": "charge"
+    },
+    {
+     "t": "15:32",
+     "x": 140,
+     "y": -52,
+     "strength": 38
+    },
+    {
+     "t": "15:37",
+     "x": 120,
+     "y": 0
+    },
+    {
+     "t": "15:42",
+     "x": 80,
+     "y": 30
+    },
+    {
+     "t": "15:50",
+     "x": 140,
+     "y": -20,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "16:10",
+     "x": 140,
+     "y": -20
+    }
+   ]
+  },
+  {
+   "id": "kinlock",
+   "side": "british",
+   "name": "British Legion cavalry, the centre with the 17th",
+   "short": "Kinlock's dragoons",
+   "commander": "Capt. David Kinlock",
+   "type": "cavalry",
+   "strength": 40,
+   "keys": [
+    {
+     "t": "14:49",
+     "x": 206,
+     "y": -1000,
+     "h": 345,
+     "state": "column"
+    },
+    {
+     "t": "15:20",
+     "x": 95,
+     "y": -300,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "15:31",
+     "x": 95,
+     "y": -300,
+     "state": "charge"
+    },
+    {
+     "t": "15:32",
+     "x": 95,
+     "y": -52,
+     "strength": 39
+    },
+    {
+     "t": "15:37",
+     "x": 60,
+     "y": -10
+    },
+    {
+     "t": "15:43",
+     "x": 110,
+     "y": 30
+    },
+    {
+     "t": "15:50",
+     "x": 90,
+     "y": -40,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "16:10",
+     "x": 90,
+     "y": -40
+    }
+   ]
+  },
+  {
+   "id": "tarleton",
+   "side": "british",
+   "name": "Thirty chosen horse under Tarleton himself, the left, against the road and the wagons",
+   "short": "Tarleton",
+   "commander": "Lt. Col. Banastre Tarleton",
+   "type": "cavalry",
+   "strength": 30,
+   "keys": [
+    {
+     "t": "14:51",
+     "x": 206,
+     "y": -1000,
+     "h": 345,
+     "state": "column"
+    },
+    {
+     "t": "15:24",
+     "x": 15,
+     "y": -300,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "15:31",
+     "x": 15,
+     "y": -300,
+     "state": "charge"
+    },
+    {
+     "t": "15:32",
+     "x": 20,
+     "y": -52,
+     "strength": 29
+    },
+    {
+     "t": "15:32:10",
+     "x": 20,
+     "y": -52,
+     "state": "line"
+    },
+    {
+     "t": "15:34",
+     "x": 20,
+     "y": -52,
+     "state": "charge"
+    },
+    {
+     "t": "15:36",
+     "x": 25,
+     "y": 120
+    },
+    {
+     "t": "15:40",
+     "x": 40,
+     "y": 200
+    },
+    {
+     "t": "15:50",
+     "x": 30,
+     "y": 60,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "16:10",
+     "x": 30,
+     "y": 60
+    }
+   ]
+  },
+  {
+   "id": "leftinf",
+   "side": "british",
+   "name": "Legion infantry with the left wing",
+   "short": "Legion infantry (left)",
+   "commander": "",
+   "type": "light_infantry",
+   "strength": 20,
+   "keys": [
+    {
+     "t": "14:53",
+     "x": 206,
+     "y": -1000,
+     "h": 345,
+     "state": "column"
+    },
+    {
+     "t": "15:26",
+     "x": 0,
+     "y": -330,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "15:31",
+     "x": 0,
+     "y": -330,
+     "state": "charge"
+    },
+    {
+     "t": "15:33",
+     "x": 5,
+     "y": -60
+    },
+    {
+     "t": "15:36",
+     "x": 15,
+     "y": 40
+    },
+    {
+     "t": "15:44",
+     "x": 30,
+     "y": 110
+    },
+    {
+     "t": "15:52",
+     "x": 10,
+     "y": -10,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "16:10",
+     "x": 10,
+     "y": -10
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "gun",
+   "side": "british",
+   "name": "The 3-pounder and the stragglers, in reserve on the rise; the gun never fired",
+   "short": "3-pounder",
+   "commander": "",
+   "type": "artillery",
+   "strength": 30,
+   "keys": [
+    {
+     "t": "15:05",
+     "x": 206,
+     "y": -1000,
+     "h": 345,
+     "state": "column"
+    },
+    {
+     "t": "15:28",
+     "x": 110,
+     "y": -330,
+     "h": 0,
+     "state": "line"
+    },
+    {
+     "t": "15:40",
+     "x": 110,
+     "y": -330
+    },
+    {
+     "t": "15:46",
+     "x": 60,
+     "y": -150
+    },
+    {
+     "t": "16:10",
+     "x": 60,
+     "y": -150
+    }
+   ],
+   "guns": 1
+  },
+  {
+   "id": "flag",
+   "side": "british",
+   "name": "Capt. Kinlock with the flag of truce and Tarleton's summons",
+   "short": "Kinlock's flag",
+   "commander": "Capt. David Kinlock",
+   "type": "cavalry",
+   "strength": 2,
+   "keys": [
+    {
+     "t": "14:46",
+     "x": 120,
+     "y": -700,
+     "h": 350,
+     "state": "hidden"
+    },
+    {
+     "t": "14:47",
+     "x": 120,
+     "y": -700,
+     "state": "line"
+    },
+    {
+     "t": "14:50",
+     "x": 60,
+     "y": -440
+    },
+    {
+     "t": "14:56",
+     "x": 60,
+     "y": -440,
+     "h": 165,
+     "state": "retreat"
+    },
+    {
+     "t": "15:00",
+     "x": 130,
+     "y": -760
+    },
+    {
+     "t": "15:01",
+     "x": 130,
+     "y": -760,
+     "state": "hidden"
+    }
+   ]
+  }
+ ],
+ "events": [
+  {
+   "t": "14:45",
+   "title": "The road to Salisbury",
+   "text": "Buford's 350 Virginians, the last Continentals in South Carolina after the fall of Charleston, march north toward Salisbury with thirty wagons and two six-pounders. Tarleton has ridden 105 miles in 54 hours to catch them.",
+   "at": [
+    60,
+    -250
+   ],
+   "view": 1200
+  },
+  {
+   "t": "14:52",
+   "title": "The blood be upon your head",
+   "text": "Kinlock brings Tarleton's summons: surrender on the Charleston terms within the hour, or 'the blood be upon your head'. Buford keeps the flag waiting while his column marches on, then answers that he will defend himself to the last extremity. The hour of this exchange is not recorded.",
+   "at": [
+    50,
+    -450
+   ],
+   "view": 900
+  },
+  {
+   "t": "15:00",
+   "title": "The rear guard",
+   "text": "Tarleton's advance guard rides down Lieutenant Pearson's sergeant and four dragoons at the tail of the column. Pearson is cut across the face as he lies on his back.",
+   "at": [
+    90,
+    -560
+   ],
+   "view": 600
+  },
+  {
+   "t": "15:05",
+   "title": "Buford forms",
+   "text": "Buford halts in open wood east of the road and forms a single line, his right on the road, colours in the centre, a small reserve fifty yards behind. He orders the guns and wagons to keep marching. His men are to hold their fire until the cavalry is within ten yards.",
+   "at": [
+    120,
+    -40
+   ],
+   "view": 600
+  },
+  {
+   "t": "15:16",
+   "title": "Tarleton forms",
+   "text": "Three hundred yards south, on a low rise east of the road, Tarleton forms in full view and without a shot fired at him: Cochrane with sixty dragoons and the dismounted infantry on the right, Corbet and Kinlock with the 17th and the Legion in the centre, Tarleton himself with thirty chosen horse on the left, against the road and the wagons.",
+   "at": [
+    120,
+    -300
+   ],
+   "view": 700
+  },
+  {
+   "t": "15:31",
+   "title": "The charge",
+   "text": "All three prongs go in together. The Virginians hold their fire until the horses are ten yards away and fire one volley. Tarleton's horse goes down and pins him.",
+   "at": [
+    120,
+    -150
+   ],
+   "view": 500
+  },
+  {
+   "t": "15:33",
+   "title": "Three minutes",
+   "text": "The line is ridden through before a second round can be loaded. The left gives way first; part of the line rallies fifty yards back and is overrun. A flag is sent and cut down. Buford and the mounted men break away north.",
+   "at": [
+    120,
+    -30
+   ],
+   "view": 450
+  },
+  {
+   "t": "15:37",
+   "title": "Tarleton's quarter",
+   "text": "With Tarleton pinned and reported dead, his men go over the field with sabre and bayonet for a quarter of an hour. Captain Stokes takes twenty-three wounds and lives. Whether the killing after surrender was ordered is still argued; that it happened, the survivors' wounds prove.",
+   "at": [
+    100,
+    0
+   ],
+   "view": 450
+  },
+  {
+   "t": "15:52",
+   "title": "The field",
+   "text": "113 Virginians dead, 150 too badly hurt to move, 53 prisoners, three colours, both guns and thirty wagons taken. Tarleton loses five killed and twelve wounded. 'Tarleton's quarter' becomes a Patriot war cry, repaid at Kings Mountain and Cowpens.",
+   "at": [
+    60,
+    50
+   ],
+   "view": 800
+  },
+  {
+   "t": "16:05",
+   "title": "Afterward",
+   "text": "Neighbours bury 84 men in one pit beside the road that afternoon and 25 more the next day. The wounded go twelve miles west by wagon to the Waxhaw meeting house, where Elizabeth Jackson and her thirteen-year-old son Andrew help nurse them. The obelisk stands over the grave today.",
+   "at": [
+    -5,
+    -36
+   ],
+   "view": 1000
+  }
+ ],
+ "sources": [
+  "Banastre Tarleton, <i>A History of the Campaigns of 1780 and 1781</i> (1787), and his return from Camden of 2 June 1780: 270 men, three o'clock, the three prongs, 113 killed, 150 wounded and 53 prisoners, five British killed and twelve wounded.",
+  "Col. Abraham Buford's report to the Virginia Assembly, 2 June 1780 ('at half past three o'clock we was attacked in rear by the horse'; the rally within fifty yards).",
+  "Dr Robert Brownfield's account (c. 1821): Pearson's rear guard, Ensign Cruit's flag, fifteen minutes of bayoneting, Captain Stokes's twenty-three wounds.",
+  "SCDOT battlefield survey by Scott Butler and Brockington and Associates (2011): metal-detector evidence placing the line at the mass grave, the rally point and Tarleton's rise.",
+  "C. Leon Harris, pension-file studies of the 3rd Virginia Detachment (2016, 2024): the company commanders, and the statistical analysis of survivors' wounds.",
+  "Jim Piecuch, <i>The Blood Be Upon Your Head: Tarleton and the Myth of Buford's Massacre</i> (2010); Wayne Lynch, <i>Journal of the American Revolution</i> (2013); and the 2025 JAR reassessment: the debate over what happened after the volley.",
+  "National Register nomination, Buford's Massacre Site (1989); Lancaster County's Liberty Trail waysides; <a href='https://www.battlefields.org/learn/revolutionary-war/battles/waxhaws' target='_blank'>American Battlefield Trust</a>.",
+  "Terrain: USGS 3DEP elevation, 10 m. The obelisk, the junction and the road from the Historical Marker Database and OpenStreetMap.",
+  "What is reconstructed: the order of the six companies on the line and their equal strengths; the hour of the summons; where the rear guard was caught; the duration of the killing after surrender (Tarleton 'a few minutes', Brownfield fifteen); and every position between the recorded moments."
+ ]
+}

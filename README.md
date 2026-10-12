@@ -7,8 +7,10 @@ that would change the outcome. Built for a laptop with integrated graphics.
 ![Cowpens, the main line engaged](docs/screenshots/cowpens-main-line.png)
 ![Kings Mountain, the columns close round the ridge](docs/screenshots/kings-mountain-noose.png)
 ![Guilford Courthouse, the first line](docs/screenshots/guilford-first-line.png)
+![The Waxhaws, the charge](docs/screenshots/waxhaws-charge.png)
 
-Battles so far: Kings Mountain (7 October 1780), Cowpens (17 January 1781) and Guilford Courthouse (15 March 1781).
+Battles so far: the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781) and
+Guilford Courthouse (15 March 1781).
 
 ## Run locally
 
@@ -45,7 +47,7 @@ compass degrees. Times are the local clock, `HH:MM`.
 | `speed` | default playback multiplier |
 | `menPerDot` | men per drawn dot (5 for a small battle, 10 or 20 for a large one) |
 | `sides` | `{ id: { name, color, light, dark } }` |
-| `units[]` | `id, side, name, short?, commander, type, strength, guns?, loose?, keys[]`; `short` is the map label; `loose` keeps a unit in open order |
+| `units[]` | `id, side, name, short?, commander, type, strength, guns?, loose?, ranks?, keys[]`; `short` is the map label; `loose` keeps a unit in open order; `ranks` defaults to 2 |
 | `keys[]` | `{ t, x, y, h, state, strength }`; omitted fields carry forward from the previous key |
 | `events[]` | `{ t, title, text, at: [x, y], view }` captions; `at` and `view` (metres across) steer the auto-camera |
 | `features[]` | `{ type: road|creek|fence, name, pts }` or `{ name, at, rot }` labels |
