@@ -1,0 +1,1808 @@
+{
+ "id": "kings-mountain",
+ "name": "Battle of Kings Mountain",
+ "date": "1780-10-07",
+ "dateText": "7 October 1780",
+ "place": "Kings Mountain, South Carolina",
+ "origin": {
+  "lat": 35.1423,
+  "lon": -81.3811
+ },
+ "extent": 2000,
+ "start": "14:50",
+ "end": "16:15",
+ "speed": 10,
+ "menPerDot": 5,
+ "terrainExaggeration": 1.5,
+ "contourInterval": 3,
+ "trees": {
+  "density": 0.005,
+  "clear": [
+   [
+    [
+     -275,
+     -194
+    ],
+    [
+     -227,
+     -173
+    ],
+    [
+     -121,
+     -145
+    ],
+    [
+     -5,
+     -51
+    ],
+    [
+     82,
+     0
+    ],
+    [
+     192,
+     24
+    ],
+    [
+     236,
+     80
+    ],
+    [
+     260,
+     131
+    ],
+    [
+     241,
+     154
+    ],
+    [
+     186,
+     142
+    ],
+    [
+     122,
+     110
+    ],
+    [
+     26,
+     70
+    ],
+    [
+     -43,
+     -4
+    ],
+    [
+     -159,
+     -99
+    ],
+    [
+     -259,
+     -134
+    ],
+    [
+     -294,
+     -170
+    ]
+   ]
+  ]
+ },
+ "wind": {
+  "x": 0.6,
+  "y": -0.3
+ },
+ "palette": {
+  "ground": "#a9a67a",
+  "high": "#d3cc9f",
+  "tree": "rgba(75,70,40,0.5)"
+ },
+ "sides": {
+  "patriot": {
+   "name": "Patriots (Campbell)",
+   "color": "#1f55c4",
+   "light": "#4a83e6",
+   "dark": "#122c66"
+  },
+  "loyalist": {
+   "name": "Loyalists (Ferguson)",
+   "color": "#c02a1f",
+   "light": "#e2584a",
+   "dark": "#5e1510"
+  }
+ },
+ "features": [
+  {
+   "type": "road",
+   "name": "Colonial road",
+   "pts": [
+    [
+     -900,
+     250
+    ],
+    [
+     -650,
+     180
+    ],
+    [
+     -400,
+     260
+    ],
+    [
+     -150,
+     300
+    ],
+    [
+     100,
+     290
+    ],
+    [
+     240,
+     250
+    ],
+    [
+     400,
+     120
+    ],
+    [
+     520,
+     -80
+    ],
+    [
+     620,
+     -350
+    ],
+    [
+     760,
+     -900
+    ]
+   ]
+  },
+  {
+   "type": "creek",
+   "name": "Buck Hill Branch",
+   "pts": [
+    [
+     -189,
+     96
+    ],
+    [
+     -92,
+     136
+    ],
+    [
+     20,
+     160
+    ],
+    [
+     132,
+     176
+    ],
+    [
+     300,
+     225
+    ],
+    [
+     450,
+     375
+    ],
+    [
+     600,
+     525
+    ],
+    [
+     720,
+     720
+    ],
+    [
+     820,
+     900
+    ]
+   ]
+  },
+  {
+   "type": "creek",
+   "name": "stream on the south side",
+   "pts": [
+    [
+     90,
+     -290
+    ],
+    [
+     240,
+     -380
+    ],
+    [
+     375,
+     -450
+    ],
+    [
+     450,
+     -675
+    ],
+    [
+     525,
+     -750
+    ],
+    [
+     675,
+     -900
+    ]
+   ]
+  },
+  {
+   "name": "Colonial road to the Ridge Road",
+   "at": [
+    -760,
+    250
+   ],
+   "rot": -12
+  },
+  {
+   "name": "to Yorkville",
+   "at": [
+    720,
+    -800
+   ],
+   "rot": 75
+  },
+  {
+   "name": "Hambright's Gap",
+   "at": [
+    260,
+    300
+   ]
+  },
+  {
+   "name": "Buck Hill Branch",
+   "at": [
+    520,
+    470
+   ],
+   "rot": 45
+  },
+  {
+   "name": "Centennial Monument (1880)",
+   "at": [
+    -250,
+    -230
+   ]
+  },
+  {
+   "name": "U.S. Monument (1909)",
+   "at": [
+    44,
+    50
+   ]
+  },
+  {
+   "name": "Ferguson fell",
+   "at": [
+    200,
+    100
+   ]
+  },
+  {
+   "name": "Ferguson's grave",
+   "at": [
+    215,
+    30
+   ]
+  },
+  {
+   "name": "Chronicle fell",
+   "at": [
+    260,
+    190
+   ]
+  },
+  {
+   "name": "Hoover monument",
+   "at": [
+    -411,
+    -130
+   ]
+  },
+  {
+   "name": "Visitor Center",
+   "at": [
+    354,
+    -140
+   ]
+  },
+  {
+   "name": "horses left here",
+   "at": [
+    -650,
+    150
+   ]
+  },
+  {
+   "name": "Ferguson's camp and wagons",
+   "at": [
+    118,
+    126
+   ]
+  }
+ ],
+ "units": [
+  {
+   "id": "campbell",
+   "side": "patriot",
+   "name": "Washington County, Virginia, militia",
+   "short": "Campbell",
+   "commander": "Col. William Campbell",
+   "type": "riflemen",
+   "strength": 200,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -900,
+     "y": 230,
+     "h": 120,
+     "state": "column"
+    },
+    {
+     "t": "14:58",
+     "x": -650,
+     "y": 180
+    },
+    {
+     "t": "15:00",
+     "x": -650,
+     "y": 180,
+     "state": "column"
+    },
+    {
+     "t": "15:04",
+     "x": -330,
+     "y": -230,
+     "state": "firing"
+    },
+    {
+     "t": "15:06",
+     "x": -98,
+     "y": -206,
+     "strength": 196
+    },
+    {
+     "t": "15:08",
+     "x": -98,
+     "y": -206,
+     "h": 141,
+     "state": "retreat",
+     "strength": 192
+    },
+    {
+     "t": "15:11",
+     "x": -41,
+     "y": -276
+    },
+    {
+     "t": "15:13",
+     "x": -41,
+     "y": -276,
+     "h": 321,
+     "state": "skirmish"
+    },
+    {
+     "t": "15:17",
+     "x": -98,
+     "y": -206,
+     "state": "firing",
+     "strength": 186
+    },
+    {
+     "t": "15:30",
+     "x": -98,
+     "y": -206,
+     "h": 141,
+     "state": "rout",
+     "strength": 180
+    },
+    {
+     "t": "15:33",
+     "x": -45,
+     "y": -287,
+     "strength": 176
+    },
+    {
+     "t": "15:35",
+     "x": -45,
+     "y": -287,
+     "h": 321,
+     "state": "skirmish"
+    },
+    {
+     "t": "15:40",
+     "x": -98,
+     "y": -206,
+     "state": "firing",
+     "strength": 175
+    },
+    {
+     "t": "15:46",
+     "x": -98,
+     "y": -206,
+     "state": "charge"
+    },
+    {
+     "t": "15:50",
+     "x": -193,
+     "y": -153,
+     "state": "firing",
+     "strength": 172
+    },
+    {
+     "t": "16:05",
+     "x": -193,
+     "y": -153,
+     "strength": 170
+    },
+    {
+     "t": "16:06",
+     "x": -193,
+     "y": -153,
+     "state": "line"
+    },
+    {
+     "t": "16:15",
+     "x": -193,
+     "y": -153
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "shelby",
+   "side": "patriot",
+   "name": "Sullivan County militia",
+   "short": "Shelby",
+   "commander": "Col. Isaac Shelby",
+   "type": "riflemen",
+   "strength": 120,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -900,
+     "y": 230,
+     "h": 120,
+     "state": "column"
+    },
+    {
+     "t": "14:58",
+     "x": -650,
+     "y": 180
+    },
+    {
+     "t": "15:00",
+     "x": -650,
+     "y": 180,
+     "state": "column"
+    },
+    {
+     "t": "15:04",
+     "x": -330,
+     "y": -60,
+     "state": "firing"
+    },
+    {
+     "t": "15:06",
+     "x": -244,
+     "y": -57,
+     "strength": 118
+    },
+    {
+     "t": "15:18",
+     "x": -244,
+     "y": -57,
+     "h": 321,
+     "state": "retreat",
+     "strength": 115
+    },
+    {
+     "t": "15:21",
+     "x": -301,
+     "y": 13
+    },
+    {
+     "t": "15:23",
+     "x": -301,
+     "y": 13,
+     "h": 141,
+     "state": "skirmish"
+    },
+    {
+     "t": "15:27",
+     "x": -244,
+     "y": -57,
+     "state": "firing",
+     "strength": 112
+    },
+    {
+     "t": "15:46",
+     "x": -244,
+     "y": -57,
+     "state": "charge"
+    },
+    {
+     "t": "15:50",
+     "x": -201,
+     "y": -126,
+     "state": "firing",
+     "strength": 110
+    },
+    {
+     "t": "16:05",
+     "x": -201,
+     "y": -126,
+     "strength": 108
+    },
+    {
+     "t": "16:06",
+     "x": -201,
+     "y": -126,
+     "state": "line"
+    },
+    {
+     "t": "16:15",
+     "x": -201,
+     "y": -126
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "sevier",
+   "side": "patriot",
+   "name": "Washington County, North Carolina, militia",
+   "short": "Sevier",
+   "commander": "Lt. Col. John Sevier",
+   "type": "riflemen",
+   "strength": 120,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -900,
+     "y": 230,
+     "h": 120,
+     "state": "column"
+    },
+    {
+     "t": "14:58",
+     "x": -650,
+     "y": 180
+    },
+    {
+     "t": "15:00",
+     "x": -650,
+     "y": 180,
+     "state": "column"
+    },
+    {
+     "t": "15:05",
+     "x": -420,
+     "y": -230
+    },
+    {
+     "t": "15:09",
+     "x": -150,
+     "y": -340
+    },
+    {
+     "t": "15:14",
+     "x": 78,
+     "y": -74,
+     "h": 321,
+     "state": "firing"
+    },
+    {
+     "t": "15:46",
+     "x": 78,
+     "y": -74,
+     "state": "charge",
+     "strength": 115
+    },
+    {
+     "t": "15:52",
+     "x": -38,
+     "y": -58,
+     "state": "firing",
+     "strength": 113
+    },
+    {
+     "t": "16:05",
+     "x": -38,
+     "y": -58,
+     "strength": 112
+    },
+    {
+     "t": "16:06",
+     "x": -38,
+     "y": -58,
+     "state": "line"
+    },
+    {
+     "t": "16:15",
+     "x": -38,
+     "y": -58
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "mcdowell",
+   "side": "patriot",
+   "name": "Burke County militia",
+   "short": "McDowell",
+   "commander": "Maj. Joseph McDowell",
+   "type": "riflemen",
+   "strength": 90,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -900,
+     "y": 230,
+     "h": 120,
+     "state": "column"
+    },
+    {
+     "t": "14:58",
+     "x": -650,
+     "y": 180
+    },
+    {
+     "t": "15:00",
+     "x": -650,
+     "y": 180,
+     "state": "column"
+    },
+    {
+     "t": "15:06",
+     "x": -420,
+     "y": -250
+    },
+    {
+     "t": "15:10",
+     "x": -100,
+     "y": -390
+    },
+    {
+     "t": "15:16",
+     "x": 201,
+     "y": -19,
+     "h": 321,
+     "state": "firing"
+    },
+    {
+     "t": "15:48",
+     "x": 201,
+     "y": -19,
+     "state": "charge",
+     "strength": 87
+    },
+    {
+     "t": "15:54",
+     "x": 78,
+     "y": 22,
+     "state": "firing",
+     "strength": 86
+    },
+    {
+     "t": "16:05",
+     "x": 78,
+     "y": 22,
+     "strength": 85
+    },
+    {
+     "t": "16:06",
+     "x": 78,
+     "y": 22,
+     "state": "line"
+    },
+    {
+     "t": "16:15",
+     "x": 78,
+     "y": 22
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "winston",
+   "side": "patriot",
+   "name": "Surry County militia (part of Cleveland's regiment), sent round to the enemy's right",
+   "short": "Winston",
+   "commander": "Maj. Joseph Winston",
+   "type": "riflemen",
+   "strength": 60,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -900,
+     "y": -450,
+     "h": 100,
+     "state": "column"
+    },
+    {
+     "t": "15:05",
+     "x": -200,
+     "y": -620
+    },
+    {
+     "t": "15:14",
+     "x": 280,
+     "y": -380
+    },
+    {
+     "t": "15:22",
+     "x": 249,
+     "y": 65,
+     "h": 300,
+     "state": "firing"
+    },
+    {
+     "t": "15:50",
+     "x": 249,
+     "y": 65,
+     "state": "charge",
+     "strength": 59
+    },
+    {
+     "t": "15:56",
+     "x": 191,
+     "y": 56,
+     "state": "firing"
+    },
+    {
+     "t": "16:05",
+     "x": 191,
+     "y": 56,
+     "strength": 58
+    },
+    {
+     "t": "16:06",
+     "x": 191,
+     "y": 56,
+     "state": "line"
+    },
+    {
+     "t": "16:15",
+     "x": 191,
+     "y": 56
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "williams",
+   "side": "patriot",
+   "name": "Little River District, South Carolina, with Brandon's, Hammond's and Candler's men",
+   "short": "Williams",
+   "commander": "Col. James Williams",
+   "type": "riflemen",
+   "strength": 60,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -900,
+     "y": 230,
+     "h": 120,
+     "state": "column"
+    },
+    {
+     "t": "14:58",
+     "x": -650,
+     "y": 180
+    },
+    {
+     "t": "15:00",
+     "x": -650,
+     "y": 180,
+     "state": "column"
+    },
+    {
+     "t": "15:04",
+     "x": -330,
+     "y": 40
+    },
+    {
+     "t": "15:08",
+     "x": -133,
+     "y": 12,
+     "h": 141,
+     "state": "firing"
+    },
+    {
+     "t": "15:46",
+     "x": -133,
+     "y": 12,
+     "state": "charge",
+     "strength": 58
+    },
+    {
+     "t": "15:52",
+     "x": -111,
+     "y": -79,
+     "state": "firing",
+     "strength": 57
+    },
+    {
+     "t": "16:00",
+     "x": -111,
+     "y": -79,
+     "strength": 56
+    },
+    {
+     "t": "16:05",
+     "x": -111,
+     "y": -79,
+     "strength": 56
+    },
+    {
+     "t": "16:06",
+     "x": -111,
+     "y": -79,
+     "state": "line"
+    },
+    {
+     "t": "16:15",
+     "x": -111,
+     "y": -79
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "lacey",
+   "side": "patriot",
+   "name": "Sumter's brigade: New Acquisition and Turkey Creek regiments (Lacey, Hawthorn, Steen)",
+   "short": "Lacey",
+   "commander": "Col. Edward Lacey",
+   "type": "riflemen",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -900,
+     "y": 230,
+     "h": 120,
+     "state": "column"
+    },
+    {
+     "t": "14:58",
+     "x": -650,
+     "y": 180
+    },
+    {
+     "t": "15:00",
+     "x": -650,
+     "y": 180,
+     "state": "column"
+    },
+    {
+     "t": "15:05",
+     "x": -300,
+     "y": 100
+    },
+    {
+     "t": "15:11",
+     "x": -32,
+     "y": 94,
+     "h": 141,
+     "state": "firing"
+    },
+    {
+     "t": "15:48",
+     "x": -32,
+     "y": 94,
+     "state": "charge",
+     "strength": 97
+    },
+    {
+     "t": "15:54",
+     "x": 3,
+     "y": 19,
+     "state": "firing",
+     "strength": 96
+    },
+    {
+     "t": "16:05",
+     "x": 3,
+     "y": 19,
+     "strength": 96
+    },
+    {
+     "t": "16:06",
+     "x": 3,
+     "y": 19,
+     "state": "line"
+    },
+    {
+     "t": "16:15",
+     "x": 3,
+     "y": 19
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "cleveland",
+   "side": "patriot",
+   "name": "Wilkes County militia",
+   "short": "Cleveland",
+   "commander": "Col. Benjamin Cleveland",
+   "type": "riflemen",
+   "strength": 110,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -900,
+     "y": 230,
+     "h": 120,
+     "state": "column"
+    },
+    {
+     "t": "14:58",
+     "x": -650,
+     "y": 180
+    },
+    {
+     "t": "15:00",
+     "x": -650,
+     "y": 180,
+     "state": "column"
+    },
+    {
+     "t": "15:06",
+     "x": -250,
+     "y": 200
+    },
+    {
+     "t": "15:14",
+     "x": -100,
+     "y": 240
+    },
+    {
+     "t": "15:20",
+     "x": 102,
+     "y": 151,
+     "h": 141,
+     "state": "firing"
+    },
+    {
+     "t": "15:50",
+     "x": 102,
+     "y": 151,
+     "state": "charge",
+     "strength": 106
+    },
+    {
+     "t": "15:56",
+     "x": 128,
+     "y": 86,
+     "state": "firing",
+     "strength": 105
+    },
+    {
+     "t": "16:05",
+     "x": 128,
+     "y": 86,
+     "strength": 104
+    },
+    {
+     "t": "16:06",
+     "x": 128,
+     "y": 86,
+     "state": "line"
+    },
+    {
+     "t": "16:15",
+     "x": 128,
+     "y": 86
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "hambright",
+   "side": "patriot",
+   "name": "Lincoln County 'South Fork' men",
+   "short": "Hambright & Chronicle",
+   "commander": "Lt. Col. Frederick Hambright and Maj. William Chronicle",
+   "type": "riflemen",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -900,
+     "y": 230,
+     "h": 120,
+     "state": "column"
+    },
+    {
+     "t": "14:58",
+     "x": -650,
+     "y": 180
+    },
+    {
+     "t": "15:00",
+     "x": -650,
+     "y": 180,
+     "state": "column"
+    },
+    {
+     "t": "15:07",
+     "x": -200,
+     "y": 290
+    },
+    {
+     "t": "15:14",
+     "x": 100,
+     "y": 310
+    },
+    {
+     "t": "15:20",
+     "x": 245,
+     "y": 164,
+     "h": 231,
+     "state": "firing"
+    },
+    {
+     "t": "15:25",
+     "x": 245,
+     "y": 164,
+     "strength": 46
+    },
+    {
+     "t": "15:52",
+     "x": 245,
+     "y": 164,
+     "state": "charge"
+    },
+    {
+     "t": "15:57",
+     "x": 211,
+     "y": 111,
+     "state": "firing"
+    },
+    {
+     "t": "16:05",
+     "x": 211,
+     "y": 111,
+     "strength": 46
+    },
+    {
+     "t": "16:06",
+     "x": 211,
+     "y": 111,
+     "state": "line"
+    },
+    {
+     "t": "16:15",
+     "x": 211,
+     "y": 111
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "picket",
+   "side": "loyalist",
+   "name": "Loyalist main guard, halfway up the south-west spur",
+   "short": "Main guard",
+   "commander": "",
+   "type": "militia",
+   "strength": 20,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -276,
+     "y": -176,
+     "h": 231,
+     "state": "skirmish"
+    },
+    {
+     "t": "15:00",
+     "x": -276,
+     "y": -176,
+     "state": "firing"
+    },
+    {
+     "t": "15:03",
+     "x": -276,
+     "y": -176,
+     "h": 51,
+     "state": "retreat",
+     "strength": 14
+    },
+    {
+     "t": "15:06",
+     "x": -181,
+     "y": -135,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "volunteers",
+   "side": "loyalist",
+   "name": "American Volunteers: Provincials of the King's American Regiment, New Jersey Volunteers and others",
+   "short": "American Volunteers",
+   "commander": "Maj. Patrick Ferguson; Capt. Abraham DePeyster",
+   "type": "infantry",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -161,
+     "y": -128,
+     "h": 231,
+     "state": "line"
+    },
+    {
+     "t": "15:03",
+     "x": -161,
+     "y": -128,
+     "state": "firing"
+    },
+    {
+     "t": "15:06",
+     "x": -161,
+     "y": -128,
+     "h": 141,
+     "state": "charge"
+    },
+    {
+     "t": "15:09",
+     "x": -124,
+     "y": -190,
+     "strength": 96
+    },
+    {
+     "t": "15:10",
+     "x": -124,
+     "y": -190,
+     "h": 321,
+     "state": "retreat"
+    },
+    {
+     "t": "15:13",
+     "x": -161,
+     "y": -128,
+     "h": 231,
+     "state": "firing"
+    },
+    {
+     "t": "15:16",
+     "x": -161,
+     "y": -128,
+     "h": 321,
+     "state": "charge"
+    },
+    {
+     "t": "15:19",
+     "x": -229,
+     "y": -77,
+     "strength": 92
+    },
+    {
+     "t": "15:20",
+     "x": -229,
+     "y": -77,
+     "h": 141,
+     "state": "retreat"
+    },
+    {
+     "t": "15:23",
+     "x": -161,
+     "y": -128,
+     "h": 231,
+     "state": "firing"
+    },
+    {
+     "t": "15:28",
+     "x": -161,
+     "y": -128,
+     "h": 141,
+     "state": "charge",
+     "strength": 88
+    },
+    {
+     "t": "15:31",
+     "x": -128,
+     "y": -201,
+     "strength": 84
+    },
+    {
+     "t": "15:32",
+     "x": -128,
+     "y": -201,
+     "h": 321,
+     "state": "retreat"
+    },
+    {
+     "t": "15:36",
+     "x": -151,
+     "y": -125,
+     "h": 231,
+     "state": "firing",
+     "strength": 80
+    },
+    {
+     "t": "15:40",
+     "x": -151,
+     "y": -125,
+     "h": 51,
+     "state": "retreat",
+     "strength": 75
+    },
+    {
+     "t": "15:50",
+     "x": 87,
+     "y": 42,
+     "h": 231,
+     "state": "firing",
+     "strength": 60
+    },
+    {
+     "t": "16:00",
+     "x": 87,
+     "y": 42,
+     "state": "surrender",
+     "strength": 55
+    },
+    {
+     "t": "16:05",
+     "x": 87,
+     "y": 42,
+     "strength": 50
+    },
+    {
+     "t": "16:15",
+     "x": 87,
+     "y": 42
+    }
+   ]
+  },
+  {
+   "id": "mills",
+   "side": "loyalist",
+   "name": "Tryon County Loyalist militia, North Carolina",
+   "short": "Mills",
+   "commander": "Col. Ambrose Mills",
+   "type": "militia",
+   "strength": 250,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -78,
+     "y": -72,
+     "h": 321,
+     "state": "line"
+    },
+    {
+     "t": "15:05",
+     "x": -78,
+     "y": -72,
+     "state": "firing"
+    },
+    {
+     "t": "15:40",
+     "x": -78,
+     "y": -72,
+     "h": 51,
+     "state": "retreat",
+     "strength": 210
+    },
+    {
+     "t": "15:48",
+     "x": 115,
+     "y": 40,
+     "h": 321,
+     "state": "line"
+    },
+    {
+     "t": "16:00",
+     "x": 115,
+     "y": 40,
+     "state": "surrender",
+     "strength": 180
+    },
+    {
+     "t": "16:05",
+     "x": 115,
+     "y": 40,
+     "strength": 170
+    },
+    {
+     "t": "16:15",
+     "x": 115,
+     "y": 40
+    }
+   ]
+  },
+  {
+   "id": "husbands",
+   "side": "loyalist",
+   "name": "Burke County Loyalist militia, North Carolina",
+   "short": "Husbands",
+   "commander": "Col. Vezey Husbands",
+   "type": "militia",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": -16,
+     "y": -21,
+     "h": 141,
+     "state": "line"
+    },
+    {
+     "t": "15:08",
+     "x": -16,
+     "y": -21,
+     "state": "firing"
+    },
+    {
+     "t": "15:44",
+     "x": -16,
+     "y": -21,
+     "h": 51,
+     "state": "retreat",
+     "strength": 80
+    },
+    {
+     "t": "15:50",
+     "x": 99,
+     "y": 59,
+     "h": 141,
+     "state": "line"
+    },
+    {
+     "t": "16:00",
+     "x": 99,
+     "y": 59,
+     "state": "surrender",
+     "strength": 70
+    },
+    {
+     "t": "16:05",
+     "x": 99,
+     "y": 59,
+     "strength": 65
+    },
+    {
+     "t": "16:15",
+     "x": 99,
+     "y": 59
+    }
+   ]
+  },
+  {
+   "id": "green",
+   "side": "loyalist",
+   "name": "Rutherford County Loyalist militia, North Carolina",
+   "short": "Green",
+   "commander": "Maj. William Green",
+   "type": "militia",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": 31,
+     "y": 16,
+     "h": 321,
+     "state": "line"
+    },
+    {
+     "t": "15:16",
+     "x": 31,
+     "y": 16,
+     "state": "firing"
+    },
+    {
+     "t": "15:48",
+     "x": 31,
+     "y": 16,
+     "h": 51,
+     "state": "retreat",
+     "strength": 85
+    },
+    {
+     "t": "15:54",
+     "x": 123,
+     "y": 53,
+     "h": 321,
+     "state": "line"
+    },
+    {
+     "t": "16:00",
+     "x": 123,
+     "y": 53,
+     "state": "surrender",
+     "strength": 75
+    },
+    {
+     "t": "16:05",
+     "x": 123,
+     "y": 53,
+     "strength": 70
+    },
+    {
+     "t": "16:15",
+     "x": 123,
+     "y": 53
+    }
+   ]
+  },
+  {
+   "id": "plummer",
+   "side": "loyalist",
+   "name": "Fair Forest Loyalist militia, South Carolina",
+   "short": "Plummer",
+   "commander": "Maj. Daniel Plummer",
+   "type": "militia",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": 98,
+     "y": 45,
+     "h": 141,
+     "state": "line"
+    },
+    {
+     "t": "15:20",
+     "x": 98,
+     "y": 45,
+     "state": "firing"
+    },
+    {
+     "t": "15:52",
+     "x": 98,
+     "y": 45,
+     "h": 51,
+     "state": "retreat",
+     "strength": 125
+    },
+    {
+     "t": "15:56",
+     "x": 145,
+     "y": 50,
+     "h": 141,
+     "state": "line"
+    },
+    {
+     "t": "16:00",
+     "x": 145,
+     "y": 50,
+     "state": "surrender",
+     "strength": 110
+    },
+    {
+     "t": "16:05",
+     "x": 145,
+     "y": 50,
+     "strength": 100
+    },
+    {
+     "t": "16:15",
+     "x": 145,
+     "y": 50
+    }
+   ]
+  },
+  {
+   "id": "spartan",
+   "side": "loyalist",
+   "name": "Spartan District Loyalist militia, South Carolina",
+   "short": "Spartan Loyalists",
+   "commander": "",
+   "type": "militia",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": 147,
+     "y": 63,
+     "h": 321,
+     "state": "line"
+    },
+    {
+     "t": "15:22",
+     "x": 147,
+     "y": 63,
+     "state": "firing"
+    },
+    {
+     "t": "15:54",
+     "x": 147,
+     "y": 63,
+     "h": 51,
+     "state": "retreat",
+     "strength": 85
+    },
+    {
+     "t": "15:57",
+     "x": 130,
+     "y": 69,
+     "h": 321,
+     "state": "line"
+    },
+    {
+     "t": "16:00",
+     "x": 130,
+     "y": 69,
+     "state": "surrender",
+     "strength": 75
+    },
+    {
+     "t": "16:05",
+     "x": 130,
+     "y": 69,
+     "strength": 70
+    },
+    {
+     "t": "16:15",
+     "x": 130,
+     "y": 69
+    }
+   ]
+  },
+  {
+   "id": "ninetysix",
+   "side": "loyalist",
+   "name": "Ninety Six District Loyalist militia (Little River, Long Cane, Stevens Creek, Dutch Fork)",
+   "short": "Ninety Six Loyalists",
+   "commander": "",
+   "type": "militia",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": 180,
+     "y": 86,
+     "h": 51,
+     "state": "line"
+    },
+    {
+     "t": "15:22",
+     "x": 180,
+     "y": 86,
+     "state": "firing"
+    },
+    {
+     "t": "15:55",
+     "x": 180,
+     "y": 86,
+     "h": 51,
+     "state": "retreat",
+     "strength": 85
+    },
+    {
+     "t": "15:58",
+     "x": 152,
+     "y": 65,
+     "h": 51,
+     "state": "line"
+    },
+    {
+     "t": "16:00",
+     "x": 152,
+     "y": 65,
+     "state": "surrender",
+     "strength": 80
+    },
+    {
+     "t": "16:05",
+     "x": 152,
+     "y": 65,
+     "strength": 75
+    },
+    {
+     "t": "16:15",
+     "x": 152,
+     "y": 65
+    }
+   ]
+  },
+  {
+   "id": "wagons",
+   "side": "loyalist",
+   "name": "Seventeen baggage wagons and their drivers, drawn across the north-east end",
+   "short": "Wagons",
+   "commander": "",
+   "type": "infantry",
+   "strength": 10,
+   "keys": [
+    {
+     "t": "14:50",
+     "x": 180,
+     "y": 118,
+     "h": 51,
+     "state": "column"
+    },
+    {
+     "t": "16:00",
+     "x": 180,
+     "y": 118,
+     "state": "surrender"
+    },
+    {
+     "t": "16:15",
+     "x": 180,
+     "y": 118
+    }
+   ]
+  },
+  {
+   "id": "ferguson",
+   "side": "loyalist",
+   "name": "Ferguson with two Loyalist colonels and his mounted men, trying to cut through",
+   "short": "Ferguson",
+   "commander": "Maj. Patrick Ferguson",
+   "type": "cavalry",
+   "strength": 10,
+   "keys": [
+    {
+     "t": "15:49",
+     "x": 87,
+     "y": 42,
+     "h": 51,
+     "state": "hidden"
+    },
+    {
+     "t": "15:50",
+     "x": 87,
+     "y": 42,
+     "state": "charge"
+    },
+    {
+     "t": "15:52",
+     "x": 157,
+     "y": 84,
+     "state": "rout",
+     "strength": 3
+    },
+    {
+     "t": "15:54",
+     "x": 157,
+     "y": 84,
+     "state": "hidden"
+    }
+   ]
+  }
+ ],
+ "events": [
+  {
+   "t": "14:50",
+   "title": "The Overmountain men arrive",
+   "text": "Nine hundred picked horsemen, in the saddle since eight the night before through steady rain, halt a quarter mile from the ridge. Ferguson's camp on the summit is in full view. They tie their horses and form two lines of two columns each.",
+   "at": [
+    -450,
+    60
+   ],
+   "view": 1400
+  },
+  {
+   "t": "15:00",
+   "title": "Here they are, my brave boys",
+   "text": "Loyalist pickets fire on Shelby's column before it is in place. Campbell's Virginians and Shelby's Sullivan men open the attack on the narrow south-west end while the two wings run to circle the mountain.",
+   "at": [
+    -230,
+    -180
+   ],
+   "view": 700
+  },
+  {
+   "t": "15:06",
+   "title": "The bayonet",
+   "text": "DePeyster's Provincials charge down the south-east slope with fixed bayonets. The riflemen have none. They give way to the foot of the hill, re-form among the trees, and climb again.",
+   "at": [
+    -170,
+    -230
+   ],
+   "view": 550
+  },
+  {
+   "t": "15:16",
+   "title": "Shelby's turn",
+   "text": "A second charge comes down the north-west face at Shelby's men. They fall back and climb again as soon as the bayonets turn around.",
+   "at": [
+    -240,
+    -100
+   ],
+   "view": 550
+  },
+  {
+   "t": "15:22",
+   "title": "The noose closes",
+   "text": "Cleveland's men, delayed by a swamp, and Winston's, who lost the columns and rode hard to catch up, reach the north-east end. Chronicle falls at the head of the South Fork men. Fire is general all round the mountain.",
+   "at": [
+    80,
+    70
+   ],
+   "view": 900
+  },
+  {
+   "t": "15:28",
+   "title": "The third charge",
+   "text": "The last charge drives the Virginians down the ridge in something close to a rout. Campbell rallies them. Attacks on the north and east slopes pull the Provincials back to the crest.",
+   "at": [
+    -170,
+    -230
+   ],
+   "view": 550
+  },
+  {
+   "t": "15:40",
+   "title": "Downhill fire",
+   "text": "From the crest the Loyalists overshoot. Musket balls fly over the heads of men climbing from tree to tree, while on the bare summit the close column of Loyalists is a fair mark for rifles. Mills' North Carolinians, out of ammunition, give way first.",
+   "at": [
+    -60,
+    -70
+   ],
+   "view": 600
+  },
+  {
+   "t": "15:46",
+   "title": "The summit taken",
+   "text": "Campbell and Shelby gain the south-west summit and hold it. The right wing comes over the crest and forces the Loyalists north-east along the ridge, where Cleveland's men stop them.",
+   "at": [
+    -120,
+    -120
+   ],
+   "view": 600
+  },
+  {
+   "t": "15:51",
+   "title": "Ferguson falls",
+   "text": "Ferguson, in a checked hunting shirt on a white horse, tries to cut through with two Loyalist colonels. He is hit by six or more balls and dragged by a stirrup. He dies within minutes.",
+   "at": [
+    157,
+    84
+   ],
+   "view": 450
+  },
+  {
+   "t": "15:56",
+   "title": "Sixty yards by forty",
+   "text": "The Loyalists are crowded into a pocket on the north-east end among their wagons. Ferguson's silver whistle is silent. DePeyster raises his white handkerchief.",
+   "at": [
+    110,
+    80
+   ],
+   "view": 450
+  },
+  {
+   "t": "16:00",
+   "title": "Buford's play",
+   "text": "The firing does not stop. Some men have not seen the flag; others remember Tarleton at the Waxhaws. Williams falls mortally wounded. Campbell shouts that it is murder to kill them now. A second flag ends it.",
+   "at": [
+    110,
+    80
+   ],
+   "view": 450
+  },
+  {
+   "t": "16:08",
+   "title": "An hour and five minutes",
+   "text": "Ferguson's force is destroyed: 157 killed, 163 wounded, nearly 700 prisoners, and no one escaped. The Patriots lose 28 killed and 62 wounded. Cornwallis's march into North Carolina stops here.",
+   "at": [
+    0,
+    0
+   ],
+   "view": 1100
+  }
+ ],
+ "sources": [
+  "Lyman C. Draper, <i>King's Mountain and Its Heroes</i> (1881): column order, regimental strengths (910 men), the three bayonet charges, Ferguson's death.",
+  "Official report of Cols. Campbell, Shelby and Cleveland, October 1780: 'an hour and five minutes'; Patriot loss 28 killed and 62 wounded; Loyalist return 225 killed, 163 wounded, 716 prisoners.",
+  "Lt. Anthony Allaire's diary and letters (Loyalist adjutant): 70 Provincials and about 800 militia on the field, DePeyster's surrender.",
+  "National Park Service, Kings Mountain National Military Park: <a href='https://www.nps.gov/kimo/' target='_blank'>park pages</a>, brochure map and battlefield trail waysides; Cultural Landscape Inventory (2010) for the summit, the slopes and the final pocket.",
+  "War Department survey of the battlefield (Landers, 1925 to 1928): ridge axis N 52\u00b0 E, crest width, heights above the plateau.",
+  "<a href='https://allthingsliberty.com' target='_blank'>Journal of the American Revolution</a>: Wayne Lynch on Williams' death; Jim Piecuch (2024) on numbers engaged.",
+  "American Battlefield Trust, <a href='https://www.battlefields.org/learn/revolutionary-war/battles/kings-mountain' target='_blank'>Kings Mountain</a>: modern casualty figures (157 killed, 163 wounded, 698 captured).",
+  "Terrain: USGS 3DEP elevation, 10 m. Monument and wayside coordinates from OpenStreetMap and the Historical Marker Database; the ridge axis is measured between the Centennial Monument and the Chronicle markers.",
+  "What is reconstructed: the postings and strengths of the individual Loyalist militia regiments on the crest, how far each repulse pushed the riflemen back, and every position between the recorded moments. Clock times follow the Patriot accounts ('about three o'clock'); Loyalist accounts say two."
+ ]
+}
