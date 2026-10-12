@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Battlefield Replays</title>
+<style>
+  :root { --panel: rgba(18, 20, 26, 0.86); --ink: #ecebe4; --muted: #a9a79c; --accent: #e3c27a; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0d0f14; color: var(--ink); font: 18px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  #map { position: fixed; inset: 0; touch-action: none; cursor: grab; }
+  #map:active { cursor: grabbing; }
+  .panel { position: fixed; background: var(--panel); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; backdrop-filter: blur(6px); }
+  #top { left: 16px; top: 16px; padding: 12px 16px; max-width: min(420px, calc(100vw - 32px)); }
+  #top h1 { margin: 0; font-size: 24px; font-weight: 650; letter-spacing: 0.01em; }
+  #sub { color: var(--muted); font-size: 16px; margin-top: 2px; }
+  #hint { color: var(--muted); font-size: 14px; margin-top: 6px; }
+  #legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 16px; }
+  #legend span { display: inline-flex; align-items: center; gap: 6px; }
+  #legend i { width: 16px; height: 16px; border-radius: 2px; display: inline-block; }
+  #top .row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+  select, button { font: inherit; color: var(--ink); background: #262a33; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 8px 14px; min-height: 48px; }
+  button { cursor: pointer; }
+  button:hover, select:hover { background: #30353f; }
+  #hover { right: 16px; top: 16px; padding: 12px 16px; font-size: 17px; line-height: 1.45; max-width: 340px; pointer-events: none; }
+  #caption { left: 50%; bottom: 92px; transform: translateX(-50%) translateY(8px); width: min(900px, calc(100vw - 32px)); padding: 16px 24px; opacity: 0; transition: opacity 0.4s, transform 0.4s; text-align: center; }
+  #caption.show { opacity: 1; transform: translateX(-50%); }
+  #cap-title { font-weight: 650; font-size: 22px; color: var(--accent); }
+  #cap-text { font-size: 20px; margin-top: 6px; }
+  #bar { left: 16px; right: 16px; bottom: 16px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; }
+  #play { width: 56px; min-width: 56px; font-size: 22px; }
+  #scrub { flex: 1; min-width: 80px; accent-color: var(--accent); height: 48px; margin: 0; }
+  #clock { font-variant-numeric: tabular-nums; min-width: 92px; text-align: center; font-weight: 700; font-size: 20px; }
+  #bar label { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  #bar input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--accent); }
+  dialog { background: #1a1d24; color: var(--ink); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; max-width: min(640px, calc(100vw - 32px)); padding: 20px 24px; }
+  dialog::backdrop { background: rgba(0,0,0,0.55); }
+  dialog h2 { margin: 0 0 10px; font-size: 18px; }
+  dialog li { margin: 6px 0; }
+  @media (max-width: 640px) {
+    #top { left: 12px; right: 12px; top: 12px; max-width: none; padding: 10px 12px; }
+    #top h1 { font-size: 18px; } #sub { font-size: 14px; } #hint, #legend { display: none; }
+    #top .row select { flex: 1; min-width: 0; } select, button { min-height: 44px; padding: 6px 10px; font-size: 16px; }
+    #hover { display: none; }
+    #bar { left: 12px; right: 12px; bottom: 12px; gap: 8px; padding: 8px 10px; } #bar label span { display: none; }
+    #play { width: 48px; min-width: 48px; font-size: 20px; } #clock { min-width: 72px; font-size: 17px; }
+    #caption { bottom: 88px; padding: 10px 14px; } #cap-title { font-size: 18px; } #cap-text { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+<canvas id="map"></canvas>
+
+<section id="top" class="panel">
+  <h1 id="title">Loading…</h1>
+  <div id="sub"></div>
+  <div id="legend"></div>
+  <div id="hint">Drag to look around, scroll or pinch to zoom. Space pauses.</div>
+  <div class="row">
+    <select id="battle" aria-label="Battle"></select>
+    <button id="src-btn">Sources</button>
+  </div>
+</section>
+
+<aside id="hover" class="panel" hidden></aside>
+
+<div id="caption" class="panel">
+  <div id="cap-title"></div>
+  <div id="cap-text"></div>
+</div>
+
+<footer id="bar" class="panel">
+  <button id="play" aria-label="Play">▶</button>
+  <select id="speed" aria-label="Speed"></select>
+  <input id="scrub" type="range" step="1" aria-label="Battle time">
+  <span id="clock"></span>
+  <label><input id="follow" type="checkbox" checked> <span>Follow the action</span></label>
+</footer>
+
+<dialog id="sources">
+  <h2>Sources</h2>
+  <ol id="src-list"></ol>
+  <form method="dialog"><button>Close</button></form>
+</dialog>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
