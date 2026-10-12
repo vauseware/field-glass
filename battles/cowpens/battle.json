@@ -1,0 +1,2186 @@
+{
+ "id": "cowpens",
+ "name": "Battle of Cowpens",
+ "date": "1781-01-17",
+ "dateText": "17 January 1781",
+ "place": "Cowpens, South Carolina",
+ "origin": {
+  "lat": 35.1344,
+  "lon": -81.814
+ },
+ "extent": 2000,
+ "start": "06:40",
+ "end": "08:10",
+ "sunrise": "07:34",
+ "speed": 10,
+ "menPerDot": 5,
+ "terrainExaggeration": 3,
+ "contourInterval": 2,
+ "trees": {
+  "density": 0.003
+ },
+ "wind": {
+  "x": 0.5,
+  "y": 0.4
+ },
+ "palette": {
+  "ground": "#b7b18a",
+  "high": "#d9d2aa",
+  "tree": "rgba(70,85,45,0.45)"
+ },
+ "sides": {
+  "american": {
+   "name": "Americans (Morgan)",
+   "color": "#1f55c4",
+   "light": "#4a83e6",
+   "dark": "#122c66"
+  },
+  "british": {
+   "name": "British (Tarleton)",
+   "color": "#c02a1f",
+   "light": "#e2584a",
+   "dark": "#5e1510"
+  }
+ },
+ "features": [
+  {
+   "type": "road",
+   "name": "Green River Road",
+   "pts": [
+    [
+     -900,
+     640
+    ],
+    [
+     -480,
+     420
+    ],
+    [
+     -250,
+     280
+    ],
+    [
+     -61,
+     113
+    ],
+    [
+     24,
+     26
+    ],
+    [
+     165,
+     -82
+    ],
+    [
+     364,
+     -167
+    ],
+    [
+     600,
+     -210
+    ],
+    [
+     1000,
+     -270
+    ]
+   ]
+  },
+  {
+   "name": "Green River Road",
+   "at": [
+    -330,
+    330
+   ],
+   "rot": 32
+  },
+  {
+   "name": "to Island Ford on the Broad River",
+   "at": [
+    -700,
+    560
+   ],
+   "rot": 28
+  },
+  {
+   "name": "to Thicketty Creek and Burr's Mill",
+   "at": [
+    800,
+    -300
+   ],
+   "rot": -8
+  },
+  {
+   "name": "Visitor Center and U.S. Monument",
+   "at": [
+    -373,
+    251
+   ]
+  },
+  {
+   "name": "W.L.I. Monument (1856)",
+   "at": [
+    -40,
+    -62
+   ]
+  },
+  {
+   "name": "Hannah's Cowpens: open oak and hickory woods, no undergrowth",
+   "at": [
+    0,
+    600
+   ]
+  },
+  {
+   "name": "head of Suck Creek (boggy)",
+   "at": [
+    280,
+    470
+   ]
+  },
+  {
+   "name": "Maple Swamp",
+   "at": [
+    -470,
+    -90
+   ]
+  }
+ ],
+ "units": [
+  {
+   "id": "triplett",
+   "side": "american",
+   "name": "Virginia militia, left wing (Triplett, Tate, Gilmore)",
+   "short": "Triplett",
+   "commander": "Maj. Francis Triplett",
+   "type": "riflemen",
+   "strength": 120,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 77,
+     "y": 55,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:28",
+     "x": 77,
+     "y": 55,
+     "state": "firing"
+    },
+    {
+     "t": "07:41",
+     "x": 77,
+     "y": 55,
+     "h": 305,
+     "state": "retreat",
+     "strength": 114
+    },
+    {
+     "t": "07:45",
+     "x": 3,
+     "y": 107
+    },
+    {
+     "t": "07:46",
+     "x": 3,
+     "y": 107,
+     "h": 125,
+     "state": "firing"
+    },
+    {
+     "t": "07:48",
+     "x": 3,
+     "y": 107,
+     "state": "charge"
+    },
+    {
+     "t": "07:51",
+     "x": 122,
+     "y": 24
+    },
+    {
+     "t": "07:53",
+     "x": 122,
+     "y": 24,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 122,
+     "y": 24
+    }
+   ]
+  },
+  {
+   "id": "howard",
+   "side": "american",
+   "name": "Continental light infantry (Maryland, Delaware, Virginia companies)",
+   "short": "Howard",
+   "commander": "Lt. Col. John Eager Howard",
+   "type": "light_infantry",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 31,
+     "y": -10,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:28",
+     "x": 31,
+     "y": -10,
+     "state": "firing"
+    },
+    {
+     "t": "07:41",
+     "x": 31,
+     "y": -10,
+     "h": 305,
+     "state": "retreat",
+     "strength": 288
+    },
+    {
+     "t": "07:45",
+     "x": -43,
+     "y": 41
+    },
+    {
+     "t": "07:46",
+     "x": -43,
+     "y": 41,
+     "h": 125,
+     "state": "firing"
+    },
+    {
+     "t": "07:48",
+     "x": -43,
+     "y": 41,
+     "state": "charge"
+    },
+    {
+     "t": "07:51",
+     "x": 76,
+     "y": -42
+    },
+    {
+     "t": "07:53",
+     "x": 76,
+     "y": -42,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 76,
+     "y": -42
+    }
+   ]
+  },
+  {
+   "id": "varight",
+   "side": "american",
+   "name": "Virginia militia, right wing (Buchanan, Campbell, Lawson)",
+   "short": "Virginians",
+   "commander": "Capt. Patrick Buchanan",
+   "type": "militia",
+   "strength": 165,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": -19,
+     "y": -81,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:28",
+     "x": -19,
+     "y": -81,
+     "state": "firing"
+    },
+    {
+     "t": "07:41",
+     "x": -19,
+     "y": -81,
+     "h": 305,
+     "state": "retreat",
+     "strength": 158
+    },
+    {
+     "t": "07:45",
+     "x": -92,
+     "y": -29
+    },
+    {
+     "t": "07:46",
+     "x": -92,
+     "y": -29,
+     "h": 125,
+     "state": "firing"
+    },
+    {
+     "t": "07:48",
+     "x": -92,
+     "y": -29,
+     "state": "charge"
+    },
+    {
+     "t": "07:51",
+     "x": 26,
+     "y": -112
+    },
+    {
+     "t": "07:52",
+     "x": 26,
+     "y": -112,
+     "state": "charge"
+    },
+    {
+     "t": "07:54",
+     "x": 40,
+     "y": -120,
+     "h": 230,
+     "state": "firing"
+    },
+    {
+     "t": "07:57",
+     "x": 40,
+     "y": -120,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 40,
+     "y": -120
+    }
+   ]
+  },
+  {
+   "id": "connelly",
+   "side": "american",
+   "name": "North Carolina State Troops company",
+   "short": "Connelly",
+   "commander": "Capt. Henry Connelly",
+   "type": "infantry",
+   "strength": 20,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": -40,
+     "y": -112,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:28",
+     "x": -40,
+     "y": -112,
+     "state": "firing"
+    },
+    {
+     "t": "07:41",
+     "x": -40,
+     "y": -112,
+     "h": 305,
+     "state": "retreat",
+     "strength": 19
+    },
+    {
+     "t": "07:45",
+     "x": -114,
+     "y": -60
+    },
+    {
+     "t": "07:46",
+     "x": -114,
+     "y": -60,
+     "h": 125,
+     "state": "firing"
+    },
+    {
+     "t": "07:48",
+     "x": -114,
+     "y": -60,
+     "state": "charge"
+    },
+    {
+     "t": "07:51",
+     "x": 5,
+     "y": -144
+    },
+    {
+     "t": "07:52",
+     "x": 5,
+     "y": -144,
+     "state": "charge"
+    },
+    {
+     "t": "07:54",
+     "x": 70,
+     "y": -95,
+     "h": 230,
+     "state": "firing"
+    },
+    {
+     "t": "07:57",
+     "x": 70,
+     "y": -95,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 70,
+     "y": -95
+    }
+   ]
+  },
+  {
+   "id": "brandon",
+   "side": "american",
+   "name": "Fair Forest Regiment, 7 companies",
+   "short": "Brandon",
+   "commander": "Col. Thomas Brandon",
+   "type": "militia",
+   "strength": 250,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 209,
+     "y": 5,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:20",
+     "x": 209,
+     "y": 5,
+     "state": "firing"
+    },
+    {
+     "t": "07:23",
+     "x": 209,
+     "y": 5,
+     "state": "retreat",
+     "strength": 246
+    },
+    {
+     "t": "07:27",
+     "x": 230,
+     "y": 120
+    },
+    {
+     "t": "07:31",
+     "x": 120,
+     "y": 210
+    },
+    {
+     "t": "07:36",
+     "x": 60,
+     "y": 230,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:46",
+     "x": 60,
+     "y": 230,
+     "state": "charge"
+    },
+    {
+     "t": "07:51",
+     "x": 110,
+     "y": 160,
+     "h": 235,
+     "state": "firing"
+    },
+    {
+     "t": "07:56",
+     "x": 110,
+     "y": 160,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 110,
+     "y": 160
+    }
+   ]
+  },
+  {
+   "id": "hayes",
+   "side": "american",
+   "name": "Little River Regiment, 5 companies",
+   "short": "Hayes",
+   "commander": "Lt. Col. Joseph Hayes",
+   "type": "militia",
+   "strength": 200,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 157,
+     "y": -69,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:20",
+     "x": 157,
+     "y": -69,
+     "state": "firing"
+    },
+    {
+     "t": "07:23",
+     "x": 157,
+     "y": -69,
+     "state": "retreat",
+     "strength": 196
+    },
+    {
+     "t": "07:27",
+     "x": 200,
+     "y": 60
+    },
+    {
+     "t": "07:31",
+     "x": 130,
+     "y": 180
+    },
+    {
+     "t": "07:36",
+     "x": 20,
+     "y": 215,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:46",
+     "x": 20,
+     "y": 215,
+     "state": "charge"
+    },
+    {
+     "t": "07:51",
+     "x": 150,
+     "y": 100,
+     "h": 275,
+     "state": "firing"
+    },
+    {
+     "t": "07:56",
+     "x": 150,
+     "y": 100,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 150,
+     "y": 100
+    }
+   ]
+  },
+  {
+   "id": "roebuck",
+   "side": "american",
+   "name": "Spartan Regiment detachment, 3 companies",
+   "short": "Roebuck",
+   "commander": "Lt. Col. Benjamin Roebuck",
+   "type": "militia",
+   "strength": 120,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 123,
+     "y": -118,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:20",
+     "x": 123,
+     "y": -118,
+     "state": "firing"
+    },
+    {
+     "t": "07:23",
+     "x": 123,
+     "y": -118,
+     "state": "retreat",
+     "strength": 116
+    },
+    {
+     "t": "07:27",
+     "x": -20,
+     "y": -200
+    },
+    {
+     "t": "07:31",
+     "x": -120,
+     "y": -150
+    },
+    {
+     "t": "07:36",
+     "x": -150,
+     "y": -60,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:44",
+     "x": -150,
+     "y": -60,
+     "state": "charge"
+    },
+    {
+     "t": "07:50",
+     "x": -80,
+     "y": -230,
+     "h": 60,
+     "state": "firing"
+    },
+    {
+     "t": "07:56",
+     "x": -80,
+     "y": -230,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": -80,
+     "y": -230
+    }
+   ]
+  },
+  {
+   "id": "thomas",
+   "side": "american",
+   "name": "Spartan Regiment, 4 companies",
+   "short": "Thomas",
+   "commander": "Col. John Thomas Jr.",
+   "type": "militia",
+   "strength": 160,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 93,
+     "y": -161,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:20",
+     "x": 93,
+     "y": -161,
+     "state": "firing"
+    },
+    {
+     "t": "07:23",
+     "x": 93,
+     "y": -161,
+     "state": "retreat",
+     "strength": 156
+    },
+    {
+     "t": "07:27",
+     "x": -60,
+     "y": -240
+    },
+    {
+     "t": "07:31",
+     "x": -170,
+     "y": -190
+    },
+    {
+     "t": "07:36",
+     "x": -200,
+     "y": -100,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:44",
+     "x": -200,
+     "y": -100,
+     "state": "charge"
+    },
+    {
+     "t": "07:50",
+     "x": -20,
+     "y": -290,
+     "h": 350,
+     "state": "firing"
+    },
+    {
+     "t": "07:56",
+     "x": -20,
+     "y": -290,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": -20,
+     "y": -290
+    }
+   ]
+  },
+  {
+   "id": "ncmil",
+   "side": "american",
+   "name": "North Carolina militia battalion (Burke and Rutherford counties)",
+   "short": "NC militia",
+   "commander": "Maj. Joseph McDowell",
+   "type": "militia",
+   "strength": 130,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 62,
+     "y": -204,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:20",
+     "x": 62,
+     "y": -204,
+     "state": "firing"
+    },
+    {
+     "t": "07:23",
+     "x": 62,
+     "y": -204,
+     "state": "retreat",
+     "strength": 126
+    },
+    {
+     "t": "07:27",
+     "x": -100,
+     "y": -280
+    },
+    {
+     "t": "07:31",
+     "x": -220,
+     "y": -230
+    },
+    {
+     "t": "07:36",
+     "x": -250,
+     "y": -140,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:44",
+     "x": -250,
+     "y": -140,
+     "state": "charge"
+    },
+    {
+     "t": "07:50",
+     "x": 50,
+     "y": -275,
+     "h": 320,
+     "state": "firing"
+    },
+    {
+     "t": "07:56",
+     "x": 50,
+     "y": -275,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 50,
+     "y": -275
+    }
+   ]
+  },
+  {
+   "id": "mcdowell",
+   "side": "american",
+   "name": "North Carolina riflemen, skirmish line right",
+   "short": "McDowell",
+   "commander": "Maj. Joseph McDowell",
+   "type": "riflemen",
+   "strength": 140,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 155,
+     "y": -263,
+     "h": 125,
+     "state": "skirmish"
+    },
+    {
+     "t": "06:56",
+     "x": 155,
+     "y": -263,
+     "state": "firing"
+    },
+    {
+     "t": "07:00",
+     "x": 155,
+     "y": -263,
+     "state": "skirmish"
+    },
+    {
+     "t": "07:13",
+     "x": 155,
+     "y": -263,
+     "state": "retreat"
+    },
+    {
+     "t": "07:17",
+     "x": 37,
+     "y": -241,
+     "state": "firing"
+    },
+    {
+     "t": "07:23",
+     "x": 37,
+     "y": -241,
+     "state": "retreat",
+     "strength": 138
+    },
+    {
+     "t": "07:27",
+     "x": -140,
+     "y": -320
+    },
+    {
+     "t": "07:31",
+     "x": -260,
+     "y": -270
+    },
+    {
+     "t": "07:36",
+     "x": -290,
+     "y": -170,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:44",
+     "x": -290,
+     "y": -170,
+     "state": "charge"
+    },
+    {
+     "t": "07:50",
+     "x": -130,
+     "y": -190,
+     "h": 80,
+     "state": "firing"
+    },
+    {
+     "t": "07:56",
+     "x": -130,
+     "y": -190,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": -130,
+     "y": -190
+    }
+   ]
+  },
+  {
+   "id": "cunningham",
+   "side": "american",
+   "name": "Georgia refugee riflemen, three companies",
+   "short": "Cunningham",
+   "commander": "Maj. John Cunningham",
+   "type": "riflemen",
+   "strength": 55,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 302,
+     "y": -53,
+     "h": 125,
+     "state": "skirmish"
+    },
+    {
+     "t": "06:56",
+     "x": 302,
+     "y": -53,
+     "state": "firing"
+    },
+    {
+     "t": "07:00",
+     "x": 302,
+     "y": -53,
+     "state": "skirmish"
+    },
+    {
+     "t": "07:13",
+     "x": 302,
+     "y": -53,
+     "state": "retreat"
+    },
+    {
+     "t": "07:17",
+     "x": 243,
+     "y": 54,
+     "state": "firing"
+    },
+    {
+     "t": "07:23",
+     "x": 243,
+     "y": 54,
+     "state": "retreat",
+     "strength": 53
+    },
+    {
+     "t": "07:27",
+     "x": 260,
+     "y": 90
+    },
+    {
+     "t": "07:31",
+     "x": 170,
+     "y": 230
+    },
+    {
+     "t": "07:36",
+     "x": 100,
+     "y": 250,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:46",
+     "x": 100,
+     "y": 250,
+     "state": "charge"
+    },
+    {
+     "t": "07:51",
+     "x": 170,
+     "y": 150,
+     "h": 253,
+     "state": "firing"
+    },
+    {
+     "t": "07:56",
+     "x": 170,
+     "y": 150,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 170,
+     "y": 150
+    }
+   ]
+  },
+  {
+   "id": "hammond",
+   "side": "american",
+   "name": "South Carolina State Troops (Hammond; Capt. Joseph Pickens' company)",
+   "short": "Hammond",
+   "commander": "Maj. Samuel Hammond",
+   "type": "riflemen",
+   "strength": 60,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 247,
+     "y": -132,
+     "h": 125,
+     "state": "skirmish"
+    },
+    {
+     "t": "06:56",
+     "x": 247,
+     "y": -132,
+     "state": "firing"
+    },
+    {
+     "t": "07:00",
+     "x": 247,
+     "y": -132,
+     "state": "skirmish"
+    },
+    {
+     "t": "07:13",
+     "x": 247,
+     "y": -132,
+     "state": "retreat"
+    },
+    {
+     "t": "07:17",
+     "x": 266,
+     "y": 87,
+     "state": "firing"
+    },
+    {
+     "t": "07:23",
+     "x": 266,
+     "y": 87,
+     "state": "retreat",
+     "strength": 58
+    },
+    {
+     "t": "07:27",
+     "x": 290,
+     "y": 110
+    },
+    {
+     "t": "07:31",
+     "x": 200,
+     "y": 250
+    },
+    {
+     "t": "07:36",
+     "x": 140,
+     "y": 270,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:46",
+     "x": 140,
+     "y": 270,
+     "state": "charge"
+    },
+    {
+     "t": "07:51",
+     "x": 200,
+     "y": 120,
+     "h": 266,
+     "state": "firing"
+    },
+    {
+     "t": "07:56",
+     "x": 200,
+     "y": 120,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 200,
+     "y": 120
+    }
+   ]
+  },
+  {
+   "id": "washington",
+   "side": "american",
+   "name": "3rd Continental Light Dragoons",
+   "short": "Washington",
+   "commander": "Lt. Col. William Washington",
+   "type": "cavalry",
+   "strength": 82,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 40,
+     "y": 100,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:08",
+     "x": 40,
+     "y": 100,
+     "state": "retreat"
+    },
+    {
+     "t": "07:10",
+     "x": -10,
+     "y": 125,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:24",
+     "x": -10,
+     "y": 125,
+     "state": "charge"
+    },
+    {
+     "t": "07:28",
+     "x": 190,
+     "y": 130,
+     "strength": 80
+    },
+    {
+     "t": "07:32",
+     "x": 150,
+     "y": 110,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:47",
+     "x": 150,
+     "y": 110,
+     "h": 230,
+     "state": "charge"
+    },
+    {
+     "t": "07:50",
+     "x": 80,
+     "y": 150
+    },
+    {
+     "t": "07:53",
+     "x": 20,
+     "y": 110
+    },
+    {
+     "t": "07:56",
+     "x": -40,
+     "y": 60
+    },
+    {
+     "t": "08:00",
+     "x": 60,
+     "y": -50,
+     "h": 125
+    },
+    {
+     "t": "08:01",
+     "x": 60,
+     "y": -50,
+     "state": "charge"
+    },
+    {
+     "t": "08:05",
+     "x": 330,
+     "y": -150,
+     "strength": 79
+    },
+    {
+     "t": "08:10",
+     "x": 600,
+     "y": -215
+    }
+   ]
+  },
+  {
+   "id": "mccall",
+   "side": "american",
+   "name": "South Carolina State dragoons and mounted militia (McCall, Jolly, NC and VA state dragoons)",
+   "short": "McCall & Jolly",
+   "commander": "Maj. James McCall",
+   "type": "cavalry",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 30,
+     "y": 170,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:25",
+     "x": 30,
+     "y": 170,
+     "state": "charge"
+    },
+    {
+     "t": "07:29",
+     "x": 220,
+     "y": 170
+    },
+    {
+     "t": "07:34",
+     "x": 180,
+     "y": 150,
+     "h": 125,
+     "state": "line"
+    },
+    {
+     "t": "07:40",
+     "x": 180,
+     "y": 150,
+     "h": 250,
+     "state": "retreat"
+    },
+    {
+     "t": "07:45",
+     "x": -230,
+     "y": -110
+    },
+    {
+     "t": "07:49",
+     "x": -230,
+     "y": -110,
+     "h": 330,
+     "state": "charge"
+    },
+    {
+     "t": "07:52",
+     "x": -70,
+     "y": -260
+    },
+    {
+     "t": "07:56",
+     "x": 10,
+     "y": -240,
+     "h": 330,
+     "state": "line"
+    },
+    {
+     "t": "08:10",
+     "x": 10,
+     "y": -240
+    }
+   ]
+  },
+  {
+   "id": "lightinf",
+   "side": "british",
+   "name": "Light infantry companies (16th Foot, Prince of Wales's American Regt, and others)",
+   "short": "Light infantry",
+   "commander": "",
+   "type": "light_infantry",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 709,
+     "y": -226,
+     "h": 305,
+     "state": "column"
+    },
+    {
+     "t": "07:00",
+     "x": 462,
+     "y": -185
+    },
+    {
+     "t": "07:12",
+     "x": 532,
+     "y": -126,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:14",
+     "x": 532,
+     "y": -126
+    },
+    {
+     "t": "07:21",
+     "x": 249,
+     "y": -42,
+     "h": 305,
+     "strength": 100
+    },
+    {
+     "t": "07:24",
+     "x": 249,
+     "y": -42,
+     "strength": 90
+    },
+    {
+     "t": "07:29",
+     "x": 145,
+     "y": 31,
+     "state": "firing"
+    },
+    {
+     "t": "07:41",
+     "x": 145,
+     "y": 31,
+     "state": "charge",
+     "strength": 80
+    },
+    {
+     "t": "07:46",
+     "x": 36,
+     "y": 107,
+     "state": "rout",
+     "strength": 60
+    },
+    {
+     "t": "07:50",
+     "x": 56,
+     "y": 93,
+     "state": "surrender"
+    },
+    {
+     "t": "08:10",
+     "x": 56,
+     "y": 93
+    }
+   ]
+  },
+  {
+   "id": "legioninf",
+   "side": "british",
+   "name": "British Legion infantry",
+   "short": "Legion infantry",
+   "commander": "Lt. Col. Banastre Tarleton",
+   "type": "infantry",
+   "strength": 200,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 758,
+     "y": -234,
+     "h": 305,
+     "state": "column"
+    },
+    {
+     "t": "07:00",
+     "x": 512,
+     "y": -194
+    },
+    {
+     "t": "07:12",
+     "x": 494,
+     "y": -191,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:14",
+     "x": 494,
+     "y": -191
+    },
+    {
+     "t": "07:21",
+     "x": 206,
+     "y": -103,
+     "h": 305,
+     "strength": 200
+    },
+    {
+     "t": "07:24",
+     "x": 206,
+     "y": -103,
+     "strength": 185
+    },
+    {
+     "t": "07:29",
+     "x": 102,
+     "y": -30,
+     "state": "firing"
+    },
+    {
+     "t": "07:41",
+     "x": 102,
+     "y": -30,
+     "state": "charge",
+     "strength": 165
+    },
+    {
+     "t": "07:46",
+     "x": -7,
+     "y": 46,
+     "state": "rout",
+     "strength": 120
+    },
+    {
+     "t": "07:50",
+     "x": 13,
+     "y": 32,
+     "state": "surrender"
+    },
+    {
+     "t": "08:10",
+     "x": 13,
+     "y": 32
+    }
+   ]
+  },
+  {
+   "id": "fusiliers",
+   "side": "british",
+   "name": "7th Regiment of Foot (Royal Fusiliers), mostly recruits",
+   "short": "7th Foot",
+   "commander": "Maj. Timothy Newmarsh",
+   "type": "infantry",
+   "strength": 177,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 818,
+     "y": -243,
+     "h": 305,
+     "state": "column"
+    },
+    {
+     "t": "07:00",
+     "x": 571,
+     "y": -205
+    },
+    {
+     "t": "07:12",
+     "x": 449,
+     "y": -269,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:14",
+     "x": 449,
+     "y": -269
+    },
+    {
+     "t": "07:21",
+     "x": 154,
+     "y": -177,
+     "h": 305,
+     "strength": 177
+    },
+    {
+     "t": "07:24",
+     "x": 154,
+     "y": -177,
+     "strength": 160
+    },
+    {
+     "t": "07:29",
+     "x": 50,
+     "y": -104,
+     "state": "firing"
+    },
+    {
+     "t": "07:41",
+     "x": 50,
+     "y": -104,
+     "state": "charge",
+     "strength": 140
+    },
+    {
+     "t": "07:46",
+     "x": -59,
+     "y": -28,
+     "state": "rout",
+     "strength": 100
+    },
+    {
+     "t": "07:50",
+     "x": -38,
+     "y": -42,
+     "state": "surrender"
+    },
+    {
+     "t": "08:10",
+     "x": -38,
+     "y": -42
+    }
+   ]
+  },
+  {
+   "id": "gun1",
+   "side": "british",
+   "name": "Royal Artillery, 3-pounder 'grasshopper'",
+   "short": "3-pdr",
+   "commander": "Royal Artillery detachment",
+   "type": "artillery",
+   "strength": 12,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 862,
+     "y": -249,
+     "h": 305,
+     "state": "column"
+    },
+    {
+     "t": "07:00",
+     "x": 615,
+     "y": -212
+    },
+    {
+     "t": "07:12",
+     "x": 512,
+     "y": -159,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:05",
+     "x": 512,
+     "y": -159,
+     "state": "firing"
+    },
+    {
+     "t": "07:14",
+     "x": 512,
+     "y": -159
+    },
+    {
+     "t": "07:21",
+     "x": 227,
+     "y": -73,
+     "h": 305
+    },
+    {
+     "t": "07:29",
+     "x": 123,
+     "y": 0
+    },
+    {
+     "t": "07:41",
+     "x": 123,
+     "y": 0
+    },
+    {
+     "t": "07:46",
+     "x": 39,
+     "y": 59
+    },
+    {
+     "t": "07:47",
+     "x": 39,
+     "y": 59,
+     "state": "surrender",
+     "strength": 4
+    },
+    {
+     "t": "08:10",
+     "x": 39,
+     "y": 59
+    }
+   ],
+   "guns": 1
+  },
+  {
+   "id": "gun2",
+   "side": "british",
+   "name": "Royal Artillery, 3-pounder 'grasshopper'",
+   "short": "3-pdr",
+   "commander": "Royal Artillery detachment",
+   "type": "artillery",
+   "strength": 12,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 877,
+     "y": -252,
+     "h": 305,
+     "state": "column"
+    },
+    {
+     "t": "07:00",
+     "x": 630,
+     "y": -214
+    },
+    {
+     "t": "07:12",
+     "x": 472,
+     "y": -230,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:05",
+     "x": 472,
+     "y": -230,
+     "state": "firing"
+    },
+    {
+     "t": "07:14",
+     "x": 472,
+     "y": -230
+    },
+    {
+     "t": "07:21",
+     "x": 180,
+     "y": -140,
+     "h": 305
+    },
+    {
+     "t": "07:29",
+     "x": 76,
+     "y": -67
+    },
+    {
+     "t": "07:41",
+     "x": 76,
+     "y": -67
+    },
+    {
+     "t": "07:46",
+     "x": -8,
+     "y": -8
+    },
+    {
+     "t": "07:47",
+     "x": -8,
+     "y": -8,
+     "state": "surrender",
+     "strength": 4
+    },
+    {
+     "t": "08:10",
+     "x": -8,
+     "y": -8
+    }
+   ],
+   "guns": 1
+  },
+  {
+   "id": "ld17",
+   "side": "british",
+   "name": "17th Light Dragoons, one troop (right flank)",
+   "short": "17th Light Dragoons",
+   "commander": "",
+   "type": "cavalry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 689,
+     "y": -223,
+     "h": 305,
+     "state": "column"
+    },
+    {
+     "t": "07:00",
+     "x": 443,
+     "y": -181
+    },
+    {
+     "t": "07:12",
+     "x": 559,
+     "y": -78,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:14",
+     "x": 559,
+     "y": -78
+    },
+    {
+     "t": "07:21",
+     "x": 281,
+     "y": 3,
+     "h": 305
+    },
+    {
+     "t": "07:23",
+     "x": 281,
+     "y": 3,
+     "state": "charge"
+    },
+    {
+     "t": "07:27",
+     "x": 240,
+     "y": 120
+    },
+    {
+     "t": "07:28",
+     "x": 240,
+     "y": 120,
+     "h": 120,
+     "state": "rout",
+     "strength": 32
+    },
+    {
+     "t": "07:33",
+     "x": 420,
+     "y": 60
+    },
+    {
+     "t": "07:40",
+     "x": 520,
+     "y": -120,
+     "state": "retreat"
+    },
+    {
+     "t": "07:50",
+     "x": 520,
+     "y": -150,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:57",
+     "x": 520,
+     "y": -150,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "ogilvie",
+   "side": "british",
+   "name": "British Legion dragoons, Ogilvie's troop (left flank)",
+   "short": "Ogilvie",
+   "commander": "Capt. David Ogilvie",
+   "type": "cavalry",
+   "strength": 50,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 659,
+     "y": -219,
+     "h": 305,
+     "state": "column"
+    },
+    {
+     "t": "07:00",
+     "x": 413,
+     "y": -176
+    },
+    {
+     "t": "07:12",
+     "x": 422,
+     "y": -317,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "06:52",
+     "x": 659,
+     "y": -219,
+     "state": "charge"
+    },
+    {
+     "t": "06:57",
+     "x": 335,
+     "y": -155
+    },
+    {
+     "t": "06:59",
+     "x": 335,
+     "y": -155,
+     "h": 120,
+     "state": "retreat",
+     "strength": 42
+    },
+    {
+     "t": "07:03",
+     "x": 520,
+     "y": -230
+    },
+    {
+     "t": "07:12",
+     "x": 422,
+     "y": -317,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:14",
+     "x": 422,
+     "y": -317
+    },
+    {
+     "t": "07:21",
+     "x": 123,
+     "y": -222,
+     "h": 305
+    },
+    {
+     "t": "07:29",
+     "x": 60,
+     "y": -177
+    },
+    {
+     "t": "07:41",
+     "x": 60,
+     "y": -177
+    },
+    {
+     "t": "07:48",
+     "x": 60,
+     "y": -177,
+     "h": 120,
+     "state": "retreat"
+    },
+    {
+     "t": "07:54",
+     "x": 520,
+     "y": -330,
+     "state": "rout"
+    },
+    {
+     "t": "08:00",
+     "x": 990,
+     "y": -268
+    },
+    {
+     "t": "08:01",
+     "x": 990,
+     "y": -268,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "highlanders",
+   "side": "british",
+   "name": "1st Battalion, 71st Regiment of Foot (Fraser's Highlanders)",
+   "short": "71st Highlanders",
+   "commander": "Maj. Archibald McArthur",
+   "type": "infantry",
+   "strength": 334,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 917,
+     "y": -257,
+     "h": 305,
+     "state": "column"
+    },
+    {
+     "t": "07:00",
+     "x": 669,
+     "y": -220
+    },
+    {
+     "t": "07:12",
+     "x": 558,
+     "y": -355,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:14",
+     "x": 558,
+     "y": -355
+    },
+    {
+     "t": "07:21",
+     "x": 255,
+     "y": -272,
+     "h": 305
+    },
+    {
+     "t": "07:40",
+     "x": 255,
+     "y": -272,
+     "state": "charge"
+    },
+    {
+     "t": "07:45",
+     "x": -13,
+     "y": -194,
+     "state": "firing"
+    },
+    {
+     "t": "07:50",
+     "x": -13,
+     "y": -194,
+     "state": "rout",
+     "strength": 320
+    },
+    {
+     "t": "07:55",
+     "x": -13,
+     "y": -194,
+     "state": "surrender",
+     "strength": 290
+    },
+    {
+     "t": "08:10",
+     "x": -13,
+     "y": -194
+    }
+   ]
+  },
+  {
+   "id": "legioncav",
+   "side": "british",
+   "name": "British Legion dragoons, reserve",
+   "short": "Legion cavalry",
+   "commander": "Lt. Col. Banastre Tarleton",
+   "type": "cavalry",
+   "strength": 200,
+   "keys": [
+    {
+     "t": "06:40",
+     "x": 996,
+     "y": -269,
+     "h": 305,
+     "state": "column"
+    },
+    {
+     "t": "07:00",
+     "x": 748,
+     "y": -232
+    },
+    {
+     "t": "07:12",
+     "x": 667,
+     "y": -291,
+     "h": 300,
+     "state": "line"
+    },
+    {
+     "t": "07:14",
+     "x": 667,
+     "y": -291
+    },
+    {
+     "t": "07:21",
+     "x": 392,
+     "y": -172,
+     "h": 305
+    },
+    {
+     "t": "07:52",
+     "x": 392,
+     "y": -172,
+     "h": 120,
+     "state": "retreat"
+    },
+    {
+     "t": "07:55",
+     "x": 600,
+     "y": -210,
+     "state": "rout"
+    },
+    {
+     "t": "08:00",
+     "x": 990,
+     "y": -268
+    },
+    {
+     "t": "08:01",
+     "x": 990,
+     "y": -268,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "tarleton",
+   "side": "british",
+   "name": "Tarleton's last charge: 14 officers and about 40 dragoons, mostly 17th Light Dragoons",
+   "short": "Tarleton",
+   "commander": "Lt. Col. Banastre Tarleton",
+   "type": "cavalry",
+   "strength": 40,
+   "keys": [
+    {
+     "t": "07:57",
+     "x": 520,
+     "y": -150,
+     "h": 300,
+     "state": "hidden"
+    },
+    {
+     "t": "07:58",
+     "x": 520,
+     "y": -150,
+     "state": "charge"
+    },
+    {
+     "t": "08:01",
+     "x": 60,
+     "y": 20
+    },
+    {
+     "t": "08:03",
+     "x": 60,
+     "y": 20,
+     "h": 115,
+     "state": "retreat"
+    },
+    {
+     "t": "08:05",
+     "x": 364,
+     "y": -163
+    },
+    {
+     "t": "08:09",
+     "x": 990,
+     "y": -268
+    },
+    {
+     "t": "08:10",
+     "x": 990,
+     "y": -268,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "baggage",
+   "side": "british",
+   "name": "Baggage guard: 100 men, 35 wagons, left on the road",
+   "short": "Baggage guard",
+   "commander": "",
+   "type": "infantry",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "07:05",
+     "x": 980,
+     "y": -268,
+     "h": 305,
+     "state": "hidden"
+    },
+    {
+     "t": "07:06",
+     "x": 980,
+     "y": -268,
+     "state": "column"
+    },
+    {
+     "t": "08:10",
+     "x": 980,
+     "y": -268
+    }
+   ]
+  }
+ ],
+ "events": [
+  {
+   "t": "06:40",
+   "title": "Before dawn",
+   "text": "Morgan's three lines have stood formed since first light on the slope above the Green River Road, the Broad River six miles at their backs. Tarleton's column, on the road since three in the morning, is closing from the south-east.",
+   "at": [
+    300,
+    -150
+   ],
+   "view": 1300
+  },
+  {
+   "t": "06:52",
+   "title": "First contact",
+   "text": "Tarleton sends Ogilvie's fifty Legion dragoons up the road at the skirmishers. McDowell's and Cunningham's riflemen empty saddles and the horsemen recoil.",
+   "at": [
+    330,
+    -190
+   ],
+   "view": 650
+  },
+  {
+   "t": "07:03",
+   "title": "Tarleton deploys",
+   "text": "Light infantry on the right, Legion infantry in the centre, the 7th Foot on the left, a three-pounder in each gap and fifty dragoons on each flank. The 71st and two hundred Legion cavalry wait in reserve. The guns open fire.",
+   "at": [
+    470,
+    -230
+   ],
+   "view": 800
+  },
+  {
+   "t": "07:15",
+   "title": "The advance",
+   "text": "The British line comes up the slope at a trot. Pickens' militia have orders to fire twice at close range and then file off around the left.",
+   "at": [
+    230,
+    -120
+   ],
+   "view": 650
+  },
+  {
+   "t": "07:21",
+   "title": "Two volleys",
+   "text": "At fifty yards the militia line fires. Two-thirds of the officers in the leading companies go down. The militia withdraw as ordered, most by the left, some by the right.",
+   "at": [
+    160,
+    -70
+   ],
+   "view": 550
+  },
+  {
+   "t": "07:25",
+   "title": "Dragoons on the left",
+   "text": "The 17th Light Dragoons ride round the American left after the militia and begin cutting them down. Washington's dragoons and the sabre-armed militia horse burst out of the trees and drive them off.",
+   "at": [
+    200,
+    110
+   ],
+   "view": 600
+  },
+  {
+   "t": "07:30",
+   "title": "The main line",
+   "text": "Howard's Continentals and the Virginians meet the British line on the forward crest. Both sides stand and fire; British balls are later found thirty feet up in the trees.",
+   "at": [
+    80,
+    -20
+   ],
+   "view": 500
+  },
+  {
+   "t": "07:40",
+   "title": "The Highlanders",
+   "text": "Tarleton sends the 71st past the marsh to turn the American right. Howard orders Wallace's company to wheel back and refuse the flank. The order is taken as a retreat, and within a minute the whole line is marching to the rear.",
+   "at": [
+    -20,
+    -140
+   ],
+   "view": 600
+  },
+  {
+   "t": "07:43",
+   "title": "Retreat to Washington's horse",
+   "text": "Morgan rides up and names the new ground, a hundred yards back. The British, sure the day is won, break ranks and rush after them.",
+   "at": [
+    -20,
+    50
+   ],
+   "view": 450
+  },
+  {
+   "t": "07:46",
+   "title": "About face",
+   "text": "The Continentals halt, turn and fire at thirty yards. Howard calls for the bayonet. The guns are taken and men surrender where they stand.",
+   "at": [
+    -20,
+    50
+   ],
+   "view": 450
+  },
+  {
+   "t": "07:50",
+   "title": "Double envelopment",
+   "text": "Washington's dragoons sweep into the British right and rear. McCall's horse leads Pickens' re-formed militia onto the 71st from behind, while the Virginians go at it from the front.",
+   "at": [
+    0,
+    -60
+   ],
+   "view": 700
+  },
+  {
+   "t": "07:54",
+   "title": "Collapse",
+   "text": "The 71st, cut off on three sides, lays down its arms. The 7th is broken and loses its colours. The Royal Artillery is lost to a man. Tarleton orders his two hundred reserve dragoons to charge; they ride off instead.",
+   "at": [
+    20,
+    -100
+   ],
+   "view": 650
+  },
+  {
+   "t": "07:58",
+   "title": "Tarleton's last charge",
+   "text": "With fourteen officers and forty dragoons Tarleton rides for the guns, too late. On the road he meets Washington's troopers: Washington's sword breaks at the hilt, Tarleton's pistols wound Washington's horse, and the British ride off south-east.",
+   "at": [
+    200,
+    -80
+   ],
+   "view": 600
+  },
+  {
+   "t": "08:06",
+   "title": "After the battle",
+   "text": "In about an hour Tarleton has lost 110 killed, 229 wounded and some 600 captured, with both guns and the 7th's colours. Morgan's loss is two dozen killed and about a hundred wounded. Before noon he is marching for the Broad River fords.",
+   "at": [
+    150,
+    -80
+   ],
+   "view": 1200
+  }
+ ],
+ "sources": [
+  "Lawrence E. Babits, <i>A Devil of a Whipping: The Battle of Cowpens</i> (UNC Press, 1998). Unit strengths and casualties follow Babits.",
+  "Daniel Morgan to Nathanael Greene, 19 January 1781. <a href='https://www.battlefields.org/learn/primary-sources/obtain-compleat-victory-daniel-morgans-letter-after-battle-cowpens' target='_blank'>Transcription at the American Battlefield Trust</a>.",
+  "Banastre Tarleton, <i>A History of the Campaigns of 1780 and 1781</i> (London, 1787), ch. IV: the British deployment in Tarleton's own words.",
+  "Thomas J. Fleming, <i>Cowpens: 'Downright Fighting'</i> (NPS Handbook 135, 1988). <a href='https://www.gutenberg.org/files/62413/old/62413-h/62413-h.htm' target='_blank'>Project Gutenberg</a>.",
+  "National Park Service, Cowpens National Battlefield: <a href='https://www.nps.gov/cowp/learn/historyculture/the-battle-of-cowpens.htm' target='_blank'>The Battle of Cowpens</a>, <a href='https://www.nps.gov/places/the-cavalry-dragoons-at-cowpens.htm' target='_blank'>The Cavalry at Cowpens</a>, <a href='https://home.nps.gov/cowp/learn/historyculture/british-units-at-the-cowpens.htm' target='_blank'>British Units</a>, park brochure and ranger scripts.",
+  "American Battlefield Trust, <a href='https://www.battlefields.org/learn/maps/cowpens-january-17-1781' target='_blank'>Cowpens battle maps</a> by Steven Stanley (phases 7:00\u20137:40, 7:40\u20137:50, 7:50\u20138:10).",
+  "Wayne Lynch and Jim Piecuch, <a href='https://allthingsliberty.com/2013/07/debating-cowpens-how-could-tarleton-lose/' target='_blank'>Debating Cowpens</a>; <a href='https://allthingsliberty.com/2025/01/morgans-victory-at-the-cowpens-brilliant-tactics-or-fortunate-volley/' target='_blank'>Morgan's Victory at the Cowpens</a>, <i>Journal of the American Revolution</i>.",
+  "National Register nomination, Cowpens National Battlefield (1976): terrain, vegetation and the course of the Green River Road.",
+  "Terrain: USGS 3DEP elevation, 10 m. Lines are placed on the Washington Light Infantry monument and the NPS trail waysides; the 1856 monument stands on Howard's line.",
+  "What is reconstructed: every position between the recorded moments is interpolated, clock times are approximate (Morgan wrote only 'about sunrise'), and strengths follow Babits where older accounts differ."
+ ]
+}
