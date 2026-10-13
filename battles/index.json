@@ -34,5 +34,11 @@
   "name": "Bunker Hill, 17 Jun 1775",
   "date": "1775-06-17",
   "war": "American Revolutionary War"
+ },
+ {
+  "id": "trenton-princeton",
+  "name": "Trenton and Princeton, 25 Dec 1776 \u2013 3 Jan 1777",
+  "date": "1776-12-25",
+  "war": "American Revolutionary War"
  }
 ]
