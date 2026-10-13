@@ -1,14 +1,14 @@
-import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, fmtTime, parseTime, hash, mulberry32 } from './sim.js';
+import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, activity, fmtTime, parseTime, hash, mulberry32, mod } from './sim.js';
 
 const $ = s => document.querySelector(s);
 const canvas = $('#map'), ctx = canvas.getContext('2d');
 const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $('#clock'), follow: $('#follow'), battle: $('#battle'),
   title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'),
-  hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list') };
+  hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse') };
 
 let B = null, T = null, layer = null;
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
-let cam = { x: 0, y: 0, zoom: 0.5 }, follow = true;
+let cam = { x: 0, y: 0, zoom: 0.5 }, follow = true, lapse = true, lapsing = false;
 let W = 0, H = 0, DPR = 1, last = performance.now();
 const smoke = [], flashes = [], placed = []; // placed: label boxes drawn this frame, so labels avoid each other
 let mouse = null;
@@ -26,6 +26,9 @@ async function loadBattle(id) {
   smoke.length = 0; curEvent = shownEvent = null;
   setPlaying(false);
   speed = SPEEDS.includes(b.speed) ? b.speed : 10;
+  const dur = b.endT - b.startT;
+  ui.speed.innerHTML = '';
+  for (const s of SPEEDS) if (s <= 120 || dur / s >= 120) ui.speed.add(new Option(`${s}×`, s)); // the big speeds only when the battle lasts
   ui.speed.value = speed;
   ui.scrub.min = b.startT; ui.scrub.max = b.endT;
   ui.title.textContent = b.name;
@@ -34,7 +37,7 @@ async function loadBattle(id) {
   ui.srcList.innerHTML = (b.sources ?? []).map(s => `<li>${s}</li>`).join('');
   const v = b.view ?? { x: 0, y: 0, width: b.extent };
   cam = { x: v.x, y: v.y, zoom: Math.min(W, H) / v.width };
-  follow = true; ui.follow.checked = true;
+  follow = true; ui.follow.checked = true; lapse = true; ui.lapse.checked = true;
   clampCam();
   const [, , at, play, warp] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(,warp)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
@@ -55,12 +58,13 @@ function buildLayer(b, T) {
   const at = (r, c) => Z[Math.min(rows - 1, Math.max(0, r)) * cols + Math.min(cols - 1, Math.max(0, c))];
   const small = document.createElement('canvas'); small.width = cols; small.height = rows;
   const sg = small.getContext('2d'), img = sg.createImageData(cols, rows);
-  const lo = rgb(b.palette?.ground ?? '#a8ad7a'), hi = rgb(b.palette?.high ?? '#d2cb9e');
+  const lo = rgb(b.palette?.ground ?? '#a8ad7a'), hi = rgb(b.palette?.high ?? '#d2cb9e'), water = rgb(b.palette?.water ?? '#7f9fc0');
   for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
     const gx = ((at(r, c + 1) - at(r, c - 1)) / (2 * spacing)) * ex, gy = ((at(r - 1, c) - at(r + 1, c)) / (2 * spacing)) * ex;
     const shade = Math.max(0, (0.5 * gx - 0.5 * gy + 0.707) / Math.hypot(gx, gy, 1)); // light from the north-west
     const f = (Z[r * cols + c] - zmin) / (zmax - zmin || 1), k = 0.55 + 0.6 * shade, i = (r * cols + c) * 4;
-    for (let ch = 0; ch < 3; ch++) img.data[i + ch] = (lo[ch] + (hi[ch] - lo[ch]) * f) * k;
+    const wet = b.water != null && Z[r * cols + c] <= b.water; // river or sea: the DEM flattens it to one level
+    for (let ch = 0; ch < 3; ch++) img.data[i + ch] = wet ? water[ch] : (lo[ch] + (hi[ch] - lo[ch]) * f) * k;
     img.data[i + 3] = 255;
   }
   sg.putImageData(img, 0, 0);
@@ -84,6 +88,7 @@ function buildLayer(b, T) {
   for (let i = 0; i < n; i++) {
     const x = rnd() * size, y = rnd() * size, r = (1.5 + rnd() * 1.5) * pxm;
     if (clear.some(poly => inPoly(x / pxm - b.extent / 2, b.extent / 2 - y / pxm, poly))) continue;
+    if (b.water != null && Z[Math.floor(y / sc) * cols + Math.floor(x / sc)] <= b.water) continue;
     g.beginPath(); g.arc(x, y, r, 0, 6.2832); g.fill();
   }
   return cv;
@@ -187,7 +192,13 @@ function label(text, x, y, rot, color, size, italic, bold) {
 
 // Advance the clock, camera, unit poses and smoke by dt real seconds. Drawing reads the results.
 function step(dt) {
-  if (playing) { t += dt * speed; if (t >= B.endT) { t = B.endT; setPlaying(false); } }
+  if (playing) {
+    const [busy, until] = activity(B, t);
+    lapsing = lapse && !busy && B.lapse > speed;
+    t += dt * (lapsing ? B.lapse : speed);
+    if (lapsing && t > until) t = until; // never skip past the start of the next action
+    if (t >= B.endT) { t = B.endT; setPlaying(false); }
+  }
   curEvent = eventAt(B, t);
   updateCamera(dt);
   flashes.length = 0;
@@ -212,15 +223,25 @@ function draw() {
   const half = B.extent / 2;
   ctx.imageSmoothingEnabled = true;
   ctx.drawImage(layer, w2sx(-half), w2sy(half), B.extent * cam.zoom, B.extent * cam.zoom);
-  drawFeatures(); drawFallen(); drawUnits(); drawFlashes(); drawSmoke(); drawDawn();
+  drawFeatures(); drawFallen(); drawUnits(); drawFlashes(); drawSmoke(); drawNight();
 }
 
-const FEATURE_STYLE = { road: ['rgba(90,70,40,0.6)', 6, '#dccb9f', 4], creek: ['rgba(40,70,120,0.5)', 4, '#7aa8dc', 2.2], fence: ['rgba(70,50,30,0.6)', 2] };
+const FEATURE_STYLE = { road: ['rgba(90,70,40,0.6)', 6, '#dccb9f', 4], creek: ['rgba(40,70,120,0.5)', 4, '#7aa8dc', 2.2], fence: ['rgba(70,50,30,0.6)', 2],
+  works: ['rgba(50,35,15,0.9)', 7, 'rgba(210,180,120,0.95)', 3.5], trench: ['rgba(50,35,15,0.85)', 5, 'rgba(175,145,95,0.9)', 2.2] };
+const POLY_FILL = { redoubt: 'rgba(210,180,120,0.85)', battery: 'rgba(210,180,120,0.85)', ship: 'rgba(70,50,35,0.95)', camp: 'rgba(255,255,255,0.25)' };
 function drawFeatures() {
   const z = cam.zoom;
   placed.length = 0;
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   for (const f of B.features ?? []) {
+    if ((f.from != null && t < f.from) || (f.until != null && t >= f.until)) continue; // siegeworks dug, ships burnt
+    if (f.poly) {
+      ctx.beginPath();
+      f.poly.forEach(([x, y], i) => (i ? ctx.lineTo(w2sx(x), w2sy(y)) : ctx.moveTo(w2sx(x), w2sy(y))));
+      ctx.closePath();
+      ctx.fillStyle = POLY_FILL[f.type] ?? POLY_FILL.redoubt; ctx.fill();
+      ctx.strokeStyle = 'rgba(50,35,15,0.9)'; ctx.lineWidth = Math.max(1.5, 2 * z); ctx.stroke();
+    }
     if (f.pts) {
       ctx.beginPath();
       f.pts.forEach(([x, y], i) => (i ? ctx.lineTo(w2sx(x), w2sy(y)) : ctx.moveTo(w2sx(x), w2sy(y))));
@@ -331,18 +352,21 @@ function drawSmoke() {
   ctx.globalAlpha = 1;
 }
 
-function drawDawn() {
+// Blue dusk over the map from about 45 minutes before sunrise, and after sunset when the battle gives one.
+function drawNight() {
   if (B.sunriseT == null) return;
-  const a = Math.min(0.35, Math.max(0, ((B.sunriseT - t) / 3600) * 0.45));
-  if (a <= 0) return;
-  ctx.fillStyle = `rgba(15,25,70,${a.toFixed(3)})`;
+  const tod = mod(t, 86400), ramp = x => Math.min(1, Math.max(0, x));
+  let dark = ramp((B.sunriseT - tod) / 2800);
+  if (B.sunsetT != null) dark = Math.max(dark, ramp((tod - B.sunsetT) / 2800));
+  if (dark <= 0) return;
+  ctx.fillStyle = `rgba(15,25,70,${(0.35 * dark).toFixed(3)})`;
   ctx.fillRect(0, 0, W, H);
 }
 
 // ---------- hud and controls ----------
 
 function updateHud() {
-  ui.clock.textContent = fmtTime(t);
+  ui.clock.textContent = (playing && lapsing ? '⏩ ' : '') + fmtTime(t);
   ui.scrub.value = t;
   if (curEvent !== shownEvent) {
     shownEvent = curEvent;
@@ -364,6 +388,7 @@ function updateHud() {
   if (best) ui.hover.innerHTML = `<b>${best.name}</b><br>${best.commander ? best.commander + '<br>' : ''}${B.sides[best.side].name} · ${best.type.replace('_', ' ')}<br>${Math.round(best.pose.strength)} men · ${STATE_TEXT[best.pose.state] ?? ''}`;
 }
 
+const nudge = () => Math.max(30, (B.endT - B.startT) / 240); // arrow keys: 30 s, or 1/240 of a long battle
 function setPlaying(v) { playing = v; ui.play.textContent = v ? '❚❚' : '▶'; ui.play.setAttribute('aria-label', v ? 'Pause' : 'Play'); }
 function seek(v) { t = Math.max(B.startT, Math.min(B.endT, v)); smoke.length = 0; }
 
@@ -371,14 +396,16 @@ ui.play.onclick = () => { if (!playing && t >= B.endT) seek(B.startT); setPlayin
 ui.speed.onchange = () => { speed = +ui.speed.value; };
 ui.scrub.oninput = () => seek(+ui.scrub.value);
 ui.follow.onchange = () => { follow = ui.follow.checked; };
+ui.lapse.onchange = () => { lapse = ui.lapse.checked; };
 ui.battle.onchange = () => loadBattle(ui.battle.value);
 ui.srcBtn.onclick = () => ui.sources.showModal();
 addEventListener('keydown', e => {
   if (['INPUT', 'SELECT', 'BUTTON'].includes(e.target.tagName)) return;
   if (e.code === 'Space') { e.preventDefault(); ui.play.click(); }
-  else if (e.key === 'ArrowRight') seek(t + 30);
-  else if (e.key === 'ArrowLeft') seek(t - 30);
+  else if (e.key === 'ArrowRight') seek(t + nudge());
+  else if (e.key === 'ArrowLeft') seek(t - nudge());
   else if (e.key === 'f') { follow = !follow; ui.follow.checked = follow; }
+  else if (e.key === 't') { lapse = !lapse; ui.lapse.checked = lapse; }
 });
 
 function resize() {

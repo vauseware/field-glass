@@ -24,8 +24,13 @@ On claw-mini the launch agent `com.vauseware.battle-sim` serves this folder on 1
 `tailscale serve --https=8803` proxies it, so the tailnet URL is https://claw-mini.tailcaa12e.ts.net:8803/.
 
 Static files only. `index.html` is the shell, `app.js` draws, `sim.js` is the DOM-free timeline
-logic. `#cowpens@07:45` opens a battle at a time of day; `#cowpens@07:45,play` starts it playing.
-`,warp` pre-runs five seconds of frames, which is how headless screenshots see smoke and the camera.
+logic. `#cowpens@07:45` opens a battle at a time of day (`#yorktown@1781-10-14T20:00` for a dated one);
+`#cowpens@07:45,play` starts it playing. `,warp` pre-runs five seconds of frames, which is how headless
+screenshots see smoke and the camera.
+
+**Time-lapse** (on by default, key `t`) hurries through stretches where nothing moves: the clock runs
+at the battle's `lapse` rate until 90 seconds before the next movement, appearance or fight. A siege
+bombardment does not count as movement, so Yorktown's days of gunnery pass in seconds.
 
 ## Add a battle
 
@@ -39,19 +44,21 @@ logic. `#cowpens@07:45` opens a battle at a time of day; `#cowpens@07:45,play` s
 ### battle.json
 
 Coordinates are metres from `origin` (the lat/lon at the map centre): x east, y north. Headings are
-compass degrees. Times are the local clock, `HH:MM`.
+compass degrees. Times are the local clock, `HH:MM`, or `YYYY-MM-DD HH:MM` for a battle that runs more
+than a day; one battle uses one form throughout.
 
 | field | meaning |
 |---|---|
 | `extent` | map width and height in metres, centred on `origin` |
-| `start`, `end`, `sunrise` | battle clock; before sunrise the map is tinted |
-| `speed` | default playback multiplier |
+| `start`, `end`, `sunrise`, `sunset` | battle clock; the map is tinted before sunrise and, if `sunset` is given, every night |
+| `speed`, `lapse` | default playback multiplier, and the multiplier for quiet stretches under time-lapse (default `speed × 6`) |
+| `water` | elevation in metres at or below which the DEM is drawn as water (rivers are flattened to about 0) |
 | `menPerDot` | men per drawn dot (5 for a small battle, 10 or 20 for a large one) |
 | `sides` | `{ id: { name, color, light, dark } }` |
 | `units[]` | `id, side, name, short?, commander, type, strength, guns?, loose?, ranks?, keys[]`; `short` is the map label; `loose` keeps a unit in open order; `ranks` defaults to 2 |
 | `keys[]` | `{ t, x, y, h, state, strength }`; omitted fields carry forward from the previous key |
 | `events[]` | `{ t, title, text, at: [x, y], view }` captions; `at` and `view` (metres across) steer the auto-camera |
-| `features[]` | `{ type: road|creek|fence, name, pts }` or `{ name, at, rot }` labels |
+| `features[]` | `{ type: road|creek|fence|works|trench, name, pts }` lines, `{ type: redoubt|battery|ship|camp, poly }` polygons, or `{ name, at, rot }` labels; `from` and `until` show a feature only between those times, which is how siege lines get dug |
 | `trees` | `density` in trees per square metre; `clear` is a list of polygons left bare, such as a summit |
 | `fields` | polygons of cleared farmland, tinted lighter and kept free of trees |
 | `sources[]` | shown in the Sources dialog |

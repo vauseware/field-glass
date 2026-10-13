@@ -1,19 +1,29 @@
 // Battle replay logic with no DOM dependencies. Shared by app.js and tools/check.mjs.
 
-export const SPEEDS = [1, 2, 5, 10, 20, 30, 60, 120];
+export const SPEEDS = [1, 2, 5, 10, 20, 30, 60, 120, 300, 600, 1800, 3600, 7200];
 export const STATES = ['hidden', 'column', 'line', 'skirmish', 'firing', 'charge', 'retreat', 'rout', 'surrender'];
 export const TYPES = ['infantry', 'light_infantry', 'militia', 'riflemen', 'cavalry', 'artillery'];
 export const STATE_TEXT = { column: 'in column', line: 'in line', skirmish: 'skirmishing', firing: 'firing', charge: 'charging', retreat: 'withdrawing', rout: 'routed', surrender: 'surrendered' };
 
+// "HH:MM[:SS]" is seconds into the day. "YYYY-MM-DD HH:MM[:SS]" (a T also separates) is seconds since 1970,
+// negative before it, so a battle that runs for weeks uses the same arithmetic. Numbers pass through.
 export function parseTime(v) {
   if (typeof v === 'number') return v;
-  const [h, m = 0, s = 0] = String(v).split(':').map(Number);
-  return h * 3600 + m * 60 + s;
+  const [date, clock] = String(v).includes('-') ? String(v).split(/[ T]/) : [null, String(v)];
+  const [h, m = 0, s = 0] = clock.split(':').map(Number);
+  let day = 0;
+  if (date) { const [y, mo, d] = date.split('-').map(Number); day = Date.UTC(y, mo - 1, d) / 1000; }
+  return day + h * 3600 + m * 60 + s;
 }
 
+export const mod = (a, n) => ((a % n) + n) % n;
+const MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
 export function fmtTime(t) {
-  const h = Math.floor(t / 3600) % 24, m = Math.floor(t / 60) % 60;
-  return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
+  const h = mod(Math.floor(t / 3600), 24), m = mod(Math.floor(t / 60), 60);
+  const clock = `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
+  if (Math.abs(t) < 366 * 86400) return clock;
+  const d = new Date(t * 1000);
+  return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}, ${clock}`;
 }
 
 export function hash(s) {
@@ -45,7 +55,10 @@ export function normalizeBattle(b) {
   b.startT = parseTime(b.start);
   b.endT = parseTime(b.end);
   b.sunriseT = b.sunrise == null ? null : parseTime(b.sunrise);
+  b.sunsetT = b.sunset == null ? null : parseTime(b.sunset);
+  b.lapse ??= Math.min(7200, (b.speed ?? 10) * 6); // clock rate for quiet stretches when time-lapse is on
   b.menPerDot ??= 10;
+  for (const f of b.features ?? []) { if (f.from != null) f.from = parseTime(f.from); if (f.until != null) f.until = parseTime(f.until); }
   for (const u of b.units) {
     let x = 0, y = 0, h = 0, strength = u.strength, state = 'line';
     u.keys = (u.keys ?? []).map(k => ({ ...k, t: parseTime(k.t) })).sort((p, q) => p.t - q.t);
@@ -56,7 +69,39 @@ export function normalizeBattle(b) {
   }
   b.events = (b.events ?? []).map(e => ({ ...e, t: parseTime(e.t) })).sort((p, q) => p.t - q.t);
   b.fallen = fallenMarkers(b);
+  b.active = activeSpans(b);
   return b;
+}
+
+const BUSY = new Set(['skirmish', 'firing', 'charge', 'retreat', 'rout']);
+// Stretches of battle time when something moves, fights, or appears, merged, with `lead` seconds in front
+// so the time-lapse slows down before it happens. Artillery firing alone does not count: a siege
+// bombardment runs for days.
+function activeSpans(b, lead = 90) {
+  const raw = [];
+  for (const u of b.units) {
+    const k = u.keys, busy = s => BUSY.has(s) && u.type !== 'artillery';
+    for (let i = 0; i + 1 < k.length; i++) {
+      const a = k[i], c = k[i + 1];
+      if (a.state === 'hidden') { if (c.state !== 'hidden') raw.push([c.t, c.t + 60]); continue; }
+      if (a.x !== c.x || a.y !== c.y || a.h !== c.h || busy(a.state)) raw.push([a.t, c.t]);
+    }
+    if (k.length && busy(k[k.length - 1].state)) raw.push([k[k.length - 1].t, b.endT]);
+  }
+  for (const f of b.features ?? []) { if (f.from != null) raw.push([f.from, f.from + 300]); if (f.until != null) raw.push([f.until, f.until + 300]); }
+  raw.sort((p, q) => p[0] - q[0]);
+  const out = [];
+  for (const [s, e] of raw) {
+    const st = s - lead, last = out[out.length - 1];
+    if (last && st <= last[1]) last[1] = Math.max(last[1], e); else out.push([st, e]);
+  }
+  return out;
+}
+
+// [busy, until]: whether t is inside an active span, and when that answer changes (Infinity after the last).
+export function activity(b, t) {
+  for (const [s, e] of b.active) { if (t < s) return [false, s]; if (t < e) return [true, e]; }
+  return [false, Infinity];
 }
 
 // Pose of a unit at battle time t, or null while hidden. State is a step function of the previous key.
@@ -144,6 +189,11 @@ export function validate(b, terrain) {
       if (!STATES.includes(k.state)) p.push(`${u.id}@${fmtTime(k.t)}: bad state ${k.state}`);
       if (k.t < b.startT || k.t > b.endT) p.push(`${u.id}@${fmtTime(k.t)}: outside battle clock`);
       if (k.state !== 'hidden' && !inMap(k.x, k.y)) p.push(`${u.id}@${fmtTime(k.t)}: off map (${k.x}, ${k.y})`);
+    }
+  }
+  for (const f of b.features ?? []) {
+    for (const key of ['from', 'until']) {
+      if (f[key] != null && (f[key] < b.startT || f[key] > b.endT)) p.push(`feature ${f.name ?? f.type}: ${key} outside battle clock`);
     }
   }
   for (const e of b.events) {
