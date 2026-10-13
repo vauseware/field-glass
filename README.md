@@ -27,7 +27,12 @@ On claw-mini the launch agent `com.vauseware.battle-sim` serves this folder on 1
 Static files only. `index.html` is the shell, `app.js` draws, `sim.js` is the DOM-free timeline
 logic. `#cowpens@07:45` opens a battle at a time of day (`#yorktown@1781-10-14T20:00` for a dated one);
 `#cowpens@07:45,play` starts it playing. `,warp` pre-runs five seconds of frames, which is how headless
-screenshots see smoke and the camera.
+screenshots see smoke and the camera; `,legend` opens the legend.
+
+The chapters sit above the scrubber as ticks: click one to jump there (the camera follows again).
+Labels are shown where they fit, on two rows; a bare tick names itself on hover. **Legend** in the
+top panel lists only the symbols the current battle uses. Every unit carries its name when there is
+room; labels that would overlap are dropped, biggest unit first.
 
 **Time-lapse** (on by default, key `t`) hurries through stretches where nothing moves: the clock runs
 at the battle's `lapse` rate until 90 seconds before the next movement, appearance or fight. A siege

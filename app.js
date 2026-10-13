@@ -4,7 +4,8 @@ const $ = s => document.querySelector(s);
 const canvas = $('#map'), ctx = canvas.getContext('2d');
 const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $('#clock'), follow: $('#follow'), battle: $('#battle'),
   title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'),
-  hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse') };
+  hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse'),
+  marks: $('#marks'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list') };
 
 let B = null, T = null, layer = null;
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
@@ -31,6 +32,7 @@ async function loadBattle(id) {
   for (const s of SPEEDS) if (s <= 120 || dur / s >= 120) ui.speed.add(new Option(`${s}×`, s)); // the big speeds only when the battle lasts
   ui.speed.value = speed;
   ui.scrub.min = b.startT; ui.scrub.max = b.endT;
+  buildMarks(b); buildLegend(b);
   ui.title.textContent = b.name;
   ui.sub.textContent = `${b.place} · ${b.dateText ?? b.date}`;
   ui.legend.innerHTML = Object.values(b.sides).map(s => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');
@@ -39,9 +41,10 @@ async function loadBattle(id) {
   cam = { x: v.x, y: v.y, zoom: Math.min(W, H) / v.width };
   follow = true; ui.follow.checked = true; lapse = true; ui.lapse.checked = true;
   clampCam();
-  const [, , at, play, warp] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(,warp)?$/) ?? [];
+  const [, , at, play, warp, legend] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(,warp)?(,legend)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
   if (play) setPlaying(true);
+  if (legend) ui.legendDlg.showModal(); // screenshots
   document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption fade
   if (warp) for (let i = 0; i < 300; i++) step(1 / 60); // five seconds of frames for screenshots
   location.hash = id;
@@ -302,7 +305,10 @@ function drawUnits() {
       }
     }
     if (u.type === 'artillery') drawGuns(u, p, z);
-    if (wPx >= 30) labels.push({ text: u.short ?? u.name, x: sx, y: sy - Math.max(hPx, D * z) - 12, size: Math.min(17, 12 + z * 3), men: p.strength });
+    // Every unit offers a label just above its topmost corner (a marching column is narrow but long); the overlap pass below thins them.
+    const s = Math.sin((p.h * Math.PI) / 180), c = Math.cos((p.h * Math.PI) / 180);
+    const top = -Math.abs((wPx / 2) * s) + Math.min(-2 * c, (hPx + 1) * c);
+    labels.push({ text: u.short ?? u.name, x: sx, y: sy + top - 11, size: Math.min(17, 12 + z * 3), men: p.strength });
   }
   // Bigger units get their label first; a label that would overlap one already placed is dropped this frame.
   for (const l of labels.sort((a, b) => b.men - a.men)) {
@@ -367,6 +373,87 @@ function drawNight() {
   ctx.fillRect(0, 0, W, H);
 }
 
+// ---------- chapter marks and legend ----------
+
+// One tick per chapter above the scrubber, labelled where there is room; click to jump there.
+let marks = [];
+function buildMarks(b) {
+  ui.marks.innerHTML = '';
+  marks = b.events.map(ev => {
+    const el = document.createElement('button');
+    el.textContent = ev.title; el.title = `${ev.title} · ${fmtTime(ev.t)}`;
+    el.onclick = () => { follow = true; ui.follow.checked = true; seek(ev.t); };
+    ui.marks.append(el);
+    return el;
+  });
+  layoutMarks();
+}
+// Labels go on the lower row, then the upper row, else become a bare tick. An upper label's tick runs down
+// through the lower row, so neither row may put text across the other's tick.
+function layoutMarks() {
+  const tw = ui.marks.clientWidth, dur = B.endT - B.startT, right = [-Infinity, -Infinity], lows = [], ups = [];
+  marks.forEach((el, i) => {
+    const px = ((B.events[i].t - B.startT) / dur) * tw;
+    el.classList.remove('tick', 'up');
+    const w = el.offsetWidth, L = Math.max(0, Math.min(tw - w, px - w / 2)), R = L + w;
+    let row = -1;
+    if (w < tw && L >= right[0] + 6 && !ups.some(x => x > L - 3 && x < R + 3)) { row = 0; lows.push([L, R]); }
+    else if (w < tw && L >= right[1] + 6 && !lows.some(([a, b]) => px > a - 3 && px < b + 3)) { row = 1; ups.push(px); }
+    if (row < 0) el.classList.add('tick'); else { right[row] = R; if (row) el.classList.add('up'); }
+    const left = row < 0 ? px - 7 : L;
+    el.style.left = `${left}px`; el.style.setProperty('--tick', `${px - left}px`);
+  });
+}
+
+const SVG = (inner, w = 64, h = 28) => `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">${inner}</svg>`;
+// A unit block as the map draws it: solid body, dark outline, one white dot per menPerDot men.
+function blockSvg(fill, stroke, { w = 56, h = 12, files = 9, ranks = 2, cav = false, alpha = 0.85, dot = 'rgba(255,255,255,0.92)', extra = '' } = {}) {
+  const x0 = (64 - w) / 2, y0 = (28 - h) / 2;
+  let d = '';
+  for (let r = 0; r < ranks; r++) for (let f = 0; f < files; f++)
+    d += `<rect x="${(x0 + (w / files) * (f + 0.5) - 1.5).toFixed(1)}" y="${(y0 + (h / ranks) * (r + 0.5) - (cav ? 3 : 1.5)).toFixed(1)}" width="3" height="${cav ? 6 : 3}" fill="${dot}"/>`;
+  return SVG(`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}" stroke-width="1.5" opacity="${alpha}"/>${d}${extra}`);
+}
+const lineSvg = (c1, w1, c2, w2) => SVG(`<path d="M4 14 L60 14" stroke="${c1}" stroke-width="${w1}" stroke-linecap="round"/>${c2 ? `<path d="M4 14 L60 14" stroke="${c2}" stroke-width="${w2}" stroke-linecap="round"/>` : ''}`);
+const polySvg = (pts, fill, bg) => SVG(`${bg}<polygon points="${pts}" fill="${fill}" stroke="rgba(50,35,15,0.9)" stroke-width="2"/>`);
+
+// Only the symbols this battle uses.
+function buildLegend(b) {
+  const sides = Object.values(b.sides), s0 = sides[0], mpd = b.menPerDot, iv = b.contourInterval ?? 5;
+  const types = new Set(b.units.map(u => u.type)), states = new Set(b.units.flatMap(u => u.keys.map(k => k.state)));
+  const feats = new Set((b.features ?? []).map(f => f.type));
+  const bg = `<rect width="64" height="28" fill="${b.palette?.ground ?? '#a8ad7a'}"/>`;
+  const scatter = (pts, mark) => SVG(`${bg}${pts.map(([x, y], i) => mark(x, y, i)).join('')}`);
+  const rows = [
+    ...sides.map(s => [SVG(`<rect x="4" y="4" width="56" height="20" rx="3" fill="${s.color}"/>`), s.name]),
+    [blockSvg(s0.color, s0.dark), `Infantry. Each white dot is ${mpd} men; the rows are ranks.`],
+    (types.has('militia') || types.has('riflemen')) && [blockSvg(s0.light ?? s0.color, s0.dark), 'Militia and riflemen, in the lighter shade.'],
+    states.has('column') && [blockSvg(s0.color, s0.dark, { w: 12, h: 26, files: 3, ranks: 6 }), 'A column on the march: narrow and long.'],
+    types.has('cavalry') && [blockSvg(s0.color, s0.dark, { h: 16, cav: true }), 'Cavalry: taller dots, a mounted man each.'],
+    types.has('artillery') && [blockSvg(s0.color, s0.dark, { w: 42, h: 8, files: 6, ranks: 1, extra: [18, 32, 46].map(x => `<rect x="${x - 2.5}" y="7" width="5" height="7" fill="#141414"/>`).join('') }), 'Artillery. Each dark square is a gun.'],
+    (states.has('skirmish') || b.units.some(u => u.loose)) && [blockSvg(s0.color, s0.dark, { h: 7, files: 7, ranks: 1 }), 'Skirmishers and open order: one thin, spread-out rank.'],
+    states.has('rout') && [blockSvg(s0.color, s0.dark, { alpha: 0.5 }), 'Broken and running: faded.'],
+    states.has('surrender') && [blockSvg('#9a9a92', '#55554f', { dot: '#e8e8e2' }), 'Surrendered: grey.'],
+    [scatter([[8, 6], [20, 18], [31, 9], [44, 20], [55, 7], [15, 22], [38, 5], [50, 15], [26, 14]], (x, y, i) => `<rect x="${x}" y="${y}" width="3" height="3" fill="${sides[i % sides.length].dark ?? '#3a2a20'}" opacity="0.6"/>`),
+      `Where men fell: a dark mark for every ${mpd} men a unit lost, in that side's colour.`],
+    [SVG(`<rect x="22" y="18" width="20" height="6" fill="${s0.color}" stroke="${s0.dark}"/><circle cx="30" cy="12" r="5" fill="#d8d4c8" opacity="0.5"/><circle cx="40" cy="9" r="7" fill="#d8d4c8" opacity="0.4"/><circle cx="50" cy="6" r="8" fill="#d8d4c8" opacity="0.3"/><rect x="26" y="15" width="3" height="3" fill="#fff1a8"/>`),
+      'Powder smoke drifts downwind from units firing.'],
+    (feats.has('redoubt') || feats.has('battery')) && [polySvg('14,22 14,8 26,4 38,4 50,8 50,22', POLY_FILL.redoubt, bg), 'Redoubt or battery: an earthwork fort.'],
+    feats.has('works') && [lineSvg(...FEATURE_STYLE.works), 'Fortified line of earthworks.'],
+    feats.has('trench') && [lineSvg(...FEATURE_STYLE.trench), 'Siege trench: the parallels and the approaches between them.'],
+    feats.has('camp') && [polySvg('6,6 58,6 58,22 6,22', POLY_FILL.camp, bg), 'Camp.'],
+    feats.has('ship') && [polySvg('6,10 54,10 60,16 50,22 10,22', POLY_FILL.ship, bg), 'Ship.'],
+    feats.has('road') && [lineSvg(...FEATURE_STYLE.road), 'Road.'],
+    feats.has('creek') && [lineSvg(...FEATURE_STYLE.creek), 'Creek or stream.'],
+    feats.has('fence') && [lineSvg(...FEATURE_STYLE.fence), 'Fence.'],
+    b.water != null && [SVG(`<rect width="64" height="28" fill="${b.palette?.water ?? '#7f9fc0'}"/>`), 'River.'],
+    b.fields?.length && [SVG(`${bg}<rect x="10" y="4" width="54" height="24" fill="${b.palette?.field ?? 'rgba(232,220,170,0.45)'}"/>`), 'Open field or cleared ground.'],
+    b.trees?.density && [scatter([[8, 8], [20, 20], [30, 7], [44, 18], [56, 9], [14, 24], [38, 24], [52, 24], [26, 15]], (x, y) => `<circle cx="${x}" cy="${y}" r="3" fill="${b.palette?.tree ?? 'rgba(60,85,40,0.5)'}"/>`), 'Woods.'],
+    [SVG(`${bg}<path d="M0 22 Q16 12 32 16 T64 6 M0 10 Q20 2 40 8 T64 0" fill="none" stroke="rgba(80,60,30,0.5)"/>`), `Contour lines every ${iv} m (${Math.round(iv * 3.28)} ft) of height; shading shows the slopes.`],
+  ];
+  ui.legendList.innerHTML = rows.filter(Boolean).map(([sw, text]) => `<div>${sw}</div><div>${text}</div>`).join('');
+}
+
 // ---------- hud and controls ----------
 
 function updateHud() {
@@ -377,6 +464,7 @@ function updateHud() {
     ui.capTitle.textContent = curEvent?.title ?? '';
     ui.capText.textContent = curEvent?.text ?? '';
     ui.caption.classList.toggle('show', !!curEvent);
+    marks.forEach((m, i) => m.classList.toggle('on', B.events[i] === curEvent));
   }
   let best = null, bd = 28;
   if (mouse) for (const u of B.units) {
@@ -403,6 +491,7 @@ ui.follow.onchange = () => { follow = ui.follow.checked; };
 ui.lapse.onchange = () => { lapse = ui.lapse.checked; };
 ui.battle.onchange = () => loadBattle(ui.battle.value);
 ui.srcBtn.onclick = () => ui.sources.showModal();
+ui.legendBtn.onclick = () => ui.legendDlg.showModal();
 addEventListener('keydown', e => {
   if (['INPUT', 'SELECT', 'BUTTON'].includes(e.target.tagName)) return;
   if (e.code === 'Space') { e.preventDefault(); ui.play.click(); }
@@ -419,6 +508,7 @@ function resize() {
   canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 }
 addEventListener('resize', () => { resize(); if (B) clampCam(); });
+new ResizeObserver(() => B && layoutMarks()).observe(ui.marks); // the track also narrows when the clock text widens
 resize();
 
 function frame(now) {
@@ -435,7 +525,7 @@ for (const b of list) {
   if (!groups.has(b.war)) { const g = document.createElement('optgroup'); g.label = b.war; groups.set(b.war, g); ui.battle.add(g); }
   groups.get(b.war).append(new Option(b.name, b.id));
 }
-const want = location.hash.slice(1).split('@')[0];
+const want = location.hash.slice(1).split(/[@,]/)[0];
 ui.battle.value = list.some(b => b.id === want) ? want : list[0].id;
 await loadBattle(ui.battle.value);
 requestAnimationFrame(frame);
