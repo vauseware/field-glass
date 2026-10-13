@@ -8,9 +8,10 @@ that would change the outcome. Built for a laptop with integrated graphics.
 ![Kings Mountain, the columns close round the ridge](docs/screenshots/kings-mountain-noose.png)
 ![Guilford Courthouse, the first line](docs/screenshots/guilford-first-line.png)
 ![The Waxhaws, the charge](docs/screenshots/waxhaws-charge.png)
+![Yorktown, the night of 14 October](docs/screenshots/yorktown-redoubts.png)
 
-Battles so far: the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781) and
-Guilford Courthouse (15 March 1781).
+Battles so far: the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781),
+Guilford Courthouse (15 March 1781) and the siege of Yorktown (28 September to 19 October 1781).
 
 ## Run locally
 
@@ -57,7 +58,7 @@ than a day; one battle uses one form throughout.
 | `sides` | `{ id: { name, color, light, dark } }` |
 | `units[]` | `id, side, name, short?, commander, type, strength, guns?, loose?, ranks?, keys[]`; `short` is the map label; `loose` keeps a unit in open order; `ranks` defaults to 2 |
 | `keys[]` | `{ t, x, y, h, state, strength }`; omitted fields carry forward from the previous key |
-| `events[]` | `{ t, title, text, at: [x, y], view }` captions; `at` and `view` (metres across) steer the auto-camera |
+| `events[]` | `{ t, title, text, at: [x, y], view, speed }` captions; `at` and `view` (metres across) steer the auto-camera; `speed` sets the playback rate for that chapter while Follow is on (each chapter resets to the battle's `speed`) |
 | `features[]` | `{ type: road|creek|fence|works|trench, name, pts }` lines, `{ type: redoubt|battery|ship|camp, poly }` polygons, or `{ name, at, rot }` labels; `from` and `until` show a feature only between those times, which is how siege lines get dug |
 | `trees` | `density` in trees per square metre; `clear` is a list of polygons left bare, such as a summit |
 | `fields` | polygons of cleared farmland, tinted lighter and kept free of trees |

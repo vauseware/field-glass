@@ -199,7 +199,11 @@ function step(dt) {
     if (lapsing && t > until) t = until; // never skip past the start of the next action
     if (t >= B.endT) { t = B.endT; setPlaying(false); }
   }
-  curEvent = eventAt(B, t);
+  const ev = eventAt(B, t);
+  if (ev !== curEvent) { // a chapter may set its own pace while the story is being followed
+    curEvent = ev;
+    if (follow) { speed = ev?.speed ?? (SPEEDS.includes(B.speed) ? B.speed : 10); ui.speed.value = speed; }
+  }
   updateCamera(dt);
   flashes.length = 0;
   for (const u of B.units) {
