@@ -375,33 +375,34 @@ function drawNight() {
 
 // ---------- chapter marks and legend ----------
 
-// One tick per chapter above the scrubber, labelled where there is room; click to jump there.
-let marks = [];
+// One tick per chapter above the scrubber. Each label slants up over the map from the top edge of the bar,
+// joined to its tick by a leader line, so neighbours can be spread sideways without losing their place in time.
+let marks = [], leads = [];
 function buildMarks(b) {
-  ui.marks.innerHTML = '';
-  marks = b.events.map(ev => {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  ui.marks.replaceChildren(svg);
+  leads = []; marks = b.events.map(ev => {
     const el = document.createElement('button');
     el.textContent = ev.title; el.title = `${ev.title} · ${fmtTime(ev.t)}`;
     el.onclick = () => { follow = true; ui.follow.checked = true; seek(ev.t); };
     ui.marks.append(el);
+    leads.push(svg.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'path')));
     return el;
   });
   layoutMarks();
 }
-// Labels go on the lower row, then the upper row, else become a bare tick. An upper label's tick runs down
-// through the lower row, so neither row may put text across the other's tick.
 function layoutMarks() {
-  const tw = ui.marks.clientWidth, dur = B.endT - B.startT, right = [-Infinity, -Infinity], lows = [], ups = [];
-  marks.forEach((el, i) => {
-    const px = ((B.events[i].t - B.startT) / dur) * tw;
-    el.classList.remove('tick', 'up');
-    const w = el.offsetWidth, L = Math.max(0, Math.min(tw - w, px - w / 2)), R = L + w;
-    let row = -1;
-    if (w < tw && L >= right[0] + 6 && !ups.some(x => x > L - 3 && x < R + 3)) { row = 0; lows.push([L, R]); }
-    else if (w < tw && L >= right[1] + 6 && !lows.some(([a, b]) => px > a - 3 && px < b + 3)) { row = 1; ups.push(px); }
-    if (row < 0) el.classList.add('tick'); else { right[row] = R; if (row) el.classList.add('up'); }
-    const left = row < 0 ? px - 7 : L;
-    el.style.left = `${left}px`; el.style.setProperty('--tick', `${px - left}px`);
+  const tw = ui.marks.clientWidth, dur = B.endT - B.startT, gap = 27; // a 20 px pill at 50° clears its neighbour at 27 px (27·sin 50° > 20)
+  const px = B.events.map(ev => ((ev.t - B.startT) / dur) * tw);
+  const k = Math.max(1, Math.ceil((marks.length * gap) / Math.max(1, tw))); // too many for the width: label every k-th
+  const idx = [...marks.keys()].filter(i => i % k === 0), ax = idx.map(i => px[i]);
+  for (let j = 1; j < ax.length; j++) ax[j] = Math.max(ax[j], ax[j - 1] + gap); // push crowded labels right…
+  ax[ax.length - 1] = Math.min(ax[ax.length - 1], tw);
+  for (let j = ax.length - 2; j >= 0; j--) ax[j] = Math.min(ax[j], ax[j + 1] - gap); // …then back from the end
+  marks.forEach((el, i) => { el.hidden = true; leads[i].setAttribute('d', `M${px[i]} 23V15`); });
+  idx.forEach((i, j) => {
+    marks[i].hidden = false; marks[i].style.left = `${ax[j]}px`;
+    leads[i].setAttribute('d', `M${px[i]} 23V15L${ax[j]} 0`);
   });
 }
 
@@ -464,7 +465,7 @@ function updateHud() {
     ui.capTitle.textContent = curEvent?.title ?? '';
     ui.capText.textContent = curEvent?.text ?? '';
     ui.caption.classList.toggle('show', !!curEvent);
-    marks.forEach((m, i) => m.classList.toggle('on', B.events[i] === curEvent));
+    marks.forEach((m, i) => { m.classList.toggle('on', B.events[i] === curEvent); leads[i].classList.toggle('on', B.events[i] === curEvent); });
   }
   let best = null, bd = 28;
   if (mouse) for (const u of B.units) {

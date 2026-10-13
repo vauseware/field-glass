@@ -29,8 +29,8 @@ logic. `#cowpens@07:45` opens a battle at a time of day (`#yorktown@1781-10-14T2
 `#cowpens@07:45,play` starts it playing. `,warp` pre-runs five seconds of frames, which is how headless
 screenshots see smoke and the camera; `,legend` opens the legend.
 
-The chapters sit above the scrubber as ticks: click one to jump there (the camera follows again).
-Labels are shown where they fit, on two rows; a bare tick names itself on hover. **Legend** in the
+The chapters sit above the scrubber as ticks, their titles slanting up over the map on leader lines
+so crowded chapters can be spread apart: click one to jump there (the camera follows again). **Legend** in the
 top panel lists only the symbols the current battle uses. Every unit carries its name when there is
 room; labels that would overlap are dropped, biggest unit first.
 

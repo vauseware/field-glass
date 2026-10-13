@@ -32,15 +32,14 @@
   #cap-text { font-size: 20px; margin-top: 6px; }
   #bar { left: 16px; right: 16px; bottom: 16px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; }
   #play { width: 56px; min-width: 56px; font-size: 22px; }
-  #track { flex: 1; min-width: 80px; position: relative; padding-top: 36px; }
+  #track { flex: 1; min-width: 80px; position: relative; padding-top: 12px; }
   #scrub { display: block; width: 100%; accent-color: var(--accent); height: 48px; margin: 0; }
-  #marks { position: absolute; left: 8px; right: 8px; top: 0; height: 36px; }
-  #marks button { position: absolute; top: 0; z-index: 1; height: 36px; min-height: 0; padding: 14px 5px 8px; border: 0; border-radius: 4px; background: none; color: var(--muted); font-size: 13px; line-height: 14px; white-space: nowrap; }
-  #marks button::after { content: ''; position: absolute; left: var(--tick); bottom: 0; width: 2px; height: 8px; margin-left: -1px; background: currentColor; }
-  #marks button.up { padding: 0 5px 22px; } #marks button.up::after { height: 22px; }
-  #marks button.tick { z-index: 0; width: 14px; font-size: 0; }
-  #marks button.tick:hover { z-index: 2; width: auto; font-size: 13px; background: var(--panel); }
-  #marks button:hover, #marks button.on { color: var(--accent); } #marks button.on::after { width: 3px; }
+  /* Chapter marks: ticks inside the bar, leaders up to its top edge (23 px: marks + padding + border), labels slanting over the map. */
+  #marks { position: absolute; left: 8px; right: 8px; bottom: 48px; height: 12px; }
+  #marks svg { position: absolute; left: 0; bottom: 0; width: 100%; height: 23px; overflow: visible; pointer-events: none; }
+  #marks path { fill: none; stroke: var(--muted); stroke-width: 1.5; } #marks path.on { stroke: var(--accent); stroke-width: 2.5; }
+  #marks button { position: absolute; bottom: 23px; min-height: 0; height: 20px; padding: 0 8px; border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; background: var(--panel); color: var(--ink); font-size: 13px; line-height: 18px; white-space: nowrap; transform-origin: 0 100%; transform: rotate(-50deg); }
+  #marks button:hover, #marks button.on { color: var(--accent); } #marks button.on { border-color: var(--accent); }
   #clock { font-variant-numeric: tabular-nums; min-width: 92px; text-align: center; font-weight: 700; font-size: 20px; white-space: nowrap; }
   #bar label { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
   #bar input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--accent); }
