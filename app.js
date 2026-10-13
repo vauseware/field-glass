@@ -39,6 +39,7 @@ async function loadBattle(id) {
   const [, , at, play, warp] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(,warp)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
   if (play) setPlaying(true);
+  document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption fade
   if (warp) for (let i = 0; i < 300; i++) step(1 / 60); // five seconds of frames for screenshots
   location.hash = id;
 }
@@ -356,6 +357,10 @@ function updateHud() {
     if (d < bd) { bd = d; best = u; }
   }
   ui.hover.hidden = !best;
+  if (best) { // tooltip beside the cursor, flipped to the left near the right edge
+    ui.hover.style.left = mouse[0] + 360 > W ? `${mouse[0] - 360}px` : `${mouse[0] + 20}px`;
+    ui.hover.style.top = `${Math.min(mouse[1] + 20, H - 160)}px`;
+  }
   if (best) ui.hover.innerHTML = `<b>${best.name}</b><br>${best.commander ? best.commander + '<br>' : ''}${B.sides[best.side].name} · ${best.type.replace('_', ' ')}<br>${Math.round(best.pose.strength)} men · ${STATE_TEXT[best.pose.state] ?? ''}`;
 }
 
@@ -393,8 +398,12 @@ function frame(now) {
 }
 
 for (const s of SPEEDS) ui.speed.add(new Option(`${s}×`, s));
-const list = await (await fetch('battles/index.json')).json();
-for (const b of list) ui.battle.add(new Option(b.name, b.id));
+const list = (await (await fetch('battles/index.json')).json()).sort((a, b) => a.date.localeCompare(b.date));
+const groups = new Map(); // one optgroup per war, in order of each war's first battle
+for (const b of list) {
+  if (!groups.has(b.war)) { const g = document.createElement('optgroup'); g.label = b.war; groups.set(b.war, g); ui.battle.add(g); }
+  groups.get(b.war).append(new Option(b.name, b.id));
+}
 const want = location.hash.slice(1).split('@')[0];
 ui.battle.value = list.some(b => b.id === want) ? want : list[0].id;
 await loadBattle(ui.battle.value);

@@ -1,1 +1,6 @@
-[{"id": "cowpens", "name": "Cowpens, 17 January 1781"}, {"id": "kings-mountain", "name": "Kings Mountain, 7 October 1780"}, {"id": "guilford", "name": "Guilford Courthouse, 15 March 1781"}, {"id": "waxhaws", "name": "The Waxhaws, 29 May 1780"}]
+[
+  {"id": "waxhaws", "name": "The Waxhaws, 29 May 1780", "date": "1780-05-29", "war": "American Revolutionary War"},
+  {"id": "kings-mountain", "name": "Kings Mountain, 7 Oct 1780", "date": "1780-10-07", "war": "American Revolutionary War"},
+  {"id": "cowpens", "name": "Cowpens, 17 Jan 1781", "date": "1781-01-17", "war": "American Revolutionary War"},
+  {"id": "guilford", "name": "Guilford Courthouse, 15 Mar 1781", "date": "1781-03-15", "war": "American Revolutionary War"}
+]
