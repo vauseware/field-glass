@@ -9,8 +9,9 @@ that would change the outcome. Built for a laptop with integrated graphics.
 ![Guilford Courthouse, the first line](docs/screenshots/guilford-first-line.png)
 ![The Waxhaws, the charge](docs/screenshots/waxhaws-charge.png)
 ![Yorktown, the night of 14 October](docs/screenshots/yorktown-redoubts.png)
+![Bunker Hill, the first assault](docs/screenshots/bunker-hill-first-assault.png)
 
-Battles so far: the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781),
+Battles so far: Bunker Hill (17 June 1775), the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781),
 Guilford Courthouse (15 March 1781) and the siege of Yorktown (28 September to 19 October 1781).
 
 ## Run locally
