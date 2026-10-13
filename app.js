@@ -213,6 +213,13 @@ function step(dt) {
     const p = (u.pose = unitAt(u, t));
     if (playing && p && p.fire > 0 && p.state !== 'surrender') { const { F, nd } = shape(u, p, B.menPerDot); emit(u, p, F, nd, dt); }
   }
+  if (playing) for (const f of B.features ?? []) { // burning town or ship: a standing pall of smoke while the feature is active
+    if (f.type !== 'smoke' || (f.from != null && t < f.from) || (f.until != null && t >= f.until)) continue;
+    const wind = B.wind ?? { x: 0.8, y: 0.3 }, sp = f.spread ?? 60;
+    let n = Math.floor(f.rate * dt + Math.random());
+    while (n-- > 0 && smoke.length < 2500) smoke.push({ x: f.at[0] + (Math.random() - 0.5) * sp, y: f.at[1] + (Math.random() - 0.5) * sp,
+      vx: wind.x * 2 + Math.random() - 0.5, vy: wind.y * 2 + Math.random() - 0.5, age: 0, life: 8 + Math.random() * 4, r0: 8, r1: 50 });
+  }
   if (!playing) return;
   let w = 0;
   for (const s of smoke) {
@@ -246,6 +253,7 @@ function drawFeatures() {
       ctx.beginPath();
       f.poly.forEach(([x, y], i) => (i ? ctx.lineTo(w2sx(x), w2sy(y)) : ctx.moveTo(w2sx(x), w2sy(y))));
       ctx.closePath();
+      if (f.type === 'water') { ctx.fillStyle = B.palette?.water ?? '#7f9fc0'; ctx.fill(); continue; } // a shoreline the modern ground no longer shows
       ctx.fillStyle = POLY_FILL[f.type] ?? POLY_FILL.redoubt; ctx.fill();
       ctx.strokeStyle = 'rgba(50,35,15,0.9)'; ctx.lineWidth = Math.max(1.5, 2 * z); ctx.stroke();
     }
@@ -368,9 +376,12 @@ function drawNight() {
   const tod = mod(t, 86400), ramp = x => Math.min(1, Math.max(0, x));
   let dark = ramp((B.sunriseT - tod) / 2800);
   if (B.sunsetT != null) dark = Math.max(dark, ramp((tod - B.sunsetT) / 2800));
-  if (dark <= 0) return;
-  ctx.fillStyle = `rgba(15,25,70,${(0.35 * dark).toFixed(3)})`;
-  ctx.fillRect(0, 0, W, H);
+  if (dark > 0) { ctx.fillStyle = `rgba(15,25,70,${(0.35 * dark).toFixed(3)})`; ctx.fillRect(0, 0, W, H); }
+  for (const f of B.tints ?? []) { // weather: a timed wash over the map, fading in and out over ten minutes
+    const a = Math.min(1, (t - f.from) / 600, (f.until - t) / 600);
+    if (a <= 0) continue;
+    ctx.globalAlpha = a; ctx.fillStyle = f.color; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1;
+  }
 }
 
 // ---------- chapter marks and legend ----------
@@ -447,7 +458,7 @@ function buildLegend(b) {
     feats.has('road') && [lineSvg(...FEATURE_STYLE.road), 'Road.'],
     feats.has('creek') && [lineSvg(...FEATURE_STYLE.creek), 'Creek or stream.'],
     feats.has('fence') && [lineSvg(...FEATURE_STYLE.fence), 'Fence.'],
-    b.water != null && [SVG(`<rect width="64" height="28" fill="${b.palette?.water ?? '#7f9fc0'}"/>`), 'River.'],
+    (b.water != null || feats.has('water')) && [SVG(`<rect width="64" height="28" fill="${b.palette?.water ?? '#7f9fc0'}"/>`), 'Water.'],
     b.fields?.length && [SVG(`${bg}<rect x="10" y="4" width="54" height="24" fill="${b.palette?.field ?? 'rgba(232,220,170,0.45)'}"/>`), 'Open field or cleared ground.'],
     b.trees?.density && [scatter([[8, 8], [20, 20], [30, 7], [44, 18], [56, 9], [14, 24], [38, 24], [52, 24], [26, 15]], (x, y) => `<circle cx="${x}" cy="${y}" r="3" fill="${b.palette?.tree ?? 'rgba(60,85,40,0.5)'}"/>`), 'Woods.'],
     [SVG(`${bg}<path d="M0 22 Q16 12 32 16 T64 6 M0 10 Q20 2 40 8 T64 0" fill="none" stroke="rgba(80,60,30,0.5)"/>`), `Contour lines every ${iv} m (${Math.round(iv * 3.28)} ft) of height; shading shows the slopes.`],

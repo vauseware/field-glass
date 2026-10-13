@@ -58,7 +58,7 @@ export function normalizeBattle(b) {
   b.sunsetT = b.sunset == null ? null : parseTime(b.sunset);
   b.lapse ??= Math.min(7200, (b.speed ?? 10) * 6); // clock rate for quiet stretches when time-lapse is on
   b.menPerDot ??= 10;
-  for (const f of b.features ?? []) { if (f.from != null) f.from = parseTime(f.from); if (f.until != null) f.until = parseTime(f.until); }
+  for (const f of [...(b.features ?? []), ...(b.tints ?? [])]) { if (f.from != null) f.from = parseTime(f.from); if (f.until != null) f.until = parseTime(f.until); }
   for (const u of b.units) {
     let x = 0, y = 0, h = 0, strength = u.strength, state = 'line';
     u.keys = (u.keys ?? []).map(k => ({ ...k, t: parseTime(k.t) })).sort((p, q) => p.t - q.t);
@@ -88,7 +88,7 @@ function activeSpans(b, lead = 90) {
     }
     if (k.length && busy(k[k.length - 1].state)) raw.push([k[k.length - 1].t, b.endT]);
   }
-  for (const f of b.features ?? []) { if (f.from != null) raw.push([f.from, f.from + 300]); if (f.until != null) raw.push([f.until, f.until + 300]); }
+  for (const f of [...(b.features ?? []), ...(b.tints ?? [])]) { if (f.from != null) raw.push([f.from, f.from + 300]); if (f.until != null) raw.push([f.until, f.until + 300]); }
   raw.sort((p, q) => p[0] - q[0]);
   const out = [];
   for (const [s, e] of raw) {
@@ -191,10 +191,11 @@ export function validate(b, terrain) {
       if (k.state !== 'hidden' && !inMap(k.x, k.y)) p.push(`${u.id}@${fmtTime(k.t)}: off map (${k.x}, ${k.y})`);
     }
   }
-  for (const f of b.features ?? []) {
+  for (const f of [...(b.features ?? []), ...(b.tints ?? [])]) {
     for (const key of ['from', 'until']) {
-      if (f[key] != null && (f[key] < b.startT || f[key] > b.endT)) p.push(`feature ${f.name ?? f.type}: ${key} outside battle clock`);
+      if (f[key] != null && (f[key] < b.startT || f[key] > b.endT)) p.push(`feature ${f.name ?? f.type ?? f.color}: ${key} outside battle clock`);
     }
+    if (f.type === 'smoke' && !(f.at && f.rate > 0)) p.push(`smoke feature ${f.name ?? ''} needs at and rate`);
   }
   for (const e of b.events) {
     if (e.t < b.startT || e.t > b.endT) p.push(`event "${e.title}": outside battle clock`);

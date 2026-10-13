@@ -64,7 +64,8 @@ than a day; one battle uses one form throughout.
 | `units[]` | `id, side, name, short?, commander, type, strength, guns?, loose?, ranks?, keys[]`; `short` is the map label; `loose` keeps a unit in open order; `ranks` defaults to 2 |
 | `keys[]` | `{ t, x, y, h, state, strength }`; omitted fields carry forward from the previous key |
 | `events[]` | `{ t, title, text, at: [x, y], view, speed }` captions; `at` and `view` (metres across) steer the auto-camera; `speed` sets the playback rate for that chapter while Follow is on (each chapter resets to the battle's `speed`) |
-| `features[]` | `{ type: road|creek|fence|works|trench, name, pts }` lines, `{ type: redoubt|battery|ship|camp, poly }` polygons, or `{ name, at, rot }` labels; `from` and `until` show a feature only between those times, which is how siege lines get dug |
+| `features[]` | `{ type: road|creek|fence|works|trench, name, pts }` lines, `{ type: redoubt|battery|ship|camp|water, poly }` polygons (`water` draws a shoreline the modern ground no longer shows), `{ type: smoke, at, rate, spread }` a burning town or ship, or `{ name, at, rot }` labels; `from` and `until` show a feature only between those times, which is how siege lines get dug |
+| `tints[]` | `{ from, until, color }` weather washes over the whole map, such as a snowstorm, fading in and out over ten minutes |
 | `trees` | `density` in trees per square metre; `clear` is a list of polygons left bare, such as a summit |
 | `fields` | polygons of cleared farmland, tinted lighter and kept free of trees |
 | `sources[]` | shown in the Sources dialog |
