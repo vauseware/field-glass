@@ -1,8 +1,16 @@
-# Battlefield Replays
+# Field Glass
 
 A browser app that replays historical battles from the written record. Regiment-sized units follow
 keyframed timelines on real terrain; the viewer pans, zooms and scrubs time. Nothing is simulated
 that would change the outcome. Built for a laptop with integrated graphics.
+
+![The start screen](docs/screenshots/start-screen.png)
+
+The start screen lists every battle with its running time and draws one of them, at random, as a sepia
+battle plan from its own terrain and troop positions. `npm run check` measures each running time by playing
+the battle through at the default settings (Follow and Time-lapse on, chapter speeds honoured) and writes it
+to `battles/index.json`. A link with a battle in it (`#cowpens`) skips the start screen; `?plan=yorktown`
+picks the backdrop.
 
 ![Cowpens, the main line engaged](docs/screenshots/cowpens-main-line.png)
 ![Kings Mountain, the columns close round the ridge](docs/screenshots/kings-mountain-noose.png)
