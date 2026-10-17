@@ -1,4 +1,4 @@
-import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, activity, fmtTime, parseTime, hash, mulberry32, mod } from './sim.js';
+import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, advance, defaultSpeed, fmtTime, parseTime, hash, mulberry32, mod } from './sim.js';
 
 const $ = s => document.querySelector(s);
 const canvas = $('#map'), ctx = canvas.getContext('2d');
@@ -196,16 +196,13 @@ function label(text, x, y, rot, color, size, italic, bold) {
 // Advance the clock, camera, unit poses and smoke by dt real seconds. Drawing reads the results.
 function step(dt) {
   if (playing) {
-    const [busy, until] = activity(B, t);
-    lapsing = lapse && !busy && B.lapse > speed;
-    t += dt * (lapsing ? B.lapse : speed);
-    if (lapsing && t > until) t = until; // never skip past the start of the next action
-    if (t >= B.endT) { t = B.endT; setPlaying(false); }
+    [t, lapsing] = advance(B, t, dt, speed, lapse);
+    if (t >= B.endT) setPlaying(false);
   }
   const ev = eventAt(B, t);
   if (ev !== curEvent) { // a chapter may set its own pace while the story is being followed
     curEvent = ev;
-    if (follow) { speed = ev?.speed ?? (SPEEDS.includes(B.speed) ? B.speed : 10); ui.speed.value = speed; }
+    if (follow) { speed = ev?.speed ?? defaultSpeed(B); ui.speed.value = speed; }
   }
   updateCamera(dt);
   flashes.length = 0;

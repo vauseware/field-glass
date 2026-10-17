@@ -6,6 +6,8 @@
 import json, math
 D = lambda hm, day=17: f"1775-06-{day:02d} {hm}"
 def K(t, p, **kw): return dict(t=t, x=p[0], y=p[1], **kw)
+def plus(t, m):  # a time string m minutes later
+    import datetime as _d; return (_d.datetime.strptime(t, "%Y-%m-%d %H:%M") + _d.timedelta(minutes=m)).strftime("%Y-%m-%d %H:%M")
 units = []
 def unit(id, short, side, name, commander, type, strength, keys, **extra):
     units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength, keys=keys, **extra))
@@ -61,7 +63,7 @@ us("beach", "Stark's beach party", "Stark's men behind the stone wall thrown up 
     K(D("16:55"), (322, 462), h=315, state="retreat"), K(D("17:04"), (-150, 420)), K(D("17:14"), NECK, state="column"), K(D("17:33"), OFF), K(D("17:34"), OFF, state="hidden")], ranks=3)
 # Massachusetts regiments that came over the Neck in the afternoon, to the flèches and the gap behind the breastwork.
 def mass(id, short, name, cmd, n, t_in, t_at, at, h, keys, **extra):
-    us(id, short, name, cmd, "infantry", n, [K(t_in, OFF, h=135, state="column"), K(f"1775-06-17 {t_in[11:13]}:{int(t_in[14:16]) + 30:02d}" if int(t_in[14:16]) < 30 else t_at, NECK), K(t_at, at, h=h, state="line")] + keys, **extra)
+    us(id, short, name, cmd, "infantry", n, [K(t_in, OFF, h=135, state="column"), K(min(plus(t_in, 30), t_at), NECK), K(t_at, at, h=h, state="line")] + keys, **extra)
 mass("brewer", "Brewer", "Col. Brewer's Massachusetts regiment, at the flèches between breastwork and fence", "Col. Jonathan Brewer (wounded)", 300, D("14:10"), D("15:10"), (40, 125), 135,
      [K(D("15:30"), (40, 125), state="firing"), K(D("15:50"), (40, 125), state="line", strength=294), K(D("16:00"), (40, 125), state="firing"), K(D("16:22"), (40, 125), state="line", strength=288),
       K(D("16:32"), (40, 125), state="firing"), K(D("16:44"), (40, 125), state="line", strength=282)] + out(D("16:45"), (40, 125), D("16:52"), D("17:02"), D("17:17")))
@@ -87,7 +89,7 @@ us("gerrish", "Gerrish", "Col. Gerrish's regiment, which stayed on Bunker Hill a
 
 # Howe's force: the first wave formed in three lines on Morton's Hill at one o'clock, the second landed at three.
 def wave(id, short, name, cmd, type, n, land, t_land, slot, h, keys, **extra):
-    br(id, short, name, cmd, type, n, [K(t_land, land, h=h, state="column"), K(f"1775-06-17 {t_land[11:13]}:{int(t_land[14:16]) + 15:02d}", slot, state="line")] + keys, **extra)
+    br(id, short, name, cmd, type, n, [K(t_land, land, h=h, state="column"), K(plus(t_land, 15), slot, state="line")] + keys, **extra)
 def assault(slot, fwd, hf, t0, t1, t2, t3, s1, s2):  # advance in line, fire, fall back to the start line
     return [K(t0, slot, state="line"), K(t1, fwd, h=hf, state="firing"), K(t2, fwd, state="retreat", strength=s1), K(t3, slot, h=hf, state="line", strength=s2)]
 wave("li", "Light infantry", "The light infantry battalion: eleven flank companies, sent in column along the Mystic beach against the stone wall", "", "light_infantry", 350, (470, 60), D("12:50"), (420, 140), 300,
@@ -159,28 +161,44 @@ features = [
     dict(name="Winthrop Square", at=[72, -270]),
 ]
 events = [
-    (D("21:00", 16), "The march from Cambridge", "At nine on the night of 16 June, after a prayer on Cambridge Common, Colonel Prescott marches about a thousand Massachusetts men with entrenching tools and two field pieces over Charlestown Neck. On Bunker Hill the officers argue for an hour over which hill to fortify. They choose Breed's Hill, the lower one, within cannon shot of Boston.", [-700, 700], 2600),
+    (D("21:00", 16), "The march from Cambridge", "At nine on the night of 16 June, after a prayer on Cambridge Common, Colonel Prescott marches about a thousand Massachusetts men with entrenching tools and two field pieces over Charlestown Neck. On Bunker Hill the officers argue for an hour over which hill to fortify. They choose Breed's Hill, the lower one, within cannon shot of Boston.", [-700, 700], 2600, 120),
     (D("00:00"), "Digging on Breed's Hill", "Work begins at midnight: a redoubt eight rods square with walls six feet high, laid out by Colonel Gridley. Prescott twice walks down to the shore to listen to the Somerset's watch calling 'All's well'. The moon is four days past full.", [19, -17], 700),
     (D("04:00"), "The Lively opens fire", "At first light a sentry on the Lively sees the new works. Without orders she springs her cable and opens fire. Copp's Hill and the other ships join in. One man, Asa Pollard, is killed; Prescott walks the parapet to steady the rest.", [200, -250], 1500),
-    (D("09:00"), "The breastwork", "Prescott sees the redoubt can be turned on its left and runs a breastwork a hundred yards north to a slough. The flood tide brings floating batteries up to rake the Neck. At nine his officers ask to be relieved; he refuses, and sends Major Brooks to Cambridge for reinforcements on foot, since Putnam has taken the horses.", [60, 60], 900, 20),
-    (D("11:30"), "Boston parades", "Gage, Howe, Clinton and Burgoyne decide to land at Moulton's Point and attack the works in front. The light infantry, grenadiers and four regiments parade at half past eleven and embark at Long Wharf and the North Battery in twenty-eight barges.", [420, -500], 1800, 20),
+    (D("09:00"), "The breastwork", "Prescott sees the redoubt can be turned on its left and runs a breastwork a hundred yards north to a slough. The flood tide brings floating batteries up to rake the Neck. At nine his officers ask to be relieved; he refuses, and sends Major Brooks to Cambridge for reinforcements on foot, since Putnam has taken the horses.", [60, 60], 900),
+    (D("11:30"), "Boston parades", "Gage, Howe, Clinton and Burgoyne decide to land at Moulton's Point and attack the works in front. The light infantry, grenadiers and four regiments parade at half past eleven and embark at Long Wharf and the North Battery in twenty-eight barges.", [420, -500], 1800),
     (D("12:50"), "The landing", "About one o'clock the first wave, fifteen hundred men, lands unopposed at Moulton's Point and forms three lines on Morton's Hill. Howe looks at the works, sends back for more troops, and lets the men eat their dinner.", [420, 0], 1200),
     (D("13:00"), "The rail fence", "Knowlton's two hundred Connecticut men take post six hundred feet behind the redoubt at a rail fence running to the Mystic. They build a second fence beside it and stuff the gap with new-mown hay. Three small flèches are dug across the open ground between the fence and the breastwork.", [100, 250], 900),
-    (D("14:20"), "The Neck under fire", "Ward has sent Stark's and Reed's New Hampshire regiments. They cross the Neck under the fire of the Glasgow, the Symmetry and the floating batteries, Stark at a walk: 'one fresh man in action is worth ten fatigued ones'. He puts his left on the Mystic beach behind a stone wall thrown up at low water, and plants a stake a hundred feet in front of the fence.", [-800, 750], 1600, 20),
+    (D("14:20"), "The Neck under fire", "Ward has sent Stark's and Reed's New Hampshire regiments. They cross the Neck under the fire of the Glasgow, the Symmetry and the floating batteries, Stark at a walk: 'one fresh man in action is worth ten fatigued ones'. He puts his left on the Mystic beach behind a stone wall thrown up at low water, and plants a stake a hundred feet in front of the fence.", [-800, 750], 1600),
     (D("15:00"), "The second wave", "It is nearly three when the barges return with the 47th, the 1st Marines and the rest of the flank companies. They land nearer the town. Warren and Pomeroy arrive as volunteers, Warren to the redoubt, Pomeroy to the fence.", [300, -250], 1300),
     (D("15:25"), "Charlestown burns", "Snipers in the houses gall the marines on Pigot's left. Howe asks for the town to be fired: carcasses from Copp's Hill and a landing party from the Somerset set it alight. Four hundred buildings burn; the south-west wind carries the smoke off the field toward Boston.", [-100, -380], 1300),
-    (D("15:30"), "The first assault", "About half past three the general battle begins. The light infantry go in column along the beach against the stone wall; the grenadiers, four deep, cross the fences in waist-high grass toward the rail fence; Pigot's regiments advance on the redoubt. The Americans hold their fire until the regulars reach Stark's stake and Prescott's twenty yards, then shatter the lines. The light companies melt away.", [220, 180], 1100, 5),
-    (D("16:00"), "The second assault", "Howe forms again and comes on against Knowlton's fence instead of the beach, Pigot straight at the redoubt. For half an hour the lines fire volleys at the works and lose men; the Americans fire from behind rails and earth. Howe's staff are shot down round him. On Bunker Hill Putnam tries to bring down the regiments that have stopped there.", [150, 120], 1100, 5),
-    (D("16:12"), "Clinton crosses", "Clinton, watching from Copp's Hill, crosses on his own authority with the 2nd Marines and the 63rd and rallies about two hundred walking wounded on the shore below the burning town. He takes them in on Pigot's left.", [50, -400], 1200),
-    (D("16:30"), "Bayonets", "The men drop their knapsacks. Howe's artillery, freed of its wrong-calibre shot, is dragged to the gap and enfilades the breastwork. The light infantry hold the fence under fire while the 52nd, the 47th, the marines and Clinton's men come at the redoubt in column from three sides. Inside, the powder is nearly gone.", [100, 0], 800, 2),
-    (D("16:40"), "The redoubt stormed", "The last cartridges are fired and stones thrown. Pigot climbs a corner by one of the trees; Pitcairn is shot at the parapet. With the regulars inside and the dust so thick the sally port can scarcely be seen, Prescott orders the retreat and goes out last, parrying bayonets with his sword. Warren, leaving among the last, is shot in the head.", [19, -17], 600, 2),
+    (D("15:30"), "The first assault", "About half past three the general battle begins. The light infantry go in column along the beach against the stone wall; the grenadiers, four deep, cross the fences in waist-high grass toward the rail fence; Pigot's regiments advance on the redoubt. The Americans hold their fire until the regulars reach Stark's stake and Prescott's twenty yards, then shatter the lines. The light companies melt away.", [220, 180], 1100, 20),
+    (D("16:00"), "The second assault", "Howe forms again and comes on against Knowlton's fence instead of the beach, Pigot straight at the redoubt. For half an hour the lines fire volleys at the works and lose men; the Americans fire from behind rails and earth. Howe's staff are shot down round him. On Bunker Hill Putnam tries to bring down the regiments that have stopped there.", [150, 120], 1100, 20),
+    (D("16:12"), "Clinton crosses", "Clinton, watching from Copp's Hill, crosses on his own authority with the 2nd Marines and the 63rd and rallies about two hundred walking wounded on the shore below the burning town. He takes them in on Pigot's left.", [50, -400], 1200, 20),
+    (D("16:30"), "Bayonets", "The men drop their knapsacks. Howe's artillery, freed of its wrong-calibre shot, is dragged to the gap and enfilades the breastwork. The light infantry hold the fence under fire while the 52nd, the 47th, the marines and Clinton's men come at the redoubt in column from three sides. Inside, the powder is nearly gone.", [100, 0], 800, 10),
+    (D("16:40"), "The redoubt stormed", "The last cartridges are fired and stones thrown. Pigot climbs a corner by one of the trees; Pitcairn is shot at the parapet. With the regulars inside and the dust so thick the sally port can scarcely be seen, Prescott orders the retreat and goes out last, parrying bayonets with his sword. Warren, leaving among the last, is shot in the head.", [19, -17], 600, 10),
     (D("16:50"), "The fence holds", "Stark, Reed, Knowlton and the Connecticut companies keep the rail fence until the men from the redoubt are past, then withdraw in order over Bunker Hill. Burgoyne, watching from Boston: 'no flight; it was even covered with bravery and military skill.' Gardner is mortally wounded on the slope.", [-100, 300], 1300, 5),
     (D("17:00"), "Over the Neck", "The retreat crosses the Neck under the fire of the ships; Major McClary is cut in two by a cannon ball. About five the British take Bunker Hill and halt. Clinton urges a march on Cambridge; Howe, with a third of his force down, declines.", [-800, 700], 2000),
     (D("17:30"), "The cost", "The British lose 226 killed and 828 wounded of some three thousand engaged, a hundred of them officers, the heaviest loss of the war. The Americans lose about 450, with Warren, five of six guns and the tools. Gage: 'the rebels are not the despicable rabble too many have supposed'.", [-100, 150], 2400),
 ]
+# Hold in place through long gaps: without this a unit creeps toward a key hours away and the time-lapse never engages.
+# A turn in place takes its last two minutes; a move of more than three hours takes its last fifteen.
+def add_holds(units):
+    import datetime as _dt
+    ts = lambda s: _dt.datetime.strptime(s.replace("T", " ")[:16], "%Y-%m-%d %H:%M").timestamp()
+    for u in units:
+        ks, out = u["keys"], []
+        for a, c in zip(ks, ks[1:] + [None]):
+            out.append(a)
+            if c is None or a.get("state") == "hidden": continue
+            moved = (a["x"], a["y"]) != (c["x"], c["y"]); turned = "h" in c and c["h"] != next((k["h"] for k in reversed(out) if "h" in k), c["h"])
+            gap = ts(c["t"]) - ts(a["t"]); lead = 900 if moved else 120
+            if (moved and gap > 3 * 3600) or (turned and not moved and gap > 600):
+                out.append(dict(t=_dt.datetime.fromtimestamp(ts(c["t"]) - lead).strftime("%Y-%m-%d %H:%M"), x=a["x"], y=a["y"]))
+        u["keys"] = out
+add_holds(units)
 battle = dict(
     id="bunker-hill", name="Battle of Bunker Hill", date="1775-06-17", dateText="17 June 1775", place="Charlestown, Massachusetts",
-    origin=dict(lat=42.3765, lon=-71.0610), extent=3000, start=D("21:00", 16), end=D("17:45"), speed=10, lapse=1800, menPerDot=5,
+    origin=dict(lat=42.3765, lon=-71.0610), extent=3000, start=D("21:00", 16), end=D("17:45"), speed=30, lapse=1800, menPerDot=5,
     sunrise="04:22", sunset="19:38", water=-0.5, terrainExaggeration=3, contourInterval=3, trees=dict(density=0.0004, clear=[WEST, NORTH]),
     wind=dict(x=0.7, y=0.5), palette=dict(ground="#a3ac7c", high="#d0cb9a", tree="rgba(55,90,45,0.5)", water="#7f9fc0"),
     fields=[PENINSULA],

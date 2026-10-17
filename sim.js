@@ -104,6 +104,28 @@ export function activity(b, t) {
   return [false, Infinity];
 }
 
+// One playback step: dt real seconds at this speed, hurrying through quiet stretches when time-lapse is on but never
+// past the start of the next action. Returns [new battle time, lapsing].
+export function advance(b, t, dt, speed, lapse) {
+  const [busy, until] = activity(b, t), lapsing = lapse && !busy && b.lapse > speed;
+  let n = t + dt * (lapsing ? b.lapse : speed);
+  if (lapsing && n > until) n = until;
+  return [Math.min(n, b.endT), lapsing];
+}
+export const defaultSpeed = b => (SPEEDS.includes(b.speed) ? b.speed : 10);
+
+// Real seconds to play the whole battle as it opens: default speed, chapter speeds, Follow and Time-lapse on.
+export function playTime(b, dt = 1 / 30) {
+  let t = b.startT, cur, speed = defaultSpeed(b), secs = 0;
+  while (t < b.endT) {
+    const ev = eventAt(b, t);
+    if (ev !== cur) { cur = ev; speed = ev?.speed ?? defaultSpeed(b); }
+    [t] = advance(b, t, dt, speed, true);
+    secs += dt;
+  }
+  return Math.round(secs);
+}
+
 // Pose of a unit at battle time t, or null while hidden. State is a step function of the previous key.
 export function unitAt(u, t) {
   const k = u.keys;

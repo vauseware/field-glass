@@ -239,7 +239,7 @@ features = [
     dict(name="Frog Hollow", at=[8067, 6450]), dict(name="Princeton", at=[8800, 7350]), dict(name="Nassau Hall", at=[9100, 6950]), dict(name="to Kingston and Brunswick", at=[10300, 8300], rot=38),
     dict(name="to Newtown", at=[-10500, 1250]), dict(name="Mercer fell here", at=[7250, 5200], **{"from": D(3, "08:17")}),
 ]
-PACE = {"Eight o'clock": 20, "Rall forms": 20, "The orchard at Trenton": 20, "The Knyphausen regiment": 20, "The bridge": 20, "Mawhood turns back": 20, "The orchard": 5, "Washington's rally": 5, "Frog Hollow and Nassau Hall": 20, "Hand's delaying action": 60, "Into Trenton": 30}
+PACE = {"Eight o'clock": 30, "Rall forms": 30, "The orchard at Trenton": 30, "The Knyphausen regiment": 30, "The bridge": 60, "Mawhood turns back": 30, "The orchard": 10, "Washington's rally": 15, "Frog Hollow and Nassau Hall": 60, "Into Trenton": 60}
 events = [
     (D(25, "14:30"), "Christmas Day", "Washington's army, 2,400 men and eighteen guns, marches from its camps around Newtown to McConkey's Ferry. Rall's brigade of three Hessian regiments holds Trenton nine miles downstream, with no works: Rall has refused to dig. Ewing is to cross below the town and Cadwalader at Bristol; the ice will stop them both.", [-8000, 400], 7000),
     (D(25, "18:00"), "The crossing", "Glover's Marblehead fishermen begin ferrying the army in Durham boats and flat ferries at about six, ninety minutes after sunset, the river full of floating ice. The plan is to be over by midnight.", [-9000, 1350], 2500),
@@ -266,9 +266,25 @@ events = [
     (D(3, "11:00"), "To Kingston", "Washington gives up Brunswick for want of fresh troops and marches north-east as Leslie's advance guard appears at Stony Brook, where Kelly's party is tearing up the bridge. A straggler fires the 32-pounder from the earthwork and holds up Cornwallis for an hour. The British find Princeton empty at one.", [8200, 6500], 5000),
     (D(3, "13:00"), "After", "Ten days: two posts taken, some 1,200 prisoners, Cornwallis's army drawn into the hills. The British give up all New Jersey but Brunswick and Amboy. Mercer dies at the Clarke house on 12 January. Washington goes into winter quarters at Morristown.", [3000, -1000], 20000),
 ]
+# Hold in place through long gaps: without this a unit creeps toward a key hours away and the time-lapse never engages.
+# A turn in place takes its last two minutes; a move of more than three hours takes its last fifteen.
+def add_holds(units):
+    import datetime as _dt
+    ts = lambda s: _dt.datetime.strptime(s.replace("T", " ")[:16], "%Y-%m-%d %H:%M").timestamp()
+    for u in units:
+        ks, out = u["keys"], []
+        for a, c in zip(ks, ks[1:] + [None]):
+            out.append(a)
+            if c is None or a.get("state") == "hidden": continue
+            moved = (a["x"], a["y"]) != (c["x"], c["y"]); turned = "h" in c and c["h"] != next((k["h"] for k in reversed(out) if "h" in k), c["h"])
+            gap = ts(c["t"]) - ts(a["t"]); lead = 900 if moved else 120
+            if (moved and gap > 3 * 3600) or (turned and not moved and gap > 600):
+                out.append(dict(t=_dt.datetime.fromtimestamp(ts(c["t"]) - lead).strftime("%Y-%m-%d %H:%M"), x=a["x"], y=a["y"]))
+        u["keys"] = out
+add_holds(units)
 battle = dict(
     id="trenton-princeton", name="Trenton and Princeton", date="1776-12-25", dateText="25 December 1776 to 3 January 1777", place="Trenton and Princeton, New Jersey",
-    origin=dict(lat=40.2850, lon=-74.7650), extent=22000, start=D(25, "14:00"), end=D(3, "14:00"), speed=120, lapse=7200, menPerDot=20,
+    origin=dict(lat=40.2850, lon=-74.7650), extent=22000, start=D(25, "14:00"), end=D(3, "14:00"), speed=300, lapse=7200, menPerDot=20,
     sunrise="07:20", sunset="16:40", terrainExaggeration=2, contourInterval=5, trees=dict(density=0.00012, clear=[DELAWARE]),
     wind=dict(x=-0.5, y=-0.6), palette=dict(ground="#aeb08a", high="#d6d0a4", tree="rgba(60,85,45,0.45)", water="#7f9fc0"),
     tints=[dict(color="rgba(225,228,236,0.4)", **{"from": D(25, "23:00"), "until": D(27, "06:00")})],

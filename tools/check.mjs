@@ -1,7 +1,7 @@
 // Self-check for sim.js plus validation of every battle in battles/index.json. Run: npm run check
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import assert from 'node:assert/strict';
-import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity } from '../sim.js';
+import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime } from '../sim.js';
 
 const u = { id: 'x', side: 'a', type: 'infantry', strength: 100, keys: [
   { t: '07:00', x: 0, y: 0, h: 350 },
@@ -26,7 +26,9 @@ assert.deepEqual(activity(b, parseTime('07:30')), [false, Infinity], 'quiet afte
 console.log('sim.js: ok');
 
 let bad = 0;
-for (const { id } of JSON.parse(readFileSync('battles/index.json', 'utf8'))) {
+const index = JSON.parse(readFileSync('battles/index.json', 'utf8'));
+for (const entry of index) {
+  const { id } = entry;
   const dir = `battles/${id}`;
   const battle = normalizeBattle(JSON.parse(readFileSync(`${dir}/battle.json`, 'utf8')));
   const terrain = existsSync(`${dir}/terrain.json`) ? JSON.parse(readFileSync(`${dir}/terrain.json`, 'utf8')) : null;
@@ -35,5 +37,8 @@ for (const { id } of JSON.parse(readFileSync('battles/index.json', 'utf8'))) {
   console.log(`${id}: ${battle.units.length} units, ${battle.events.length} events, ${battle.fallen.length} casualty markers${problems.length ? '' : ', ok'}`);
   for (const p of problems) console.log('  ! ' + p);
   bad += problems.length;
+  entry.runtime = playTime(battle); // shown on the start screen; kept here so the page need not load every battle
 }
+writeFileSync('battles/index.json', JSON.stringify(index, null, 1) + '\n');
+console.log('runtimes (s): ' + index.map(e => `${e.id} ${e.runtime}`).join(', '));
 process.exit(bad ? 1 : 0);
