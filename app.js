@@ -186,7 +186,7 @@ const smokeSprite = (() => {
 function label(text, x, y, rot, color, size, italic, bold) {
   ctx.save(); ctx.translate(x, y);
   if (rot) ctx.rotate((-rot * Math.PI) / 180);
-  ctx.font = `${italic ? 'italic ' : ''}${bold ? '600 ' : ''}${size}px system-ui, sans-serif`;
+  ctx.font = `${italic ? 'italic ' : ''}${bold ? '600 ' : ''}${size}px Georgia, serif`;
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(245,240,225,0.9)'; ctx.strokeText(text, 0, 0);
   ctx.fillStyle = color; ctx.fillText(text, 0, 0);
@@ -230,7 +230,7 @@ function step(dt) {
 
 function draw() {
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  ctx.fillStyle = '#0d0f14'; ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#2b2116'; ctx.fillRect(0, 0, W, H);
   const half = B.extent / 2;
   ctx.imageSmoothingEnabled = true;
   ctx.drawImage(layer, w2sx(-half), w2sy(half), B.extent * cam.zoom, B.extent * cam.zoom);
@@ -317,7 +317,7 @@ function drawUnits() {
   }
   // Bigger units get their label first; a label that would overlap one already placed is dropped this frame.
   for (const l of labels.sort((a, b) => b.men - a.men)) {
-    ctx.font = `${l.size}px system-ui, sans-serif`;
+    ctx.font = `${l.size}px Georgia, serif`;
     const w = ctx.measureText(l.text).width + 6, h = l.size + 4, r = [l.x - w / 2, l.y - h / 2, l.x + w / 2, l.y + h / 2];
     if (placed.some(q => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1])) continue;
     placed.push(r);
@@ -400,7 +400,7 @@ function buildMarks(b) {
   layoutMarks();
 }
 function layoutMarks() {
-  const tw = ui.marks.clientWidth, dur = B.endT - B.startT, gap = 27; // a 20 px pill at 50° clears its neighbour at 27 px (27·sin 50° > 20)
+  const tw = ui.marks.clientWidth, dur = B.endT - B.startT, gap = 29; // a 22 px pill at 50° clears its neighbour at 29 px (29·sin 50° > 22)
   const px = B.events.map(ev => ((ev.t - B.startT) / dur) * tw);
   const k = Math.max(1, Math.ceil((marks.length * gap) / Math.max(1, tw))); // too many for the width: label every k-th
   const idx = [...marks.keys()].filter(i => i % k === 0), ax = idx.map(i => px[i]);
@@ -466,8 +466,8 @@ function buildLegend(b) {
 // ---------- hud and controls ----------
 
 function updateHud() {
-  ui.clock.textContent = (playing && lapsing ? '⏩ ' : '') + fmtTime(t);
-  ui.scrub.value = t;
+  ui.clock.textContent = (playing && lapsing ? '» ' : '') + fmtTime(t);
+  ui.scrub.value = t; ui.scrub.style.setProperty('--p', `${((t - B.startT) / (B.endT - B.startT)) * 100}%`);
   if (curEvent !== shownEvent) {
     shownEvent = curEvent;
     ui.capTitle.textContent = curEvent?.title ?? '';
