@@ -300,6 +300,13 @@ export function noiseCanvas(w, h, { cell = 8, seed = 1, octaves = 4, persist = 0
   g.globalAlpha = 1;
   return out;
 }
+// Film grain: an independent grey level per pixel between lo and hi, opaque. Scale it up for coarser grain.
+export function grainCanvas(w, h, seed, lo = 0, hi = 255) {
+  const c = canvas(w, h), g = c.getContext('2d'), img = g.createImageData(w, h), rnd = mulberry32(seed);
+  for (let i = 0; i < w * h; i++) { const v = lo + rnd() * (hi - lo); img.data[i * 4] = img.data[i * 4 + 1] = img.data[i * 4 + 2] = v; img.data[i * 4 + 3] = 255; }
+  g.putImageData(img, 0, 0);
+  return c;
+}
 // Soft cloud shadows: thresholded fBm as alpha in one colour. Small; CSS scales it over the window.
 export function cloudSheet(w, h, seed, color, maxA = 0.16, lo = 0.52, hi = 0.72) {
   const c = canvas(w, h), g = c.getContext('2d'), N = fbm(seed, 4, 3, 0.5), img = g.createImageData(w, h);
