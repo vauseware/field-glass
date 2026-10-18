@@ -17,13 +17,17 @@ export function parseTime(v) {
 }
 
 export const mod = (a, n) => ((a % n) + n) % n;
-const MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
-export function fmtTime(t) {
+export const MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
+// Hour, minute, and for a dated time its day and month index, for the skins' clocks.
+export function clockParts(t) {
   const h = mod(Math.floor(t / 3600), 24), m = mod(Math.floor(t / 60), 60);
-  const clock = `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
-  if (Math.abs(t) < 366 * 86400) return clock;
+  if (Math.abs(t) < 366 * 86400) return { h, m, day: null, month: null };
   const d = new Date(t * 1000);
-  return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}, ${clock}`;
+  return { h, m, day: d.getUTCDate(), month: d.getUTCMonth() };
+}
+export function fmtTime(t) {
+  const { h, m, day, month } = clockParts(t), clock = `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
+  return day == null ? clock : `${day} ${MONTHS[month]}, ${clock}`;
 }
 
 export function hash(s) {
@@ -47,6 +51,7 @@ export function lerpAngle(a, b, f) {
   const d = ((b - a + 540) % 360) - 180;
   return (a + d * f + 360) % 360;
 }
+const angleGap = (a, b) => Math.abs(mod(b - a + 180, 360) - 180);
 
 const fireLevel = s => (s === 'firing' ? 1 : s === 'skirmish' ? 0.3 : 0);
 
@@ -65,6 +70,12 @@ export function normalizeBattle(b) {
     for (const k of u.keys) {
       x = k.x ?? x; y = k.y ?? y; h = k.h ?? h; strength = k.strength ?? strength; state = k.state ?? state;
       Object.assign(k, { x, y, h, strength, state, fire: k.fire ?? fireLevel(state) });
+    }
+    // A key's facing is reached as late as possible, just before that key: a line keeps firing at the enemy until it turns
+    // to go. A unit marching off along its new facing turns first, then marches.
+    for (let i = 0; i + 1 < u.keys.length; i++) {
+      const a = u.keys[i], c = u.keys[i + 1], m = (Math.atan2(c.x - a.x, c.y - a.y) * 180) / Math.PI;
+      a.turnFirst = (a.x !== c.x || a.y !== c.y) && angleGap(c.h, m) < angleGap(a.h, m);
     }
   }
   b.events = (b.events ?? []).map(e => ({ ...e, t: parseTime(e.t) })).sort((p, q) => p.t - q.t);
@@ -126,6 +137,7 @@ export function playTime(b, dt = 1 / 30) {
   return Math.round(secs);
 }
 
+const TURN = 50; // battle seconds a formation takes to wheel to a new facing, at the start or end of a segment (see turnFirst)
 // Pose of a unit at battle time t, or null while hidden. State is a step function of the previous key.
 export function unitAt(u, t) {
   const k = u.keys;
@@ -134,9 +146,36 @@ export function unitAt(u, t) {
   while (i > 0 && k[i].t > t) i--;
   const a = k[i], c = k[i + 1];
   if (a.state === 'hidden') return null;
-  if (!c || c.t <= a.t) return { x: a.x, y: a.y, h: a.h, strength: a.strength, state: a.state, fire: a.fire };
-  const f = (t - a.t) / (c.t - a.t);
-  return { x: lerp(a.x, c.x, f), y: lerp(a.y, c.y, f), h: lerpAngle(a.h, c.h, f), strength: lerp(a.strength, c.strength, f), state: a.state, fire: a.fire };
+  if (!c || c.t <= a.t) return { x: a.x, y: a.y, h: a.h, strength: a.strength, state: a.state, fire: a.fire, moving: false };
+  const f = (t - a.t) / (c.t - a.t), span = Math.min(c.t - a.t, TURN);
+  const g = Math.min(1, Math.max(0, (a.turnFirst ? t - a.t : t - c.t + span) / span));
+  return { x: lerp(a.x, c.x, f), y: lerp(a.y, c.y, f), h: lerpAngle(a.h, c.h, g * g * (3 - 2 * g)), strength: lerp(a.strength, c.strength, f), state: a.state, fire: a.fire,
+    moving: a.x !== c.x || a.y !== c.y };
+}
+
+const grow = (bx, x0, y0, x1, y1) => (bx ? { x0: Math.min(bx.x0, x0), y0: Math.min(bx.y0, y0), x1: Math.max(bx.x1, x1), y1: Math.max(bx.y1, y1) } : { x0, y0, x1, y1 });
+const focusBox = (b, ev) => { const r = (ev.view ?? b.extent * 0.6) / 2; return { x0: ev.at[0] - r, y0: ev.at[1] - r, x1: ev.at[0] + r, y1: ev.at[1] + r }; };
+// World box {x0,y0,x1,y1} for the camera at t: the chapter's focus, sliding toward the next chapter's over the last `ahead`
+// seconds before it, joined by every nearby unit that moves or fights now or within `ahead` seconds, so marching columns
+// stay in frame and the camera is already looking where they are going. Nearby is within half a focus width of the focus:
+// the fight on another part of the field is another chapter's story. Null when there is nothing to frame.
+export function actionBox(b, t, ahead, pad = 30) {
+  const ev = eventAt(b, t), nx = b.events.find(e => e.t > t && e.at);
+  let fb = ev?.at ? focusBox(b, ev) : null;
+  if (nx && nx.t - t < ahead) {
+    const f = 1 - (nx.t - t) / ahead, nb = focusBox(b, nx);
+    fb = fb ? { x0: lerp(fb.x0, nb.x0, f), y0: lerp(fb.y0, nb.y0, f), x1: lerp(fb.x1, nb.x1, f), y1: lerp(fb.y1, nb.y1, f) } : nb;
+  }
+  const reach = fb ? Math.max(fb.x1 - fb.x0, fb.y1 - fb.y0) / 2 : Infinity;
+  let bx = fb;
+  for (const u of b.units) for (let i = 0; i <= 4; i++) {
+    const p = unitAt(u, t + (ahead * i) / 4);
+    if (!p || !(p.moving || BUSY.has(p.state))) continue;
+    if (fb && Math.max(fb.x0 - p.x, p.x - fb.x1, fb.y0 - p.y, p.y - fb.y1) > reach) continue;
+    const { F, ranks, rankD } = shape(u, p, b.menPerDot), r = Math.max(F / 2, ranks * rankD);
+    bx = grow(bx, p.x - r, p.y - r, p.x + r, p.y + r);
+  }
+  return bx && { x0: bx.x0 - pad, y0: bx.y0 - pad, x1: bx.x1 + pad, y1: bx.y1 + pad };
 }
 
 // Formation footprint: dot count, ranks, frontage (m), rank depth (m). Files are ~0.7 m for foot, 1 m for horse.
@@ -186,6 +225,20 @@ export function fallenMarkers(b) {
     }
   }
   return out.sort((p, q) => p.t - q.t);
+}
+
+// Where a unit went, as runs of [t, x, y] vertices: positions are straight lines between keys, so the keys are the
+// whole path. A hidden key ends a run where the unit was last seen; the next visible key starts another.
+export function tracks(u) {
+  const runs = [];
+  let run = null;
+  u.keys.forEach((k, i) => {
+    const prev = u.keys[i - 1], seen = k.state !== 'hidden' || (prev && prev.state !== 'hidden');
+    if (!seen) return;
+    (run ??= runs[runs.push([]) - 1]).push(k.t, k.x, k.y);
+    if (k.state === 'hidden') run = null;
+  });
+  return runs;
 }
 
 export function eventAt(b, t) {

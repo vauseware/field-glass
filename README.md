@@ -12,13 +12,13 @@ the battle through at the default settings (Follow and Time-lapse on, chapter sp
 to `battles/index.json`. A link with a battle in it (`#cowpens`) skips the start screen; `?plan=yorktown`
 picks the backdrop.
 
-![Cowpens, the main line engaged](docs/screenshots/cowpens-main-line.png)
-![Kings Mountain, the columns close round the ridge](docs/screenshots/kings-mountain-noose.png)
-![Guilford Courthouse, the first line](docs/screenshots/guilford-first-line.png)
-![The Waxhaws, the charge](docs/screenshots/waxhaws-charge.png)
-![Yorktown, the night of 14 October](docs/screenshots/yorktown-redoubts.png)
-![Bunker Hill, the first assault](docs/screenshots/bunker-hill-first-assault.png)
-![Princeton, the orchard](docs/screenshots/princeton-orchard.png)
+![Cowpens, the main line engaged](docs/screenshots/cowpens-main-line.jpg)
+![Kings Mountain, the columns close round the ridge](docs/screenshots/kings-mountain-noose.jpg)
+![Guilford Courthouse, the first line](docs/screenshots/guilford-first-line.jpg)
+![The Waxhaws, the charge](docs/screenshots/waxhaws-charge.jpg)
+![Yorktown, the night of 14 October](docs/screenshots/yorktown-redoubts.jpg)
+![Bunker Hill, the first assault](docs/screenshots/bunker-hill-first-assault.jpg)
+![Princeton, the orchard](docs/screenshots/princeton-orchard.jpg)
 
 Battles so far: Bunker Hill (17 June 1775), Trenton and Princeton (25 December 1776 to 3 January 1777), the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781),
 Guilford Courthouse (15 March 1781) and the siege of Yorktown (28 September to 19 October 1781).
@@ -36,20 +36,43 @@ On claw-mini the launch agent `com.vauseware.battle-sim` serves this folder on 1
 
 ## Deploy
 
-`npm run deploy` copies the page, `app.js`, `sim.js` and each battle's `battle.json` and `terrain.json` into
-`dist/` (`tools/build.sh`) and uploads it as the Worker `fieldglass`, served at https://fieldglass.vause.io/.
+`npm run deploy` copies the page, `app.js`, `sim.js`, the skins and each battle's `battle.json` and `terrain.json`
+into `dist/` (`tools/build.sh`) and uploads it as the Worker `fieldglass`, served at https://fieldglass.vause.io/.
 The vause.io zone redirects only the bare domain and www to vauseware.com.
 
-Static files only. `index.html` is the shell, `app.js` draws, `sim.js` is the DOM-free timeline
-logic. `#cowpens@07:45` opens a battle at a time of day (`#yorktown@1781-10-14T20:00` for a dated one);
-`#cowpens@07:45,play` starts it playing. `,warp` pre-runs five seconds of frames, which is how headless
-screenshots see smoke and the camera; `,legend` opens the legend.
+Static files only. `index.html` is the shell, `app.js` runs the camera, the clock and the panels, the skins in
+`themes/` draw, `sim.js` is the DOM-free timeline logic. `#cowpens@07:45` opens a battle at a time of day
+(`#yorktown@1781-10-14T20:00` for a dated one); `#cowpens@07:45,play` starts it playing. `,warp` pre-runs five
+seconds of frames, which is how headless screenshots see smoke and the camera; `,select=howard` opens a unit's card;
+`,legend` opens the legend.
 
 The chapters sit above the scrubber as ticks, their titles slanting up over the map on leader lines
 so crowded chapters can be spread apart: click one to jump there (the camera follows again). **Legend** in the
 top panel lists only the symbols the current battle uses. The story panel opens at each new chapter with the chapter's approximate hour; **Hide** folds it to the title. **Outcome** in the top panel opens to the result and each side's losses (`outcome` in `make.py`).
 Every unit carries its name when there is
 room; labels that would overlap are dropped, biggest unit first.
+
+## Skins
+
+Each war gets its own look, a skin (`themes.js`, with the drawing in `themes/`). A skin owns the terrain baked into
+the map layer, how units, fire, the fallen and the night are drawn, what shows beyond the map edge, the ambient layers
+over the map, the clock, the legend's swatches and the panels' dress (`body.theme-<id>` in `index.html`). A battle
+wears the skin its `theme` field names, and the Revolution skin when it names none.
+
+Only the Revolution skin is built: an engraved and hand-coloured plan on laid paper. Hachures shade the slopes, woods
+are clumped engraved canopies, fields are ruled with furrows, fences zig-zag, creeks and shores are water-lined, and a
+compass rose and scale of yards sit in a free corner. Each unit's path is engraved behind it as the battle plays, the
+last quarter hour darker than the rest. At night an umber dark falls over the map and a candle lights its middle. The
+scrubber is ruled as a scale of hours. Drifting cloud shadows, paper grain and the candle are page layers the browser
+composites, so the map canvas never redraws them.
+
+Two more skins are chosen and deferred until a battle of their war arrives: the Civil War as a topographical
+engineer's survey (brown contours in feet, scalloped woods, red-ochre roads, units ruled into companies under small
+flags), and the Second World War as a recon photo mosaic on a lamp-lit operations table (painted counters, chinagraph
+frontages and advance arrows, a 1 km grid). See `docs/adr/0002-per-war-skins.md`.
+
+`,bench` on a link measures the cost of a frame; `bash tools/bench.sh 'guilford@14:02,play,warp'` runs it in headless
+Chrome and prints milliseconds per frame and the time the layer took to build.
 
 **Time-lapse** (on by default, key `t`) hurries through stretches where nothing moves: the clock runs
 at the battle's `lapse` rate until 90 seconds before the next movement, appearance or fight. A siege
@@ -73,6 +96,7 @@ than a day; one battle uses one form throughout.
 | field | meaning |
 |---|---|
 | `extent` | map width and height in metres, centred on `origin` |
+| `theme` | the skin (`themes.js`); `revolution`, the default, is the only one so far |
 | `start`, `end`, `sunrise`, `sunset` | battle clock; the map is tinted before sunrise and, if `sunset` is given, every night |
 | `speed`, `lapse` | default playback multiplier, and the multiplier for quiet stretches under time-lapse (default `speed × 6`) |
 | `water` | elevation in metres at or below which the DEM is drawn as water (rivers are flattened to about 0) |
