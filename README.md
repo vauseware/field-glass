@@ -41,7 +41,8 @@ screenshots see smoke and the camera; `,legend` opens the legend.
 
 The chapters sit above the scrubber as ticks, their titles slanting up over the map on leader lines
 so crowded chapters can be spread apart: click one to jump there (the camera follows again). **Legend** in the
-top panel lists only the symbols the current battle uses. Every unit carries its name when there is
+top panel lists only the symbols the current battle uses. The story panel opens at each new chapter with the chapter's span of time; **Hide** folds it to the title.
+Every unit carries its name when there is
 room; labels that would overlap are dropped, biggest unit first.
 
 **Time-lapse** (on by default, key `t`) hurries through stretches where nothing moves: the clock runs

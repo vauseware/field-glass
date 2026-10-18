@@ -2,8 +2,8 @@ import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, adva
 
 const $ = s => document.querySelector(s);
 const canvas = $('#map'), ctx = canvas.getContext('2d');
-const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $('#clock'), follow: $('#follow'), battle: $('#battle'),
-  title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'),
+const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $('#clock'), follow: $('#follow'),
+  title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'), capWhen: $('#cap-when'), capFold: $('#cap-fold'),
   hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse'),
   marks: $('#marks'), splash: $('#splash'), splashList: $('#splash-list'), plan: $('#plan'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list') };
 
@@ -472,7 +472,9 @@ function updateHud() {
     shownEvent = curEvent;
     ui.capTitle.textContent = curEvent?.title ?? '';
     ui.capText.textContent = curEvent?.text ?? '';
+    ui.capWhen.textContent = curEvent ? chapterSpan(curEvent) : '';
     ui.caption.classList.toggle('show', !!curEvent);
+    foldCaption(false); // every new chapter opens with its story showing
     marks.forEach((m, i) => { m.classList.toggle('on', B.events[i] === curEvent); leads[i].classList.toggle('on', B.events[i] === curEvent); });
   }
   let best = null, bd = 28;
@@ -489,6 +491,22 @@ function updateHud() {
   if (best) ui.hover.innerHTML = `<b>${best.name}</b><br>${best.commander ? best.commander + '<br>' : ''}${B.sides[best.side].name} · ${best.type.replace('_', ' ')}<br>${Math.round(best.pose.strength)} men · ${STATE_TEXT[best.pose.state] ?? ''}`;
 }
 
+// "8:00 – 8:15 AM", or "26 Dec, 8:00 AM – 27 Dec, 3:00 AM": from this chapter to the next, the day given once when it does not change.
+function chapterSpan(ev) {
+  const i = B.events.indexOf(ev), a = fmtTime(ev.t), b = fmtTime(B.events[i + 1]?.t ?? B.endT);
+  const [da, ta] = a.includes(', ') ? a.split(', ') : ['', a], [db, tb] = b.includes(', ') ? b.split(', ') : ['', b];
+  const [ha, pa] = ta.split(' '), [, pb] = tb.split(' ');
+  if (da !== db) return `${a} – ${b}`;
+  return `${da ? da + ', ' : ''}${pa === pb ? ha : ta} – ${tb}`;
+}
+function foldCaption(v) {
+  ui.caption.classList.toggle('folded', v);
+  ui.capFold.textContent = v ? 'Show' : 'Hide';
+  ui.capFold.setAttribute('aria-expanded', String(!v));
+  ui.capFold.title = ui.capFold.ariaLabel = v ? 'Show the story' : 'Hide the story';
+}
+ui.capFold.onclick = () => foldCaption(!ui.caption.classList.contains('folded'));
+
 const nudge = () => Math.max(30, (B.endT - B.startT) / 240); // arrow keys: 30 s, or 1/240 of a long battle
 function setPlaying(v) { playing = v; ui.play.textContent = v ? '❚❚' : '▶'; ui.play.setAttribute('aria-label', v ? 'Pause' : 'Play'); }
 function seek(v) { t = Math.max(B.startT, Math.min(B.endT, v)); smoke.length = 0; }
@@ -498,7 +516,6 @@ ui.speed.onchange = () => { speed = +ui.speed.value; };
 ui.scrub.oninput = () => seek(+ui.scrub.value);
 ui.follow.onchange = () => { follow = ui.follow.checked; };
 ui.lapse.onchange = () => { lapse = ui.lapse.checked; };
-ui.battle.onchange = () => loadBattle(ui.battle.value);
 ui.srcBtn.onclick = () => ui.sources.showModal();
 ui.legendBtn.onclick = () => ui.legendDlg.showModal();
 addEventListener('keydown', e => {
@@ -529,11 +546,6 @@ function frame(now) {
 
 for (const s of SPEEDS) ui.speed.add(new Option(`${s}×`, s));
 const list = (await (await fetch('battles/index.json')).json()).sort((a, b) => a.date.localeCompare(b.date));
-const groups = new Map(); // one optgroup per war, in order of each war's first battle
-for (const b of list) {
-  if (!groups.has(b.war)) { const g = document.createElement('optgroup'); g.label = b.war; groups.set(b.war, g); ui.battle.add(g); }
-  groups.get(b.war).append(new Option(b.name, b.id));
-}
 // ---------- start screen ----------
 
 // A period battle plan as the backdrop: one battle's own contours, roads and creeks in sepia ink, its regiments as
@@ -641,13 +653,13 @@ function showSplash(list) {
   ui.splashList.onclick = async e => {
     const id = e.target.closest('button')?.dataset.id;
     if (!id) return;
-    ui.splash.hidden = true; ui.battle.value = id; location.hash = id;
+    ui.splash.hidden = true; location.hash = id;
     await loadBattle(id); setPlaying(true);
   };
 }
 
 const want = location.hash.slice(1).split(/[@,]/)[0];
-if (list.some(b => b.id === want)) { ui.battle.value = want; await loadBattle(want); }
+if (list.some(b => b.id === want)) await loadBattle(want);
 else showSplash(list);
 ui.home.onclick = () => { setPlaying(false); showSplash(list); };
 requestAnimationFrame(frame);

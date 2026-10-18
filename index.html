@@ -23,7 +23,7 @@
   #legend span { display: inline-flex; align-items: center; gap: 6px; }
   #legend i { width: 16px; height: 16px; border-radius: 2px; display: inline-block; }
   #top .row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
-  #top .row select { flex: 1; min-width: 0; }
+  #top .row button { min-height: 40px; padding: 6px 14px; }
   select, button { font: inherit; color: var(--ink); background: #262a33; border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 8px 14px; min-height: 48px; }
   button { cursor: pointer; }
   button:hover, select:hover { background: #30353f; }
@@ -33,6 +33,10 @@
   .nofade #caption { transition: none; }
   #cap-title { font-weight: 650; font-size: 22px; color: var(--accent); }
   #cap-text { font-size: 20px; margin-top: 6px; }
+  .cap-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+  #cap-when { color: var(--muted); font-size: 15px; font-variant-numeric: tabular-nums; }
+  #cap-fold { flex: none; min-height: 40px; padding: 4px 12px; font-size: 15px; }
+  #caption.folded #cap-text { display: none; }
   #bar { left: 16px; right: 16px; bottom: 16px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; }
   #play { width: 56px; min-width: 56px; font-size: 22px; }
   #track { flex: 1; min-width: 80px; position: relative; padding-top: 12px; }
@@ -89,8 +93,7 @@
   <div id="legend"></div>
   <div id="hint">Drag to look around, scroll or pinch to zoom. Space pauses.</div>
   <div class="row">
-    <select id="battle" aria-label="Battle"></select>
-    <button id="home" title="All battles">☰</button>
+    <button id="home">☰ All battles</button>
     <button id="legend-btn">Legend</button>
     <button id="src-btn">Sources</button>
   </div>
@@ -99,7 +102,10 @@
 <aside id="hover" class="panel" hidden></aside>
 
 <div id="caption" class="panel">
-  <div id="cap-title"></div>
+  <div class="cap-head">
+    <div><div id="cap-when"></div><div id="cap-title"></div></div>
+    <button id="cap-fold" aria-expanded="true" aria-label="Hide the story" title="Hide the story">Hide</button>
+  </div>
   <div id="cap-text"></div>
 </div>
 
