@@ -6,11 +6,16 @@ that would change the outcome. Built for a laptop with integrated graphics.
 
 ![The start screen](docs/screenshots/start-screen.png)
 
-The start screen lists every battle with its running time and draws one of them, at random, as a sepia
-battle plan from its own terrain and troop positions. `npm run check` measures each running time by playing
-the battle through at the default settings (Follow and Time-lapse on, chapter speeds honoured) and writes it
-to `battles/index.json`. A link with a battle in it (`#cowpens`) skips the start screen; `?plan=yorktown`
-picks the backdrop.
+The start screen shows one war at a time, chosen on a timeline of the years along its foot. Each war's card
+lists its battles with their running times over a backdrop in the dress of its maps: a Revolution battle, picked
+at random, as a sepia plan; Sidi Bou Zid's recon mosaic under the operations-room lamp; and for the Civil War,
+which has no battles yet, an in-preparation card over Guilford Courthouse drawn as an engineer's survey.
+`npm run check` measures each running time by playing the battle through at the default settings (Follow and
+Time-lapse on, chapter speeds honoured), writes it to `battles/index.json`, and fails if a battle's `war` has
+no entry in `WARS` (`splash.js`). `#ww2` opens the start screen on a war (`revolution`, `civil-war`, `ww2`); a
+bare URL opens the Revolution. A link with a battle in it (`#cowpens`) skips the start screen, and All battles
+returns to that battle's war. `?plan=yorktown` picks the Revolution's backdrop. See
+[ADR-0005](docs/adr/0005-start-screen-per-war-timeline.md).
 
 ![Cowpens, the main line engaged](docs/screenshots/cowpens-main-line.jpg)
 ![Kings Mountain, the columns close round the ridge](docs/screenshots/kings-mountain-noose.jpg)
@@ -36,7 +41,7 @@ On claw-mini the launch agent `com.vauseware.battle-sim` serves this folder on 1
 
 ## Deploy
 
-`npm run deploy` copies the page, `app.js`, `sim.js`, the skins and each battle's `battle.json` and `terrain.json`
+`npm run deploy` copies the page, `app.js`, `sim.js`, `splash.js`, the skins and each battle's `battle.json` and `terrain.json`
 into `dist/` (`tools/build.sh`) and uploads it as the Worker `fieldglass`, served at https://fieldglass.vause.io/.
 The vause.io zone redirects only the bare domain and www to vauseware.com.
 
