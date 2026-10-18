@@ -3,5 +3,5 @@
   "name": "fieldglass",
   "compatibility_date": "2026-10-01",
   "assets": { "directory": "dist" },
-  "routes": [{ "pattern": "fieldglass.vause.dev", "custom_domain": true }]
+  "routes": [{ "pattern": "fieldglass.vause.io", "custom_domain": true }]
 }

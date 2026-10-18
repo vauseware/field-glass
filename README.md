@@ -37,8 +37,8 @@ On claw-mini the launch agent `com.vauseware.battle-sim` serves this folder on 1
 ## Deploy
 
 `npm run deploy` copies the page, `app.js`, `sim.js` and each battle's `battle.json` and `terrain.json` into
-`dist/` (`tools/build.sh`) and uploads it as the Worker `fieldglass`, served at https://fieldglass.vause.dev/.
-The vause.dev zone redirects every other host to vauseware.com; its redirect rule must leave this host out.
+`dist/` (`tools/build.sh`) and uploads it as the Worker `fieldglass`, served at https://fieldglass.vause.io/.
+The vause.io zone redirects only the bare domain and www to vauseware.com.
 
 Static files only. `index.html` is the shell, `app.js` draws, `sim.js` is the DOM-free timeline
 logic. `#cowpens@07:45` opens a battle at a time of day (`#yorktown@1781-10-14T20:00` for a dated one);
