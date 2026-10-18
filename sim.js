@@ -2,7 +2,7 @@
 
 export const SPEEDS = [1, 2, 5, 10, 20, 30, 60, 120, 300, 600, 1800, 3600, 7200];
 export const STATES = ['hidden', 'column', 'line', 'skirmish', 'firing', 'charge', 'retreat', 'rout', 'surrender'];
-export const TYPES = ['infantry', 'light_infantry', 'militia', 'riflemen', 'cavalry', 'artillery'];
+export const TYPES = ['infantry', 'light_infantry', 'militia', 'riflemen', 'cavalry', 'artillery', 'armor'];
 export const STATE_TEXT = { column: 'in column', line: 'in line', skirmish: 'skirmishing', firing: 'firing', charge: 'charging', retreat: 'withdrawing', rout: 'routed', surrender: 'surrendered' };
 
 // "HH:MM[:SS]" is seconds into the day. "YYYY-MM-DD HH:MM[:SS]" (a T also separates) is seconds since 1970,
@@ -178,10 +178,20 @@ export function actionBox(b, t, ahead, pad = 30) {
   return bx && { x0: bx.x0 - pad, y0: bx.y0 - pad, x1: bx.x1 + pad, y1: bx.y1 + pad };
 }
 
-// Formation footprint: dot count, ranks, frontage (m), rank depth (m). Files are ~0.7 m for foot, 1 m for horse.
+// An armor unit's strength counts vehicles, not men: a dot for each vehicle and a casualty marker for each one lost.
+export const perDot = (u, mpd) => (u.type === 'armor' ? 1 : mpd);
+
+// Formation footprint: dot count, ranks, frontage (m), rank depth (m). Files are ~0.7 m for foot, 1 m for horse;
+// tanks keep about 50 m apart in line and 30 m nose to tail on a road.
 export function shape(u, pose, mpd) {
+  mpd = perDot(u, mpd);
   const men = Math.max(0, pose.strength), nd = Math.max(1, Math.ceil(men / mpd)), s = pose.state;
   if (u.type === 'artillery') return { nd, ranks: 2, F: (u.guns ?? 1) * 14, rankD: 4 };
+  if (u.type === 'armor') {
+    if (s === 'column') return { nd, ranks: nd, F: 4, rankD: 30 };
+    if (s === 'rout') return { nd, ranks: Math.ceil(nd / 3), F: nd * 40, rankD: 40 };
+    return { nd, ranks: 1, F: Math.max(10, nd * 50), rankD: 30 };
+  }
   if (s === 'column') return { nd, ranks: Math.ceil(nd / 4), F: 8, rankD: Math.max(1.5, mpd * 0.5) };
   if (s === 'rout') return { nd, ranks: Math.ceil(nd / 6), F: Math.max(10, men * 0.25), rankD: 6 };
   if (s === 'skirmish') return { nd, ranks: 1, F: Math.max(10, men * 2.5), rankD: 3 };
@@ -195,7 +205,8 @@ export function dots(u, pose, mpd, out = []) {
   const { nd, ranks, F, rankD } = shape(u, pose, mpd);
   const perFile = Math.ceil(nd / ranks), sp = F / perFile;
   const rad = (pose.h * Math.PI) / 180, dx = Math.sin(rad), dy = Math.cos(rad);
-  const jit = u.loose && pose.state !== 'column' ? 3 : { rout: 8, skirmish: 2, charge: 1, retreat: 0.8 }[pose.state] ?? 0.3;
+  const open = pose.state !== 'column' && (u.loose ? 3 : u.type === 'armor' ? 6 : 0);
+  const jit = open || ({ rout: 8, skirmish: 2, charge: 1, retreat: 0.8 }[pose.state] ?? 0.3);
   const rnd = mulberry32(hash(u.id));
   for (let i = 0; i < nd; i++) {
     const uu = ((i % perFile) - (perFile - 1) / 2) * sp + (rnd() - 0.5) * 2 * jit;
@@ -205,14 +216,14 @@ export function dots(u, pose, mpd, out = []) {
   return out;
 }
 
-// Casualty markers for the whole battle, sorted by time: one per menPerDot men lost between keys.
+// Casualty markers for the whole battle, sorted by time: one per menPerDot men (or per vehicle) lost between keys.
 export function fallenMarkers(b) {
   const out = [], mpd = b.menPerDot;
   for (const u of b.units) {
     const rnd = mulberry32(hash(u.id) ^ 0x9e3779b9);
     for (let i = 0; i + 1 < u.keys.length; i++) {
       const a = u.keys[i], c = u.keys[i + 1];
-      const n = Math.floor(a.strength / mpd) - Math.floor(c.strength / mpd);
+      const m = perDot(u, mpd), n = Math.floor(a.strength / m) - Math.floor(c.strength / m);
       for (let j = 0; j < n; j++) {
         const t = a.t + rnd() * Math.max(1, c.t - a.t);
         const p = unitAt(u, t);
@@ -271,6 +282,7 @@ export function validate(b, terrain) {
       if (f[key] != null && (f[key] < b.startT || f[key] > b.endT)) p.push(`feature ${f.name ?? f.type ?? f.color}: ${key} outside battle clock`);
     }
     if (f.type === 'smoke' && !(f.at && f.rate > 0)) p.push(`smoke feature ${f.name ?? ''} needs at and rate`);
+    if (f.type === 'airstrike' && !(f.at && f.from != null && f.until != null)) p.push(`airstrike ${f.name ?? ''} needs at, from and until`);
   }
   for (const e of b.events) {
     if (e.t < b.startT || e.t > b.endT) p.push(`event "${e.title}": outside battle clock`);
