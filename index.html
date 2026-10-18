@@ -70,7 +70,8 @@
   #marks path { fill: none; stroke: var(--rule); stroke-width: 1.5; } #marks path.on { stroke: var(--accent); stroke-width: 2.5; }
   #marks button { position: absolute; bottom: 23px; min-height: 0; height: 22px; padding: 0 8px; border-radius: 2px; background: var(--paper-solid); box-shadow: 0 1px 3px rgba(40,25,10,0.4); font-size: 16px; line-height: 20px; white-space: nowrap; transform-origin: 0 100%; transform: rotate(-50deg); }
   #marks button:hover, #marks button.on { color: var(--accent); } #marks button.on { border-color: var(--accent); border-width: 2px; line-height: 18px; }
-  #clock { font-variant-numeric: tabular-nums lining-nums; min-width: 100px; text-align: center; font-size: 21px; font-weight: 700; white-space: nowrap; }
+  #clock { flex: none; position: relative; margin-left: 12px; font-variant-numeric: tabular-nums lining-nums; text-align: left; font-size: 21px; font-weight: 700; white-space: nowrap; }
+  #clock.lapsing::before { content: "»"; position: absolute; right: 100%; padding-right: 4px; } /* time-lapse running; outside the width so it never shifts the bar */
   #bar label { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font: 19px var(--fell); cursor: pointer; }
   #bar input[type=checkbox] { width: 22px; height: 22px; margin: 0; accent-color: var(--muted); }
   dialog { background: var(--paper-solid); color: var(--ink); border: 1px solid var(--rule); box-shadow: var(--frame); max-width: min(640px, calc(100vw - 42px)); max-height: calc(100vh - 42px); padding: 20px 26px; }
@@ -101,10 +102,10 @@
     #top h1 { font-size: 22px; } #sub { font-size: 15px; } #hint, #legend { display: none; }
     select, button { min-height: 44px; padding: 6px 10px; font-size: 17px; }
     #hover { display: none; }
-    #bar { left: 17px; right: 17px; bottom: 17px; gap: 5px; padding: 8px 6px; } #bar label span { display: none; } #speed { padding: 6px 2px 6px 6px; }
-    #play { width: 48px; min-width: 48px; font-size: 20px; } #clock { min-width: 0; font-size: 15px; }
-    #track { min-width: 30px; padding-top: 0; } #marks { display: none; } /* no room for chapters on a phone's scrubber */
-    #caption { top: auto; bottom: 96px; left: 17px; right: 17px; width: auto; max-height: 40vh; padding: 10px 14px; } #cap-title { font-size: 21px; } #cap-when { font-size: 15px; } #cap-text { font-size: 17px; margin-top: 6px; padding-top: 6px; }
+    #bar { left: 17px; right: 17px; bottom: 17px; gap: 0 6px; padding: 8px 10px 0; flex-wrap: wrap; } #clock { margin-left: auto; } #bar label span { display: none; } #speed { padding: 6px 0 6px 4px; font-size: 16px; }
+    #play { width: 44px; min-width: 44px; font-size: 18px; } #clock { font-size: 15px; }
+    #track { order: 1; flex: 1 0 100%; padding-top: 0; } #marks { display: none; } /* the scrubber takes its own row; no room for chapters */
+    #caption { top: auto; bottom: 150px; left: 17px; right: 17px; width: auto; max-height: 40vh; padding: 10px 14px; } #cap-title { font-size: 21px; } #cap-when { font-size: 15px; } #cap-text { font-size: 17px; margin-top: 6px; padding-top: 6px; }
   }
 </style>
 </head>

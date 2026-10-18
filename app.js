@@ -33,6 +33,7 @@ async function loadBattle(id) {
   for (const s of SPEEDS) if (s <= 120 || dur / s >= 120) ui.speed.add(new Option(`${s}×`, s)); // the big speeds only when the battle lasts
   ui.speed.value = speed;
   ui.scrub.min = b.startT; ui.scrub.max = b.endT;
+  sizeClock();
   buildMarks(b); buildLegend(b);
   ui.title.textContent = b.name;
   ui.sub.textContent = `${b.place} · ${b.dateText ?? b.date}`;
@@ -477,7 +478,7 @@ function buildLegend(b) {
 // ---------- hud and controls ----------
 
 function updateHud() {
-  ui.clock.textContent = (playing && lapsing ? '» ' : '') + fmtTime(t);
+  ui.clock.textContent = fmtTime(t); ui.clock.classList.toggle('lapsing', playing && lapsing);
   ui.scrub.value = t; ui.scrub.style.setProperty('--p', `${((t - B.startT) / (B.endT - B.startT)) * 100}%`);
   if (curEvent !== shownEvent) {
     shownEvent = curEvent;
@@ -543,7 +544,16 @@ function resize() {
   canvas.width = W * DPR; canvas.height = H * DPR;
   canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 }
-addEventListener('resize', () => { resize(); if (B) clampCam(); });
+// Georgia's figures differ in width, so the clock is held at the width of the widest time it can show; otherwise every tick nudges the scrubber.
+function sizeClock() {
+  let w = 0; ui.clock.style.width = '';
+  for (let d = B.startT; d < B.endT + 86400; d += 86400) { // 10:00 PM on each day of the battle
+    ui.clock.textContent = fmtTime(d - mod(d, 86400) + 79200);
+    w = Math.max(w, ui.clock.offsetWidth);
+  }
+  ui.clock.style.width = `${w + 4}px`;
+}
+addEventListener('resize', () => { resize(); if (B) { clampCam(); sizeClock(); } });
 new ResizeObserver(() => B && layoutMarks()).observe(ui.marks); // the track also narrows when the clock text widens
 resize();
 
