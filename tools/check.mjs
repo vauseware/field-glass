@@ -1,7 +1,7 @@
 // Self-check for sim.js plus validation of every battle in battles/index.json. Run: npm run check
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import assert from 'node:assert/strict';
-import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime, actionBox } from '../sim.js';
+import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime, actionBox, tracks } from '../sim.js';
 
 const u = { id: 'x', side: 'a', type: 'infantry', strength: 100, keys: [
   { t: '07:00', x: 0, y: 0, h: 350 },
@@ -18,6 +18,9 @@ assert.equal(unitAt(u, parseTime('07:15')).fire, 1);
 assert.equal(unitAt(u, parseTime('07:21')), null, 'hidden after hidden key');
 assert.equal(dots(u, unitAt(u, parseTime('07:00')), 10).length, 20, 'ten dots');
 assert.equal(b.fallen.length, 5, 'one marker per 10 men lost');
+assert.deepEqual(tracks(u), [[parseTime('07:00'), 0, 0, parseTime('07:10'), 100, 0, parseTime('07:20'), 100, 0]], 'track ends where the unit was last seen');
+assert.deepEqual(tracks({ keys: [{ t: 1, x: 0, y: 0, state: 'hidden' }, { t: 2, x: 5, y: 0, state: 'line' }, { t: 3, x: 9, y: 0, state: 'hidden' }, { t: 4, x: 1, y: 1, state: 'hidden' }, { t: 5, x: 2, y: 2, state: 'line' }] }),
+  [[2, 5, 0, 3, 9, 0], [5, 2, 2]], 'a hidden spell splits the track');
 assert.equal(lerpAngle(350, 10, 0.5), 0, 'heading wraps through north');
 assert.equal(parseTime('1781-10-14T20:00') - parseTime('1781-10-13 20:00'), 86400, 'dated times');
 assert.equal(fmtTime(parseTime('1781-10-14 20:05')), '14 Oct, 8:05 PM', 'dated clock');

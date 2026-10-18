@@ -17,13 +17,17 @@ export function parseTime(v) {
 }
 
 export const mod = (a, n) => ((a % n) + n) % n;
-const MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
-export function fmtTime(t) {
+export const MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
+// Hour, minute, and for a dated time its day and month index, for the skins' clocks.
+export function clockParts(t) {
   const h = mod(Math.floor(t / 3600), 24), m = mod(Math.floor(t / 60), 60);
-  const clock = `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
-  if (Math.abs(t) < 366 * 86400) return clock;
+  if (Math.abs(t) < 366 * 86400) return { h, m, day: null, month: null };
   const d = new Date(t * 1000);
-  return `${d.getUTCDate()} ${MONTHS[d.getUTCMonth()]}, ${clock}`;
+  return { h, m, day: d.getUTCDate(), month: d.getUTCMonth() };
+}
+export function fmtTime(t) {
+  const { h, m, day, month } = clockParts(t), clock = `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
+  return day == null ? clock : `${day} ${MONTHS[month]}, ${clock}`;
 }
 
 export function hash(s) {
@@ -221,6 +225,20 @@ export function fallenMarkers(b) {
     }
   }
   return out.sort((p, q) => p.t - q.t);
+}
+
+// Where a unit went, as runs of [t, x, y] vertices: positions are straight lines between keys, so the keys are the
+// whole path. A hidden key ends a run where the unit was last seen; the next visible key starts another.
+export function tracks(u) {
+  const runs = [];
+  let run = null;
+  u.keys.forEach((k, i) => {
+    const prev = u.keys[i - 1], seen = k.state !== 'hidden' || (prev && prev.state !== 'hidden');
+    if (!seen) return;
+    (run ??= runs[runs.push([]) - 1]).push(k.t, k.x, k.y);
+    if (k.state === 'hidden') run = null;
+  });
+  return runs;
 }
 
 export function eventAt(b, t) {
