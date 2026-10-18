@@ -1,0 +1,34 @@
+# Field Glass verification map
+
+This folder is the maintained source for verifying what a Field Glass viewer can see and do. Read this index before you drive the page, then use the matching feature file as the recipe.
+
+## Baseline preconditions
+
+- Run `bash .claude/skills/verify-field-glass/fg.sh up <dir>` with a new `<dir>` in the session scratchpad.
+- Require `fg.sh doctor <dir>` to print only `ok` lines, and note the commit it reports.
+- Use the battles listed in `battles/index.json` at that commit. The recipes use `cowpens` (Revolution) and `sidi-bou-zid` (Second World War) because both exist today.
+- Never drive a server this run did not start.
+
+## Driving conventions
+
+- Drive through `fg.sh drive` journeys (puppeteer-core in chrome-headless-shell) or `fg.sh shot` links.
+- Use the handles named in each feature file: element ids, `data-war`, `data-id` and `aria-label`, not coordinates.
+- Wait for a state (`waitForFunction` on the hash, `#splash` hidden, `#title` loaded), not a fixed sleep. Use fixed sleeps only to let the clock run.
+- Before keyboard input, blur the focused element. After a click, focus stays on that button: the app then ignores the arrow keys, and Space triggers the button's own click.
+
+## Proof and skip reporting
+
+- Each check prints `PASS` or `FAIL` with the observed before and after values.
+- Save a screenshot after each step that changes what the viewer sees, and look at it.
+- Record the entry point you used. Do not report a path as verified through a different path.
+- Report an unreachable path with the command you ran and the precondition it lacked.
+
+## Feature entry contract
+
+Each feature file starts with an H1 title and one paragraph describing the viewer-visible behavior. It then has exactly four H2 sections in this order: `Sub-features`, `How to get to it (user POV)`, `Driving it with fg.sh`, and `Gotchas`.
+
+## Features
+
+- [Start screen](./start-screen.md) covers the war timeline, each war's card, opening a battle, All battles and Back.
+- [Battle playback](./battle-playback.md) covers play and pause, Space, the scrubber, the arrow keys, speed, Follow, Time-lapse, Legend and Sources.
+- [Screenshot links](./screenshot-links.md) covers `#<battle>@<time>,play,select=,warp,legend,outcome` links that open a battle at a set moment.
