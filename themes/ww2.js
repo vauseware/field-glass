@@ -114,14 +114,15 @@ function ground(b, dem, L) {
 }
 
 // The mosaic: four rows of four overlapping prints, each a touch rotated, misregistered and differently exposed, with a
-// white border captioned along its foot with the sortie, frame number and date.
+// white border captioned along its foot with the place, the battle's date and the print's number. The captions stay generic
+// (no sortie, squadron or camera) so nothing on them reads as an archival record.
 function mosaic(base, b, size) {
   const cv = P.canvas(size, size), m = cv.getContext('2d'), id = hash(b.id), rnd = mulberry32(id);
   const pw = size * 0.32, ph = size * 0.3, cap = Math.max(16, size * 0.01), [y, mo, d] = (b.date ?? '1944-06-06').split('-');
-  const caption = `${3 + (id % 6)}PR/${400 + (id % 90)}`, date = `${+d}.${ROMAN[+mo - 1]}.${y.slice(2)}`;
+  const place = (b.place ?? b.name).split(',')[0].toUpperCase(), date = `${+d}.${ROMAN[+mo - 1]}.${y.slice(2)}`;
   m.fillStyle = TABLE; m.fillRect(0, 0, size, size);
   m.font = `700 ${(cap * 0.68).toFixed(1)}px ${TELE}`; m.textBaseline = 'middle';
-  let frame = 4000 + (id % 900);
+  let frame = 1;
   for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
     const cx = size * (c * 0.2467 + 0.1267) + (rnd() - 0.5) * size * 0.017, cy = size * (r * 0.24 + 0.133) + (rnd() - 0.5) * size * 0.017, a = (rnd() - 0.5) * 0.035;
     m.save(); m.translate(cx, cy); m.rotate(a);
@@ -133,7 +134,7 @@ function mosaic(base, b, size) {
     m.restore();
     m.strokeStyle = CHALK; m.lineWidth = 7; m.strokeRect(-pw / 2, -ph / 2, pw, ph);
     m.fillStyle = CHALK; m.fillRect(-pw / 2, ph / 2 - cap, pw, cap);
-    m.fillStyle = '#1b1b18'; m.fillText(`${caption}   ${frame++}   ${date}   F.24  20"   9,000'   SECRET`, -pw / 2 + 12, ph / 2 - cap / 2);
+    m.fillStyle = '#1b1b18'; m.fillText(`${place}   ${date}   PRINT ${frame++} OF 16`, -pw / 2 + 12, ph / 2 - cap / 2);
     m.restore();
   }
   return cv;

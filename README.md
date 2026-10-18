@@ -69,7 +69,8 @@ scrubber is ruled as a scale of hours. Drifting cloud shadows, paper grain and t
 composites, so the map canvas never redraws them.
 
 The Second World War skin (`ww2`) is a reconnaissance photo mosaic on a lamp-lit operations table. The ground is a
-sortie's overlapping prints, each a touch askew and differently exposed, captioned along the foot of its white border:
+sortie's overlapping prints, each a touch askew and differently exposed, its white border captioned only with the place,
+the battle's date and the print's number (no invented sortie or camera that could pass for a record):
 grey-green relief, bright ploughed fields, dark woods of tree crowns throwing their shadows, hedgerows along the fence
 lines. Each unit is a painted counter with its name stencilled on it, behind a chinagraph bracket along its front with an
 arrow the way it faces; its men are dark specks on the print. The last side listed draws in red and the others in
