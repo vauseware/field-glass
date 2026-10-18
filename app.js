@@ -204,9 +204,12 @@ function updateCamera(dt) {
   safeRect();
   const best = rects.reduce((a, r) => (fitZ(r) > fitZ(a) ? r : a));
   if (fitZ(best) > 1.1 * fitZ(clear)) clear = best;
-  const s = clear, k = 1 - Math.exp(-dt * 1.2), tz = Math.min(12, Math.max(minZoom(), fitZ(s))), h = B.extent / 2;
+  // Never wider than the map filling the window: a box too big for that crops its outskirts rather than showing bare edges.
+  const s = clear, k = 1 - Math.exp(-dt * 1.2), tz = Math.min(12, Math.max(Math.max(W, H) / B.extent, fitZ(s))), h = B.extent / 2;
   // Box centred in the clear rect, then slid, while it still fits there, to where the map fills the whole window.
-  const aim = (c, lo, hi, vlo, vhi) => { const a = Math.max(lo, vlo), b = Math.min(hi, vhi); return a <= b ? Math.max(a, Math.min(b, c)) : c; };
+  // A box too big for the clear rect gives way to the map filling the window; one that fits keeps to the clear rect, edge or not.
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const aim = (c, lo, hi, vlo, vhi) => { const a = Math.max(lo, vlo), b = Math.min(hi, vhi); return a <= b ? clamp(c, a, b) : lo <= hi ? clamp((vlo + vhi) / 2, lo, hi) : clamp(c, vlo, vhi); };
   const tx = aim((bx.x0 + bx.x1) / 2 - ((s.l + s.r) / 2 - W / 2) / tz, bx.x1 - (s.r - W / 2) / tz, bx.x0 + (W / 2 - s.l) / tz, -h + W / 2 / tz, h - W / 2 / tz);
   const ty = aim((bx.y0 + bx.y1) / 2 + ((s.t + s.b) / 2 - H / 2) / tz, bx.y1 - (H / 2 - s.t) / tz, bx.y0 + (s.b - H / 2) / tz, -h + H / 2 / tz, h - H / 2 / tz);
   cam.x += (tx - cam.x) * k;
