@@ -14,7 +14,8 @@ const pad2 = n => String(n).padStart(2, '0');
 // frame (the night falls after under() and before the units, so they read it a frame late).
 let cur = null;
 
-// Grease pencil drags and skips on a glossy print: the colour with a scatter of thin spots, as a repeating pattern.
+// Grease pencil drags and skips on a glossy print: the colour with a scatter of thin spots, as a repeating pattern, for the
+// arrows' broad strokes.
 function waxOf(hex, seed) {
   const c = P.canvas(48, 48), g = c.getContext('2d'), img = g.createImageData(48, 48), rnd = mulberry32(seed), [r, gg, b] = P.hex(hex);
   for (let i = 0; i < 48 * 48; i++) { const v = rnd(); img.data.set([r, gg, b, v < 0.1 ? 80 : v < 0.28 ? 195 : 248], i * 4); }
@@ -243,7 +244,7 @@ function unit(ctx, U) {
     ctx.strokeStyle = 'rgba(225,222,205,0.75)'; ctx.lineWidth = 1.3; ctx.beginPath(); ctx.arc(x, 4, 5.5, 0, 7); ctx.stroke();
     ctx.strokeStyle = '#11120d'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x, 4); ctx.lineTo(x, -6); ctx.stroke();
   }
-  shape(); ctx.lineWidth = 2.6; ctx.strokeStyle = U.gone ? '#a4a49a' : look.pattern; ctx.stroke();
+  shape(); ctx.lineWidth = 2.6; ctx.strokeStyle = U.gone ? '#a4a49a' : look.wax; ctx.stroke(); // solid: the skips barely show this thin, and cost a fifth of a ms in software
   ctx.restore();
 }
 
