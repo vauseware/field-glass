@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="brass" cx="35%" cy="30%" r="75%">
+      <stop offset="0" stop-color="#fbe7a8"/><stop offset="0.45" stop-color="#c9963f"/><stop offset="1" stop-color="#6e4a1c"/>
+    </radialGradient>
+    <radialGradient id="paper" cx="45%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#f6ecd2"/><stop offset="0.8" stop-color="#e2cd9c"/><stop offset="1" stop-color="#b8945c"/>
+    </radialGradient>
+    <clipPath id="lens"><circle cx="32" cy="32" r="24"/></clipPath>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="#3b2614"/>
+  <circle cx="32" cy="32" r="29" fill="url(#brass)"/>
+  <circle cx="32" cy="32" r="25.5" fill="#3b2614"/>
+  <circle cx="32" cy="32" r="24" fill="url(#paper)"/>
+  <g clip-path="url(#lens)">
+    <path d="M6 44 Q22 36 34 40 T62 32 M6 22 Q20 14 36 19 T62 12" fill="none" stroke="#8a6a3e" stroke-width="1.6" opacity="0.6"/>
+    <circle cx="36" cy="24" r="6" fill="#efeadb" opacity="0.85"/>
+    <circle cx="42" cy="19" r="5" fill="#efeadb" opacity="0.6"/>
+    <rect x="9" y="22" width="30" height="10" fill="#1f55c4" stroke="#122c66" stroke-width="2" transform="rotate(-18 24 27)"/>
+    <rect x="25" y="36" width="30" height="10" fill="#c02a1f" stroke="#5e1510" stroke-width="2" transform="rotate(-18 40 41)"/>
+    <circle cx="32.5" cy="33.5" r="3" fill="#ffb347"/>
+  </g>
+  <path d="M12 20 A23 23 0 0 1 30 9" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+</svg>
