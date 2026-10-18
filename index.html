@@ -48,7 +48,7 @@
   #hover { padding: 12px 16px; font-size: 17px; line-height: 1.45; width: 340px; pointer-events: none; }
   #hover b { font: 400 21px/1.2 var(--fell); }
   /* The unit card rides beside its unit; app.js sets the transform. Handing it to another unit fades the details out and in. */
-  #card { left: 0; top: 0; z-index: 2; width: 320px; padding: 12px 16px 14px; font-size: 17px; line-height: 1.45; opacity: 0; pointer-events: none; transition: opacity 0.2s; will-change: transform; }
+  #card { left: 0; top: 0; z-index: 2; width: 320px; background: var(--paper-solid); padding: 12px 16px 14px; font-size: 17px; line-height: 1.45; opacity: 0; pointer-events: none; transition: opacity 0.2s; will-change: transform; }
   #card.show { opacity: 1; pointer-events: auto; }
   .nofade #card, .nofade .card-body { transition: none; }
   .card-body { transition: opacity 0.11s, transform 0.11s; padding-right: 36px; }
