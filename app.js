@@ -1,4 +1,6 @@
 import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, actionBox, advance, defaultSpeed, fmtTime, parseTime, hash, mulberry32, mod } from './sim.js';
+import { themeFor } from './themes.js';
+import { contours, isStatic, canvas as newCanvas } from './themes/paint.js';
 
 const $ = s => document.querySelector(s);
 const canvas = $('#map'), ctx = canvas.getContext('2d');
@@ -7,9 +9,10 @@ const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $(
   hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse'),
   marks: $('#marks'), splash: $('#splash'), splashList: $('#splash-list'), plan: $('#plan'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list'),
   outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body'),
-  card: $('#card'), cardSwatch: $('#card-swatch'), cardName: $('#card-name'), cardCmd: $('#card-cmd'), cardKind: $('#card-kind'), cardLive: $('#card-live'), cardClose: $('#card-close') };
+  card: $('#card'), cardSwatch: $('#card-swatch'), cardName: $('#card-name'), cardCmd: $('#card-cmd'), cardKind: $('#card-kind'), cardLive: $('#card-live'), cardClose: $('#card-close'),
+  fx: $('#fx'), fonts: $('#theme-fonts'), kicker: $('#kicker'), hours: $('#hours'), loading: $('#loading') };
 
-let B = null, T = null, layer = null;
+let B = null, skin = null, sheet = null, buildMs = 0; // the battle, its skin (themes.js), what the skin built for it and how long that took
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
 let cam = { x: 0, y: 0, zoom: 0.5 }, follow = true, lapse = true, lapsing = false;
 let W = 0, H = 0, DPR = 1, last = performance.now();
@@ -24,9 +27,16 @@ async function loadBattle(id) {
     fetch(`battles/${id}/battle.json`).then(r => r.json()),
     fetch(`battles/${id}/terrain.json`).then(r => r.json()),
   ]);
-  const b = normalizeBattle(raw);
-  layer = buildLayer(b, terrain);
-  B = b; T = terrain;
+  const b = normalizeBattle(raw), theme = themeFor(b);
+  ui.loading.hidden = false; // the layer takes a moment on a slow machine: parchment rather than a stale map
+  await wearSkin(theme);
+  await new Promise(r => { requestAnimationFrame(() => setTimeout(r)); setTimeout(r, 100); }); // let it paint; a hidden tab has no frames
+  const t0 = performance.now();
+  sheet = theme.build(b, terrain, DPR); skin = theme;
+  buildMs = performance.now() - t0;
+  theme.ambient(ui.fx, sheet); ui.fx.style.setProperty('--dark', 0); fxDark = 0;
+  ui.loading.hidden = true;
+  B = b;
   smoke.length = 0; curEvent = shownEvent = null; select(null);
   speed = SPEEDS.includes(b.speed) ? b.speed : 10;
   const dur = b.endT - b.startT;
@@ -36,7 +46,7 @@ async function loadBattle(id) {
   ui.scrub.min = b.startT; ui.scrub.max = b.endT;
   sizeClock();
   buildMarks(b); buildLegend(b);
-  ui.title.textContent = b.name;
+  ui.title.textContent = b.name; ui.kicker.textContent = skin.kicker;
   ui.sub.textContent = `${b.place} · ${b.dateText ?? b.date}`;
   ui.legend.innerHTML = Object.values(b.sides).map(s => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');
   const o = b.outcome; // result in the summary; losses side by side once opened
@@ -53,7 +63,7 @@ async function loadBattle(id) {
   cam = { x: v.x, y: v.y, zoom: Math.min(W, H) / v.width };
   follow = true; ui.follow.checked = true; lapse = true; ui.lapse.checked = true;
   clampCam();
-  const [, , at, play, pickId, warp, legend, outcome] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(?:,select=([^,]+))?(,warp)?(,legend)?(,outcome)?$/) ?? [];
+  const [, , at, play, pickId, warp, legend, outcome, bench] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(?:,select=([^,]+))?(,warp)?(,legend)?(,outcome)?(,bench)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
   setPlaying(!!play); foldTop(!!play);
   if (legend) ui.legendDlg.showModal(); // screenshots
@@ -66,77 +76,20 @@ async function loadBattle(id) {
     for (let i = 0; i < 300; i++) step(1 / 60);
     draw(); updateHud();
   }
+  if (bench) (await import('./tools/bench.js')).bench(skin.id, ctx, draw, buildMs); // per-frame draw cost; tools/bench.sh
   location.hash = id;
 }
 
-function rgb(hex) { return [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)); }
-
-// Shaded relief with contour lines, drawn once per battle into an offscreen canvas covering the whole extent.
-function buildLayer(b, T) {
-  const { cols, rows, spacing } = T, size = Math.min(3072, Math.max(1024, Math.round(b.extent))), ex = b.terrainExaggeration ?? 2;
-  let zmin = Infinity, zmax = -Infinity;
-  for (const v of T.z) if (v) { if (v < zmin) zmin = v; if (v > zmax) zmax = v; }
-  const Z = T.z.map(v => v || zmin);
-  const at = (r, c) => Z[Math.min(rows - 1, Math.max(0, r)) * cols + Math.min(cols - 1, Math.max(0, c))];
-  const small = document.createElement('canvas'); small.width = cols; small.height = rows;
-  const sg = small.getContext('2d'), img = sg.createImageData(cols, rows);
-  const lo = rgb(b.palette?.ground ?? '#a8ad7a'), hi = rgb(b.palette?.high ?? '#d2cb9e'), water = rgb(b.palette?.water ?? '#7f9fc0');
-  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
-    const gx = ((at(r, c + 1) - at(r, c - 1)) / (2 * spacing)) * ex, gy = ((at(r - 1, c) - at(r + 1, c)) / (2 * spacing)) * ex;
-    const shade = Math.max(0, (0.5 * gx - 0.5 * gy + 0.707) / Math.hypot(gx, gy, 1)); // light from the north-west
-    const f = (Z[r * cols + c] - zmin) / (zmax - zmin || 1), k = 0.55 + 0.6 * shade, i = (r * cols + c) * 4;
-    const wet = b.water != null && Z[r * cols + c] <= b.water; // river or sea: the DEM flattens it to one level
-    for (let ch = 0; ch < 3; ch++) img.data[i + ch] = wet ? water[ch] : (lo[ch] + (hi[ch] - lo[ch]) * f) * k;
-    img.data[i + 3] = 255;
+// Dress the page for a skin: its class on <body> for the chrome, its fonts, loaded before the layer draws with them.
+async function wearSkin(theme) {
+  document.body.className = document.body.className.replace(/\btheme-\S+/g, '').trim();
+  document.body.classList.add(`theme-${theme.id}`);
+  if (ui.fonts.getAttribute('href') !== theme.fonts) {
+    const loaded = new Promise(r => { ui.fonts.onload = ui.fonts.onerror = r; });
+    ui.fonts.href = theme.fonts;
+    await loaded;
   }
-  sg.putImageData(img, 0, 0);
-  const cv = document.createElement('canvas'); cv.width = cv.height = size;
-  const g = cv.getContext('2d');
-  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
-  g.drawImage(small, 0, 0, size, size);
-  const sc = size / cols, iv = b.contourInterval ?? 5;
-  g.strokeStyle = 'rgba(80,60,30,0.3)'; g.lineWidth = Math.max(1, size / 1500); g.beginPath();
-  for (let lv = Math.ceil(zmin / iv) * iv; lv <= zmax; lv += iv)
-    contours(Z, cols, rows, lv, (x0, y0, x1, y1) => { g.moveTo((x0 + 0.5) * sc, (y0 + 0.5) * sc); g.lineTo((x1 + 0.5) * sc, (y1 + 0.5) * sc); });
-  g.stroke();
-  const pxm = size / b.extent, toPx = ([x, y]) => [(x + b.extent / 2) * pxm, (b.extent / 2 - y) * pxm];
-  // Fields: cleared, lighter ground. They are also kept free of trees below.
-  g.fillStyle = b.palette?.field ?? 'rgba(232,220,170,0.45)';
-  for (const poly of b.fields ?? []) { g.beginPath(); poly.map(toPx).forEach(([x, y], i) => (i ? g.lineTo(x, y) : g.moveTo(x, y))); g.closePath(); g.fill(); }
-  // Trees are static, so they live in the layer: a tree is ~2 m across, which is about one layer pixel.
-  const rnd = mulberry32(hash(b.id + 'trees')), n = Math.min(60000, Math.round((b.trees?.density ?? 0) * b.extent * b.extent));
-  g.fillStyle = b.palette?.tree ?? 'rgba(60,85,40,0.5)';
-  const clear = [...(b.trees?.clear ?? []), ...(b.fields ?? [])]; // polygons in world metres with no trees
-  for (let i = 0; i < n; i++) {
-    const x = rnd() * size, y = rnd() * size, r = (1.5 + rnd() * 1.5) * pxm;
-    if (clear.some(poly => inPoly(x / pxm - b.extent / 2, b.extent / 2 - y / pxm, poly))) continue;
-    if (b.water != null && Z[Math.floor(y / sc) * cols + Math.floor(x / sc)] <= b.water) continue;
-    g.beginPath(); g.arc(x, y, r, 0, 6.2832); g.fill();
-  }
-  return cv;
-}
-
-function inPoly(x, y, poly) {
-  let inside = false;
-  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
-    const [xi, yi] = poly[i], [xj, yj] = poly[j];
-    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
-  }
-  return inside;
-}
-
-// Marching squares over cell centres. Corner bits: top-left 8, top-right 4, bottom-right 2, bottom-left 1.
-function contours(Z, cols, rows, lv, seg) {
-  const f = (p, q) => (lv - p) / (q - p);
-  for (let r = 0; r < rows - 1; r++) for (let c = 0; c < cols - 1; c++) {
-    const a = Z[r * cols + c], b = Z[r * cols + c + 1], d = Z[(r + 1) * cols + c + 1], e = Z[(r + 1) * cols + c];
-    const idx = (a >= lv ? 8 : 0) | (b >= lv ? 4 : 0) | (d >= lv ? 2 : 0) | (e >= lv ? 1 : 0);
-    if (!idx || idx === 15) continue;
-    const top = [c + f(a, b), r], right = [c + 1, r + f(b, d)], bot = [c + f(e, d), r + 1], left = [c, r + f(a, e)];
-    const L = { 1: [left, bot], 2: [bot, right], 3: [left, right], 4: [top, right], 5: [top, right, left, bot], 6: [top, bot], 7: [top, left], 8: [top, left],
-      9: [top, bot], 10: [top, left, right, bot], 11: [top, right], 12: [left, right], 13: [bot, right], 14: [left, bot] }[idx];
-    for (let i = 0; i < L.length; i += 2) seg(L[i][0], L[i][1], L[i + 1][0], L[i + 1][1]);
-  }
+  await Promise.all(theme.faces.map(f => document.fonts.load(f).catch(() => {})));
 }
 
 // ---------- camera ----------
@@ -160,6 +113,7 @@ function safeRect() {
 function measureSafe() {
   const m = 10, panels = [ui.top, ui.bar, ...(ui.caption.classList.contains('show') ? [ui.caption] : [])].map(el => el.getBoundingClientRect());
   const labels = marks.filter(el => !el.hidden).map(el => el.getBoundingClientRect()).filter(r => r.width);
+  V.avoid = [...panels, ...labels].map(p => ({ l: p.left, t: p.top, r: p.right, b: p.bottom })); // for the skin's map furniture
   if (labels.length) panels.push({ left: Math.min(...labels.map(r => r.left)), right: Math.max(...labels.map(r => r.right)), top: Math.min(...labels.map(r => r.top)), bottom: panels[1].top });
   const out = [], bar = panels[1].top;
   const trim = (i, s) => {
@@ -229,7 +183,7 @@ function pick(mx, my) {
     const d = Math.hypot(Math.max(0, Math.abs(lx) - s.w / 2), Math.max(0, -2 - ly, ly - s.h - 1)), area = s.w * s.h;
     if (d < bd || (d === bd && area < ba)) { best = u; bd = d; ba = area; }
   }
-  return best;
+  return best ?? B.units.find(u => u.pose && u.tag && mx >= u.tag[0] && mx <= u.tag[2] && my >= u.tag[1] && my <= u.tag[3]) ?? null; // or its name
 }
 
 // A press that moves less than 6 px is a click on a unit, not a drag, so it neither pans nor turns Follow off.
@@ -267,24 +221,6 @@ canvas.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.clientX, e.
 
 // ---------- drawing ----------
 
-const smokeSprite = (() => {
-  const c = document.createElement('canvas'); c.width = c.height = 64;
-  const g = c.getContext('2d'), r = g.createRadialGradient(32, 32, 2, 32, 32, 32);
-  r.addColorStop(0, 'rgba(238,236,226,0.9)'); r.addColorStop(0.5, 'rgba(228,226,216,0.4)'); r.addColorStop(1, 'rgba(220,220,210,0)');
-  g.fillStyle = r; g.fillRect(0, 0, 64, 64);
-  return c;
-})();
-
-function label(text, x, y, rot, color, size, italic, bold) {
-  ctx.save(); ctx.translate(x, y);
-  if (rot) ctx.rotate((-rot * Math.PI) / 180);
-  ctx.font = `${italic ? 'italic ' : ''}${bold ? '600 ' : ''}${size}px Georgia, serif`;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(245,240,225,0.9)'; ctx.strokeText(text, 0, 0);
-  ctx.fillStyle = color; ctx.fillText(text, 0, 0);
-  ctx.restore();
-}
-
 // Advance the clock, camera, unit poses and smoke by dt real seconds. Drawing reads the results.
 function step(dt) {
   if (playing) {
@@ -309,7 +245,7 @@ function step(dt) {
     const wind = B.wind ?? { x: 0.8, y: 0.3 }, sp = f.spread ?? 60;
     let n = Math.floor(f.rate * dt + Math.random());
     while (n-- > 0 && smoke.length < 2500) smoke.push({ x: f.at[0] + (Math.random() - 0.5) * sp, y: f.at[1] + (Math.random() - 0.5) * sp,
-      vx: wind.x * 2 + Math.random() - 0.5, vy: wind.y * 2 + Math.random() - 0.5, age: 0, life: 8 + Math.random() * 4, r0: 8, r1: 50 });
+      vx: wind.x * 2 + Math.random() - 0.5, vy: wind.y * 2 + Math.random() - 0.5, age: 0, life: 8 + Math.random() * 4, r0: 8, r1: 50, k: Math.random() });
   }
   if (!playing) return;
   let w = 0;
@@ -322,136 +258,112 @@ function step(dt) {
   smoke.length = w;
 }
 
+// The frame, back to front: the layer and what lies beyond it, the skin's underlay, the features that come and go, the
+// fallen, the units, smoke, names, the skin's furniture, night and weather, then muzzle flashes, which glow through it all.
+const V = { B: null, sheet: null, t: 0, W: 0, H: 0, z: 1, sx: w2sx, sy: w2sy, safe: null, avoid: [], dark: 0 };
 function draw() {
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  ctx.fillStyle = '#2b2116'; ctx.fillRect(0, 0, W, H);
-  const half = B.extent / 2;
+  const half = B.extent / 2, r = { l: w2sx(-half), t: w2sy(half), r: w2sx(half), b: w2sy(-half) };
+  Object.assign(V, { B, sheet, t, W, H, z: cam.zoom, safe: safeRect() });
   ctx.imageSmoothingEnabled = true;
-  ctx.drawImage(layer, w2sx(-half), w2sy(half), B.extent * cam.zoom, B.extent * cam.zoom);
-  drawFeatures(); drawFallen(); drawUnits(); drawSmoke(); drawNight(); drawPops(); // flashes glow through smoke and dark
+  ctx.drawImage(sheet.layer, r.l, r.t, r.r - r.l, r.b - r.t);
+  skin.surround(ctx, r, V);
+  skin.under?.(ctx, V);
+  drawFeatures(); drawFallen();
+  const labels = drawUnits();
+  drawSmoke(); drawLabels(labels);
+  skin.over?.(ctx, V);
+  drawNight(); drawPops();
 }
 
-const FEATURE_STYLE = { road: ['rgba(90,70,40,0.6)', 6, '#dccb9f', 4], creek: ['rgba(40,70,120,0.5)', 4, '#7aa8dc', 2.2], fence: ['rgba(70,50,30,0.6)', 2],
-  works: ['rgba(50,35,15,0.9)', 7, 'rgba(210,180,120,0.95)', 3.5], trench: ['rgba(50,35,15,0.85)', 5, 'rgba(175,145,95,0.9)', 2.2] };
-const POLY_FILL = { redoubt: 'rgba(210,180,120,0.85)', battery: 'rgba(210,180,120,0.85)', ship: 'rgba(70,50,35,0.95)', camp: 'rgba(255,255,255,0.25)' };
+// Features that come and go (siegeworks dug, ships burnt) and every place name; the rest are baked into the layer.
 function drawFeatures() {
-  const z = cam.zoom;
+  const k = Math.max(0.7, (cam.zoom * B.extent) / sheet.layer.width);
   placed.length = 0;
-  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   for (const f of B.features ?? []) {
-    if ((f.from != null && t < f.from) || (f.until != null && t >= f.until)) continue; // siegeworks dug, ships burnt
-    if (f.poly) {
-      ctx.beginPath();
-      f.poly.forEach(([x, y], i) => (i ? ctx.lineTo(w2sx(x), w2sy(y)) : ctx.moveTo(w2sx(x), w2sy(y))));
-      ctx.closePath();
-      if (f.type === 'water') { ctx.fillStyle = B.palette?.water ?? '#7f9fc0'; ctx.fill(); continue; } // a shoreline the modern ground no longer shows
-      ctx.fillStyle = POLY_FILL[f.type] ?? POLY_FILL.redoubt; ctx.fill();
-      ctx.strokeStyle = 'rgba(50,35,15,0.9)'; ctx.lineWidth = Math.max(1.5, 2 * z); ctx.stroke();
-    }
-    if (f.pts) {
-      ctx.beginPath();
-      f.pts.forEach(([x, y], i) => (i ? ctx.lineTo(w2sx(x), w2sy(y)) : ctx.moveTo(w2sx(x), w2sy(y))));
-      const [c1, w1, c2, w2] = FEATURE_STYLE[f.type] ?? ['#000', 1];
-      ctx.strokeStyle = c1; ctx.lineWidth = Math.max(w1, w1 * z * 0.8); ctx.stroke();
-      if (c2) { ctx.strokeStyle = c2; ctx.lineWidth = Math.max(w2, w2 * z * 0.8); ctx.stroke(); }
-    }
+    if ((f.from != null && t < f.from) || (f.until != null && t >= f.until)) continue;
+    const pts = f.pts ?? f.poly;
+    if (pts && !isStatic(f)) skin.feature(ctx, f.type, pts.map(([x, y]) => [w2sx(x), w2sy(y)]), k, !!f.poly);
     if (f.name && f.at) {
       const x = w2sx(f.at[0]), y = w2sy(f.at[1]);
-      label(f.name, x, y, f.rot ?? 0, 'rgba(60,45,25,0.9)', 14, true);
-      if (!f.rot) { const w = ctx.measureText(f.name).width + 6; placed.push([x - w / 2, y - 9, x + w / 2, y + 9]); }
+      if (x < -300 || x > W + 300 || y < -60 || y > H + 60) continue;
+      const w = skin.placeName(ctx, f, x, y) + 6;
+      if (!f.rot) placed.push([x - w / 2, y - 9, x + w / 2, y + 9]);
     }
   }
 }
 
 function drawFallen() {
-  const d = Math.max(2.5, 1.6 * cam.zoom);
-  ctx.globalAlpha = 0.6;
+  const d = Math.max(2.5, Math.min(6, 1.6 * cam.zoom)), { color, mark } = skin.fallen;
+  ctx.lineWidth = 1; ctx.globalAlpha = 0.65;
   for (const [side, s] of Object.entries(B.sides)) {
-    ctx.fillStyle = s.dark ?? '#3a2a20';
+    ctx.beginPath();
     for (const f of B.fallen) {
       if (f.t > t) break;
-      if (f.side === side) ctx.fillRect(w2sx(f.x) - d / 2, w2sy(f.y) - d / 2, d, d);
+      if (f.side === side) mark(ctx, w2sx(f.x), w2sy(f.y), d);
     }
+    ctx.strokeStyle = color(s); ctx.stroke();
   }
   ctx.globalAlpha = 1;
 }
 
+// Each unit as the skin draws it, from the geometry worked out here: U is the body on screen, front edge at y = -2 in its
+// own frame and ranks running back to y = h + 1. Returns the labels each unit offers, for drawLabels to thin.
+const dotBuf = [];
 function drawUnits() {
   const z = cam.zoom, mpd = B.menPerDot, labels = [];
   for (const u of B.units) {
     const p = u.pose;
+    u.tag = null;
     if (!p) continue;
     const sx = w2sx(p.x), sy = w2sy(p.y);
     const { ranks, F, rankD } = shape(u, p, mpd), D = ranks * rankD, ext = Math.max(F, D) * z + 40;
-    // Solid body with a dark outline so a unit reads at any zoom; it never shrinks below a few pixels.
-    const wPx = Math.max(16, F * z), hPx = Math.max(7, D * z);
+    const wPx = Math.max(16, F * z), hPx = Math.max(7, D * z); // never shrinks below a few pixels
     u.screen = { x: sx, y: sy, w: wPx, h: hPx, a: (p.h * Math.PI) / 180 }; // the body as drawn, for pointing and the card
     if (sx < -ext || sy < -ext || sx > W + ext || sy > H + ext) continue;
-    const side = B.sides[u.side], gone = p.state === 'surrender', militia = u.type === 'militia' || u.type === 'riflemen';
-    ctx.save(); ctx.translate(sx, sy); ctx.rotate(u.screen.a);
-    if (u === selected) { // a pulsing ring so the unit on the card is easy to find
-      ctx.globalAlpha = 0.75 + 0.25 * Math.sin(performance.now() / 300);
-      ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(255,248,225,0.95)'; ctx.strokeRect(-wPx / 2 - 7, -9, wPx + 14, hPx + 17);
-      ctx.lineWidth = 2.5; ctx.strokeStyle = '#8a2617'; ctx.strokeRect(-wPx / 2 - 7, -9, wPx + 14, hPx + 17);
-    }
-    ctx.globalAlpha = p.state === 'rout' ? 0.5 : 0.85;
-    ctx.fillStyle = gone ? '#9a9a92' : militia ? side.light ?? side.color : side.color;
-    ctx.fillRect(-wPx / 2, -2, wPx, hPx + 3);
-    ctx.globalAlpha = 1; ctx.lineWidth = 1.5; ctx.strokeStyle = gone ? '#55554f' : side.dark ?? '#000';
-    ctx.strokeRect(-wPx / 2, -2, wPx, hPx + 3);
-    if (!gone) { // an arrowhead on the front edge, fixed in pixels so the facing reads at any zoom; bolder on the march
-      const go = p.moving || p.state === 'column', L = go ? 10 : 7, hw = go ? 7 : 5;
-      ctx.globalAlpha = p.state === 'rout' ? 0.5 : 1;
-      ctx.beginPath(); ctx.moveTo(-hw, -3); ctx.lineTo(0, -3 - L); ctx.lineTo(hw, -3); ctx.closePath();
-      ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(245,240,225,0.9)'; ctx.stroke();
-      ctx.fillStyle = side.dark ?? '#000'; ctx.fill();
-      ctx.globalAlpha = 1;
-    }
-    ctx.restore();
-    if (F * z >= 24) {
-      const pts = dots(u, p, mpd), d = Math.max(2.5, 2 * z), cav = u.type === 'cavalry';
-      ctx.fillStyle = gone ? '#e8e8e2' : 'rgba(255,255,255,0.92)';
-      for (let i = 0; i < pts.length; i += 2) {
-        const x = w2sx(pts[i]), y = w2sy(pts[i + 1]);
-        if (cav) ctx.fillRect(x - d / 2, y - d, d, d * 2); else ctx.fillRect(x - d / 2, y - d / 2, d, d);
-      }
-    }
-    if (u.type === 'artillery') drawGuns(u, p, z);
-    // Every unit offers a label just above its topmost corner (a marching column is narrow but long); the overlap pass below thins them.
-    const s = Math.sin((p.h * Math.PI) / 180), c = Math.cos((p.h * Math.PI) / 180);
-    const top = -Math.abs((wPx / 2) * s) + Math.min(-2 * c, (hPx + 1) * c);
-    labels.push({ text: u.short ?? u.name, x: sx, y: sy + top - 11, size: Math.min(17, 12 + z * 3), men: p.strength });
+    if (u === selected) ring(u.screen);
+    dotBuf.length = 0;
+    if (F * z >= 24) { const pts = dots(u, p, mpd, dotBuf); for (let i = 0; i < pts.length; i += 2) { pts[i] = w2sx(pts[i]); pts[i + 1] = w2sy(pts[i + 1]); } }
+    const U = { u, p, side: B.sides[u.side], x: sx, y: sy, a: u.screen.a, w: wPx, h: hPx, z, dots: dotBuf.length ? dotBuf : null,
+      gone: p.state === 'surrender', rout: p.state === 'rout', go: p.moving || p.state === 'column', mil: u.type === 'militia' || u.type === 'riflemen',
+      cav: u.type === 'cavalry', art: u.type === 'artillery', guns: u.guns ?? 1 };
+    skin.unit(ctx, U);
+    // Every unit offers a label just above its topmost corner (a marching column is narrow but long).
+    const s = Math.sin(U.a), c = Math.cos(U.a), top = -Math.abs((wPx / 2) * s) + Math.min(-2 * c, (hPx + 1) * c);
+    const l = { u, U, text: u.short ?? u.name, x: sx, y: sy + top - 11, size: Math.min(17, 12 + z * 3), men: p.strength };
+    labels.push(l);
   }
-  // Bigger units get their label first; a label that would overlap one already placed is dropped this frame.
-  for (const l of labels.sort((a, b) => b.men - a.men)) {
-    ctx.font = `${l.size}px Georgia, serif`;
-    const w = ctx.measureText(l.text).width + 6, h = l.size + 4, r = [l.x - w / 2, l.y - h / 2, l.x + w / 2, l.y + h / 2];
-    if (placed.some(q => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1])) continue;
-    placed.push(r);
-    label(l.text, l.x, l.y, 0, '#141414', l.size, false, true);
-  }
+  return labels;
 }
 
-function drawGuns(u, p, z) {
-  const n = u.guns ?? 1, rad = (p.h * Math.PI) / 180, dx = Math.sin(rad), dy = Math.cos(rad), s = Math.max(6, 3.5 * z);
-  ctx.fillStyle = '#141414';
-  for (let i = 0; i < n; i++) {
-    const uu = (i - (n - 1) / 2) * 14;
-    ctx.save(); ctx.translate(w2sx(p.x + uu * dy + 2 * dx), w2sy(p.y - uu * dx + 2 * dy)); ctx.rotate(rad);
-    ctx.fillRect(-s / 2, -s / 2, s, s * 1.4);
-    ctx.restore();
+// A pulsing ring so the unit on the card is easy to find.
+function ring(s) {
+  ctx.save(); ctx.translate(s.x, s.y); ctx.rotate(s.a);
+  ctx.globalAlpha = 0.75 + 0.25 * Math.sin(performance.now() / 300);
+  ctx.lineWidth = 6; ctx.strokeStyle = skin.ring[0]; ctx.strokeRect(-s.w / 2 - 7, -9, s.w + 14, s.h + 17);
+  ctx.lineWidth = 2.5; ctx.strokeStyle = skin.ring[1]; ctx.strokeRect(-s.w / 2 - 7, -9, s.w + 14, s.h + 17);
+  ctx.restore();
+}
+
+// Bigger units get their label first; a label that would overlap one already placed is dropped this frame.
+function drawLabels(labels) {
+  for (const l of labels.sort((a, b) => b.men - a.men)) {
+    const [w, h] = skin.label.measure(ctx, l), r = [l.x - w / 2, l.y - h / 2, l.x + w / 2, l.y + h / 2];
+    if (placed.some(q => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1])) continue;
+    placed.push(r); l.u.tag = r;
+    skin.label.draw(ctx, l);
   }
 }
 
 function emit(u, p, F, nd, dt) {
-  const art = u.type === 'artillery', wind = B.wind ?? { x: 0.8, y: 0.3 };
+  const art = u.type === 'artillery', wind = B.wind ?? { x: 0.8, y: 0.3 }, life = sheet.smoke.life;
   const rate = p.fire * (art ? (u.guns ?? 1) * 0.5 : nd * 0.35);
   let n = Math.floor(rate * dt + Math.random());
   const rad = (p.h * Math.PI) / 180, dx = Math.sin(rad), dy = Math.cos(rad);
   while (n-- > 0) {
     const uu = (Math.random() - 0.5) * F, x = p.x + uu * dy + 2 * dx, y = p.y - uu * dx + 2 * dy;
     if (smoke.length < 2500) smoke.push({ x, y, vx: wind.x + dx * 1.2 + Math.random() - 0.5, vy: wind.y + dy * 1.2 + Math.random() - 0.5,
-      age: 0, life: art ? 4.5 : 2.4 + Math.random() * 1.6, r0: art ? 4 : 2, r1: art ? 22 : 11 });
+      age: 0, life: (art ? 4.5 : 2.4 + Math.random() * 1.6) * life, r0: art ? 4 : 2, r1: art ? 22 : 11, k: Math.random() });
     if (popN < 400) { // a musket pops for a tenth of a second or so; a gun's flash is bigger and lasts longer
       const q = (pops[popN++] ??= {});
       q.x = x; q.y = y; q.age = 0;
@@ -461,43 +373,46 @@ function emit(u, p, F, nd, dt) {
   }
 }
 
-const popSprite = (() => {
-  const c = document.createElement('canvas'); c.width = c.height = 32;
-  const g = c.getContext('2d'), r = g.createRadialGradient(16, 16, 0, 16, 16, 16);
-  r.addColorStop(0, 'rgba(255,243,192,1)'); r.addColorStop(0.2, 'rgba(255,243,192,0.95)'); r.addColorStop(0.45, 'rgba(255,154,46,0.6)'); r.addColorStop(1, 'rgba(255,154,46,0)');
-  g.fillStyle = r; g.fillRect(0, 0, 32, 32);
-  return c;
-})();
 function drawPops() {
   if (!playing || !popN) return;
   const s = Math.min(2, Math.max(0.8, Math.sqrt(cam.zoom))); // a little bigger close up, never lost far out
-  ctx.globalCompositeOperation = 'lighter';
+  ctx.globalCompositeOperation = V.dark > 0.25 ? 'lighter' : 'source-over'; // added light washes out on paper by day
   for (let i = 0; i < popN; i++) {
     const q = pops[i], f = q.age / q.life, r = q.r * s * (1 - 0.4 * f);
     ctx.globalAlpha = 1 - f * f;
-    ctx.drawImage(popSprite, w2sx(q.x) - r, w2sy(q.y) - r, 2 * r, 2 * r);
+    ctx.drawImage(sheet.flash, w2sx(q.x) - r, w2sy(q.y) - r, 2 * r, 2 * r);
   }
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
 }
 
 function drawSmoke() {
-  const z = cam.zoom;
+  const z = cam.zoom, { sprites, alpha, grow } = sheet.smoke, n = sprites.length;
   for (const s of smoke) {
-    const f = s.age / s.life, r = (s.r0 + (s.r1 - s.r0) * f) * z;
+    const f = s.age / s.life, r = (s.r0 + (s.r1 - s.r0) * Math.sqrt(f)) * z * grow;
     if (r < 0.8) continue;
-    ctx.globalAlpha = 0.7 * (1 - f);
-    ctx.drawImage(smokeSprite, w2sx(s.x) - r, w2sy(s.y) - r, 2 * r, 2 * r);
+    ctx.globalAlpha = alpha * (1 - f);
+    ctx.drawImage(sprites[(s.k * n) | 0], w2sx(s.x) - r, w2sy(s.y) - r, 2 * r, 2 * r);
   }
   ctx.globalAlpha = 1;
 }
 
-// Blue dusk over the map from about 45 minutes before sunrise, and after sunset when the battle gives one.
+// Night from about 45 minutes before sunrise, and after sunset when the battle gives one: the skin's dark multiplied
+// over the map. The ambient layers hear of it through --dark (clouds thin, a candle or lamp takes over).
+let fxDark = 0;
 function drawNight() {
-  if (B.sunriseT == null) return;
-  const tod = mod(t, 86400), ramp = x => Math.min(1, Math.max(0, x));
-  let dark = ramp((B.sunriseT - tod) / 2800);
-  if (B.sunsetT != null) dark = Math.max(dark, ramp((tod - B.sunsetT) / 2800));
-  if (dark > 0) { ctx.fillStyle = `rgba(15,25,70,${(0.35 * dark).toFixed(3)})`; ctx.fillRect(0, 0, W, H); }
+  let dark = 0;
+  if (B.sunriseT != null) {
+    const tod = mod(t, 86400), ramp = x => Math.min(1, Math.max(0, x));
+    dark = ramp((B.sunriseT - tod) / 2800);
+    if (B.sunsetT != null) dark = Math.max(dark, ramp((tod - B.sunsetT) / 2800));
+  }
+  V.dark = dark;
+  if (Math.abs(dark - fxDark) > 0.02 || (dark === 0) !== (fxDark === 0)) { fxDark = dark; ui.fx.style.setProperty('--dark', dark.toFixed(2)); }
+  if (dark > 0) {
+    ctx.globalCompositeOperation = 'multiply';
+    ctx.fillStyle = `rgb(${skin.night.map(v => Math.round(255 - (255 - v) * dark)).join(',')})`; ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'source-over';
+  }
   for (const f of B.tints ?? []) { // weather: a timed wash over the map, fading in and out over ten minutes
     const a = Math.min(1, (t - f.from) / 600, (f.until - t) / 600);
     if (a <= 0) continue;
@@ -537,62 +452,122 @@ function layoutMarks() {
     marks[i].hidden = false; marks[i].style.left = `${ax[j]}px`;
     leads[i].setAttribute('d', `M${px[i]} 23V15L${ax[j]} 0`);
   });
+  layoutHours(ui.scrub.clientWidth - 26, dur); // the thumb's travel; the marks are hidden on a phone
 }
 
-const SVG = (inner, w = 64, h = 28) => `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true">${inner}</svg>`;
-// A unit block as the map draws it: solid body, dark outline, one white dot per menPerDot men.
-function blockSvg(fill, stroke, { w = 56, h = 12, files = 9, ranks = 2, cav = false, alpha = 0.85, dot = 'rgba(255,255,255,0.92)', extra = '' } = {}) {
-  const x0 = (64 - w) / 2, y0 = (28 - h) / 2;
-  let d = '';
-  for (let r = 0; r < ranks; r++) for (let f = 0; f < files; f++)
-    d += `<rect x="${(x0 + (w / files) * (f + 0.5) - 1.5).toFixed(1)}" y="${(y0 + (h / ranks) * (r + 0.5) - (cav ? 3 : 1.5)).toFixed(1)}" width="3" height="${cav ? 6 : 3}" fill="${dot}"/>`;
-  return SVG(`<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}" stroke-width="1.5" opacity="${alpha}"/>${d}${extra}`);
+// The scale of hours under the scrubber, for a skin that rules one: alternate inked and blank segments of a round number
+// of hours (or days) at least 40 px wide, named every 70 px or so. --seg and --seg0 size and place the segments.
+function layoutHours(tw, dur) {
+  ui.hours.replaceChildren();
+  if (!skin.hours) return;
+  const unit = [900, 1800, 3600, 7200, 10800, 21600, 43200, 86400, 172800, 604800].find(u => (tw * u) / dur >= 40) ?? 604800;
+  const seg = (tw * unit) / dur, first = Math.ceil(B.startT / unit) * unit;
+  let named = unit * Math.ceil(70 / seg); // a name every 70 px or so, on the hour
+  if (named < 3600) named = 3600; else if (named < 86400) named = Math.ceil(named / 3600) * 3600;
+  ui.scrub.style.setProperty('--seg', `${seg.toFixed(2)}px`);
+  ui.scrub.style.setProperty('--seg0', `${(13 + ((first - B.startT) / dur) * tw).toFixed(2)}px`);
+  for (let tb = first; tb <= B.endT; tb += unit) {
+    if (mod(tb, named)) continue;
+    const el = document.createElement('span');
+    el.textContent = skin.hours(tb); el.style.left = `${((tb - B.startT) / dur) * tw}px`;
+    ui.hours.append(el);
+  }
 }
-const lineSvg = (c1, w1, c2, w2) => SVG(`<path d="M4 14 L60 14" stroke="${c1}" stroke-width="${w1}" stroke-linecap="round"/>${c2 ? `<path d="M4 14 L60 14" stroke="${c2}" stroke-width="${w2}" stroke-linecap="round"/>` : ''}`);
-const polySvg = (pts, fill, bg) => SVG(`${bg}<polygon points="${pts}" fill="${fill}" stroke="rgba(50,35,15,0.9)" stroke-width="2"/>`);
 
-// Only the symbols this battle uses.
+// Each legend row's words. A skin rewords the rows its drawing changes (legend.text).
+const LEGEND_TEXT = {
+  infantry: b => `Infantry. Each pale dot is ${b.menPerDot} men; the rows are ranks.`,
+  facing: () => 'The point on the front rank shows which way a unit faces.',
+  militia: () => 'Militia and riflemen, in the lighter shade.',
+  column: () => 'A column on the march: narrow and long.',
+  cavalry: () => 'Cavalry: taller dots, a mounted man each.',
+  artillery: () => 'Artillery, with its guns.',
+  skirmish: () => 'Skirmishers and open order: one thin, spread-out rank.',
+  rout: () => 'Broken and running: faded.',
+  surrender: () => 'Surrendered: grey.',
+  fallen: b => `Where men fell: a mark for every ${b.menPerDot} men a unit lost, in that side’s colour.`,
+  fire: () => 'Muzzle flashes, and powder smoke drifting downwind from units firing.',
+  redoubt: () => 'Redoubt or battery: an earthwork fort.',
+  works: () => 'Fortified line of earthworks.',
+  trench: () => 'Siege trench: the parallels and the approaches between them.',
+  camp: () => 'Camp.', ship: () => 'Ship.', road: () => 'Road.', creek: () => 'Creek or stream.', fence: () => 'Fence.',
+  water: () => 'Water.', field: () => 'Open field or cleared ground.', woods: () => 'Woods.',
+  contours: (b, sheet) => `Contour lines every ${sheet.iv} m (${Math.round(sheet.iv * 3.28)} ft) of height.`,
+};
+const FEATURE_SWATCH = { // where each feature sits in its 64 × 28 swatch
+  road: [[4, 16], [30, 13], [60, 15]], creek: [[4, 18], [24, 12], [44, 16], [60, 11]], fence: [[4, 14], [60, 14]], works: [[4, 18], [24, 10], [60, 14]], trench: [[4, 10], [30, 18], [60, 14]],
+  redoubt: [[14, 23], [14, 9], [26, 5], [38, 5], [50, 9], [50, 23]], camp: [[6, 6], [58, 6], [58, 22], [6, 22]], ship: [[6, 10], [54, 10], [60, 16], [50, 22], [10, 22]],
+};
+
+// A 64 × 28 swatch drawn by the skin on its own ground, at twice the pixels for sharp screens.
+function swatch(draw) {
+  const c = newCanvas(128, 56), g = c.getContext('2d');
+  c.style.width = '64px'; c.style.height = '28px';
+  g.scale(2, 2); g.fillStyle = skin.paper; g.fillRect(0, 0, 64, 28);
+  draw(g);
+  return c;
+}
+// A unit drawn by the skin exactly as the map draws one, front edge at y - 2, `files` × `ranks` men.
+function unitSwatch(side, { w = 50, h = 9, y = 12, files = 9, ranks = 2, type = 'infantry', state = 'line', mil = false } = {}) {
+  return swatch(g => {
+    const d = [];
+    for (let r = 0; r < ranks; r++) for (let f = 0; f < files; f++) d.push(32 - w / 2 + (w / files) * (f + 0.5), y - 2 + ((h + 3) / ranks) * (r + 0.5));
+    skin.unit(g, { u: { id: 'legend', type, name: '' }, p: { state, h: 0, strength: 100 }, side, x: 32, y, a: 0, w, h, z: 1, dots: d,
+      gone: state === 'surrender', rout: state === 'rout', go: state === 'column', mil, cav: type === 'cavalry', art: type === 'artillery', guns: 3 });
+  });
+}
+
+// Only the symbols this battle uses, each drawn by the skin.
 function buildLegend(b) {
-  const sides = Object.values(b.sides), s0 = sides[0], mpd = b.menPerDot, iv = b.contourInterval ?? 5;
+  const sides = Object.values(b.sides), s0 = sides[0], L = skin.legend, say = (k, ...a) => (L.text?.[k] ?? LEGEND_TEXT[k])(b, sheet, ...a);
   const types = new Set(b.units.map(u => u.type)), states = new Set(b.units.flatMap(u => u.keys.map(k => k.state)));
-  const feats = new Set((b.features ?? []).map(f => f.type));
-  const bg = `<rect width="64" height="28" fill="${b.palette?.ground ?? '#a8ad7a'}"/>`;
-  const scatter = (pts, mark) => SVG(`${bg}${pts.map(([x, y], i) => mark(x, y, i)).join('')}`);
+  const feats = new Set((b.features ?? []).map(f => (f.type === 'battery' ? 'redoubt' : f.type)));
   const rows = [
-    ...sides.map(s => [SVG(`<rect x="4" y="4" width="56" height="20" rx="3" fill="${s.color}"/>`), s.name]),
-    [blockSvg(s0.color, s0.dark), `Infantry. Each white dot is ${mpd} men; the rows are ranks.`],
-    [blockSvg(s0.color, s0.dark, { extra: `<path d="M26 7 L32 0 L38 7 Z" fill="${s0.dark}" stroke="rgba(245,240,225,0.9)"/>` }), 'The arrowhead on the front rank shows which way a unit faces.'],
-    (types.has('militia') || types.has('riflemen')) && [blockSvg(s0.light ?? s0.color, s0.dark), 'Militia and riflemen, in the lighter shade.'],
-    states.has('column') && [blockSvg(s0.color, s0.dark, { w: 12, h: 26, files: 3, ranks: 6 }), 'A column on the march: narrow and long.'],
-    types.has('cavalry') && [blockSvg(s0.color, s0.dark, { h: 16, cav: true }), 'Cavalry: taller dots, a mounted man each.'],
-    types.has('artillery') && [blockSvg(s0.color, s0.dark, { w: 42, h: 8, files: 6, ranks: 1, extra: [18, 32, 46].map(x => `<rect x="${x - 2.5}" y="7" width="5" height="7" fill="#141414"/>`).join('') }), 'Artillery. Each dark square is a gun.'],
-    (states.has('skirmish') || b.units.some(u => u.loose)) && [blockSvg(s0.color, s0.dark, { h: 7, files: 7, ranks: 1 }), 'Skirmishers and open order: one thin, spread-out rank.'],
-    states.has('rout') && [blockSvg(s0.color, s0.dark, { alpha: 0.5 }), 'Broken and running: faded.'],
-    states.has('surrender') && [blockSvg('#9a9a92', '#55554f', { dot: '#e8e8e2' }), 'Surrendered: grey.'],
-    [scatter([[8, 6], [20, 18], [31, 9], [44, 20], [55, 7], [15, 22], [38, 5], [50, 15], [26, 14]], (x, y, i) => `<rect x="${x}" y="${y}" width="3" height="3" fill="${sides[i % sides.length].dark ?? '#3a2a20'}" opacity="0.6"/>`),
-      `Where men fell: a dark mark for every ${mpd} men a unit lost, in that side's colour.`],
-    [SVG(`<rect x="22" y="18" width="20" height="6" fill="${s0.color}" stroke="${s0.dark}"/><circle cx="30" cy="12" r="5" fill="#d8d4c8" opacity="0.5"/><circle cx="40" cy="9" r="7" fill="#d8d4c8" opacity="0.4"/><circle cx="50" cy="6" r="8" fill="#d8d4c8" opacity="0.3"/><circle cx="27.5" cy="16.5" r="2.5" fill="#ffb347"/><circle cx="27.5" cy="16.5" r="1.2" fill="#fff3c0"/>`),
-      'Muzzle flashes, and powder smoke drifting downwind from units firing.'],
-    (feats.has('redoubt') || feats.has('battery')) && [polySvg('14,22 14,8 26,4 38,4 50,8 50,22', POLY_FILL.redoubt, bg), 'Redoubt or battery: an earthwork fort.'],
-    feats.has('works') && [lineSvg(...FEATURE_STYLE.works), 'Fortified line of earthworks.'],
-    feats.has('trench') && [lineSvg(...FEATURE_STYLE.trench), 'Siege trench: the parallels and the approaches between them.'],
-    feats.has('camp') && [polySvg('6,6 58,6 58,22 6,22', POLY_FILL.camp, bg), 'Camp.'],
-    feats.has('ship') && [polySvg('6,10 54,10 60,16 50,22 10,22', POLY_FILL.ship, bg), 'Ship.'],
-    feats.has('road') && [lineSvg(...FEATURE_STYLE.road), 'Road.'],
-    feats.has('creek') && [lineSvg(...FEATURE_STYLE.creek), 'Creek or stream.'],
-    feats.has('fence') && [lineSvg(...FEATURE_STYLE.fence), 'Fence.'],
-    (b.water != null || feats.has('water')) && [SVG(`<rect width="64" height="28" fill="${b.palette?.water ?? '#7f9fc0'}"/>`), 'Water.'],
-    b.fields?.length && [SVG(`${bg}<rect x="10" y="4" width="54" height="24" fill="${b.palette?.field ?? 'rgba(232,220,170,0.45)'}"/>`), 'Open field or cleared ground.'],
-    b.trees?.density && [scatter([[8, 8], [20, 20], [30, 7], [44, 18], [56, 9], [14, 24], [38, 24], [52, 24], [26, 15]], (x, y) => `<circle cx="${x}" cy="${y}" r="3" fill="${b.palette?.tree ?? 'rgba(60,85,40,0.5)'}"/>`), 'Woods.'],
-    [SVG(`${bg}<path d="M0 22 Q16 12 32 16 T64 6 M0 10 Q20 2 40 8 T64 0" fill="none" stroke="rgba(80,60,30,0.5)"/>`), `Contour lines every ${iv} m (${Math.round(iv * 3.28)} ft) of height; shading shows the slopes.`],
+    ...sides.map(s => [swatch(g => { g.fillStyle = s.color; g.beginPath(); g.roundRect(4, 4, 56, 20, 3); g.fill(); }), s.name]),
+    [unitSwatch(s0), say('infantry')],
+    [unitSwatch(s0, { w: 26, files: 5, y: 15 }), say('facing')],
+    (types.has('militia') || types.has('riflemen')) && [unitSwatch(s0, { mil: true }), say('militia')],
+    states.has('column') && [unitSwatch(s0, { w: 10, h: 14, y: 12, files: 2, ranks: 5, state: 'column' }), say('column')],
+    types.has('cavalry') && [unitSwatch(s0, { h: 11, type: 'cavalry', files: 8 }), say('cavalry')],
+    types.has('artillery') && [unitSwatch(s0, { w: 42, h: 5, y: 16, files: 6, ranks: 1, type: 'artillery' }), say('artillery')],
+    (states.has('skirmish') || b.units.some(u => u.loose)) && [unitSwatch(s0, { h: 4, files: 7, ranks: 1 }), say('skirmish')],
+    states.has('rout') && [unitSwatch(s0, { state: 'rout' }), say('rout')],
+    states.has('surrender') && [unitSwatch(s0, { state: 'surrender' }), say('surrender')],
+    [swatch(g => {
+      const pts = [[8, 6], [20, 18], [31, 9], [44, 20], [55, 7], [15, 22], [38, 5], [50, 15], [26, 14]];
+      g.lineWidth = 1; g.globalAlpha = 0.75;
+      sides.forEach((s, i) => { g.beginPath(); pts.forEach(([x, y], j) => j % sides.length === i && skin.fallen.mark(g, x, y, 4)); g.strokeStyle = skin.fallen.color(s); g.stroke(); });
+      g.globalAlpha = 1;
+    }), say('fallen')],
+    [swatch(g => {
+      skin.unit(g, { u: { id: 'legend', type: 'infantry' }, p: { state: 'firing', h: 0, strength: 60 }, side: s0, x: 22, y: 20, a: 0, w: 24, h: 4, z: 1, dots: null, guns: 1 });
+      sheet.smoke.sprites.forEach((sp, i) => { g.globalAlpha = sheet.smoke.alpha * (0.9 - i * 0.15); g.drawImage(sp, 22 + i * 9, 1 + (3 - i) * 2, 14 + i * 5, 14 + i * 5); });
+      g.globalAlpha = 1; g.drawImage(sheet.flash, 14, 9, 14, 14);
+    }), say('fire')],
+    ...(L.extra?.(b, sheet) ?? []).map(([draw, text]) => [swatch(g => draw(g, s0, sheet)), text]),
+    ...['redoubt', 'works', 'trench', 'camp', 'ship', 'road', 'creek', 'fence'].filter(k => feats.has(k)).map(k =>
+      [swatch(g => skin.feature(g, k, FEATURE_SWATCH[k], 0.8, ['redoubt', 'camp', 'ship'].includes(k))), say(k)]),
+    (b.water != null || feats.has('water')) && [swatch(g => L.swatch.water(g, sheet)), say('water')],
+    b.fields?.length && [swatch(g => L.swatch.field(g, sheet)), say('field')],
+    b.trees?.density && [swatch(g => L.swatch.woods(g, sheet)), say('woods')],
+    [swatch(g => L.swatch.contours(g, sheet)), say('contours')],
   ];
-  ui.legendList.innerHTML = rows.filter(Boolean).map(([sw, text]) => `<div>${sw}</div><div>${text}</div>`).join('');
+  ui.legendList.replaceChildren(...rows.filter(Boolean).flatMap(([sw, text]) => {
+    const a = document.createElement('div'), t = document.createElement('div');
+    a.append(sw); t.textContent = text;
+    return [a, t];
+  }));
 }
 
 // ---------- hud and controls ----------
 
+let clockShown = '';
+function showClock(at) {
+  const [main, small] = skin.clock(at), s = small ? `${main}<small>${small}</small>` : main;
+  if (s !== clockShown) ui.clock.innerHTML = clockShown = s;
+}
 function updateHud(dt) {
-  ui.clock.textContent = fmtTime(t); ui.clock.classList.toggle('lapsing', playing && lapsing);
+  showClock(t); ui.clock.classList.toggle('lapsing', playing && lapsing);
   ui.scrub.value = t; ui.scrub.style.setProperty('--p', `${((t - B.startT) / (B.endT - B.startT)) * 100}%`);
   if (curEvent !== shownEvent) {
     shownEvent = curEvent;
@@ -718,11 +693,11 @@ function resize() {
   canvas.width = W * DPR; canvas.height = H * DPR; rects = null;
   canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 }
-// Georgia's figures differ in width, so the clock is held at the width of the widest time it can show; otherwise every tick nudges the scrubber.
+// Old-style figures differ in width, so the clock is held at the width of the widest time it can show; otherwise every tick nudges the scrubber.
 function sizeClock() {
   let w = 0; ui.clock.style.width = '';
-  for (let d = B.startT; d < B.endT + 86400; d += 86400) { // 10:00 PM on each day of the battle
-    ui.clock.textContent = fmtTime(d - mod(d, 86400) + 79200);
+  for (let d = B.startT; d < B.endT + 86400; d += 86400) for (const h of [0, 10, 12, 15, 20, 22]) { // each day of the battle, round the clock
+    showClock(d - mod(d, 86400) + h * 3600 + 3480);
     w = Math.max(w, ui.clock.offsetWidth);
   }
   ui.clock.style.width = `${w + 4}px`;
