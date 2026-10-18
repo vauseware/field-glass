@@ -236,6 +236,7 @@ function unit(ctx, U) {
     ctx.moveTo(0, -5); ctx.lineTo(0, -2 - L); ctx.moveTo(-4.5, 3.5 - L); ctx.lineTo(0, -2 - L); ctx.lineTo(4.5, 3.5 - L);
   };
   ctx.save(); ctx.globalAlpha = U.rout ? 0.5 : 1; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (U.mil) ctx.setLineDash([6, 4]); // militia and riflemen: a broken bracket
   ctx.translate(U.x + 1, U.y + 1.5); ctx.rotate(U.a); // the pencil's shadow on the print, down and right whatever the facing
   if (U.art) for (const x of P.gunXs(U)) { ctx.fillStyle = 'rgba(12,12,9,0.8)'; ctx.beginPath(); ctx.arc(x, 4, 4.5, 0, 7); ctx.fill(); }
   shape(); ctx.lineWidth = 3.6; ctx.strokeStyle = 'rgba(0,0,0,0.45)'; ctx.stroke();
@@ -368,7 +369,7 @@ export default {
     text: {
       infantry: b => `Infantry: a chinagraph bracket along its front, in its side’s colour. Each dark speck is ${b.menPerDot} men.`,
       facing: () => 'The arrow from the front shows which way a unit faces.',
-      militia: () => 'Militia and riflemen: their counters in the lighter shade.',
+      militia: () => 'Militia and riflemen: a broken bracket, and their counters in the lighter shade.',
       column: () => 'A column on the march: a narrow front and a long trail of men.',
       cavalry: () => 'Cavalry: taller specks, a mounted man each.',
       artillery: () => 'Artillery: guns in their pits.',
