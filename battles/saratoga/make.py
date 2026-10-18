@@ -307,7 +307,7 @@ features = [
     *[dict(type="redoubt", poly=sq(x, y, 16), **{"from": D(20, "13:30"), "until": D(7, "17:35")}) for x, y in [(-1420, 1040), (-1390, 1075)]],
     dict(type="works", name="British lines", pts=BR_LINE, at=[-450, 300], rot=-15, **{"from": D(21, "12:00")}),
     *[dict(type="redoubt", poly=sq(x, y, 45), **{"from": D(20, "14:00")}) for x, y in [(840, 520), (830, 650), (827, 778)]],
-    dict(type="road", name="bridge of boats", pts=[(1000, 110), (1300, 110)], at=[1150, 40], **{"from": D(22, "12:00"), "until": D(8, "21:00")}),
+    dict(type="road", name="bridge of boats", pts=[(1000, 110), (1400, 110)], at=[1200, 40], **{"from": D(22, "12:00"), "until": D(8, "21:00")}),
     dict(type="road", name="river road to Albany", pts=RIVER_RD, at=[-620, -2050], rot=-55), dict(type="road", name="Wilbur Road", pts=WILBUR, at=[300, 2600], rot=14),
     dict(type="road", name="Quaker road", pts=FR_RT[-3:], at=[-2020, 1550], rot=-88), dict(type="road", name="Phillips Road", pts=HAM_RT[2:], at=[220, 1450], rot=-88),
     dict(type="road", pts=FREEMAN_RD), dict(type="road", pts=[(-2300, 320), (-1600, 345)]), dict(type="road", pts=LATERAL),
