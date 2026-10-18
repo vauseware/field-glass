@@ -158,7 +158,8 @@ function build(b, T, dpr) {
   const sheet = {
     layer: mosaic(ground(b, dem, L), b, L.size), iv: P.interval(dem, 5), dpr, looks: looks(b), counters: new Map(), E0, N0, gridX: [], gridY: [], tails: null,
     units: [...b.units].sort((p, q) => q.strength - p.strength), // the biggest unit claims an arrow where two converge
-    smoke: { sprites: [1, 2, 3, 4].map(s => P.puffSprite(64, s + 50, '150,150,140', '70,70,64', 0.8)), alpha: 0.55, grow: 2, life: 1.2 },
+    // Smokeless powder: dust and a little smoke, a quarter of what the same fire makes in black powder (`rate`).
+    smoke: { sprites: [1, 2, 3, 4].map(s => P.puffSprite(64, s + 50, '150,150,140', '70,70,64', 0.8)), alpha: 0.55, grow: 2, life: 1.2, rate: 0.25 },
     flash: P.glowSprite(32, [[0, 'rgba(255,255,240,1)'], [0.2, 'rgba(255,220,140,0.9)'], [0.5, 'rgba(255,140,40,0.35)'], [1, 'rgba(255,100,20,0)']]),
   };
   cur = { sheet, dark: 0 };
@@ -226,11 +227,34 @@ function over(ctx, V) {
 
 // ---------- units ----------
 
-// The unit as the table shows it: its men as dark specks on the print (pale at night), and a chinagraph bracket along its
-// front, hooked back at the ends, with an arrow the way it faces. Guns sit in pits. The counter is its label.
+// A tank seen from above, nose toward -y: hull on its tracks, turret, gun. `s` is its length in px.
+function tankTop(ctx, s) {
+  const w = s * 0.58;
+  ctx.fillRect(-w / 2, -s / 2, w, s);
+  ctx.beginPath(); ctx.arc(0, s * 0.06, s * 0.21, 0, 7); ctx.fill();
+  ctx.fillRect(-s * 0.045, -s * 0.78, s * 0.09, s * 0.8);
+}
+// A tank from the side, facing right, standing on (x, y): tracks, hull, turret, gun. `s` is its length in px.
+function tankSide(g, x, y, s) {
+  g.beginPath(); g.roundRect(x, y - s * 0.22, s, s * 0.22, s * 0.11); g.fill();
+  g.fillRect(x + s * 0.08, y - s * 0.36, s * 0.84, s * 0.16);
+  g.fillRect(x + s * 0.3, y - s * 0.52, s * 0.36, s * 0.17);
+  g.fillRect(x + s * 0.62, y - s * 0.47, s * 0.48, s * 0.06);
+}
+// Armor's vehicles where the app laid them out (U.dots, one per tank): each a tank, drawn larger than its real 6 m so
+// it reads as one, set back behind the bracket and turned the way the unit faces.
+function tanks(ctx, U, color) {
+  if (!U.dots) return;
+  const s = P.clamp(6.5 * U.z, 16, 24), D = U.dots;
+  ctx.fillStyle = color;
+  for (let i = 0; i < D.length; i += 2) { ctx.save(); ctx.translate(D[i], D[i + 1]); ctx.rotate(U.a); ctx.translate(0, s * 0.9); tankTop(ctx, s); ctx.restore(); }
+}
+
+// The unit as the table shows it: its men as dark specks on the print (pale at night), or its tanks, and a chinagraph
+// bracket along its front, hooked back at the ends, with an arrow the way it faces. Guns sit in pits. The counter is its label.
 function unit(ctx, U) {
   const look = cur.sheet.looks.get(U.side), night = cur.dark > 0.5, w = U.w / 2, hook = Math.min(U.h + 3, 10), L = U.go ? 20 : 13;
-  P.menDots(ctx, U, night ? 'rgba(214,218,200,0.75)' : 'rgba(18,20,14,0.85)');
+  (U.type === 'armor' ? tanks : P.menDots)(ctx, U, night ? 'rgba(214,218,200,0.75)' : 'rgba(18,20,14,0.85)');
   const shape = () => {
     ctx.beginPath(); ctx.moveTo(-w, -2 + hook); ctx.lineTo(-w, -2); ctx.lineTo(w, -2); ctx.lineTo(w, -2 + hook);
     ctx.moveTo(0, -5); ctx.lineTo(0, -2 - L); ctx.moveTo(-4.5, 3.5 - L); ctx.lineTo(0, -2 - L); ctx.lineTo(4.5, 3.5 - L);
@@ -250,10 +274,12 @@ function unit(ctx, U) {
 }
 
 // A unit's counter: a painted block, darker along its foot for its thickness, with the side's chinagraph colour down its
-// left edge and its name stencilled on it, its shadow baked in. Painted once per size and kept.
-function counter(text, look, fs, mil, gone, dpr) {
+// left edge and its name stencilled on it, its shadow baked in; an armor counter carries a tank before the name. Painted
+// once per size and kept.
+function counter(text, look, fs, mil, gone, dpr, tank = false) {
   const m = P.canvas(1, 1).getContext('2d'); m.font = `700 ${fs}px ${STENCIL}`;
-  const w = Math.round(m.measureText(text).width + 19), h = fs + 10, pad = 8, paint = gone ? { top: '#8e8e86', edge: '#5c5c56', text: '#1a1a18' } : mil ? look.light : look.paint;
+  const ts = tank ? Math.round(fs * 1.3) : 0, tw = tank ? ts + 6 : 0;
+  const w = Math.round(m.measureText(text).width + 19) + tw, h = fs + 10, pad = 8, paint = gone ? { top: '#8e8e86', edge: '#5c5c56', text: '#1a1a18' } : mil ? look.light : look.paint;
   const c = P.canvas((w + pad * 2 + 6) * dpr, (h + pad * 2 + 8) * dpr), g = c.getContext('2d');
   g.scale(dpr, dpr);
   g.filter = 'blur(2.5px)'; g.fillStyle = 'rgba(0,0,0,0.6)'; g.fillRect(pad + 3, pad + 5, w, h); g.filter = 'none';
@@ -261,13 +287,14 @@ function counter(text, look, fs, mil, gone, dpr) {
   g.fillStyle = paint.top; g.fillRect(pad, pad, w, h - 2);
   g.fillStyle = 'rgba(255,255,255,0.22)'; g.fillRect(pad, pad, w, 1.5);
   g.fillStyle = gone ? '#6e6e68' : look.wax; g.fillRect(pad, pad, 5, h - 2);
-  g.font = m.font; g.fillStyle = paint.text; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, pad + 3 + w / 2, pad + h / 2);
+  g.font = m.font; g.fillStyle = paint.text; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, pad + 3 + tw + (w - tw) / 2, pad + h / 2);
+  if (tank) tankSide(g, pad + 10, pad + h / 2 + ts * 0.26, ts);
   return { c, w, h, pad, dpr };
 }
 const fontSize = l => Math.round(P.clamp(l.size - 1, 13, 15));
 function counterFor(l) {
   const S = cur.sheet, mil = l.U.mil, gone = l.U.gone, fs = fontSize(l), key = `${l.u.id}|${fs}|${mil}|${gone}`;
-  return S.counters.get(key) ?? S.counters.set(key, counter(l.text.toUpperCase(), S.looks.get(l.U.side), fs, mil, gone, S.dpr)).get(key);
+  return S.counters.get(key) ?? S.counters.set(key, counter(l.text.toUpperCase(), S.looks.get(l.U.side), fs, mil, gone, S.dpr, l.U.type === 'armor')).get(key);
 }
 const label = {
   place(l) { const U = l.U, d = Math.min(U.h, 30) + 16; l.x = U.x - Math.sin(U.a) * d; l.y = U.y + Math.cos(U.a) * d; }, // behind the unit's rear
@@ -296,6 +323,32 @@ function fire(ctx, V, pops, n) {
     const [r, g, b] = look.tracer;
     ctx.lineWidth = 5; ctx.strokeStyle = `rgba(${r},${g},${b},0.35)`; ctx.stroke();
     ctx.lineWidth = 1.6; ctx.strokeStyle = `rgb(${Math.min(255, r + 120)},${Math.min(255, g + 120)},${Math.min(255, b + 120)})`; ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// ---------- air ----------
+
+// An aircraft seen from above, nose toward -y, `s` px across the wings: the inverted gull wing, fuselage and tailplane of
+// a Ju 87. `grow` thickens every stroke, for a pale outline drawn under it.
+function plane(ctx, s, grow = 0) {
+  const k = s / 2, line = (w, ...p) => { ctx.lineWidth = w * s + grow; ctx.beginPath(); for (let i = 0; i < p.length; i += 2) (i ? ctx.lineTo : ctx.moveTo).call(ctx, p[i] * k, p[i + 1] * k); ctx.stroke(); };
+  line(0.15, -1, -0.12, -0.38, 0.06, 0, -0.14, 0.38, 0.06, 1, -0.12);
+  line(0.12, 0, -0.78, 0, 0.82);
+  line(0.08, -0.3, 0.74, 0.3, 0.74);
+}
+// An air strike: a flight of three diving across the target on the strike's heading, round and round while it lasts, each
+// with its shadow thrown down and right on the ground below. The app drops the bombs. `clock` is real seconds of play.
+function air(ctx, V, f, clock) {
+  const h = ((f.h ?? 0) * Math.PI) / 180, dx = Math.sin(h), dy = -Math.cos(h), R = Math.max(280, (f.spread ?? 150) * 8 * V.z);
+  const cx = V.sx(f.at[0]), cy = V.sy(f.at[1]);
+  ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  for (let i = 0; i < 3; i++) {
+    const d = (((clock / 7 + i * 0.03) % 1) * 2 - 1) * R, o = i - 1, back = Math.abs(o) * 30; // the wingmen echeloned behind the leader
+    const x = cx + dx * (d - back) - dy * o * 38, y = cy + dy * (d - back) + dx * o * 38;
+    for (const [ox, oy, col, grow] of [[22, 30, 'rgba(0,0,0,0.28)', 0], [0, 0, 'rgba(236,235,226,0.55)', 2.5], [0, 0, '#262925', 0]]) {
+      ctx.save(); ctx.translate(x + ox, y + oy); ctx.rotate(h); ctx.strokeStyle = col; plane(ctx, 30, grow); ctx.restore();
+    }
   }
   ctx.restore();
 }
@@ -349,6 +402,7 @@ export default {
   label,
   over,
   fire,
+  air,
   ambient(el) { // the lamp: a warm pool over the table falling off into the dark room, swaying a little on its flex (CSS)
     el.innerHTML = '<div class="lamp"></div>';
     el.firstChild.style.backgroundImage = `${P.grainURL(256, 31, [24, 22, 16], r => r * 46)}, var(--lamp)`;
@@ -373,6 +427,8 @@ export default {
       column: () => 'A column on the march: a narrow front and a long trail of men.',
       cavalry: () => 'Cavalry: taller specks, a mounted man each.',
       artillery: () => 'Artillery: guns in their pits.',
+      armor: () => 'Armor: a tank for each vehicle, and a tank on its counter.',
+      airstrike: () => 'Air attack: dive bombers over the target, and their bombs bursting.',
       rout: () => 'Broken and running: faded.',
       surrender: () => 'Surrendered: grey.',
       fallen: b => `Where men fell: a small cross for every ${b.menPerDot} men a unit lost, in that side’s chinagraph.`,
@@ -387,6 +443,11 @@ export default {
       contours: g => { const gr = g.createLinearGradient(8, 4, 56, 24); gr.addColorStop(0, '#c9c9bd'); gr.addColorStop(0.5, '#8a8b80'); gr.addColorStop(1, '#4d4f47'); g.fillStyle = gr; g.beginPath(); g.ellipse(32, 14, 26, 11, -0.2, 0, 7); g.fill(); },
       water: g => { g.fillStyle = '#2a2f29'; g.fillRect(0, 12, 64, 16); P.stroke(g, [[0, 12], [64, 12]], 'rgba(205,208,192,0.7)', 1.2); P.stroke(g, [[0, 15.5], [64, 15.5]], '#c8cbbd', 0.6, 0.25); },
       field: g => { const p = [[8, 3], [62, 3], [62, 26], [8, 26]]; g.fillStyle = 'rgba(196,196,176,0.9)'; P.polyPath(g, p); g.fill(); P.rule(g, p, 0, 2.6, '#3e4036', 0.9, 0.35); },
+      airstrike: (g, sheet) => {
+        g.drawImage(sheet.flash, 34, 6, 22, 22); g.drawImage(sheet.smoke.sprites[0], 38, 4, 20, 20);
+        g.lineCap = 'round'; g.lineJoin = 'round'; g.translate(20, 13); g.rotate(1.2);
+        g.strokeStyle = 'rgba(236,235,226,0.55)'; plane(g, 22, 2); g.strokeStyle = '#262925'; plane(g, 22);
+      },
     },
     extra: (b, sheet) => [
       [(g, s) => { // the side's shortest name, cut to fit

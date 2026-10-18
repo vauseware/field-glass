@@ -16,6 +16,7 @@ let B = null, skin = null, sheet = null, buildMs = 0; // the battle, its skin (t
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
 let cam = { x: 0, y: 0, zoom: 0.5 }, follow = true, lapse = true, lapsing = false;
 let W = 0, H = 0, DPR = 1, last = performance.now();
+let airClock = 0; // real seconds of play, which fly the aircraft of an air strike
 const smoke = [], pops = [], placed = []; // placed: label boxes drawn this frame, so labels avoid each other
 let popN = 0; // live muzzle flashes are pops[0..popN); the objects past it are kept for reuse
 let mouse = null, selected = null, cardAt = null, cardLive = '', cardSwap = 0; // cardAt: the card's eased screen position
@@ -241,6 +242,8 @@ function step(dt) {
     const p = (u.pose = unitAt(u, t));
     if (playing && p && p.fire > 0 && p.state !== 'surrender') { const { F, nd } = shape(u, p, B.menPerDot); emit(u, p, F, nd, dt); }
   }
+  if (playing) airClock += dt;
+  if (playing) for (const f of B.features ?? []) if (f.type === 'airstrike' && t >= f.from && t < f.until) bombs(f, dt);
   if (playing) for (const f of B.features ?? []) { // burning town or ship: a standing pall of smoke while the feature is active
     if (f.type !== 'smoke' || (f.from != null && t < f.from) || (f.until != null && t >= f.until)) continue;
     const wind = B.wind ?? { x: 0.8, y: 0.3 }, sp = f.spread ?? 60;
@@ -274,6 +277,7 @@ function draw() {
   drawNight(); // the ground darkens; the regiments stay readable above it
   const labels = drawUnits();
   drawSmoke(); drawLabels(labels);
+  for (const f of B.features ?? []) if (f.type === 'airstrike' && t >= f.from && t < f.until) skin.air?.(ctx, V, f, airClock);
   skin.over?.(ctx, V);
   drawPops();
 }
@@ -286,7 +290,7 @@ function drawFeatures() {
     if ((f.from != null && t < f.from) || (f.until != null && t >= f.until)) continue;
     const pts = f.pts ?? f.poly;
     if (pts && !isStatic(f)) skin.feature(ctx, f.type, pts.map(([x, y]) => [w2sx(x), w2sy(y)]), k, !!f.poly);
-    if (f.name && f.at) {
+    if (f.name && f.at && f.type !== 'airstrike') { // an air strike's name is for the data, not the map
       const x = w2sx(f.at[0]), y = w2sy(f.at[1]);
       if (x < -300 || x > W + 300 || y < -60 || y > H + 60) continue;
       const w = skin.placeName(ctx, f, x, y) + 6;
@@ -358,20 +362,38 @@ function drawLabels(labels) {
   }
 }
 
+// A firing unit's flashes and smoke. A tank fires its gun now and then, flashing like a field piece; the skin's smoke
+// `rate` and the battle's `smoke` thin the smoke (smokeless powder) but never the flashes.
 function emit(u, p, F, nd, dt) {
-  const art = u.type === 'artillery', wind = B.wind ?? { x: 0.8, y: 0.3 }, life = sheet.smoke.life;
-  const rate = p.fire * (art ? (u.guns ?? 1) * 0.5 : nd * 0.35);
+  const art = u.type === 'artillery' || u.type === 'armor', wind = B.wind ?? { x: 0.8, y: 0.3 }, life = sheet.smoke.life;
+  const rate = p.fire * (u.type === 'artillery' ? (u.guns ?? 1) * 0.5 : nd * (art ? 0.12 : 0.35)), thin = (sheet.smoke.rate ?? 1) * (B.smoke ?? 1);
   let n = Math.floor(rate * dt + Math.random());
   const rad = (p.h * Math.PI) / 180, dx = Math.sin(rad), dy = Math.cos(rad);
   while (n-- > 0) {
     const uu = (Math.random() - 0.5) * F, x = p.x + uu * dy + 2 * dx, y = p.y - uu * dx + 2 * dy;
-    if (smoke.length < 2500) smoke.push({ x, y, vx: wind.x + dx * 1.2 + Math.random() - 0.5, vy: wind.y + dy * 1.2 + Math.random() - 0.5,
+    if (smoke.length < 2500 && Math.random() < thin) smoke.push({ x, y, vx: wind.x + dx * 1.2 + Math.random() - 0.5, vy: wind.y + dy * 1.2 + Math.random() - 0.5,
       age: 0, life: (art ? 4.5 : 2.4 + Math.random() * 1.6) * life, r0: art ? 4 : 2, r1: art ? 22 : 11, k: Math.random() });
     if (popN < 400) { // a musket pops for a tenth of a second or so; a gun's flash is bigger and lasts longer
       const q = (pops[popN++] ??= {});
       q.x = x; q.y = y; q.age = 0; q.side = u.side; q.dx = dx; q.dy = dy; q.art = art; q.k = Math.random(); // dx, dy: the line of fire, north up
       q.life = art ? 0.18 + Math.random() * 0.1 : 0.08 + Math.random() * 0.12;
       q.r = art ? 11 + Math.random() * 7 : 3.5 + Math.random() * 3; // glow radius in pixels; the white core is a fifth of it
+    }
+  }
+}
+
+// An air strike's bombs: two or three a second of play burst within `spread` of the target, each a big flash and a
+// column of dust. The skin flies the aircraft (air).
+function bombs(f, dt) {
+  const wind = B.wind ?? { x: 0.8, y: 0.3 }, sp = f.spread ?? 150;
+  let n = Math.floor(2.5 * dt + Math.random());
+  while (n-- > 0) {
+    const a = Math.random() * 2 * Math.PI, d = sp * Math.sqrt(Math.random()), x = f.at[0] + Math.cos(a) * d, y = f.at[1] + Math.sin(a) * d;
+    for (let i = 0; i < 4 && smoke.length < 2500; i++) smoke.push({ x: x + (Math.random() - 0.5) * 20, y: y + (Math.random() - 0.5) * 20, vx: wind.x * 2 + Math.random() - 0.5,
+      vy: wind.y * 2 + Math.random() - 0.5, age: 0, life: (5 + Math.random() * 3) * sheet.smoke.life, r0: 12, r1: 60, k: Math.random() });
+    if (popN < 400) {
+      const q = (pops[popN++] ??= {});
+      Object.assign(q, { x, y, age: 0, side: null, dx: 0, dy: 1, art: true, k: Math.random(), life: 0.3 + Math.random() * 0.15, r: 24 + Math.random() * 10 });
     }
   }
 }
@@ -486,6 +508,8 @@ const LEGEND_TEXT = {
   column: () => 'A column on the march: narrow and long.',
   cavalry: () => 'Cavalry: taller dots, a mounted man each.',
   artillery: () => 'Artillery, with its guns.',
+  armor: () => 'Armor: a mark for each vehicle.',
+  airstrike: () => 'Air attack: bombs bursting round the target.',
   skirmish: () => 'Skirmishers and open order: one thin, spread-out rank.',
   rout: () => 'Broken and running: faded.',
   surrender: () => 'Surrendered: grey.',
@@ -534,6 +558,7 @@ function buildLegend(b) {
     states.has('column') && [unitSwatch(s0, { w: 10, h: 14, y: 12, files: 2, ranks: 5, state: 'column' }), say('column')],
     types.has('cavalry') && [unitSwatch(s0, { h: 11, type: 'cavalry', files: 8 }), say('cavalry')],
     types.has('artillery') && [unitSwatch(s0, { w: 42, h: 5, y: 16, files: 6, ranks: 1, type: 'artillery' }), say('artillery')],
+    types.has('armor') && [unitSwatch(s0, { w: 52, h: 6, y: 15, files: 4, ranks: 1, type: 'armor' }), say('armor')],
     (states.has('skirmish') || b.units.some(u => u.loose)) && [unitSwatch(s0, { h: 4, files: 7, ranks: 1 }), say('skirmish')],
     states.has('rout') && [unitSwatch(s0, { state: 'rout' }), say('rout')],
     states.has('surrender') && [unitSwatch(s0, { state: 'surrender' }), say('surrender')],
@@ -552,6 +577,7 @@ function buildLegend(b) {
     ...['redoubt', 'works', 'trench', 'camp', 'ship', 'road', 'creek', 'fence'].filter(k => feats.has(k)).map(k =>
       [swatch(g => skin.feature(g, k, FEATURE_SWATCH[k], 0.8, ['redoubt', 'camp', 'ship'].includes(k))), say(k)]),
     (b.water != null || feats.has('water')) && [swatch(g => L.swatch.water(g, sheet)), say('water')],
+    feats.has('airstrike') && L.swatch.airstrike && [swatch(g => L.swatch.airstrike(g, sheet)), say('airstrike')],
     b.fields?.length && [swatch(g => L.swatch.field(g, sheet)), say('field')],
     b.trees?.density && [swatch(g => L.swatch.woods(g, sheet)), say('woods')],
     [swatch(g => L.swatch.contours(g, sheet)), say('contours')],

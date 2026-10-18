@@ -72,7 +72,10 @@ The Second World War skin (`ww2`) is a reconnaissance photo mosaic on a lamp-lit
 sortie's overlapping prints, each a touch askew and differently exposed, captioned along the foot of its white border:
 grey-green relief, bright ploughed fields, dark woods of tree crowns throwing their shadows, hedgerows along the fence
 lines. Each unit is a painted counter with its name stencilled on it, behind a chinagraph bracket along its front with an
-arrow the way it faces; its men are dark specks on the print. The last side listed draws in red and the others in
+arrow the way it faces; its men are dark specks on the print. Armor draws a tank for each vehicle, turned the way the
+unit faces, and its counter carries a tank before the name. Fire throws dust and a little smoke, a quarter of what black
+powder makes. An air strike is a flight of three dive bombers crossing the target, their shadows on the ground below,
+and bombs bursting round it. The last side listed draws in red and the others in
 yellow, unless a side sets `wax` (and `tracer`) in `battle.json`. A hollow chinagraph arrow shows where each sizeable unit
 has come from since the chapter before, a dashed 1 km grid is numbered with its UTM kilometres in the window's margins,
 and every fifth round is a tracer. Night falls blue-black with the counters and fire still lit. The story is a yellow
@@ -117,6 +120,7 @@ than a day; one battle uses one form throughout.
 | `speed`, `lapse` | default playback multiplier, and the multiplier for quiet stretches under time-lapse (default `speed × 6`) |
 | `water` | elevation in metres at or below which the DEM is drawn as water (rivers are flattened to about 0) |
 | `menPerDot` | men per drawn dot (5 for a small battle, 10 or 20 for a large one) |
+| `smoke` | scales the smoke from firing units on top of the skin's own amount (default 1; 0 for none); muzzle flashes are unchanged |
 | `sides` | `{ id: { name, color, light, dark, wax?, tracer? } }`; `wax` and `tracer` (`[r, g, b]`) are a side's chinagraph and tracer colours in the `ww2` skin |
 | `units[]` | `id, side, name, short?, commander, type, strength, guns?, loose?, ranks?, keys[]`; `short` is the map label; `loose` keeps a unit in open order; `ranks` defaults to 2 |
 | `keys[]` | `{ t, x, y, h, state, strength }`; omitted fields carry forward from the previous key |
