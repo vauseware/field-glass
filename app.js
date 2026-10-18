@@ -27,7 +27,8 @@ async function loadBattle(id) {
     fetch(`battles/${id}/battle.json`).then(r => r.json()),
     fetch(`battles/${id}/terrain.json`).then(r => r.json()),
   ]);
-  const b = normalizeBattle(raw), theme = themeFor(b);
+  const b = normalizeBattle(raw), theme = themeFor(b, new URLSearchParams(location.search).get('theme'));
+  if (theme !== themeFor(b)) theme.preview?.(b); // ?theme= tries a skin on another war's battle: the skin may recolour the sides
   ui.loading.hidden = false; // the layer takes a moment on a slow machine: parchment rather than a stale map
   await wearSkin(theme);
   await new Promise(r => { requestAnimationFrame(() => setTimeout(r)); setTimeout(r, 100); }); // let it paint; a hidden tab has no frames
@@ -326,12 +327,13 @@ function drawUnits() {
     dotBuf.length = 0;
     if (F * z >= 24) { const pts = dots(u, p, mpd, dotBuf); for (let i = 0; i < pts.length; i += 2) { pts[i] = w2sx(pts[i]); pts[i + 1] = w2sy(pts[i + 1]); } }
     const U = { u, p, side: B.sides[u.side], x: sx, y: sy, a: u.screen.a, w: wPx, h: hPx, z, dots: dotBuf.length ? dotBuf : null,
-      gone: p.state === 'surrender', rout: p.state === 'rout', go: p.moving || p.state === 'column', mil: u.type === 'militia' || u.type === 'riflemen',
+      type: u.type, gone: p.state === 'surrender', rout: p.state === 'rout', go: p.moving || p.state === 'column', mil: u.type === 'militia' || u.type === 'riflemen',
       cav: u.type === 'cavalry', art: u.type === 'artillery', guns: u.guns ?? 1 };
     skin.unit(ctx, U);
-    // Every unit offers a label just above its topmost corner (a marching column is narrow but long).
+    // Every unit offers a label just above its topmost corner (a marching column is narrow but long); a skin may move it.
     const s = Math.sin(U.a), c = Math.cos(U.a), top = -Math.abs((wPx / 2) * s) + Math.min(-2 * c, (hPx + 1) * c);
     const l = { u, U, text: u.short ?? u.name, x: sx, y: sy + top - 11, size: Math.min(17, 12 + z * 3), men: p.strength };
+    skin.label.place?.(l);
     labels.push(l);
   }
   return labels;
@@ -367,7 +369,7 @@ function emit(u, p, F, nd, dt) {
       age: 0, life: (art ? 4.5 : 2.4 + Math.random() * 1.6) * life, r0: art ? 4 : 2, r1: art ? 22 : 11, k: Math.random() });
     if (popN < 400) { // a musket pops for a tenth of a second or so; a gun's flash is bigger and lasts longer
       const q = (pops[popN++] ??= {});
-      q.x = x; q.y = y; q.age = 0;
+      q.x = x; q.y = y; q.age = 0; q.side = u.side; q.dx = dx; q.dy = dy; q.art = art; q.k = Math.random(); // dx, dy: the line of fire, north up
       q.life = art ? 0.18 + Math.random() * 0.1 : 0.08 + Math.random() * 0.12;
       q.r = art ? 11 + Math.random() * 7 : 3.5 + Math.random() * 3; // glow radius in pixels; the white core is a fifth of it
     }
@@ -377,6 +379,7 @@ function emit(u, p, F, nd, dt) {
 function drawPops() {
   if (!playing || !popN) return;
   const s = Math.min(2, Math.max(0.8, Math.sqrt(cam.zoom))); // a little bigger close up, never lost far out
+  skin.fire?.(ctx, V, pops, popN); // what else the skin's fire draws, such as tracer
   ctx.globalCompositeOperation = V.dark > 0.25 ? 'lighter' : 'source-over'; // added light washes out on paper by day
   for (let i = 0; i < popN; i++) {
     const q = pops[i], f = q.age / q.life, r = q.r * s * (1 - 0.4 * f);
@@ -514,7 +517,7 @@ function unitSwatch(side, { w = 50, h = 9, y = 12, files = 9, ranks = 2, type = 
     const d = [];
     for (let r = 0; r < ranks; r++) for (let f = 0; f < files; f++) d.push(32 - w / 2 + (w / files) * (f + 0.5), y - 2 + ((h + 3) / ranks) * (r + 0.5));
     skin.unit(g, { u: { id: 'legend', type, name: '' }, p: { state, h: 0, strength: 100 }, side, x: 32, y, a: 0, w, h, z: 1, dots: d,
-      gone: state === 'surrender', rout: state === 'rout', go: state === 'column', mil, cav: type === 'cavalry', art: type === 'artillery', guns: 3 });
+      type, gone: state === 'surrender', rout: state === 'rout', go: state === 'column', mil, cav: type === 'cavalry', art: type === 'artillery', guns: 3 });
   });
 }
 
@@ -541,7 +544,7 @@ function buildLegend(b) {
       g.globalAlpha = 1;
     }), say('fallen')],
     [swatch(g => {
-      skin.unit(g, { u: { id: 'legend', type: 'infantry' }, p: { state: 'firing', h: 0, strength: 60 }, side: s0, x: 22, y: 20, a: 0, w: 24, h: 4, z: 1, dots: null, guns: 1 });
+      skin.unit(g, { u: { id: 'legend', type: 'infantry' }, p: { state: 'firing', h: 0, strength: 60 }, side: s0, x: 22, y: 20, a: 0, w: 24, h: 4, z: 1, dots: null, type: 'infantry', guns: 1 });
       sheet.smoke.sprites.forEach((sp, i) => { g.globalAlpha = sheet.smoke.alpha * (0.9 - i * 0.15); g.drawImage(sp, 22 + i * 9, 1 + (3 - i) * 2, 14 + i * 5, 14 + i * 5); });
       g.globalAlpha = 1; g.drawImage(sheet.flash, 14, 9, 14, 14);
     }), say('fire')],
@@ -574,7 +577,8 @@ function updateHud(dt) {
     shownEvent = curEvent;
     ui.capTitle.textContent = curEvent?.title ?? '';
     ui.capText.textContent = curEvent?.text ?? '';
-    ui.capWhen.textContent = curEvent ? chapterWhen(curEvent) : '';
+    const [when, tag] = !curEvent ? [''] : skin.when?.(curEvent, B) ?? [chapterWhen(curEvent)]; // a skin may word the time its own way
+    ui.capWhen.textContent = when; ui.caption.dataset.tag = tag ?? '';
     ui.caption.classList.toggle('show', !!curEvent); rects = null;
     foldCaption(false); // every new chapter opens with its story showing
     marks.forEach((m, i) => { m.classList.toggle('on', B.events[i] === curEvent); leads[i].classList.toggle('on', B.events[i] === curEvent); });
@@ -592,7 +596,8 @@ function updateHud(dt) {
 
 // ---------- unit card ----------
 
-const liveText = u => (u.pose ? `${Math.round(u.pose.strength)} men · ${STATE_TEXT[u.pose.state] ?? ''}` : '');
+const NOUN = { armor: 'vehicles' }; // what a unit's strength counts, by type: men unless named here
+const liveText = u => (u.pose ? `${Math.round(u.pose.strength)} ${NOUN[u.type] ?? 'men'} · ${STATE_TEXT[u.pose.state] ?? ''}` : '');
 let cardSize = [0, 0], cardSide = 0;
 function fillCard(u) {
   const side = B.sides[u.side];

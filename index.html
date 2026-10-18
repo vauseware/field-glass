@@ -150,6 +150,80 @@
   .theme-revolution #scrub::-webkit-slider-thumb { width: 22px; height: 30px; margin-top: -27px; border: 0; border-radius: 0; box-shadow: none; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='30' viewBox='0 0 22 30'><circle cx='11' cy='6' r='4.5' fill='none' stroke='%232a1a0c' stroke-width='1.2'/><path d='M11 29 L4.5 16 H8.5 V10 H13.5 V16 H17.5 Z' fill='%23a3202f' stroke='%232a1a0c' stroke-width='1'/></svg>") center / 22px 30px no-repeat; }
   .theme-revolution #scrub::-moz-range-thumb { width: 22px; height: 30px; border: 0; border-radius: 0; box-shadow: none; transform: translateY(-12px); background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='30' viewBox='0 0 22 30'><circle cx='11' cy='6' r='4.5' fill='none' stroke='%232a1a0c' stroke-width='1.2'/><path d='M11 29 L4.5 16 H8.5 V10 H13.5 V16 H17.5 Z' fill='%23a3202f' stroke='%232a1a0c' stroke-width='1'/></svg>") center / 22px 30px no-repeat; }
 
+  /* Second World War: an operations room. Dark boards with chalk stencilling, the story as a yellow teleprinter strip that
+     ends STOP, an amber scrubber, a sector clock in the bar, and a lamp swaying over the table (#fx). */
+  body.theme-ww2 { --paper: rgba(29,33,27,0.97); --paper-solid: #1d211b; --ink: #e9e4d2; --chalk: #e9e4d2; --muted: #a9ad9b; --rule: #000; --accent: #f0b53c; --tape: #f2e6b4;
+    --fell: "Stardos Stencil", Impact, sans-serif; --sc: "Stardos Stencil", Impact, sans-serif; --text: "Courier Prime", "Courier New", monospace; --num: Oswald, "Arial Narrow", sans-serif;
+    --panel-bg: radial-gradient(ellipse at 30% 0%, rgba(255,255,255,0.05), transparent 60%), #1d211b;
+    --frame: inset 0 0 0 1px rgba(255,255,255,0.06), 0 14px 34px rgba(0,0,0,0.7);
+    --lamp: radial-gradient(circle farthest-corner at 48% 50%, #fffdf6 0%, #f4eee0 32%, #8c8574 68%, #221f19 100%);
+    background: #0f0e0b; font-size: 16px; }
+  .theme-ww2 #fx { mix-blend-mode: multiply; } /* #fx is fixed, an isolated group: the blend must be on it to reach the map */
+  .theme-ww2 #fx .lamp { inset: -10%; background-size: 256px 256px, 100% 100%; background-repeat: repeat, no-repeat; animation: sway 8s ease-in-out infinite alternate; }
+  @keyframes sway { from { transform: translate(-3%, -1.5%); } to { transform: translate(3%, 1.5%); } }
+  .theme-ww2 #kicker { display: flex; justify-content: space-between; gap: 24px; font: 12px var(--sc); letter-spacing: 0.25em; text-transform: uppercase; color: #9da38f; border-bottom: 1px solid #3a4035; padding-bottom: 6px; margin-bottom: 8px; }
+  .theme-ww2 #kicker::after { content: "Table 2"; }
+  .theme-ww2 #top h1 { font: 700 31px/1.02 var(--fell); letter-spacing: 0.03em; text-transform: uppercase; color: var(--chalk); }
+  .theme-ww2 #sub { color: var(--muted); font: 15px/1.4 var(--text); letter-spacing: 0.04em; text-transform: uppercase; margin-top: 6px; }
+  .theme-ww2 #hint { font-size: 15px; }
+  .theme-ww2 #legend, .theme-ww2 #outcome { border-top-color: #3a4035; }
+  .theme-ww2 #legend { font: 14px var(--fell); letter-spacing: 0.1em; text-transform: uppercase; gap: 10px 20px; }
+  .theme-ww2 :is(#legend, #out-body) i, .theme-ww2 #card-swatch { border: 0; border-radius: 2px; box-shadow: 0 3px 4px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.25); }
+  .theme-ww2 #legend i { width: 32px; height: 18px; }
+  .theme-ww2 #outcome summary { font: 16px/1.2 var(--fell); letter-spacing: 0.08em; text-transform: uppercase; }
+  .theme-ww2 #out-body { font-size: 15px; } .theme-ww2 #out-body b { font: 700 15px var(--fell); letter-spacing: 0.06em; text-transform: uppercase; }
+  .theme-ww2 :is(#top, #bar, #card, #caption, dialog) :is(button, select) { font: 15px/1.2 var(--fell); letter-spacing: 0.12em; text-transform: uppercase; color: var(--chalk);
+    background: linear-gradient(#2f352b, #1a1e17); border: 1px solid #000; border-radius: 3px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 3px rgba(0,0,0,0.6); }
+  .theme-ww2 :is(#top, #bar, #card, #caption, dialog) :is(button, select):hover { background: linear-gradient(#3a4135, #22271e); }
+  .theme-ww2 :is(#top, #bar, #card, #caption, dialog) button:active { background: #161914; box-shadow: inset 0 2px 3px rgba(0,0,0,0.6); }
+  .theme-ww2 option { background: #1d211b; color: var(--chalk); }
+  .theme-ww2 #speed { font: 600 18px var(--num); letter-spacing: 0.04em; }
+  .theme-ww2 #bar #play { width: 52px; min-width: 52px; height: 52px; padding: 0; border-radius: 50%; color: var(--accent); font-size: 18px; }
+  .theme-ww2 #hover, .theme-ww2 #card { font-size: 15px; line-height: 1.5; }
+  .theme-ww2 :is(#hover b, #card-name) { font: 700 17px/1.25 var(--fell); letter-spacing: 0.04em; text-transform: uppercase; }
+  .theme-ww2 #card-swatch { width: 26px; height: 15px; align-self: center; }
+  .theme-ww2 #card-live { border-top-color: #3a4035; color: var(--tape); }
+  .theme-ww2 #card #card-close { font: 24px/1 var(--text); letter-spacing: 0; }
+  .theme-ww2 #caption { --panel-bg: var(--tape); color: #1f1c14; padding: 0 0 16px; box-shadow: 0 14px 30px rgba(0,0,0,0.65); scrollbar-color: #1f1c14 transparent; }
+  .theme-ww2 #caption::before { content: "Priority"; display: block; padding: 6px 18px; background: #1f1c14; color: var(--tape); font: 700 13px var(--text); letter-spacing: 0.2em; text-transform: uppercase; }
+  .theme-ww2 #caption::after { content: attr(data-tag); position: absolute; top: 6px; right: 18px; color: var(--tape); font: 700 13px var(--text); letter-spacing: 0.2em; }
+  .theme-ww2 .cap-head { padding: 10px 18px 0; align-items: center; }
+  .theme-ww2 #cap-when { color: #1f1c14; font: 700 14px/1.3 var(--text); letter-spacing: 0.06em; white-space: pre-wrap; }
+  .theme-ww2 #cap-title { color: #1f1c14; font: 700 22px/1.2 var(--text); text-transform: uppercase; margin-top: 2px; }
+  .theme-ww2 #cap-text { margin: 8px 18px 0; padding-top: 8px; border-top: 1px dashed rgba(31,28,20,0.4); font: 16px/1.55 var(--text); text-transform: uppercase; }
+  .theme-ww2 #cap-text::after { content: " STOP"; font-weight: 700; }
+  .theme-ww2 #caption #cap-fold { background: #1f1c14; color: var(--tape); border-color: #1f1c14; box-shadow: none; font-size: 14px; }
+  .theme-ww2 #bar { padding: 8px 18px; gap: 14px; }
+  .theme-ww2 #scrub::-webkit-slider-runnable-track { height: 6px; border: 0; border-radius: 3px; box-shadow: inset 0 1px 2px #000, 0 1px 0 rgba(255,255,255,0.07);
+    background: linear-gradient(90deg, rgba(240,181,60,0.3), var(--accent)) 0 / var(--p, 0%) 100% no-repeat, #0d0f0b; }
+  .theme-ww2 #scrub::-moz-range-track { height: 6px; border: 0; border-radius: 3px; background: #0d0f0b; box-shadow: inset 0 1px 2px #000; }
+  .theme-ww2 #scrub::-moz-range-progress { height: 6px; border-radius: 3px; background: linear-gradient(90deg, rgba(240,181,60,0.3), var(--accent)); }
+  .theme-ww2 #scrub::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -7px; border: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff1c8, var(--accent) 60%, #8a5a10); box-shadow: 0 0 10px rgba(240,181,60,0.75); }
+  .theme-ww2 #scrub::-moz-range-thumb { width: 18px; height: 18px; border: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff1c8, var(--accent) 60%, #8a5a10); box-shadow: 0 0 10px rgba(240,181,60,0.75); }
+  .theme-ww2 #marks path { stroke: #7d826f; } .theme-ww2 #marks path.on { stroke: var(--accent); }
+  .theme-ww2 #bar #marks button { font: 13px/20px var(--fell); letter-spacing: 0.08em; color: #c3c7b4; background: #1d211b; box-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+  .theme-ww2 #bar #marks button:hover, .theme-ww2 #bar #marks button.on { color: var(--accent); } .theme-ww2 #bar #marks button.on { border-color: var(--accent); line-height: 18px; }
+  .theme-ww2 #hours { font: 12px/14px var(--num); letter-spacing: 0.06em; color: #8b907c; }
+  .theme-ww2 #clock { display: grid; grid-template-columns: auto auto; column-gap: 12px; align-items: center; font: 600 30px/1 var(--num); letter-spacing: 0.04em; color: var(--chalk); }
+  .theme-ww2 #clock .dial { grid-row: 1 / span 2; width: 60px; height: 60px; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.6)); }
+  .theme-ww2 #clock small { margin-top: 3px; color: #9da38f; font: 12px/1.1 var(--sc); letter-spacing: 0.2em; }
+  .theme-ww2 #bar label { font: 14px var(--fell); letter-spacing: 0.12em; text-transform: uppercase; color: #b9bda9; }
+  .theme-ww2 #bar input[type=checkbox] { accent-color: var(--accent); }
+  .theme-ww2 dialog { background: var(--panel-bg); color: var(--chalk); font: 16px/1.5 var(--text); }
+  .theme-ww2 dialog::backdrop { background: rgba(0,0,0,0.65); }
+  .theme-ww2 dialog h2 { font: 700 24px var(--fell); letter-spacing: 0.08em; text-transform: uppercase; border-bottom-color: #3a4035; padding-bottom: 4px; }
+  .theme-ww2 #legend-list { font-size: 15px; } .theme-ww2 #legend-list canvas { border: 1px solid #000; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+  .theme-ww2 #loading { color: var(--tape); font: 700 22px var(--text); letter-spacing: 0.25em; text-transform: uppercase; background: radial-gradient(ellipse at 50% 45%, #2c3127, #141310 70%, #0a0907); }
+  .theme-ww2 #loading p::after { content: "_"; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  @media (max-width: 640px) {
+    .theme-ww2 #top h1 { font-size: 20px; } .theme-ww2 #sub { font-size: 13px; } .theme-ww2 #kicker { font-size: 10px; margin-bottom: 4px; }
+    .theme-ww2 :is(#top, #bar, #card, #caption, dialog) :is(button, select) { font-size: 13px; }
+    .theme-ww2 #bar #play { width: 44px; min-width: 44px; height: 44px; } .theme-ww2 #speed { font-size: 16px; }
+    .theme-ww2 #clock { font-size: 20px; column-gap: 6px; } .theme-ww2 #clock .dial { width: 36px; height: 36px; } .theme-ww2 #clock small { font-size: 10px; }
+    .theme-ww2 #cap-title { font-size: 17px; } .theme-ww2 #cap-text { font-size: 14px; } .theme-ww2 #cap-when { font-size: 12px; }
+  }
   @media (max-width: 640px) {
     #hours { display: none; }
     #splash .card { padding: 20px 16px; margin-left: auto; } #splash h1 { font-size: 44px; } #splash .tag { font-size: 18px; } #splash-list button { font-size: 18px; }

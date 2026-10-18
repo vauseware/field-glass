@@ -7,11 +7,17 @@
 // multiplied over the map at full dark), ring ([halo, line] round the selected unit),
 // build(b, terrain, dpr) => sheet { layer, iv, smoke: { sprites, alpha, grow, life }, flash, ... },
 // surround(ctx, mapRect, V), feature(g, type, pts, k, closed), placeName(ctx, f, x, y), fallen: { color(side), mark(ctx, x, y, d) },
-// unit(ctx, U), label: { measure(ctx, l), draw(ctx, l) }, under?(ctx, V), over?(ctx, V), ambient(el, sheet),
-// clock(t) => [main, small], hours?(t), legend: { text, swatch, extra(b, sheet) } }.
+// unit(ctx, U), label: { place?(l), measure(ctx, l), draw(ctx, l) }, under?(ctx, V), over?(ctx, V), fire?(ctx, V, pops, n),
+// ambient(el, sheet), clock(t) => [main html, small], hours?(t), when?(event, b) => [caption time, tag],
+// preview?(b) (recolours another war's battle shown in this skin), legend: { text, swatch, extra(b, sheet) } }.
 import revolution from './themes/revolution.js';
+import ww2 from './themes/ww2.js';
 
-export const THEMES = { revolution };
+export const THEMES = { revolution, ww2 };
 
-// The battle's `theme`, else the Revolution's: the only skin built so far.
-export const themeFor = b => THEMES[b.theme] ?? THEMES.revolution;
+// The skin asked for (the `?theme=` preview), else the battle's `theme`, else its war's by the year: 1939 to 1945 is the
+// Second World War, and anything else the Revolution, the other skin built so far.
+export function themeFor(b, want = null) {
+  const year = +String(b.date ?? '').slice(0, 4);
+  return THEMES[want] ?? THEMES[b.theme] ?? (year >= 1939 && year <= 1945 ? THEMES.ww2 : THEMES.revolution);
+}
