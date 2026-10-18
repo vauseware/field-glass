@@ -49,6 +49,13 @@
   "runtime": 1418
  },
  {
+  "id": "saratoga",
+  "name": "Saratoga, 19 Sep – 7 Oct 1777",
+  "date": "1777-09-19",
+  "war": "American Revolutionary War",
+  "runtime": 846
+ },
+ {
   "id": "sidi-bou-zid",
   "name": "Sidi Bou Zid, 14–17 Feb 1943",
   "date": "1943-02-14",

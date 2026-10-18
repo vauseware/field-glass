@@ -20,7 +20,7 @@ picks the backdrop.
 ![Bunker Hill, the first assault](docs/screenshots/bunker-hill-first-assault.jpg)
 ![Princeton, the orchard](docs/screenshots/princeton-orchard.jpg)
 
-Battles so far: Bunker Hill (17 June 1775), Trenton and Princeton (25 December 1776 to 3 January 1777), the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781),
+Battles so far: Bunker Hill (17 June 1775), Trenton and Princeton (25 December 1776 to 3 January 1777), Saratoga (19 September to 8 October 1777), the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781),
 Guilford Courthouse (15 March 1781) and the siege of Yorktown (28 September to 19 October 1781).
 
 ## Run locally
