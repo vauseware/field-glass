@@ -13599,6 +13599,11 @@
   "x": 0.6,
   "y": 0.3
  },
+ "view": {
+  "x": 0,
+  "y": 1200,
+  "width": 10500
+ },
  "sides": {
   "union": {
    "name": "Union (McDowell)",
@@ -19551,32 +19556,32 @@
      "h": 185
     },
     {
-     "t": "09:37",
+     "t": "09:46",
      "x": -4128,
      "y": 2862,
      "h": 174,
      "state": "column"
     },
     {
-     "t": "09:48:41",
+     "t": "09:54:55",
      "x": -4077,
      "y": 2362,
      "h": 157
     },
     {
-     "t": "09:54:23",
+     "t": "09:59:16",
      "x": -3981,
      "y": 2136,
      "h": 168
     },
     {
-     "t": "09:58:19",
+     "t": "10:02:16",
      "x": -3946,
      "y": 1971,
      "h": 178
     },
     {
-     "t": "10:06:15",
+     "t": "10:08:19",
      "x": -3936,
      "y": 1630,
      "h": 88
@@ -33086,10 +33091,10 @@
    "title": "The march from Centreville",
    "text": "Under a moon a day short of full, McDowell's army leaves its camps round Centreville at half past two. Tyler's division takes the Warrenton Turnpike to make a show at the Stone Bridge; Hunter's and Heintzelman's follow it, to turn off past Cub Run and go round by Sudley Springs onto the Confederate left. About 18,000 men will cross Bull Run. The road is choked and the column crawls.",
    "at": [
-    3000,
-    2300
+    3500,
+    2500
    ],
-   "view": 5000,
+   "view": 3600,
    "speed": 300,
    "when": "2:30 AM"
   },
@@ -33377,12 +33382,12 @@
   "note": "About 18,000 men were engaged on each side: Fry gives the Union force that crossed Bull Run as 18,572, Jordan the Confederates engaged as 18,053. Most of the Union missing were stragglers and prisoners taken in the rout."
  },
  "sources": [
-  "<i>The War of the Rebellion: Official Records of the Union and Confederate Armies</i>, Series I, vol. 2 (1880), read in the Internet Archive scan: the reports of McDowell, Tyler, Keyes, Sherman, Porter, Heintzelman, Willcox, Bidwell, Davies, Beauregard, Johnston, Jackson, Longstreet, D. R. Jones and Hampton; the Union casualty returns by regiment and the Confederate field return of 25 September 1861.",
+  "<i>The War of the Rebellion: Official Records of the Union and Confederate Armies</i>, Series I, vol. 2 (1880), read in the Internet Archive scan: the reports of Keyes, Sherman, Porter, Heintzelman, Willcox, Bidwell, Davies, Beauregard, Longstreet, D. R. Jones and Hampton; the Union casualty returns by regiment and the Confederate field return of 25 September 1861.",
   "James B. Fry, \"McDowell's Advance to Bull Run\", and \"The Opposing Forces at the First Bull Run\", <i>Battles and Leaders of the Civil War</i>, vol. 1 (1887): the times, Fry's and Jordan's strengths and the losses by brigade.",
   "Francis F. Wilshin, <i>Manassas (Bull Run) National Battlefield Park</i>, NPS Historical Handbook 15 (1953, rev. 1961): the morning's clock times, the arrivals of Johnston's brigades and the fight for Henry Hill.",
   "National Park Service, Manassas National Battlefield Park: \"The Battle of First Manassas\", the orders of battle, the panel on the retreat from Chinn Ridge, and the battle maps of the General Management Plan (2005, figures A-1 and A-2), from which the fords, the farm roads, Pittsylvania, Van Pelt's, Portici and the wartime woods are read.",
   "Daniel Schaible, <i>Fence Lines, Fields, and Forests: Manassas National Battlefield Cultural Landscape Report</i> (NPS, 2013), which reprints those maps; John Hennessy, <i>The First Battle of Manassas: An End to Innocence</i> (rev. 2015), and Bradley Gottfried, <i>The Maps of First Bull Run</i> (2009), not consulted.",
   "Places: OpenStreetMap contributors (ODbL), the Park Service's markers for the houses and the batteries, US 29 on the Warrenton Turnpike and VA 234 on the Manassas-Sudley road. Terrain: USGS 3DEP elevation at 27.5 m over an 11 km square, with three modern quarries filled smooth.",
-  "What is reconstructed: every position between the recorded moments, read from the reports' descriptions, not a troop-movement map, and good to a few hundred metres; the line of the flank-march road and the McLean's Ford site; the woods east of Bull Run, outside the Park Service map; Howard's start from the turn of the road, Early's route and the hour Early and Kirby Smith left; and most regimental strengths, apportioned from the brigade and division totals named in the order of battle. The sources disagree by 15 to 30 minutes on the morning's times."
+  "What is reconstructed: every position between the recorded moments, read from the reports' descriptions, not a troop-movement map, and good to a few hundred metres; the line of the flank-march road and the McLean's Ford site; the woods east of Bull Run, outside the Park Service map; Howard's start from the turn of the road, Early's route and the hour Early and Kirby Smith left; and most regimental strengths, apportioned from the brigade and division totals in these sources. The sources disagree by 15 to 30 minutes on the morning's times."
  ]
 }

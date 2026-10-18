@@ -428,7 +428,7 @@ MH = [("ri2", (-3700, 1550), 180, "10:10"), ("riB", (-3560, 1640), 185, "10:15")
       ("ri1", (-3230, 1560), 190, "10:40"), ("griffin", (-4050, 1680), 150, "10:45"), ("marines", (-4120, 1800), 150, "10:50"), ("ny27", (-4200, 1450), 160, "10:55"),
       ("ny14", (-4350, 1350), 150, "11:00"), ("nysm8", (-4450, 1250), 140, "11:05"), ("sykes", (-3300, 1720), 180, "11:10"), ("palmer", (-4150, 1950), 170, "11:15")]
 for id, spot, h, t1 in MH:
-    t0 = plus(KEYS[id][-1]["t"], 12 if id == "ri2" else 3)
+    t0 = plus(KEYS[id][-1]["t"], 12 if id in ("ri2", "riB") else 3)
     keys(id, down_sudley(t0, t1, spot, h))
 for id, s, lost in [("ri2", 490, 60), ("ny71", 600, 30), ("nh2", 600, 35), ("ri1", 480, 30)]:
     spot = (KEYS[id][-1]["x"], KEYS[id][-1]["y"])
@@ -724,7 +724,7 @@ features += [dict(type="battery", poly=gun_park(P['ricketts_guns'], 95), **{"fro
 # Chapters: (time, title, text, camera centre, metres across, playback speed, clock time the sources record or None).
 # The morning follows Wilshin's times and the afternoon the Park Service's; where they disagree the caption says so.
 CHAPTERS = [
-    ("02:30", "The march from Centreville", "Under a moon a day short of full, McDowell's army leaves its camps round Centreville at half past two. Tyler's division takes the Warrenton Turnpike to make a show at the Stone Bridge; Hunter's and Heintzelman's follow it, to turn off past Cub Run and go round by Sudley Springs onto the Confederate left. About 18,000 men will cross Bull Run. The road is choked and the column crawls.", [3000, 2300], 5000, 300, "2:30 AM"),
+    ("02:30", "The march from Centreville", "Under a moon a day short of full, McDowell's army leaves its camps round Centreville at half past two. Tyler's division takes the Warrenton Turnpike to make a show at the Stone Bridge; Hunter's and Heintzelman's follow it, to turn off past Cub Run and go round by Sudley Springs onto the Confederate left. About 18,000 men will cross Bull Run. The road is choked and the column crawls.", [3500, 2500], 3600, 300, "2:30 AM"),
     ("05:15", "The first gun", "Tyler's head halts before the Stone Bridge. Lieutenant Hains's 30-pounder Parrott fires down the turnpike, the first shot of the day: a quarter past five by Wilshin, half past by the Park Service. Evans, holding the bridge with eleven companies and two guns, does not answer. Across the valley the Union guns at Blackburn's Ford open too.", [-800, 1150], 2600, 120, "about 5:15 AM"),
     ("05:30", "The road through the woods", "At the blacksmith's shop half a mile past Cub Run, Hunter's division turns right onto a narrow track through the woods, Heintzelman's behind it. It was to reach Sudley Springs by seven; the road is twice as long as anyone thought, and the head will not get there until half past nine. Howard's brigade halts at the turn as a reserve.", [-500, 3300], 5000, 300, None),
     ("07:00", "The Confederate right", "Beauregard means to attack Centreville with his right. D. R. Jones has crossed McLean's Ford to wait for Ewell, who never gets the order; Longstreet lies under the Union guns across Blackburn's Ford. Seeing columns moving to the north, Beauregard sends Jackson's brigade about seven to the gap between Bonham and Cocke, and Bee and Bartow toward the Stone Bridge.", [2400, -2000], 4500, 300, "about 7 AM"),
@@ -753,7 +753,7 @@ events = [dict(t=t, title=a, text=b, at=at, view=v, speed=s, **({"when": w} if w
 battle = dict(
     id="first-manassas", name="First Manassas", date="1861-07-21", dateText="21 July 1861", place="Bull Run, near Manassas Junction, Virginia",
     origin=dict(lat=LAT0, lon=LON0), extent=11000, start="02:30", end="21:00", sunrise="04:46", sunset="19:14", speed=60, lapse=1800, menPerDot=20,
-    terrainExaggeration=2, contourInterval=3, trees=dict(density=0.0004), fields=FIELDS, wind=dict(x=0.6, y=0.3),
+    terrainExaggeration=2, contourInterval=3, trees=dict(density=0.0004), fields=FIELDS, wind=dict(x=0.6, y=0.3), view=dict(x=0, y=1200, width=10500),
     sides=dict(union=dict(name="Union (McDowell)", color="#2a4fa8", light="#5a7fd8", dark="#16285a"),
                confederate=dict(name="Confederate (Beauregard, Johnston)", color="#8a8f98", light="#b9bec6", dark="#43464c")),
     features=features, units=units, events=events,
@@ -762,13 +762,13 @@ battle = dict(
         ["confederate", "1,982: 387 killed, 1,582 wounded, 13 missing (Official Records). Bee and Bartow killed or mortally wounded; Jackson, Kirby Smith, Hampton and Wheat wounded."]],
         "note": "About 18,000 men were engaged on each side: Fry gives the Union force that crossed Bull Run as 18,572, Jordan the Confederates engaged as 18,053. Most of the Union missing were stragglers and prisoners taken in the rout."},
     sources=[
-        "<i>The War of the Rebellion: Official Records of the Union and Confederate Armies</i>, Series I, vol. 2 (1880), read in the Internet Archive scan: the reports of McDowell, Tyler, Keyes, Sherman, Porter, Heintzelman, Willcox, Bidwell, Davies, Beauregard, Johnston, Jackson, Longstreet, D. R. Jones and Hampton; the Union casualty returns by regiment and the Confederate field return of 25 September 1861.",
+        "<i>The War of the Rebellion: Official Records of the Union and Confederate Armies</i>, Series I, vol. 2 (1880), read in the Internet Archive scan: the reports of Keyes, Sherman, Porter, Heintzelman, Willcox, Bidwell, Davies, Beauregard, Longstreet, D. R. Jones and Hampton; the Union casualty returns by regiment and the Confederate field return of 25 September 1861.",
         "James B. Fry, \"McDowell's Advance to Bull Run\", and \"The Opposing Forces at the First Bull Run\", <i>Battles and Leaders of the Civil War</i>, vol. 1 (1887): the times, Fry's and Jordan's strengths and the losses by brigade.",
         "Francis F. Wilshin, <i>Manassas (Bull Run) National Battlefield Park</i>, NPS Historical Handbook 15 (1953, rev. 1961): the morning's clock times, the arrivals of Johnston's brigades and the fight for Henry Hill.",
         "National Park Service, Manassas National Battlefield Park: \"The Battle of First Manassas\", the orders of battle, the panel on the retreat from Chinn Ridge, and the battle maps of the General Management Plan (2005, figures A-1 and A-2), from which the fords, the farm roads, Pittsylvania, Van Pelt's, Portici and the wartime woods are read.",
         "Daniel Schaible, <i>Fence Lines, Fields, and Forests: Manassas National Battlefield Cultural Landscape Report</i> (NPS, 2013), which reprints those maps; John Hennessy, <i>The First Battle of Manassas: An End to Innocence</i> (rev. 2015), and Bradley Gottfried, <i>The Maps of First Bull Run</i> (2009), not consulted.",
         "Places: OpenStreetMap contributors (ODbL), the Park Service's markers for the houses and the batteries, US 29 on the Warrenton Turnpike and VA 234 on the Manassas-Sudley road. Terrain: USGS 3DEP elevation at 27.5 m over an 11 km square, with three modern quarries filled smooth.",
-        "What is reconstructed: every position between the recorded moments, read from the reports' descriptions, not a troop-movement map, and good to a few hundred metres; the line of the flank-march road and the McLean's Ford site; the woods east of Bull Run, outside the Park Service map; Howard's start from the turn of the road, Early's route and the hour Early and Kirby Smith left; and most regimental strengths, apportioned from the brigade and division totals named in the order of battle. The sources disagree by 15 to 30 minutes on the morning's times.",
+        "What is reconstructed: every position between the recorded moments, read from the reports' descriptions, not a troop-movement map, and good to a few hundred metres; the line of the flank-march road and the McLean's Ford site; the woods east of Bull Run, outside the Park Service map; Howard's start from the turn of the road, Early's route and the hour Early and Kirby Smith left; and most regimental strengths, apportioned from the brigade and division totals in these sources. The sources disagree by 15 to 30 minutes on the morning's times.",
     ],
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1)
