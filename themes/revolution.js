@@ -100,9 +100,7 @@ function rose(dpr) {
 function over(ctx, V) {
   if (V.W <= 640) return;
   const yd = 0.9144 * V.z, len = [50, 100, 200, 250, 500, 1000, 2000, 5000].findLast(n => n * yd <= 170) ?? 50, w = len * yd;
-  const fits = (r, b) => r - 190 >= 0 && b - 230 >= 0 && !V.avoid.some(p => p.t < b - 4 && p.b > b - 230 && p.l < r && p.r > r - 190) &&
-    !V.B.units.some(u => u.pose && u.screen && Math.abs(u.screen.x - (r - 95)) < 95 + u.screen.w / 2 && Math.abs(u.screen.y - (b - 115)) < 115 + u.screen.w / 2);
-  const corner = [[V.W - 24, V.safe.bar - 14], [V.safe.r - 10, V.safe.b]].find(([r, b]) => fits(r, b));
+  const corner = P.freeCorner(V, 190, 230);
   if (!corner) return;
   const x0 = corner[0] - 10 - Math.max(w, 150) / 2 - w / 2, y0 = corner[1] - 26;
   for (let i = 0; i < 4; i++) { ctx.fillStyle = i % 2 ? PAPER : INK; ctx.fillRect(x0 + (i * w) / 4, y0, w / 4, 5); }
