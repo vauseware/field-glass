@@ -134,9 +134,35 @@ export function unitAt(u, t) {
   while (i > 0 && k[i].t > t) i--;
   const a = k[i], c = k[i + 1];
   if (a.state === 'hidden') return null;
-  if (!c || c.t <= a.t) return { x: a.x, y: a.y, h: a.h, strength: a.strength, state: a.state, fire: a.fire };
+  if (!c || c.t <= a.t) return { x: a.x, y: a.y, h: a.h, strength: a.strength, state: a.state, fire: a.fire, moving: false };
   const f = (t - a.t) / (c.t - a.t);
-  return { x: lerp(a.x, c.x, f), y: lerp(a.y, c.y, f), h: lerpAngle(a.h, c.h, f), strength: lerp(a.strength, c.strength, f), state: a.state, fire: a.fire };
+  return { x: lerp(a.x, c.x, f), y: lerp(a.y, c.y, f), h: lerpAngle(a.h, c.h, f), strength: lerp(a.strength, c.strength, f), state: a.state, fire: a.fire,
+    moving: a.x !== c.x || a.y !== c.y };
+}
+
+const grow = (bx, x0, y0, x1, y1) => (bx ? { x0: Math.min(bx.x0, x0), y0: Math.min(bx.y0, y0), x1: Math.max(bx.x1, x1), y1: Math.max(bx.y1, y1) } : { x0, y0, x1, y1 });
+const focusBox = (b, ev) => { const r = (ev.view ?? b.extent * 0.6) / 2; return { x0: ev.at[0] - r, y0: ev.at[1] - r, x1: ev.at[0] + r, y1: ev.at[1] + r }; };
+// World box {x0,y0,x1,y1} for the camera at t: the chapter's focus, sliding toward the next chapter's over the last `ahead`
+// seconds before it, joined by every nearby unit that moves or fights now or within `ahead` seconds, so marching columns
+// stay in frame and the camera is already looking where they are going. Nearby is within half a focus width of the focus:
+// the fight on another part of the field is another chapter's story. Null when there is nothing to frame.
+export function actionBox(b, t, ahead, pad = 30) {
+  const ev = eventAt(b, t), nx = b.events.find(e => e.t > t && e.at);
+  let fb = ev?.at ? focusBox(b, ev) : null;
+  if (nx && nx.t - t < ahead) {
+    const f = 1 - (nx.t - t) / ahead, nb = focusBox(b, nx);
+    fb = fb ? { x0: lerp(fb.x0, nb.x0, f), y0: lerp(fb.y0, nb.y0, f), x1: lerp(fb.x1, nb.x1, f), y1: lerp(fb.y1, nb.y1, f) } : nb;
+  }
+  const reach = fb ? Math.max(fb.x1 - fb.x0, fb.y1 - fb.y0) / 2 : Infinity;
+  let bx = fb;
+  for (const u of b.units) for (let i = 0; i <= 4; i++) {
+    const p = unitAt(u, t + (ahead * i) / 4);
+    if (!p || !(p.moving || BUSY.has(p.state))) continue;
+    if (fb && Math.max(fb.x0 - p.x, p.x - fb.x1, fb.y0 - p.y, p.y - fb.y1) > reach) continue;
+    const { F, ranks, rankD } = shape(u, p, b.menPerDot), r = Math.max(F / 2, ranks * rankD);
+    bx = grow(bx, p.x - r, p.y - r, p.x + r, p.y + r);
+  }
+  return bx && { x0: bx.x0 - pad, y0: bx.y0 - pad, x1: bx.x1 + pad, y1: bx.y1 + pad };
 }
 
 // Formation footprint: dot count, ranks, frontage (m), rank depth (m). Files are ~0.7 m for foot, 1 m for horse.

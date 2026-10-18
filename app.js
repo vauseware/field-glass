@@ -1,9 +1,9 @@
-import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, advance, defaultSpeed, fmtTime, parseTime, hash, mulberry32, mod } from './sim.js';
+import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, actionBox, advance, defaultSpeed, fmtTime, parseTime, hash, mulberry32, mod } from './sim.js';
 
 const $ = s => document.querySelector(s);
 const canvas = $('#map'), ctx = canvas.getContext('2d');
-const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $('#clock'), follow: $('#follow'),
-  title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'), capWhen: $('#cap-when'), capFold: $('#cap-fold'),
+const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $('#clock'), follow: $('#follow'), bar: $('#bar'),
+  top: $('#top'), topFold: $('#top-fold'), title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'), capWhen: $('#cap-when'), capFold: $('#cap-fold'),
   hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse'),
   marks: $('#marks'), splash: $('#splash'), splashList: $('#splash-list'), plan: $('#plan'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list'),
   outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body') };
@@ -26,7 +26,6 @@ async function loadBattle(id) {
   layer = buildLayer(b, terrain);
   B = b; T = terrain;
   smoke.length = 0; curEvent = shownEvent = null;
-  setPlaying(false);
   speed = SPEEDS.includes(b.speed) ? b.speed : 10;
   const dur = b.endT - b.startT;
   ui.speed.innerHTML = '';
@@ -54,11 +53,11 @@ async function loadBattle(id) {
   clampCam();
   const [, , at, play, warp, legend, outcome] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(,warp)?(,legend)?(,outcome)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
-  if (play) setPlaying(true);
+  setPlaying(!!play); foldTop(!!play);
   if (legend) ui.legendDlg.showModal(); // screenshots
   if (outcome) ui.outcome.open = true;
   document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption fade
-  if (warp) for (let i = 0; i < 300; i++) step(1 / 60); // five seconds of frames for screenshots
+  if (warp) { step(0); updateHud(); for (let i = 0; i < 300; i++) step(1 / 60); } // five seconds of frames for screenshots, framed around the caption
   location.hash = id;
 }
 
@@ -136,13 +135,41 @@ function contours(Z, cols, rows, lv, seg) {
 
 const w2sx = x => (x - cam.x) * cam.zoom + W / 2;
 const w2sy = y => (cam.y - y) * cam.zoom + H / 2;
-const minZoom = () => Math.max(W, H) / B.extent; // the map always covers the viewport
 
+// The screen rect the panels leave clear, {l,t,r,b}. Each panel is cut away by trimming one side of the rect; of every
+// combination of trims, the largest rect wins. The chapter labels slanting up from the bar count as one more panel.
+// Measured only when a panel, the labels or the window change.
+let safe = null;
+const safeRect = () => (safe ??= measureSafe());
+function measureSafe() {
+  const m = 10, panels = [ui.top, ui.bar, ...(ui.caption.classList.contains('show') ? [ui.caption] : [])].map(el => el.getBoundingClientRect());
+  const labels = marks.filter(el => !el.hidden).map(el => el.getBoundingClientRect()).filter(r => r.width);
+  if (labels.length) panels.push({ left: Math.min(...labels.map(r => r.left)), right: Math.max(...labels.map(r => r.right)), top: Math.min(...labels.map(r => r.top)), bottom: panels[1].top });
+  let best = { l: 0, t: 0, r: W, b: H }, area = -1;
+  const trim = (i, s) => {
+    if (s.r - s.l < 80 || s.b - s.t < 80) return;
+    if (i === panels.length) { const a = (s.r - s.l) * (s.b - s.t); if (a > area) { area = a; best = s; } return; }
+    const p = panels[i];
+    if (p.right <= s.l || p.left >= s.r || p.bottom <= s.t || p.top >= s.b) return trim(i + 1, s);
+    trim(i + 1, { ...s, t: p.bottom + m }); trim(i + 1, { ...s, b: p.top - m });
+    trim(i + 1, { ...s, l: p.right + m }); trim(i + 1, { ...s, r: p.left - m });
+  };
+  trim(0, best);
+  return best;
+}
+const panelSizes = new ResizeObserver(() => { safe = null; });
+for (const el of [ui.top, ui.caption, ui.bar]) panelSizes.observe(el);
+
+const minZoom = () => { const s = safeRect(); return Math.min(s.r - s.l, s.b - s.t) / B.extent; }; // out to the whole map in the clear rect
+
+// The map edge may come in as far as the clear rect's edge, so anything under a panel can be dragged out from under it.
+// Zoomed out past that, the map sits centred in the clear rect.
 function clampCam() {
   cam.zoom = Math.min(12, Math.max(minZoom(), cam.zoom));
-  const h = B.extent / 2, rx = Math.max(0, h - W / 2 / cam.zoom), ry = Math.max(0, h - H / 2 / cam.zoom);
-  cam.x = Math.max(-rx, Math.min(rx, cam.x));
-  cam.y = Math.max(-ry, Math.min(ry, cam.y));
+  const h = B.extent / 2, z = cam.zoom, s = safeRect();
+  const fit = (v, lo, hi) => (lo > hi ? (lo + hi) / 2 : Math.max(lo, Math.min(hi, v)));
+  cam.x = fit(cam.x, -h + (W / 2 - s.l) / z, h - (s.r - W / 2) / z);
+  cam.y = fit(cam.y, -h + (s.b - H / 2) / z, h - (H / 2 - s.t) / z);
 }
 function zoomAt(sx, sy, f) {
   const nz = Math.min(12, Math.max(minZoom(), cam.zoom * f));
@@ -152,12 +179,15 @@ function zoomAt(sx, sy, f) {
 }
 function userMoved() { if (follow) { follow = false; ui.follow.checked = false; } }
 
+// Ease toward the action box fitted into the clear rect. It looks four real seconds ahead at the current clock rate.
 function updateCamera(dt) {
-  if (!follow || !curEvent?.at) return;
-  const k = 1 - Math.exp(-dt * 1.2);
-  const tz = Math.min(12, Math.max(minZoom(), Math.min(W, H) / (curEvent.view ?? B.extent * 0.6)));
-  cam.x += (curEvent.at[0] - cam.x) * k;
-  cam.y += (curEvent.at[1] - cam.y) * k;
+  if (!follow) return;
+  const bx = actionBox(B, t, (lapsing ? B.lapse : speed) * 4);
+  if (!bx) return;
+  const s = safeRect(), k = 1 - Math.exp(-dt * 1.2);
+  const tz = Math.min(12, Math.max(minZoom(), Math.min((s.r - s.l) / (bx.x1 - bx.x0), (s.b - s.t) / (bx.y1 - bx.y0))));
+  cam.x += ((bx.x0 + bx.x1) / 2 - ((s.l + s.r) / 2 - W / 2) / tz - cam.x) * k;
+  cam.y += ((bx.y0 + bx.y1) / 2 + ((s.t + s.b) / 2 - H / 2) / tz - cam.y) * k;
   cam.zoom *= Math.exp(Math.log(tz / cam.zoom) * k);
   clampCam();
 }
@@ -413,6 +443,7 @@ function buildMarks(b) {
 }
 function layoutMarks() {
   const tw = ui.marks.clientWidth, dur = B.endT - B.startT, gap = 29; // a 22 px pill at 50° clears its neighbour at 29 px (29·sin 50° > 22)
+  safe = null;
   const px = B.events.map(ev => ((ev.t - B.startT) / dur) * tw);
   const k = Math.max(1, Math.ceil((marks.length * gap) / Math.max(1, tw))); // too many for the width: label every k-th
   const idx = [...marks.keys()].filter(i => i % k === 0), ax = idx.map(i => px[i]);
@@ -485,7 +516,7 @@ function updateHud() {
     ui.capTitle.textContent = curEvent?.title ?? '';
     ui.capText.textContent = curEvent?.text ?? '';
     ui.capWhen.textContent = curEvent ? chapterWhen(curEvent) : '';
-    ui.caption.classList.toggle('show', !!curEvent);
+    ui.caption.classList.toggle('show', !!curEvent); safe = null;
     foldCaption(false); // every new chapter opens with its story showing
     marks.forEach((m, i) => { m.classList.toggle('on', B.events[i] === curEvent); leads[i].classList.toggle('on', B.events[i] === curEvent); });
   }
@@ -510,13 +541,16 @@ function chapterWhen(ev) {
   const when = ev.when ?? `about ${hh === 0 ? 'midnight' : hh === 12 ? 'noon' : `${hh % 12} ${hh < 12 ? 'AM' : 'PM'}`}`;
   return d.includes(', ') ? `${d.split(', ')[0]}, ${when}` : when[0].toUpperCase() + when.slice(1);
 }
-function foldCaption(v) {
-  ui.caption.classList.toggle('folded', v);
-  ui.capFold.textContent = v ? 'Show' : 'Hide';
-  ui.capFold.setAttribute('aria-expanded', String(!v));
-  ui.capFold.title = ui.capFold.ariaLabel = v ? 'Show the story' : 'Hide the story';
+function fold(panel, btn, what, v) {
+  panel.classList.toggle('folded', v);
+  btn.textContent = v ? 'Show' : 'Hide';
+  btn.setAttribute('aria-expanded', String(!v));
+  btn.title = btn.ariaLabel = `${v ? 'Show' : 'Hide'} ${what}`;
 }
+const foldCaption = v => fold(ui.caption, ui.capFold, 'the story', v);
+const foldTop = v => fold(ui.top, ui.topFold, 'the battle details', v); // folded to the title row while playing, so it hides fewer men
 ui.capFold.onclick = () => foldCaption(!ui.caption.classList.contains('folded'));
+ui.topFold.onclick = () => foldTop(!ui.top.classList.contains('folded'));
 
 const nudge = () => Math.max(30, (B.endT - B.startT) / 240); // arrow keys: 30 s, or 1/240 of a long battle
 function setPlaying(v) { playing = v; ui.play.textContent = v ? '❚❚' : '▶'; ui.play.setAttribute('aria-label', v ? 'Pause' : 'Play'); }
@@ -541,7 +575,7 @@ addEventListener('keydown', e => {
 function resize() {
   DPR = Math.min(2, devicePixelRatio || 1);
   W = innerWidth; H = innerHeight;
-  canvas.width = W * DPR; canvas.height = H * DPR;
+  canvas.width = W * DPR; canvas.height = H * DPR; safe = null;
   canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 }
 // Georgia's figures differ in width, so the clock is held at the width of the widest time it can show; otherwise every tick nudges the scrubber.
@@ -674,7 +708,7 @@ function showSplash(list) {
     const id = e.target.closest('button')?.dataset.id;
     if (!id) return;
     ui.splash.hidden = true; location.hash = id;
-    await loadBattle(id); setPlaying(true);
+    await loadBattle(id); setPlaying(true); foldTop(true);
   };
 }
 

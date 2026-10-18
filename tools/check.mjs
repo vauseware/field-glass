@@ -1,7 +1,7 @@
 // Self-check for sim.js plus validation of every battle in battles/index.json. Run: npm run check
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import assert from 'node:assert/strict';
-import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime } from '../sim.js';
+import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime, actionBox } from '../sim.js';
 
 const u = { id: 'x', side: 'a', type: 'infantry', strength: 100, keys: [
   { t: '07:00', x: 0, y: 0, h: 350 },
@@ -23,6 +23,15 @@ assert.equal(fmtTime(parseTime('1781-10-14 20:05')), '14 Oct, 8:05 PM', 'dated c
 assert.deepEqual(activity(b, parseTime('07:05')), [true, parseTime('07:20')], 'moving then firing is one active span');
 assert.deepEqual(activity(b, parseTime('06:50')), [false, parseTime('06:58:30')], 'quiet until 90 s before the move');
 assert.deepEqual(activity(b, parseTime('07:30')), [false, Infinity], 'quiet after the last key');
+const cb = normalizeBattle({ start: '07:00', end: '08:00', extent: 2000, menPerDot: 10, units: [
+  { id: 'm', type: 'infantry', strength: 100, keys: [{ t: '07:00', x: 300, y: 0, state: 'column' }, { t: '07:10', x: 600, y: 0 }] },
+  { id: 'idle', type: 'infantry', strength: 100, keys: [{ t: '07:00', x: -900, y: 0 }, { t: '08:00', x: -900, y: 0 }] },
+], events: [{ t: '07:00', at: [0, 0], view: 400 }, { t: '07:10', at: [600, 0], view: 400 }] });
+const box = (t, ahead) => actionBox(cb, parseTime(t), ahead, 0);
+assert.equal(box('07:01', 0).x0, -200, 'chapter focus framed; idle unit left out');
+assert.ok(box('07:01', 0).x1 >= 330 && box('07:01', 120).x1 >= 390, 'marching unit framed now and where it will be');
+const [pre, at] = [actionBox(cb, parseTime('07:10') - 0.01, 60, 0), box('07:10', 60)];
+assert.ok(['x0', 'y0', 'x1', 'y1'].every(k => Math.abs(pre[k] - at[k]) < 1), 'no jump at the chapter boundary');
 console.log('sim.js: ok');
 
 let bad = 0;
