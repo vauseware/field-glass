@@ -6,14 +6,15 @@ const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $(
   top: $('#top'), topFold: $('#top-fold'), title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'), capWhen: $('#cap-when'), capFold: $('#cap-fold'),
   hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse'),
   marks: $('#marks'), splash: $('#splash'), splashList: $('#splash-list'), plan: $('#plan'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list'),
-  outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body') };
+  outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body'),
+  card: $('#card'), cardSwatch: $('#card-swatch'), cardName: $('#card-name'), cardCmd: $('#card-cmd'), cardKind: $('#card-kind'), cardLive: $('#card-live'), cardClose: $('#card-close') };
 
 let B = null, T = null, layer = null;
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
 let cam = { x: 0, y: 0, zoom: 0.5 }, follow = true, lapse = true, lapsing = false;
 let W = 0, H = 0, DPR = 1, last = performance.now();
 const smoke = [], flashes = [], placed = []; // placed: label boxes drawn this frame, so labels avoid each other
-let mouse = null;
+let mouse = null, selected = null, cardAt = null, cardLive = '', cardSwap = 0; // cardAt: the card's eased screen position
 
 // ---------- loading ----------
 
@@ -25,7 +26,7 @@ async function loadBattle(id) {
   const b = normalizeBattle(raw);
   layer = buildLayer(b, terrain);
   B = b; T = terrain;
-  smoke.length = 0; curEvent = shownEvent = null;
+  smoke.length = 0; curEvent = shownEvent = null; select(null);
   speed = SPEEDS.includes(b.speed) ? b.speed : 10;
   const dur = b.endT - b.startT;
   ui.speed.innerHTML = '';
@@ -51,16 +52,18 @@ async function loadBattle(id) {
   cam = { x: v.x, y: v.y, zoom: Math.min(W, H) / v.width };
   follow = true; ui.follow.checked = true; lapse = true; ui.lapse.checked = true;
   clampCam();
-  const [, , at, play, warp, legend, outcome] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(,warp)?(,legend)?(,outcome)?$/) ?? [];
+  const [, , at, play, pickId, warp, legend, outcome] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(?:,select=([^,]+))?(,warp)?(,legend)?(,outcome)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
   setPlaying(!!play); foldTop(!!play);
   if (legend) ui.legendDlg.showModal(); // screenshots
   if (outcome) ui.outcome.open = true;
-  document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption fade
-  if (warp) { // five seconds of frames for screenshots, framed around the caption
+  if (pickId) select(b.units.find(u => u.id === pickId) ?? null); // screenshots: the card open on this unit
+  document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption and card fades
+  if (warp) { // five seconds of frames for screenshots, framed around the caption, with the card beside its unit
     await document.fonts.ready; rects = null; // the Fell faces resize the panels
     step(0); updateHud();
     for (let i = 0; i < 300; i++) step(1 / 60);
+    draw(); updateHud();
   }
   location.hash = id;
 }
@@ -211,24 +214,48 @@ function updateCamera(dt) {
   clampCam();
 }
 
+// The unit whose drawn body is under a screen point, within a few pixels; the smallest wins where bodies overlap.
+function pick(mx, my) {
+  let best = null, bd = 8, ba = Infinity;
+  for (const u of B.units) {
+    const s = u.screen;
+    if (!u.pose || !s) continue;
+    const X = mx - s.x, Y = my - s.y, c = Math.cos(s.a), n = Math.sin(s.a);
+    const lx = X * c + Y * n, ly = -X * n + Y * c; // into the body's frame: front edge at y = -2, ranks behind it
+    const d = Math.hypot(Math.max(0, Math.abs(lx) - s.w / 2), Math.max(0, -2 - ly, ly - s.h - 1)), area = s.w * s.h;
+    if (d < bd || (d === bd && area < ba)) { best = u; bd = d; ba = area; }
+  }
+  return best;
+}
+
+// A press that moves less than 6 px is a click on a unit, not a drag, so it neither pans nor turns Follow off.
 const ptrs = new Map();
 let pinch = 0;
-canvas.addEventListener('pointerdown', e => { ptrs.set(e.pointerId, [e.clientX, e.clientY]); canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener('pointerdown', e => {
+  for (const q of ptrs.values()) q.drag = true;
+  ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY, x0: e.clientX, y0: e.clientY, drag: ptrs.size > 0 });
+  canvas.setPointerCapture(e.pointerId);
+});
 canvas.addEventListener('pointermove', e => {
   mouse = [e.clientX, e.clientY];
-  if (!ptrs.has(e.pointerId)) return;
-  const prev = ptrs.get(e.pointerId);
-  ptrs.set(e.pointerId, [e.clientX, e.clientY]);
+  const q = ptrs.get(e.pointerId);
+  if (!q || (!q.drag && Math.hypot(e.clientX - q.x0, e.clientY - q.y0) < 6)) return;
+  const px = q.x, py = q.y;
+  Object.assign(q, { x: e.clientX, y: e.clientY, drag: true });
   if (ptrs.size === 1) {
-    cam.x -= (e.clientX - prev[0]) / cam.zoom; cam.y += (e.clientY - prev[1]) / cam.zoom;
+    cam.x -= (e.clientX - px) / cam.zoom; cam.y += (e.clientY - py) / cam.zoom;
     clampCam(); userMoved();
   } else if (ptrs.size === 2) {
-    const [a, b] = [...ptrs.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]);
-    if (pinch) zoomAt((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, d / pinch);
+    const [a, b] = [...ptrs.values()], d = Math.hypot(a.x - b.x, a.y - b.y);
+    if (pinch) zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, d / pinch);
     pinch = d; userMoved();
   }
 });
-const up = e => { ptrs.delete(e.pointerId); pinch = 0; };
+const up = e => {
+  const q = ptrs.get(e.pointerId);
+  ptrs.delete(e.pointerId); pinch = 0;
+  if (e.type === 'pointerup' && q && !q.drag) { const u = pick(e.clientX, e.clientY); if (u) select(u); }
+};
 canvas.addEventListener('pointerup', up);
 canvas.addEventListener('pointercancel', up);
 canvas.addEventListener('pointerleave', () => { mouse = null; });
@@ -349,13 +376,18 @@ function drawUnits() {
     const p = u.pose;
     if (!p) continue;
     const sx = w2sx(p.x), sy = w2sy(p.y);
-    u.screen = [sx, sy];
     const { ranks, F, rankD } = shape(u, p, mpd), D = ranks * rankD, ext = Math.max(F, D) * z + 40;
-    if (sx < -ext || sy < -ext || sx > W + ext || sy > H + ext) continue;
-    const side = B.sides[u.side], gone = p.state === 'surrender', militia = u.type === 'militia' || u.type === 'riflemen';
     // Solid body with a dark outline so a unit reads at any zoom; it never shrinks below a few pixels.
     const wPx = Math.max(16, F * z), hPx = Math.max(7, D * z);
-    ctx.save(); ctx.translate(sx, sy); ctx.rotate((p.h * Math.PI) / 180);
+    u.screen = { x: sx, y: sy, w: wPx, h: hPx, a: (p.h * Math.PI) / 180 }; // the body as drawn, for pointing and the card
+    if (sx < -ext || sy < -ext || sx > W + ext || sy > H + ext) continue;
+    const side = B.sides[u.side], gone = p.state === 'surrender', militia = u.type === 'militia' || u.type === 'riflemen';
+    ctx.save(); ctx.translate(sx, sy); ctx.rotate(u.screen.a);
+    if (u === selected) { // a pulsing ring so the unit on the card is easy to find
+      ctx.globalAlpha = 0.75 + 0.25 * Math.sin(performance.now() / 300);
+      ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(255,248,225,0.95)'; ctx.strokeRect(-wPx / 2 - 7, -9, wPx + 14, hPx + 17);
+      ctx.lineWidth = 2.5; ctx.strokeStyle = '#8a2617'; ctx.strokeRect(-wPx / 2 - 7, -9, wPx + 14, hPx + 17);
+    }
     ctx.globalAlpha = p.state === 'rout' ? 0.5 : 0.85;
     ctx.fillStyle = gone ? '#9a9a92' : militia ? side.light ?? side.color : side.color;
     ctx.fillRect(-wPx / 2, -2, wPx, hPx + 3);
@@ -527,7 +559,7 @@ function buildLegend(b) {
 
 // ---------- hud and controls ----------
 
-function updateHud() {
+function updateHud(dt) {
   ui.clock.textContent = fmtTime(t); ui.clock.classList.toggle('lapsing', playing && lapsing);
   ui.scrub.value = t; ui.scrub.style.setProperty('--p', `${((t - B.startT) / (B.endT - B.startT)) * 100}%`);
   if (curEvent !== shownEvent) {
@@ -539,18 +571,74 @@ function updateHud() {
     foldCaption(false); // every new chapter opens with its story showing
     marks.forEach((m, i) => { m.classList.toggle('on', B.events[i] === curEvent); leads[i].classList.toggle('on', B.events[i] === curEvent); });
   }
-  let best = null, bd = 28;
-  if (mouse) for (const u of B.units) {
-    if (!u.pose) continue;
-    const d = Math.hypot(u.screen[0] - mouse[0], u.screen[1] - mouse[1]);
-    if (d < bd) { bd = d; best = u; }
-  }
+  const under = mouse && !ptrs.size ? pick(mouse[0], mouse[1]) : null, best = under !== selected && under;
+  if (canvas.style.cursor !== (under ? 'pointer' : '')) canvas.style.cursor = under ? 'pointer' : '';
   ui.hover.hidden = !best;
   if (best) { // tooltip beside the cursor, flipped to the left near the right edge
     ui.hover.style.left = mouse[0] + 360 > W ? `${mouse[0] - 360}px` : `${mouse[0] + 20}px`;
     ui.hover.style.top = `${Math.min(mouse[1] + 20, H - 160)}px`;
   }
-  if (best) ui.hover.innerHTML = `<b>${best.name}</b><br>${best.commander ? best.commander + '<br>' : ''}${B.sides[best.side].name} · ${best.type.replace('_', ' ')}<br>${Math.round(best.pose.strength)} men · ${STATE_TEXT[best.pose.state] ?? ''}`;
+  if (best) ui.hover.innerHTML = `<b>${best.name}</b><br>${best.commander ? best.commander + '<br>' : ''}${B.sides[best.side].name} · ${best.type.replace('_', ' ')}<br>${liveText(best)}`;
+  placeCard(dt);
+}
+
+// ---------- unit card ----------
+
+const liveText = u => (u.pose ? `${Math.round(u.pose.strength)} men · ${STATE_TEXT[u.pose.state] ?? ''}` : '');
+let cardSize = [0, 0], cardSide = 0;
+function fillCard(u) {
+  const side = B.sides[u.side];
+  ui.cardSwatch.style.background = u.type === 'militia' || u.type === 'riflemen' ? side.light ?? side.color : side.color;
+  ui.cardName.textContent = u.name;
+  ui.cardCmd.textContent = u.commander ?? ''; ui.cardCmd.hidden = !u.commander;
+  ui.cardKind.textContent = `${side.name} · ${u.type.replace('_', ' ')}`;
+  ui.cardLive.textContent = cardLive = liveText(u);
+  cardSize = [ui.card.offsetWidth, ui.card.offsetHeight];
+}
+// Click a unit to open its card, or hand the card on to another unit: the old details fade and slide out, the new ones in,
+// while the card glides across to its new unit.
+function select(u) {
+  if (u === selected) return;
+  const was = selected;
+  selected = u; clearTimeout(cardSwap);
+  ui.card.classList.toggle('show', !!u);
+  if (!u) return;
+  if (!was) { ui.card.classList.remove('swap'); fillCard(u); cardAt = null; return; }
+  ui.card.classList.add('swap');
+  cardSwap = setTimeout(() => { if (selected) fillCard(selected); ui.card.classList.remove('swap'); }, 110);
+}
+ui.cardClose.onclick = () => select(null);
+
+// The card rides beside its unit on whichever side covers the unit least, inside the clear rect, easing after it.
+// On a phone it docks above the bar instead.
+function placeCard(dt) {
+  const u = selected, s = u?.screen;
+  if (!u) return;
+  if (!u.pose) return select(null); // gone from the field
+  if (!s) return;
+  if (!ui.card.classList.contains('swap')) { const live = liveText(u); if (live !== cardLive) ui.cardLive.textContent = cardLive = live; }
+  const [cw, ch] = cardSize, S = safeRect(), g = 14, c = Math.cos(s.a), n = Math.sin(s.a), mid = s.h / 2;
+  let target;
+  if (W <= 640) target = [(W - cw) / 2, S.bar - ch - 12];
+  else {
+    const cx = s.x - n * mid, cy = s.y + c * mid; // centre of the body, whose ranks run back from the front edge
+    const ex = Math.abs((s.w / 2) * c) + Math.abs(mid * n) + 10, ey = Math.abs((s.w / 2) * n) + Math.abs(mid * c) + 10;
+    const fit = (v, lo, hi) => Math.max(Math.min(lo, hi), Math.min(Math.max(lo, hi), v));
+    const xl = [S.l, S.r - cw], yl = [S.t, S.b - ch];
+    if (xl[1] < xl[0]) xl.splice(0, 2, 8, W - cw - 8);
+    if (yl[1] < yl[0]) yl.splice(0, 2, 8, H - ch - 8);
+    let best = Infinity, side = cardSide;
+    [[cx + ex + g, cy - ch / 2], [cx - ex - g - cw, cy - ch / 2], [cx - cw / 2, cy - ey - g - ch], [cx - cw / 2, cy + ey + g]].forEach(([x, y], i) => {
+      const px = fit(x, ...xl), py = fit(y, ...yl);
+      const cover = Math.max(0, Math.min(px + cw, cx + ex) - Math.max(px, cx - ex)) * Math.max(0, Math.min(py + ch, cy + ey) - Math.max(py, cy - ey));
+      const score = cover + Math.hypot(px - x, py - y) + i * 5 - (i === cardSide ? 60 : 0); // stick to the current side unless another is clearly better
+      if (score < best) { best = score; target = [px, py]; side = i; }
+    });
+    cardSide = side;
+  }
+  const k = cardAt && dt ? 1 - Math.exp(-dt * 8) : 1;
+  cardAt = cardAt ? [cardAt[0] + (target[0] - cardAt[0]) * k, cardAt[1] + (target[1] - cardAt[1]) * k] : target;
+  ui.card.style.transform = `translate(${cardAt[0].toFixed(1)}px, ${cardAt[1].toFixed(1)}px)`;
 }
 
 // "About 3 PM", or "26 Dec, about noon": times between recorded moments are estimates, so the story gives the nearest hour.
@@ -583,6 +671,7 @@ ui.lapse.onchange = () => { lapse = ui.lapse.checked; };
 ui.srcBtn.onclick = () => ui.sources.showModal();
 ui.legendBtn.onclick = () => ui.legendDlg.showModal();
 addEventListener('keydown', e => {
+  if (e.key === 'Escape' && selected && !document.querySelector('dialog[open]')) return select(null);
   if (['INPUT', 'SELECT', 'BUTTON'].includes(e.target.tagName)) return;
   if (e.code === 'Space') { e.preventDefault(); ui.play.click(); }
   else if (e.key === 'ArrowRight') seek(t + nudge());
@@ -606,14 +695,14 @@ function sizeClock() {
   }
   ui.clock.style.width = `${w + 4}px`;
 }
-addEventListener('resize', () => { resize(); if (B) { clampCam(); sizeClock(); } });
+addEventListener('resize', () => { resize(); if (B) { clampCam(); sizeClock(); } if (selected) fillCard(selected); });
 new ResizeObserver(() => B && layoutMarks()).observe(ui.marks); // the track also narrows when the clock text widens
 resize();
 
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000);
   last = now;
-  if (B) { step(dt); draw(); updateHud(); }
+  if (B) { step(dt); draw(); updateHud(dt); }
   requestAnimationFrame(frame);
 }
 

@@ -47,6 +47,18 @@
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   #hover { padding: 12px 16px; font-size: 17px; line-height: 1.45; width: 340px; pointer-events: none; }
   #hover b { font: 400 21px/1.2 var(--fell); }
+  /* The unit card rides beside its unit; app.js sets the transform. Handing it to another unit fades the details out and in. */
+  #card { left: 0; top: 0; z-index: 2; width: 320px; padding: 12px 16px 14px; font-size: 17px; line-height: 1.45; opacity: 0; pointer-events: none; transition: opacity 0.2s; will-change: transform; }
+  #card.show { opacity: 1; pointer-events: auto; }
+  .nofade #card, .nofade .card-body { transition: none; }
+  .card-body { transition: opacity 0.11s, transform 0.11s; padding-right: 36px; }
+  #card.swap .card-body { opacity: 0; transform: translateY(6px); }
+  #card-name-row { display: flex; gap: 9px; align-items: baseline; }
+  #card-name { font: 400 21px/1.2 var(--fell); }
+  #card-swatch { flex: none; width: 16px; height: 12px; border: 1px solid var(--ink); }
+  #card-cmd, #card-kind { color: var(--muted); }
+  #card-live { margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(107,74,42,0.45); font-weight: 700; }
+  #card-close { position: absolute; top: 8px; right: 8px; min-height: 0; width: 36px; height: 36px; padding: 0; font: 26px/1 var(--text); }
   #caption { right: 21px; top: 21px; transform: translateY(-8px); width: min(440px, calc(100vw - 42px)); max-height: calc(100vh - 170px); overflow-y: auto; padding: 14px 20px 18px; opacity: 0; transition: opacity 0.4s, transform 0.4s; scrollbar-color: var(--rule) transparent; }
   #caption.show { opacity: 1; transform: none; }
   .nofade #caption { transition: none; }
@@ -104,7 +116,7 @@
     #top { left: 17px; right: 17px; top: 17px; max-width: none; max-height: 42vh; padding: 8px 12px 10px; }
     #top h1 { font-size: 22px; } #sub { font-size: 15px; } #hint, #legend { display: none; }
     select, button { min-height: 44px; padding: 6px 10px; font-size: 17px; }
-    #hover { display: none; }
+    #hover { display: none; } #card { width: calc(100vw - 34px); z-index: 3; }
     #bar { left: 17px; right: 17px; bottom: 17px; gap: 0 6px; padding: 8px 10px 0; flex-wrap: wrap; } #clock { margin-left: auto; } #bar label span { display: none; } #speed { padding: 6px 0 6px 4px; font-size: 16px; }
     #play { width: 44px; min-width: 44px; font-size: 18px; } #clock { font-size: 15px; }
     #track { order: 1; flex: 1 0 100%; padding-top: 0; } #marks { display: none; } /* the scrubber takes its own row; no room for chapters */
@@ -123,7 +135,7 @@
   <div id="sub"></div>
   <div id="legend"></div>
   <details id="outcome"><summary>Outcome: <span id="out-result"></span></summary><div id="out-body"></div></details>
-  <div id="hint">Drag to look around, scroll or pinch to zoom. Space pauses.</div>
+  <div id="hint">Drag to look around, scroll or pinch to zoom. Click a unit for its details. Space pauses.</div>
   <div class="row">
     <button id="home">☰ All battles</button>
     <button id="legend-btn">Legend</button>
@@ -132,6 +144,16 @@
 </section>
 
 <aside id="hover" class="panel" hidden></aside>
+
+<aside id="card" class="panel" aria-live="polite">
+  <button id="card-close" aria-label="Close the unit card" title="Close">×</button>
+  <div class="card-body">
+    <div id="card-name-row"><i id="card-swatch"></i><b id="card-name"></b></div>
+    <div id="card-cmd"></div>
+    <div id="card-kind"></div>
+    <div id="card-live"></div>
+  </div>
+</aside>
 
 <div id="caption" class="panel">
   <div class="cap-head">
@@ -163,7 +185,7 @@
 <dialog id="legend-dlg">
   <h2>Legend</h2>
   <div id="legend-list"></div>
-  <p id="legend-hint">Point at any unit for its name, commander, strength and what it is doing.</p>
+  <p id="legend-hint">Click any unit for its name, commander, strength and what it is doing.</p>
   <form method="dialog"><button>Close</button></form>
 </dialog>
 
