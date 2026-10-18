@@ -56,6 +56,13 @@
   "runtime": 846
  },
  {
+  "id": "first-manassas",
+  "name": "First Manassas, 21 Jul 1861",
+  "date": "1861-07-21",
+  "war": "Civil War",
+  "runtime": 37
+ },
+ {
   "id": "sidi-bou-zid",
   "name": "Sidi Bou Zid, 14–17 Feb 1943",
   "date": "1943-02-14",
