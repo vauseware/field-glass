@@ -57,7 +57,11 @@ async function loadBattle(id) {
   if (legend) ui.legendDlg.showModal(); // screenshots
   if (outcome) ui.outcome.open = true;
   document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption fade
-  if (warp) { step(0); updateHud(); for (let i = 0; i < 300; i++) step(1 / 60); } // five seconds of frames for screenshots, framed around the caption
+  if (warp) { // five seconds of frames for screenshots, framed around the caption
+    await document.fonts.ready; rects = null; // the Fell faces resize the panels
+    step(0); updateHud();
+    for (let i = 0; i < 300; i++) step(1 / 60);
+  }
   location.hash = id;
 }
 
@@ -136,28 +140,36 @@ function contours(Z, cols, rows, lv, seg) {
 const w2sx = x => (x - cam.x) * cam.zoom + W / 2;
 const w2sy = y => (cam.y - y) * cam.zoom + H / 2;
 
-// The screen rect the panels leave clear, {l,t,r,b}. Each panel is cut away by trimming one side of the rect; of every
-// combination of trims, the largest rect wins. The chapter labels slanting up from the bar count as one more panel.
-// Measured only when a panel, the labels or the window change.
-let safe = null;
-const safeRect = () => (safe ??= measureSafe());
+// Screen rects {l,t,r,b} the panels leave clear: each panel is cut away by trimming one side, every combination of trims
+// giving one candidate. The chapter labels slanting up from the bar count as one more panel. Measured only when a panel,
+// the labels or the window change. `clear` is the candidate in use; the camera moves it to whichever shows the action
+// biggest, and a re-measure keeps the nearest new one, so a panel growing a few pixels never swings the view across.
+let rects = null, clear = null;
+const area = r => (r.r - r.l) * (r.b - r.t), gap = (r, c) => Math.abs(r.l - c.l) + Math.abs(r.t - c.t) + Math.abs(r.r - c.r) + Math.abs(r.b - c.b);
+function safeRect() {
+  if (!rects) {
+    rects = measureSafe();
+    clear = rects.reduce((a, r) => (clear ? gap(r, clear) < gap(a, clear) : area(r) > area(a)) ? r : a);
+  }
+  return clear;
+}
 function measureSafe() {
   const m = 10, panels = [ui.top, ui.bar, ...(ui.caption.classList.contains('show') ? [ui.caption] : [])].map(el => el.getBoundingClientRect());
   const labels = marks.filter(el => !el.hidden).map(el => el.getBoundingClientRect()).filter(r => r.width);
   if (labels.length) panels.push({ left: Math.min(...labels.map(r => r.left)), right: Math.max(...labels.map(r => r.right)), top: Math.min(...labels.map(r => r.top)), bottom: panels[1].top });
-  let best = { l: 0, t: 0, r: W, b: H }, area = -1;
+  const out = [], bar = panels[1].top;
   const trim = (i, s) => {
     if (s.r - s.l < 80 || s.b - s.t < 80) return;
-    if (i === panels.length) { const a = (s.r - s.l) * (s.b - s.t); if (a > area) { area = a; best = s; } return; }
+    if (i === panels.length) return out.push(s);
     const p = panels[i];
     if (p.right <= s.l || p.left >= s.r || p.bottom <= s.t || p.top >= s.b) return trim(i + 1, s);
     trim(i + 1, { ...s, t: p.bottom + m }); trim(i + 1, { ...s, b: p.top - m });
     trim(i + 1, { ...s, l: p.right + m }); trim(i + 1, { ...s, r: p.left - m });
   };
-  trim(0, best);
-  return best;
+  trim(0, { l: 0, t: 0, r: W, b: H, bar });
+  return out.length ? out : [{ l: 0, t: 0, r: W, b: H, bar }];
 }
-const panelSizes = new ResizeObserver(() => { safe = null; });
+const panelSizes = new ResizeObserver(() => { rects = null; });
 for (const el of [ui.top, ui.caption, ui.bar]) panelSizes.observe(el);
 
 const minZoom = () => { const s = safeRect(); return Math.min(s.r - s.l, s.b - s.t) / B.extent; }; // out to the whole map in the clear rect
@@ -184,10 +196,17 @@ function updateCamera(dt) {
   if (!follow) return;
   const bx = actionBox(B, t, (lapsing ? B.lapse : speed) * 4);
   if (!bx) return;
-  const s = safeRect(), k = 1 - Math.exp(-dt * 1.2);
-  const tz = Math.min(12, Math.max(minZoom(), Math.min((s.r - s.l) / (bx.x1 - bx.x0), (s.b - s.t) / (bx.y1 - bx.y0))));
-  cam.x += ((bx.x0 + bx.x1) / 2 - ((s.l + s.r) / 2 - W / 2) / tz - cam.x) * k;
-  cam.y += ((bx.y0 + bx.y1) / 2 + ((s.t + s.b) / 2 - H / 2) / tz - cam.y) * k;
+  const fitZ = r => Math.min((r.r - r.l) / (bx.x1 - bx.x0), (r.b - r.t) / (bx.y1 - bx.y0));
+  safeRect();
+  const best = rects.reduce((a, r) => (fitZ(r) > fitZ(a) ? r : a));
+  if (fitZ(best) > 1.1 * fitZ(clear)) clear = best;
+  const s = clear, k = 1 - Math.exp(-dt * 1.2), tz = Math.min(12, Math.max(minZoom(), fitZ(s))), h = B.extent / 2;
+  // Box centred in the clear rect, then slid, while it still fits there, to where the map fills the whole window.
+  const aim = (c, lo, hi, vlo, vhi) => { const a = Math.max(lo, vlo), b = Math.min(hi, vhi); return a <= b ? Math.max(a, Math.min(b, c)) : c; };
+  const tx = aim((bx.x0 + bx.x1) / 2 - ((s.l + s.r) / 2 - W / 2) / tz, bx.x1 - (s.r - W / 2) / tz, bx.x0 + (W / 2 - s.l) / tz, -h + W / 2 / tz, h - W / 2 / tz);
+  const ty = aim((bx.y0 + bx.y1) / 2 + ((s.t + s.b) / 2 - H / 2) / tz, bx.y1 - (H / 2 - s.t) / tz, bx.y0 + (s.b - H / 2) / tz, -h + H / 2 / tz, h - H / 2 / tz);
+  cam.x += (tx - cam.x) * k;
+  cam.y += (ty - cam.y) * k;
   cam.zoom *= Math.exp(Math.log(tz / cam.zoom) * k);
   clampCam();
 }
@@ -443,7 +462,7 @@ function buildMarks(b) {
 }
 function layoutMarks() {
   const tw = ui.marks.clientWidth, dur = B.endT - B.startT, gap = 29; // a 22 px pill at 50° clears its neighbour at 29 px (29·sin 50° > 22)
-  safe = null;
+  rects = null;
   const px = B.events.map(ev => ((ev.t - B.startT) / dur) * tw);
   const k = Math.max(1, Math.ceil((marks.length * gap) / Math.max(1, tw))); // too many for the width: label every k-th
   const idx = [...marks.keys()].filter(i => i % k === 0), ax = idx.map(i => px[i]);
@@ -516,7 +535,7 @@ function updateHud() {
     ui.capTitle.textContent = curEvent?.title ?? '';
     ui.capText.textContent = curEvent?.text ?? '';
     ui.capWhen.textContent = curEvent ? chapterWhen(curEvent) : '';
-    ui.caption.classList.toggle('show', !!curEvent); safe = null;
+    ui.caption.classList.toggle('show', !!curEvent); rects = null;
     foldCaption(false); // every new chapter opens with its story showing
     marks.forEach((m, i) => { m.classList.toggle('on', B.events[i] === curEvent); leads[i].classList.toggle('on', B.events[i] === curEvent); });
   }
@@ -575,7 +594,7 @@ addEventListener('keydown', e => {
 function resize() {
   DPR = Math.min(2, devicePixelRatio || 1);
   W = innerWidth; H = innerHeight;
-  canvas.width = W * DPR; canvas.height = H * DPR; safe = null;
+  canvas.width = W * DPR; canvas.height = H * DPR; rects = null;
   canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
 }
 // Georgia's figures differ in width, so the clock is held at the width of the widest time it can show; otherwise every tick nudges the scrubber.
