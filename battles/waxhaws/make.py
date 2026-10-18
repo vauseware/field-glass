@@ -96,6 +96,7 @@ battle = dict(
               dict(name="Waxhaw meeting house, 12 miles west", at=[-760, 60])],
     units=units,
     events=[dict(t=t, title=a, text=b, at=at, view=v) for t, a, b, at, v in events],
+    outcome={"result": "British victory", "losses": [["american", "113 killed, 150 wounded too badly to move, 53 prisoners."], ["british", "5 killed, 12 wounded."]], "note": "Both guns, three colours and thirty wagons taken. Figures are Tarleton's return of 2 June 1780."},
     sources=[
         "Banastre Tarleton, <i>A History of the Campaigns of 1780 and 1781</i> (1787), and his return from Camden of 2 June 1780: 270 men, three o'clock, the three prongs, 113 killed, 150 wounded and 53 prisoners, five British killed and twelve wounded.",
         "Col. Abraham Buford's report to the Virginia Assembly, 2 June 1780 ('at half past three o'clock we was attacked in rear by the horse'; the rally within fifty yards).",

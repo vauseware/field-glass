@@ -154,6 +154,7 @@ battle = dict(
               dict(name="Cavalry monument", at=[492, 160]), dict(name="the knoll in Country Park: the separate fight ends here", at=[450, -1060])],
     units=units,
     events=[dict(t=t, title=a, text=b, at=at, view=v) for t, a, b, at, v in events],
+    outcome={"result": "British victory, at heavy cost", "losses": [["american", "79 killed, 185 wounded; over a thousand militia missing, most of them gone home."], ["british", "93 killed, 413 wounded, 26 missing: a quarter of the army."]], "note": "Cornwallis held the field but could not stay in it. He marched for Wilmington, then Virginia."},
     sources=[
         "Lawrence E. Babits and Joshua B. Howard, <i>Long, Obstinate, and Bloody: The Battle of Guilford Courthouse</i> (UNC Press, 2009), read through the NPS Historic Resource Study (2017), which cites it page by page: the third line on the courthouse rise, the fences and fields, the sequence at the third line.",
         "Cornwallis to Lord George Germain, 17 March 1781. <a href='https://www.battlefields.org/learn/primary-sources/1781-cleared-ground-about-guilford-court-house' target='_blank'>Transcription at the American Battlefield Trust</a>: the deployment, Leslie right and Webster left, 'about half an hour past one', the Guards driven back by Washington's dragoons.",

@@ -9596,6 +9596,20 @@
    "view": 20000
   }
  ],
+ "outcome": {
+  "result": "American victory",
+  "losses": [
+   [
+    "american",
+    "Trenton: 4 wounded, 2 dead of cold on the march. Princeton: 25 to 44 killed, Mercer among them, and 40 wounded."
+   ],
+   [
+    "british",
+    "Trenton: 22 killed, 83 wounded, 896 captured. Princeton: by Howe's return 18 killed, 58 wounded and about 200 missing."
+   ]
+  ],
+  "note": "Washington claimed over 100 British killed and 300 taken at Princeton; the counts have never been reconciled."
+ },
  "sources": [
   "William S. Stryker, <i>The Battles of Trenton and Princeton</i> (1898): the Hessian quarters and picket posts, the regimental strengths and losses, the night march order, the Stony Brook bridge, Mawhood's sighting from the hill by Cochran's, the orchard fight, Nassau Hall and the 32-pounder.",
   "Washington to Hancock, 27 December 1776 ('exactly at eight o'clock', 'three minutes after') and 5 January 1777; Knox's and Greene's letters; the Hessian court-martial testimony on Rall; Wiederhold's and Piel's diaries.",

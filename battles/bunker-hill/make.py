@@ -206,6 +206,7 @@ battle = dict(
                british=dict(name="British (Howe, Pigot)", color="#c02a1f", light="#e2584a", dark="#5e1510")),
     features=features, units=units,
     events=[dict(t=e[0], title=e[1], text=e[2], at=e[3], view=e[4], **({"speed": e[5]} if len(e) > 5 else {})) for e in events],
+    outcome={"result": "British victory, at heavy cost", "losses": [["american", "115 killed, 305 wounded, 30 captured, Warren among the dead."], ["british", "226 killed, 828 wounded: about two in five of those engaged."]], "note": "American figures are from Ward's orderly book, British from Gage's return. Clinton: 'A few more such victories would have shortly put an end to British dominion in America.'"},
     sources=[
         "Richard Frothingham, <i>History of the Siege of Boston</i> (1849), chapters IV and V: the march, the redoubt 'eight rods square', the breastwork a hundred yards north, the fence six hundred feet behind the redoubt, the landing about one, the battle 'about half past three' to five, the Neck under the fire of the Glasgow, the Symmetry and the floating batteries, and the loss tables by regiment.",
         "Gage's return of 17 June 1775 (226 killed, 828 wounded) and Ward's orderly book (115 killed, 305 wounded, 30 taken); Burgoyne's letter on the retreat; Prescott's letter to John Adams; Stark's return.",

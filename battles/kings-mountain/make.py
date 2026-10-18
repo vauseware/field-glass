@@ -118,6 +118,7 @@ battle = dict(
               dict(name="horses left here", at=[-650, 150]), dict(name="Ferguson's camp and wagons", at=[118, 126])],
     units=units,
     events=[dict(t=t, title=a, text=b, at=at, view=v) for t, a, b, at, v in events],
+    outcome={"result": "Patriot victory", "losses": [["patriot", "28 killed, 62 wounded."], ["loyalist", "157 killed, 163 wounded, nearly 700 prisoners. Ferguson killed; no one escaped."]], "note": "The Patriot colonels' report gave 225 Loyalists killed and 716 prisoners."},
     sources=[
         "Lyman C. Draper, <i>King's Mountain and Its Heroes</i> (1881): column order, regimental strengths (910 men), the three bayonet charges, Ferguson's death.",
         "Official report of Cols. Campbell, Shelby and Cleveland, October 1780: 'an hour and five minutes'; Patriot loss 28 killed and 62 wounded; Loyalist return 225 killed, 163 wounded, 716 prisoners.",

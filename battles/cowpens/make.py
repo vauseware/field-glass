@@ -149,6 +149,7 @@ battle = dict(
               dict(name="head of Suck Creek (boggy)", at=[280, 470]), dict(name="Maple Swamp", at=[-470, -90])],
     units=units,
     events=[dict(t=t, title=a, text=b, at=at, view=v) for t, a, b, at, v in events],
+    outcome={"result": "American victory", "losses": [["american", "About 25 killed, about 100 wounded."], ["british", "110 killed, 229 wounded, some 600 captured, with both guns and the 7th's colours."]], "note": "Losses follow Babits. Morgan reported 12 killed and 60 wounded."},
     sources=[
         "Lawrence E. Babits, <i>A Devil of a Whipping: The Battle of Cowpens</i> (UNC Press, 1998). Unit strengths and casualties follow Babits.",
         "Daniel Morgan to Nathanael Greene, 19 January 1781. <a href='https://www.battlefields.org/learn/primary-sources/obtain-compleat-victory-daniel-morgans-letter-after-battle-cowpens' target='_blank'>Transcription at the American Battlefield Trust</a>.",

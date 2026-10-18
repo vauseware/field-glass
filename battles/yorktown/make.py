@@ -262,6 +262,7 @@ battle = dict(
                british=dict(name="British and Germans (Cornwallis)", color="#c9332e", light="#e06a5a", dark="#6e1b18")),
     features=features, units=units,
     events=[dict(t=t, title=a, text=b, at=at, view=v, **({'speed': PACE[a]} if a in PACE else {})) for t, a, b, at, v in events],
+    outcome={"result": "Allied victory: Cornwallis surrenders", "losses": [[["american", "french"], "About 88 killed and 300 wounded."], ["british", "156 killed, 326 wounded; 7,247 soldiers and 840 seamen surrendered."]], "note": "The Gloucester garrison surrendered to Choisy the same afternoon."},
     sources=[
         "Earl Cornwallis to Sir Henry Clinton, York Town, 20 October 1781: the outer works, the sortie, the boats and the storm, the parley.",
         "George Washington's diary, 28 September to 19 October 1781 (Founders Online): the first parallel, the hours the batteries opened, the storming of the redoubts, the howitzers of the 15th.",

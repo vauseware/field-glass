@@ -5,7 +5,8 @@ const canvas = $('#map'), ctx = canvas.getContext('2d');
 const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $('#clock'), follow: $('#follow'),
   title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'), capWhen: $('#cap-when'), capFold: $('#cap-fold'),
   hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse'),
-  marks: $('#marks'), splash: $('#splash'), splashList: $('#splash-list'), plan: $('#plan'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list') };
+  marks: $('#marks'), splash: $('#splash'), splashList: $('#splash-list'), plan: $('#plan'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list'),
+  outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body') };
 
 let B = null, T = null, layer = null;
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
@@ -36,15 +37,25 @@ async function loadBattle(id) {
   ui.title.textContent = b.name;
   ui.sub.textContent = `${b.place} · ${b.dateText ?? b.date}`;
   ui.legend.innerHTML = Object.values(b.sides).map(s => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');
+  const o = b.outcome; // result in the summary; losses side by side once opened
+  ui.outcome.hidden = !o; ui.outcome.open = false;
+  if (o) {
+    ui.outResult.textContent = o.result;
+    ui.outBody.innerHTML = o.losses.map(([s, text]) => {
+      const ids = [].concat(s);
+      return `<p><b>${ids.map(i => `<i style="background:${b.sides[i].color}"></i>`).join('')} ${ids.map(i => b.sides[i].name).join(' and ')}.</b> ${text}</p>`;
+    }).join('') + (o.note ? `<p class="note">${o.note}</p>` : '');
+  }
   ui.srcList.innerHTML = (b.sources ?? []).map(s => `<li>${s}</li>`).join('');
   const v = b.view ?? { x: 0, y: 0, width: b.extent };
   cam = { x: v.x, y: v.y, zoom: Math.min(W, H) / v.width };
   follow = true; ui.follow.checked = true; lapse = true; ui.lapse.checked = true;
   clampCam();
-  const [, , at, play, warp, legend] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(,warp)?(,legend)?$/) ?? [];
+  const [, , at, play, warp, legend, outcome] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(,warp)?(,legend)?(,outcome)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
   if (play) setPlaying(true);
   if (legend) ui.legendDlg.showModal(); // screenshots
+  if (outcome) ui.outcome.open = true;
   document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption fade
   if (warp) for (let i = 0; i < 300; i++) step(1 / 60); // five seconds of frames for screenshots
   location.hash = id;

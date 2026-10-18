@@ -2171,6 +2171,20 @@
    "view": 1200
   }
  ],
+ "outcome": {
+  "result": "American victory",
+  "losses": [
+   [
+    "american",
+    "About 25 killed, about 100 wounded."
+   ],
+   [
+    "british",
+    "110 killed, 229 wounded, some 600 captured, with both guns and the 7th's colours."
+   ]
+  ],
+  "note": "Losses follow Babits. Morgan reported 12 killed and 60 wounded."
+ },
  "sources": [
   "Lawrence E. Babits, <i>A Devil of a Whipping: The Battle of Cowpens</i> (UNC Press, 1998). Unit strengths and casualties follow Babits.",
   "Daniel Morgan to Nathanael Greene, 19 January 1781. <a href='https://www.battlefields.org/learn/primary-sources/obtain-compleat-victory-daniel-morgans-letter-after-battle-cowpens' target='_blank'>Transcription at the American Battlefield Trust</a>.",
