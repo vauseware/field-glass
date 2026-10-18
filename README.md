@@ -57,19 +57,33 @@ room; labels that would overlap are dropped, biggest unit first.
 Each war gets its own look, a skin (`themes.js`, with the drawing in `themes/`). A skin owns the terrain baked into
 the map layer, how units, fire, the fallen and the night are drawn, what shows beyond the map edge, the ambient layers
 over the map, the clock, the legend's swatches and the panels' dress (`body.theme-<id>` in `index.html`). A battle
-wears the skin its `theme` field names, and the Revolution skin when it names none.
+wears the skin its `theme` field names; with none, a battle dated 1939 to 1945 wears the Second World War skin and any
+other the Revolution skin. `?theme=ww2` in a link (`index.html?theme=ww2#guilford@14:03`) shows a battle in another
+skin; the skin may recolour the sides for it, and the Second World War skin paints them olive drab against field grey.
 
-Only the Revolution skin is built: an engraved and hand-coloured plan on laid paper. Hachures shade the slopes, woods
+The Revolution skin is an engraved and hand-coloured plan on laid paper. Hachures shade the slopes, woods
 are clumped engraved canopies, fields are ruled with furrows, fences zig-zag, creeks and shores are water-lined, and a
 compass rose and scale of yards sit in a free corner. Each unit's path is engraved behind it as the battle plays, the
 last quarter hour darker than the rest. At night an umber dark falls over the map and a candle lights its middle. The
 scrubber is ruled as a scale of hours. Drifting cloud shadows, paper grain and the candle are page layers the browser
 composites, so the map canvas never redraws them.
 
-Two more skins are chosen and deferred until a battle of their war arrives: the Civil War as a topographical
-engineer's survey (brown contours in feet, scalloped woods, red-ochre roads, units ruled into companies under small
-flags), and the Second World War as a recon photo mosaic on a lamp-lit operations table (painted counters, chinagraph
-frontages and advance arrows, a 1 km grid). See `docs/adr/0002-per-war-skins.md`.
+The Second World War skin (`ww2`) is a reconnaissance photo mosaic on a lamp-lit operations table. The ground is a
+sortie's overlapping prints, each a touch askew and differently exposed, captioned along the foot of its white border:
+grey-green relief, bright ploughed fields, dark woods of tree crowns throwing their shadows, hedgerows along the fence
+lines. Each unit is a painted counter with its name stencilled on it, behind a chinagraph bracket along its front with an
+arrow the way it faces; its men are dark specks on the print. The last side listed draws in red and the others in
+yellow, unless a side sets `wax` (and `tracer`) in `battle.json`. A hollow chinagraph arrow shows where each sizeable unit
+has come from since the chapter before, a dashed 1 km grid is numbered with its UTM kilometres in the window's margins,
+and every fifth round is a tracer. Night falls blue-black with the counters and fire still lit. The story is a yellow
+teleprinter strip that ends STOP, and the bar carries a red, yellow and blue sector clock beside a 24-hour clock. The lamp
+swaying over the table is a page layer. See `docs/adr/0004-wwii-skin-before-its-battle.md`.
+
+![The Second World War skin previewed on Guilford Courthouse](docs/screenshots/ww2-guilford.jpg)
+
+The Civil War skin is chosen and deferred until a battle of that war arrives: a topographical engineer's survey (brown
+contours in feet, scalloped woods, red-ochre roads, units ruled into companies under small flags). See
+`docs/adr/0002-per-war-skins.md`.
 
 `,bench` on a link measures the cost of a frame; `bash tools/bench.sh 'guilford@14:02,play,warp'` runs it in headless
 Chrome and prints milliseconds per frame and the time the layer took to build.
@@ -98,12 +112,12 @@ than a day; one battle uses one form throughout.
 | field | meaning |
 |---|---|
 | `extent` | map width and height in metres, centred on `origin` |
-| `theme` | the skin (`themes.js`); `revolution`, the default, is the only one so far |
+| `theme` | the skin (`themes.js`): `revolution` or `ww2`; by default `ww2` for a battle dated 1939 to 1945 and `revolution` otherwise |
 | `start`, `end`, `sunrise`, `sunset` | battle clock; the map is tinted before sunrise and, if `sunset` is given, every night |
 | `speed`, `lapse` | default playback multiplier, and the multiplier for quiet stretches under time-lapse (default `speed × 6`) |
 | `water` | elevation in metres at or below which the DEM is drawn as water (rivers are flattened to about 0) |
 | `menPerDot` | men per drawn dot (5 for a small battle, 10 or 20 for a large one) |
-| `sides` | `{ id: { name, color, light, dark } }` |
+| `sides` | `{ id: { name, color, light, dark, wax?, tracer? } }`; `wax` and `tracer` (`[r, g, b]`) are a side's chinagraph and tracer colours in the `ww2` skin |
 | `units[]` | `id, side, name, short?, commander, type, strength, guns?, loose?, ranks?, keys[]`; `short` is the map label; `loose` keeps a unit in open order; `ranks` defaults to 2 |
 | `keys[]` | `{ t, x, y, h, state, strength }`; omitted fields carry forward from the previous key |
 | `events[]` | `{ t, title, text, at: [x, y], view, speed, when }` captions; the story gives `t` to the nearest hour ("About 3 PM") unless `when` holds a time the sources record; `at` and `view` (metres across) steer the auto-camera; `speed` sets the playback rate for that chapter while Follow is on (each chapter resets to the battle's `speed`) |
