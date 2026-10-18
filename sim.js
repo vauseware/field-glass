@@ -282,6 +282,7 @@ export function validate(b, terrain) {
       if (f[key] != null && (f[key] < b.startT || f[key] > b.endT)) p.push(`feature ${f.name ?? f.type ?? f.color}: ${key} outside battle clock`);
     }
     if (f.type === 'smoke' && !(f.at && f.rate > 0)) p.push(`smoke feature ${f.name ?? ''} needs at and rate`);
+    if (f.type === 'airstrike' && !(f.at && f.from != null && f.until != null)) p.push(`airstrike ${f.name ?? ''} needs at, from and until`);
   }
   for (const e of b.events) {
     if (e.t < b.startT || e.t > b.endT) p.push(`event "${e.title}": outside battle clock`);

@@ -45,6 +45,8 @@ const tb = normalizeBattle({ start: '07:00', end: '08:00', menPerDot: 20, units:
 assert.equal(dots(tanks, unitAt(tanks, parseTime('07:10')), 20).length, 34, 'armor: a dot per tank whatever menPerDot is');
 assert.deepEqual([shape(tanks, unitAt(tanks, parseTime('07:00')), 20).F, shape(tanks, unitAt(tanks, parseTime('07:10')), 20).F], [4, 850], 'armor: one tank wide in column, 50 m a tank in line');
 assert.equal(tb.fallen.length, 5, 'armor: a marker per tank lost');
+assert.deepEqual(validate(normalizeBattle({ id: 'v', name: 'v', date: 'd', place: 'p', origin: {}, extent: 1000, start: '07:00', end: '08:00', sides: {}, units: [],
+  features: [{ type: 'airstrike', name: 'Stukas', at: [0, 0], from: '07:10' }] })), ['airstrike Stukas needs at, from and until'], 'an air strike needs its times');
 console.log('sim.js: ok');
 
 let bad = 0;
