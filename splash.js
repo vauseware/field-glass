@@ -11,8 +11,7 @@ import { ground, INK, SHEET } from './themes/civil-war.js';
 // width the scale is judged by, bottom: px kept clear at the foot, cartouche: bool }.
 export const WARS = [
   { id: 'revolution', name: 'American Revolution', years: '1775–1783', from: 1775, to: 1783, war: 'American Revolutionary War', draw: drawPlan },
-  { id: 'civil-war', name: 'Civil War', years: '1861–1865', from: 1861, to: 1865, war: 'Civil War', draw: drawSurvey,
-    note: 'Specimen sheet: the ground behind this card is Guilford Courthouse, drawn in the survey style.' },
+  { id: 'civil-war', name: 'Civil War', years: '1861–1865', from: 1861, to: 1865, war: 'Civil War', draw: drawSurvey },
   { id: 'ww2', name: 'Second World War', years: '1939–1945', from: 1939, to: 1945, war: 'World War II', draw: drawTable },
 ];
 
@@ -200,12 +199,13 @@ async function drawTable(cv, o) {
   }
 }
 
-// Civil War, before its first battle: Guilford Courthouse on the skin's survey ground, ground only.
-let survey = null; // the layer, built once
+// Civil War: one battle's ground as the skin's survey sheet, centred on the hottest moment of the fight, ground only.
+const surveys = new Map(); // id -> the ground, built once
 async function drawSurvey(cv, o) {
-  const [{ b, T }] = await Promise.all([load('guilford'), faces(['italic 11px "Old Standard TT"', 'italic 12px "Old Standard TT"', '700 14px "Playfair Display SC"', '13px "Playfair Display SC"'])]);
-  const layer = (survey ??= ground(b, T, 1).layer), g = cv.getContext('2d'), CW = cv.width, CH = cv.height;
-  const at = [-250, -60], k = o.refW / 1440, E = b.extent; // the fields round the courthouse
+  const [{ b, T }] = await Promise.all([load(o.id), faces(['italic 11px "Old Standard TT"', 'italic 12px "Old Standard TT"', '700 14px "Playfair Display SC"', '13px "Playfair Display SC"'])]);
+  if (!surveys.has(b.id)) surveys.set(b.id, ground(b, T, 1));
+  const { layer, ivft } = surveys.get(b.id), g = cv.getContext('2d'), CW = cv.width, CH = cv.height;
+  const ev = busiest(b), at = ev.at ?? [0, 0], E = b.extent, k = o.refW / Math.max(1440, E / 3); // ground only, so wide enough for the place names
   const X = x => CW * o.fx + (x - at[0]) * k, Y = y => CH * o.fy - (y - at[1]) * k;
   g.fillStyle = SHEET; g.fillRect(0, 0, CW, CH);
   g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
@@ -218,18 +218,19 @@ async function drawSurvey(cv, o) {
   g.fillStyle = vg; g.fillRect(0, 0, CW, CH); g.globalCompositeOperation = 'source-over';
   if (o.cartouche) { // a meridian arrow and a scale of feet, the engineer's furniture
     const fb = CH - o.bottom, sx = CW - 380, sy = fb - 60, ftpx = 0.3048 * k;
+    const L = [1000, 2000, 5000].find(n => n * ftpx >= 200) ?? 5000, st = L / 5; // a bar at least 200 px long
     g.strokeStyle = INK; g.fillStyle = INK; g.lineWidth = 1.2;
     const mx = CW - 80, my = 70; g.beginPath(); g.moveTo(mx, my + 90); g.lineTo(mx, my); g.stroke();
     g.beginPath(); g.moveTo(mx, my - 6); g.lineTo(mx - 7, my + 16); g.lineTo(mx, my + 10); g.closePath(); g.fill();
     g.beginPath(); g.moveTo(mx, my - 6); g.lineTo(mx + 7, my + 16); g.lineTo(mx, my + 10); g.closePath(); g.stroke();
     g.font = '700 14px "Playfair Display SC"'; g.textAlign = 'center'; g.fillText('N', mx, my - 18);
-    g.fillStyle = 'rgba(241,236,224,0.88)'; g.fillRect(sx - 24, sy - 38, 2 * 24 + 1000 * ftpx, 78);
-    g.fillStyle = INK; g.font = '13px "Playfair Display SC"'; g.letterSpacing = '2px'; g.fillText('Scale of Feet', sx + 500 * ftpx, sy - 20); g.letterSpacing = '0px';
-    for (let i = 0; i < 5; i++) { g.fillStyle = i % 2 ? SHEET : INK; g.fillRect(sx + i * 200 * ftpx, sy - 6, 200 * ftpx, 6); }
-    g.strokeRect(sx, sy - 6, 1000 * ftpx, 6);
+    g.fillStyle = 'rgba(241,236,224,0.88)'; g.fillRect(sx - 24, sy - 38, 2 * 24 + L * ftpx, 78);
+    g.fillStyle = INK; g.font = '13px "Playfair Display SC"'; g.letterSpacing = '2px'; g.fillText('Scale of Feet', sx + st * 2.5 * ftpx, sy - 20); g.letterSpacing = '0px';
+    for (let i = 0; i < 5; i++) { g.fillStyle = i % 2 ? SHEET : INK; g.fillRect(sx + i * st * ftpx, sy - 6, st * ftpx, 6); }
+    g.strokeRect(sx, sy - 6, L * ftpx, 6);
     g.font = 'italic 12px "Old Standard TT"'; g.fillStyle = INK;
-    for (let i = 0; i <= 5; i++) g.fillText(String(i * 200), sx + i * 200 * ftpx, sy + 14);
-    g.fillText('Contours at intervals of five feet.', sx + 500 * ftpx, sy + 32);
+    for (let i = 0; i <= 5; i++) g.fillText(String(i * st), sx + i * st * ftpx, sy + 14);
+    g.fillText(`Contours at intervals of ${ivft} feet.`, sx + st * 2.5 * ftpx, sy + 32);
   }
 }
 
