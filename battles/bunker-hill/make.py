@@ -217,5 +217,8 @@ battle = dict(
         "What is reconstructed: the exact trace of the breastwork, the flèches and the rail fence (from Frothingham's distances, not a survey); the ships' anchorages; British regimental strengths, which Gage's return does not give; how the American reinforcements were shared between the fence, the flèches and the breastwork; and the loss of each unit, scaled from the regimental tables.",
     ],
 )
+WHEN = {'The first assault': 'about 3:30 PM'}  # chapter times the sources record; the story gives the others to the nearest hour
+for e in battle["events"]:
+    if e["title"] in WHEN: e["when"] = WHEN[e["title"]]
 json.dump(battle, open("battles/bunker-hill/battle.json", "w"), indent=1)
 print(len(units), "units,", len(events), "events,", len(features), "features")

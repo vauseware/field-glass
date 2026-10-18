@@ -303,5 +303,8 @@ battle = dict(
         "What is reconstructed: the times inside the Trenton fight between 'exactly eight' and 'over by ten'; the hours of Hand's stands on 2 January; the start of the night march (sources say midnight to two); the hours at Princeton, anchored only by 'daylight', 'about eight' and 'two hours in the town'; brigade strengths on 3 January; and the places of the orchard, the Quaker Bridge and Cochran's hill, taken off the modern road net.",
     ],
 )
+WHEN = {"Eight o'clock": '8:00 AM'}  # chapter times the sources record; the story gives the others to the nearest hour
+for e in battle["events"]:
+    if e["title"] in WHEN: e["when"] = WHEN[e["title"]]
 json.dump(battle, open("battles/trenton-princeton/battle.json", "w"), indent=1)
 print(len(units), "units,", len(events), "events,", len(features), "features; river polygon", len(DELAWARE), "points")

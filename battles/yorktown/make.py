@@ -277,5 +277,8 @@ battle = dict(
         "What is reconstructed: the allied earthworks are 1930s rebuilds on sites fixed by archaeology; the visible British line is the 1862 Confederate rebuild over the 1781 one; Redoubts 1 to 8 are placed within about fifty metres; the French camp order by regiment is inferred from Ewald's plan; the trench guard is shown as one standing block for whichever division was on duty; the hours of the sortie (midnight to five) and the length of the fight for Redoubt 9 (seven minutes to half an hour) are given differently by every diarist.",
     ],
 )
+WHEN = {'The guns open': '3:00 PM', 'The storm': '2:00 AM', 'The drummer': '10:00 AM', 'The world turned upside down': '2:00 PM'}  # chapter times the sources record; the story gives the others to the nearest hour
+for e in battle["events"]:
+    if e["title"] in WHEN: e["when"] = WHEN[e["title"]]
 json.dump(battle, open("battles/yorktown/battle.json", "w"), indent=1)
 print(len(units), "units,", len(events), "events,", len(features), "features")

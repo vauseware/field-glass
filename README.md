@@ -41,7 +41,7 @@ screenshots see smoke and the camera; `,legend` opens the legend.
 
 The chapters sit above the scrubber as ticks, their titles slanting up over the map on leader lines
 so crowded chapters can be spread apart: click one to jump there (the camera follows again). **Legend** in the
-top panel lists only the symbols the current battle uses. The story panel opens at each new chapter with the chapter's span of time; **Hide** folds it to the title. **Outcome** in the top panel opens to the result and each side's losses (`outcome` in `make.py`).
+top panel lists only the symbols the current battle uses. The story panel opens at each new chapter with the chapter's approximate hour; **Hide** folds it to the title. **Outcome** in the top panel opens to the result and each side's losses (`outcome` in `make.py`).
 Every unit carries its name when there is
 room; labels that would overlap are dropped, biggest unit first.
 
@@ -74,7 +74,7 @@ than a day; one battle uses one form throughout.
 | `sides` | `{ id: { name, color, light, dark } }` |
 | `units[]` | `id, side, name, short?, commander, type, strength, guns?, loose?, ranks?, keys[]`; `short` is the map label; `loose` keeps a unit in open order; `ranks` defaults to 2 |
 | `keys[]` | `{ t, x, y, h, state, strength }`; omitted fields carry forward from the previous key |
-| `events[]` | `{ t, title, text, at: [x, y], view, speed }` captions; `at` and `view` (metres across) steer the auto-camera; `speed` sets the playback rate for that chapter while Follow is on (each chapter resets to the battle's `speed`) |
+| `events[]` | `{ t, title, text, at: [x, y], view, speed, when }` captions; the story gives `t` to the nearest hour ("About 3 PM") unless `when` holds a time the sources record; `at` and `view` (metres across) steer the auto-camera; `speed` sets the playback rate for that chapter while Follow is on (each chapter resets to the battle's `speed`) |
 | `features[]` | `{ type: road|creek|fence|works|trench, name, pts }` lines, `{ type: redoubt|battery|ship|camp|water, poly }` polygons (`water` draws a shoreline the modern ground no longer shows), `{ type: smoke, at, rate, spread }` a burning town or ship, or `{ name, at, rot }` labels; `from` and `until` show a feature only between those times, which is how siege lines get dug |
 | `tints[]` | `{ from, until, color }` weather washes over the whole map, such as a snowstorm, fading in and out over ten minutes |
 | `trees` | `density` in trees per square metre; `clear` is a list of polygons left bare, such as a summit |

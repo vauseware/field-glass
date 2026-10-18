@@ -402,7 +402,7 @@ function buildMarks(b) {
   ui.marks.replaceChildren(svg);
   leads = []; marks = b.events.map(ev => {
     const el = document.createElement('button');
-    el.textContent = ev.title; el.title = `${ev.title} · ${fmtTime(ev.t)}`;
+    el.textContent = ev.title; el.title = `${ev.title} · ${chapterWhen(ev)}`;
     el.onclick = () => { follow = true; ui.follow.checked = true; seek(ev.t); };
     ui.marks.append(el);
     leads.push(svg.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'path')));
@@ -483,7 +483,7 @@ function updateHud() {
     shownEvent = curEvent;
     ui.capTitle.textContent = curEvent?.title ?? '';
     ui.capText.textContent = curEvent?.text ?? '';
-    ui.capWhen.textContent = curEvent ? chapterSpan(curEvent) : '';
+    ui.capWhen.textContent = curEvent ? chapterWhen(curEvent) : '';
     ui.caption.classList.toggle('show', !!curEvent);
     foldCaption(false); // every new chapter opens with its story showing
     marks.forEach((m, i) => { m.classList.toggle('on', B.events[i] === curEvent); leads[i].classList.toggle('on', B.events[i] === curEvent); });
@@ -502,13 +502,12 @@ function updateHud() {
   if (best) ui.hover.innerHTML = `<b>${best.name}</b><br>${best.commander ? best.commander + '<br>' : ''}${B.sides[best.side].name} · ${best.type.replace('_', ' ')}<br>${Math.round(best.pose.strength)} men · ${STATE_TEXT[best.pose.state] ?? ''}`;
 }
 
-// "8:00 – 8:15 AM", or "26 Dec, 8:00 AM – 27 Dec, 3:00 AM": from this chapter to the next, the day given once when it does not change.
-function chapterSpan(ev) {
-  const i = B.events.indexOf(ev), a = fmtTime(ev.t), b = fmtTime(B.events[i + 1]?.t ?? B.endT);
-  const [da, ta] = a.includes(', ') ? a.split(', ') : ['', a], [db, tb] = b.includes(', ') ? b.split(', ') : ['', b];
-  const [ha, pa] = ta.split(' '), [, pb] = tb.split(' ');
-  if (da !== db) return `${a} – ${b}`;
-  return `${da ? da + ', ' : ''}${pa === pb ? ha : ta} – ${tb}`;
+// "About 3 PM", or "26 Dec, about noon": times between recorded moments are estimates, so the story gives the nearest hour.
+// A chapter whose time the sources record carries it as `when` ("8:00 AM", "about 3:30 PM").
+function chapterWhen(ev) {
+  const h = Math.round(ev.t / 3600), hh = mod(h, 24), d = fmtTime(ev.when ? ev.t : h * 3600);
+  const when = ev.when ?? `about ${hh === 0 ? 'midnight' : hh === 12 ? 'noon' : `${hh % 12} ${hh < 12 ? 'AM' : 'PM'}`}`;
+  return d.includes(', ') ? `${d.split(', ')[0]}, ${when}` : when[0].toUpperCase() + when.slice(1);
 }
 function foldCaption(v) {
   ui.caption.classList.toggle('folded', v);
