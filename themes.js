@@ -5,9 +5,10 @@
 //
 // A skin: { id, fonts (stylesheet URL), faces (canvas fonts to load first), kicker, paper (legend ground), night ([r, g, b]
 // multiplied over the map at full dark), ring ([halo, line] round the selected unit),
-// build(b, terrain, dpr) => sheet { layer, iv, smoke: { sprites, alpha, grow, life }, flash, ... },
+// build(b, terrain, dpr) => sheet { layer, iv, smoke: { sprites, alpha, grow, life, rate? (share of firing smoke drawn) }, flash, ... },
 // surround(ctx, mapRect, V), feature(g, type, pts, k, closed), placeName(ctx, f, x, y), fallen: { color(side), mark(ctx, x, y, d) },
 // unit(ctx, U), label: { place?(l), measure(ctx, l), draw(ctx, l) }, under?(ctx, V), over?(ctx, V), fire?(ctx, V, pops, n),
+// air?(ctx, V, f, clock) (the aircraft of an air strike `f`; clock is real seconds of play),
 // ambient(el, sheet), clock(t) => [main html, small], hours?(t), when?(event, b) => [caption time, tag],
 // preview?(b) (recolours another war's battle shown in this skin), legend: { text, swatch, extra(b, sheet) } }.
 import revolution from './themes/revolution.js';
