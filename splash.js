@@ -4,6 +4,7 @@
 import { normalizeBattle, unitAt, shape, hash, mulberry32, MONTHS } from './sim.js';
 import * as P from './themes/paint.js';
 import ww2, { counter, looks, arrowPath } from './themes/ww2.js';
+import { ground, INK, SHEET } from './themes/civil-war.js';
 
 // In date order. `war` is the index.json "war" string; ids match the skins in themes.js where a war has one.
 // draw(cv, o): o = { id: the battle to draw, fx, fy: where the fight sits as a share of width and height, refW: the
@@ -199,66 +200,11 @@ async function drawTable(cv, o) {
   }
 }
 
-// Civil War, before its first battle: Guilford Courthouse drawn as a topographical engineer's survey, ground only.
-const INK = '#1d2230', SHEET = '#f1ece0', SEPIA = '#7a4a26';
+// Civil War, before its first battle: Guilford Courthouse on the skin's survey ground, ground only.
 let survey = null; // the layer, built once
-function surveyLayer(b, T) {
-  const dem = P.makeDem(b, T), L = P.layerSpace(b, dem), size = L.size, cv = P.canvas(size, size), g = cv.getContext('2d');
-  g.fillStyle = SHEET; g.fillRect(0, 0, size, size);
-  g.globalCompositeOperation = 'multiply'; g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
-  g.drawImage(P.reliefCanvas(dem, (f, sh) => { const v = 0.78 + 0.3 * sh + 0.06 * f; return [Math.min(255, 255 * v), Math.min(255, 250 * v), Math.min(255, 240 * v)]; }, { shadeOnly: true }), 0, 0, size, size);
-  g.globalCompositeOperation = 'source-over';
-  const woods = P.woodsSheet(b, L, { lo: 0.31, hi: 0.33, color: [150, 178, 120], alpha: 0.55, edge: 14 });
-  g.drawImage(woods, 0, 0);
-  { // scalloped wood edges and scattered tree marks, sampled from a coarse copy of the woods
-    const m = P.canvas(size / 6, size / 6), mg = m.getContext('2d'); mg.drawImage(woods, 0, 0, m.width, m.height);
-    const id = mg.getImageData(0, 0, m.width, m.height).data, Mw = m.width;
-    const inside = (x, y) => { const i = (Math.floor(y / 6) * Mw + Math.floor(x / 6)) * 4 + 3; return id[i] > 70; };
-    const rnd = mulberry32(17);
-    g.strokeStyle = '#3f5a2c'; g.lineWidth = 0.9; g.globalAlpha = 0.85; g.beginPath();
-    for (let y = 6; y < size - 6; y += 7) for (let x = 6; x < size - 6; x += 7) {
-      if (!inside(x, y)) continue;
-      if (!inside(x + 8, y) || !inside(x - 8, y) || !inside(x, y + 8) || !inside(x, y - 8)) { g.moveTo(x + 4, y); g.arc(x, y, 4, 0, Math.PI * 2); }
-    }
-    g.stroke(); g.globalAlpha = 1;
-    g.lineWidth = 0.8; g.beginPath();
-    for (let i = 0; i < 26000; i++) { const x = rnd() * size, y = rnd() * size; if (!inside(x, y) || !inside(x + 10, y) || !inside(x - 10, y)) continue; g.moveTo(x + 2.6, y); g.arc(x, y, 2.6, 0, 7); g.moveTo(x + 0.8, y + 4.2); g.arc(x, y + 4.2, 0.8, 0, 7); }
-    g.stroke();
-  }
-  for (const poly of b.fields ?? []) {
-    const p = poly.map(([x, y]) => [L.x(x), L.y(y)]);
-    g.fillStyle = 'rgba(236,222,180,0.55)'; P.polyPath(g, p); g.fill();
-    g.strokeStyle = INK; g.lineWidth = 0.9; g.setLineDash([6, 2, 1, 2]); P.polyPath(g, p); g.stroke(); g.setLineDash([]);
-  }
-  const ft = 0.3048, labels = [];
-  for (const { lv, pts } of P.contourLines(dem, 5 * ft)) {
-    const feet = Math.round(lv / ft), index = feet % 25 === 0, q = P.densify(pts.map(([c, r]) => [L.gx(c), L.gy(r)]), 5);
-    P.stroke(g, q, SEPIA, index ? 1.25 : 0.6, index ? 0.8 : 0.5);
-    if (index && q.length > 120) for (let i = 60; i < q.length - 30; i += 260) labels.push([q[i], q[i + 4], feet]);
-  }
-  g.font = 'italic 11px "Old Standard TT"'; g.textAlign = 'center'; g.textBaseline = 'middle';
-  for (const [a, c, feet] of labels) {
-    let ang = Math.atan2(c[1] - a[1], c[0] - a[0]); if (ang > Math.PI / 2) ang -= Math.PI; if (ang < -Math.PI / 2) ang += Math.PI;
-    g.save(); g.translate(a[0], a[1]); g.rotate(ang); g.fillStyle = 'rgba(241,236,224,0.92)'; g.fillRect(-11, -6, 22, 12); g.fillStyle = SEPIA; g.fillText(String(feet), 0, 0.5); g.restore();
-  }
-  for (const f of b.features.filter(f => f.type === 'creek')) {
-    const q = P.densify(f.pts.map(([x, y]) => [L.x(x), L.y(y)]), 2);
-    for (let i = 1; i < q.length; i++) { const kk = i / q.length; g.strokeStyle = '#2f5d9a'; g.lineWidth = 1 + kk * 2.6; g.lineCap = 'round'; g.beginPath(); g.moveTo(...q[i - 1]); g.lineTo(...q[i]); g.stroke(); }
-  }
-  for (const f of b.features.filter(f => f.type === 'road')) {
-    const q = P.densify(f.pts.map(([x, y]) => [L.x(x), L.y(y)]), 2);
-    P.stroke(g, q, INK, 7.5, 1); P.stroke(g, q, '#d9925f', 5.2, 1);
-  }
-  for (const f of b.features.filter(f => f.type === 'fence')) {
-    const q = P.densify(f.pts.map(([x, y]) => [L.x(x), L.y(y)]), 2);
-    P.stroke(g, q, INK, 0.9, 1); const n = P.normals(q);
-    g.beginPath(); for (let i = 0; i < q.length; i += 3) { const [x, y] = q[i]; g.moveTo(x - n[i][0] * 2.2, y - n[i][1] * 2.2); g.lineTo(x + n[i][0] * 2.2, y + n[i][1] * 2.2); } g.lineWidth = 0.7; g.stroke();
-  }
-  return cv;
-}
 async function drawSurvey(cv, o) {
   const [{ b, T }] = await Promise.all([load('guilford'), faces(['italic 11px "Old Standard TT"', 'italic 12px "Old Standard TT"', '700 14px "Playfair Display SC"', '13px "Playfair Display SC"'])]);
-  const layer = (survey ??= surveyLayer(b, T)), g = cv.getContext('2d'), CW = cv.width, CH = cv.height;
+  const layer = (survey ??= ground(b, T, 1).layer), g = cv.getContext('2d'), CW = cv.width, CH = cv.height;
   const at = [-250, -60], k = o.refW / 1440, E = b.extent; // the fields round the courthouse
   const X = x => CW * o.fx + (x - at[0]) * k, Y = y => CH * o.fy - (y - at[1]) * k;
   g.fillStyle = SHEET; g.fillRect(0, 0, CW, CH);
