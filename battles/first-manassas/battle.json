@@ -33080,7 +33080,288 @@
    ]
   }
  ],
- "events": [],
+ "events": [
+  {
+   "t": "02:30",
+   "title": "The march from Centreville",
+   "text": "Under a moon a day short of full, McDowell's army leaves its camps round Centreville at half past two. Tyler's division takes the Warrenton Turnpike to make a show at the Stone Bridge; Hunter's and Heintzelman's follow it, to turn off past Cub Run and go round by Sudley Springs onto the Confederate left. About 18,000 men will cross Bull Run. The road is choked and the column crawls.",
+   "at": [
+    3000,
+    2300
+   ],
+   "view": 5000,
+   "speed": 300,
+   "when": "2:30 AM"
+  },
+  {
+   "t": "05:15",
+   "title": "The first gun",
+   "text": "Tyler's head halts before the Stone Bridge. Lieutenant Hains's 30-pounder Parrott fires down the turnpike, the first shot of the day: a quarter past five by Wilshin, half past by the Park Service. Evans, holding the bridge with eleven companies and two guns, does not answer. Across the valley the Union guns at Blackburn's Ford open too.",
+   "at": [
+    -800,
+    1150
+   ],
+   "view": 2600,
+   "speed": 120,
+   "when": "about 5:15 AM"
+  },
+  {
+   "t": "05:30",
+   "title": "The road through the woods",
+   "text": "At the blacksmith's shop half a mile past Cub Run, Hunter's division turns right onto a narrow track through the woods, Heintzelman's behind it. It was to reach Sudley Springs by seven; the road is twice as long as anyone thought, and the head will not get there until half past nine. Howard's brigade halts at the turn as a reserve.",
+   "at": [
+    -500,
+    3300
+   ],
+   "view": 5000,
+   "speed": 300
+  },
+  {
+   "t": "07:00",
+   "title": "The Confederate right",
+   "text": "Beauregard means to attack Centreville with his right. D. R. Jones has crossed McLean's Ford to wait for Ewell, who never gets the order; Longstreet lies under the Union guns across Blackburn's Ford. Seeing columns moving to the north, Beauregard sends Jackson's brigade about seven to the gap between Bonham and Cocke, and Bee and Bartow toward the Stone Bridge.",
+   "at": [
+    2400,
+    -2000
+   ],
+   "view": 4500,
+   "speed": 300,
+   "when": "about 7 AM"
+  },
+  {
+   "t": "08:45",
+   "title": "You are turned",
+   "text": "From the signal station on Wilcoxen's farm Captain Alexander sees the glint of guns and bayonets near Sudley and flags Evans: 'Look out for your left; you are turned.' Evans leaves four companies at the bridge and takes the rest by the Carter farm to Matthews Hill. Wilshin has it at a quarter to nine, the Park Service at nine.",
+   "at": [
+    -2500,
+    1250
+   ],
+   "view": 3300,
+   "speed": 60,
+   "when": "8:45 AM"
+  },
+  {
+   "t": "09:30",
+   "title": "Sudley Springs",
+   "text": "Hunter's head fords Bull Run at Sudley Springs at half past nine and halts so the men can drink. Then it comes on down the Manassas-Sudley road toward Evans's skirmishers.",
+   "at": [
+    -3900,
+    2300
+   ],
+   "view": 2600,
+   "speed": 60,
+   "when": "9:30 AM"
+  },
+  {
+   "t": "10:15",
+   "title": "Matthews Hill",
+   "text": "Burnside's 2nd Rhode Island walks into Evans's line on Matthews Hill; its battery and the rest of the brigade come into line beside it. Wheat's Louisianans charge and are shot back, Wheat badly wounded. Evans's 900 hold the head of Hunter's column for an hour. Wilshin puts the attack at a quarter past ten, Fry at a quarter to.",
+   "at": [
+    -3550,
+    1300
+   ],
+   "view": 1700,
+   "speed": 30,
+   "when": "about 10:15 AM"
+  },
+  {
+   "t": "11:00",
+   "title": "Bee and Bartow",
+   "text": "Bee and Bartow bring five regiments up on Evans's right, with Imboden's guns firing from Henry Hill behind them; the 8th Georgia goes into a thicket ahead of the line and is cut to pieces. Porter's brigade comes in on Burnside's right, Sykes's regulars on his left.",
+   "at": [
+    -3450,
+    1250
+   ],
+   "view": 1700,
+   "speed": 30,
+   "when": "about 11 AM"
+  },
+  {
+   "t": "11:30",
+   "title": "The line breaks",
+   "text": "Outflanked by Porter, with Heintzelman's division coming down the road behind him, the Confederate line breaks about half past eleven and runs back over Young's Branch and the turnpike. Hampton's Legion, off the train that morning, stands by the Robinson house to cover it and loses heavily.",
+   "at": [
+    -3000,
+    650
+   ],
+   "view": 2300,
+   "speed": 30,
+   "when": "11:30 AM"
+  },
+  {
+   "t": "11:50",
+   "title": "A stone wall",
+   "text": "Jackson has formed his five Virginia regiments behind the crest of Henry Hill with thirteen guns in front of them. Bee, trying to rally his brigade, points to them: 'There is Jackson standing like a stone wall.' Johnston and Beauregard come up; Johnston goes back to Portici to send on the reinforcements.",
+   "at": [
+    -2550,
+    -80
+   ],
+   "view": 1700,
+   "speed": 60,
+   "when": "about noon"
+  },
+  {
+   "t": "12:10",
+   "title": "The Farm Ford",
+   "text": "Ordered over about noon, Sherman takes his brigade across Bull Run at a ford 800 yards above the Stone Bridge, where he had seen a horseman cross; Keyes follows. Their guns cannot climb the far bluff. Sherman forms behind Porter's brigade on Matthews Hill.",
+   "at": [
+    -2300,
+    1350
+   ],
+   "view": 3000,
+   "speed": 60
+  },
+  {
+   "t": "12:45",
+   "title": "The lull",
+   "text": "For two hours the Union regiments re-form north of Young's Branch while McDowell readies an attack on Henry Hill; Ricketts's and Griffin's batteries shell it from Dogan Ridge. About two Keyes sends the 2nd Maine and 3rd Connecticut up the bare slope to the Robinson house. They reach the top, are driven off, and file away down Young's Branch out of the fight.",
+   "at": [
+    -3000,
+    600
+   ],
+   "view": 3000,
+   "speed": 120
+  },
+  {
+   "t": "14:00",
+   "title": "Ricketts and Griffin",
+   "text": "McDowell sends the two regular batteries onto Henry Hill south of the house, eleven guns 300 yards from Jackson's line, the Fire Zouaves and the Marines behind them. For a quarter of an hour the guns duel. Mrs. Judith Henry, bedridden, is mortally wounded in her house.",
+   "at": [
+    -2700,
+    -200
+   ],
+   "view": 1300,
+   "speed": 20,
+   "when": "2:00 PM"
+  },
+  {
+   "t": "14:28",
+   "title": "Stuart's charge",
+   "text": "On the right of the guns the Fire Zouaves face the woods along the Sudley road. Stuart's 1st Virginia Cavalry rides out of them into the regiment's flank and scatters it.",
+   "at": [
+    -2950,
+    -450
+   ],
+   "view": 1200,
+   "speed": 20
+  },
+  {
+   "t": "14:50",
+   "title": "The 33rd Virginia",
+   "text": "A regiment comes out of the brush toward Griffin's guns. Griffin takes it for the enemy; Major Barry, chief of artillery, tells him it is his support, and he holds his fire. At seventy yards the 33rd Virginia fires a volley that kills most of the gunners and horses. In 1861 both armies have men in blue and in grey.",
+   "at": [
+    -2620,
+    -330
+   ],
+   "view": 1000,
+   "speed": 20,
+   "when": "about 3 PM"
+  },
+  {
+   "t": "15:05",
+   "title": "Up the hill one at a time",
+   "text": "The Union regiments go up from the Sudley road one at a time: the 14th Brooklyn, the 38th New York, the Massachusetts regiments, then Sherman's 2nd Wisconsin twice, the 79th and the 69th New York. The guns change hands three times and are never fired again. Bee and Bartow fall leading what is left of their brigades; Fisher of the 6th North Carolina is killed by the guns.",
+   "at": [
+    -2800,
+    -80
+   ],
+   "view": 1100,
+   "speed": 20
+  },
+  {
+   "t": "15:30",
+   "title": "Kirby Smith",
+   "text": "Kirby Smith's brigade, off the cars near Manassas Junction, comes up from the south about half past three. Smith falls as it arrives and Elzey leads it on to the left. Sherman: 'Here, about 3.30 p.m., began the scene of confusion and disorder that characterized the remainder of the day.'",
+   "at": [
+    -2900,
+    -900
+   ],
+   "view": 2400,
+   "speed": 30,
+   "when": "half past 3"
+  },
+  {
+   "t": "15:45",
+   "title": "The general advance",
+   "text": "Beauregard orders his whole line forward. Jackson's regiments, the 18th Virginia and the men on the left sweep the plateau to the Sudley road and take the guns for good.",
+   "at": [
+    -2850,
+    -150
+   ],
+   "view": 1900,
+   "speed": 30,
+   "when": "about 3:45 PM"
+  },
+  {
+   "t": "16:00",
+   "title": "Blackburn's Ford",
+   "text": "On the Union left D. R. Jones's brigade comes down a ravine onto Davies's flank. Davies has his men lie down and six guns fire grape and canister into the column for half an hour; the 5th South Carolina holds the far slope three-quarters of an hour, alone, and goes back.",
+   "at": [
+    4300,
+    -150
+   ],
+   "view": 1700,
+   "speed": 30,
+   "when": "about 4 PM"
+  },
+  {
+   "t": "16:12",
+   "title": "Chinn Ridge",
+   "text": "Howard's brigade, the last Union reserve, comes onto Chinn Ridge after the whole flank march. Elzey strikes it from the south-east, and Early, who has marched round the field, from the west; Kershaw's South Carolinians and Kemper's guns join in.",
+   "at": [
+    -3600,
+    -650
+   ],
+   "view": 1800,
+   "speed": 20
+  },
+  {
+   "t": "16:30",
+   "title": "The retreat",
+   "text": "There is no order to retreat; the men go back of their own accord, most up the Sudley road and the woods road they came by, Sherman's and Keyes's over the Farm Ford. Sykes's regulars, Palmer's cavalry and Arnold's guns hold Buck Hill as the rear guard.",
+   "at": [
+    -3200,
+    1500
+   ],
+   "view": 2800,
+   "speed": 60,
+   "when": "4:30 PM"
+  },
+  {
+   "t": "18:12",
+   "title": "Cub Run",
+   "text": "Kemper's guns, pushed down the turnpike behind Kershaw, shell the Cub Run bridge; Edmund Ruffin is given the first shot. A wagon upsets on the bridge and the retreat becomes a panic. Guns, wagons and the carriages of the sightseers out from Washington are left behind, and Radford's troopers ride into the column.",
+   "at": [
+    1500,
+    1800
+   ],
+   "view": 2400,
+   "speed": 30
+  },
+  {
+   "t": "19:14",
+   "title": "Sunset",
+   "text": "McDowell reaches Centreville about sunset and tries to make a stand behind Miles's division. The Confederates are nearly as disordered by victory as the Union army by defeat, and there is no pursuit past Cub Run. Longstreet and Bonham, pushing up the roads from the fords, halt at dark and go back to Bull Run for water.",
+   "at": [
+    3600,
+    1500
+   ],
+   "view": 4000,
+   "speed": 120,
+   "when": "about sunset"
+  },
+  {
+   "t": "20:15",
+   "title": "Blenker's line",
+   "text": "Until about nine the stragglers stream through Blenker's regiments across the turnpike, the 8th New York a mile and a half out and the 29th half a mile behind. At midnight McDowell orders the army back to Washington. It rains on the 22nd.",
+   "at": [
+    3300,
+    2250
+   ],
+   "view": 3200,
+   "speed": 60
+  }
+ ],
  "outcome": {
   "result": "Confederate victory: the Union army falls back to Washington",
   "losses": [
