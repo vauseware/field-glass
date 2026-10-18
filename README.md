@@ -111,7 +111,9 @@ than a day; one battle uses one form throughout.
 | `fields` | polygons of cleared farmland, tinted lighter and kept free of trees |
 | `sources[]` | shown in the Sources dialog |
 
-Unit types: `infantry`, `light_infantry`, `militia`, `riflemen`, `cavalry`, `artillery`.
+Unit types: `infantry`, `light_infantry`, `militia`, `riflemen`, `cavalry`, `artillery`, `armor`.
+An `armor` unit's `strength` counts vehicles, not men: one dot per vehicle whatever `menPerDot` is, about
+50 m apart in line and 30 m apart in column, and a casualty marker for each vehicle lost.
 States: `hidden`, `column`, `line`, `skirmish`, `firing`, `charge`, `retreat`, `rout`, `surrender`.
 A `firing` or `skirmish` state makes the unit smoke; a falling `strength` leaves casualty markers.
 Positions between keys are straight-line interpolation, so add keys where a unit follows a road.

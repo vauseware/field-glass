@@ -1,7 +1,7 @@
 // Self-check for sim.js plus validation of every battle in battles/index.json. Run: npm run check
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import assert from 'node:assert/strict';
-import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime, actionBox, tracks } from '../sim.js';
+import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime, actionBox, tracks, shape } from '../sim.js';
 
 const u = { id: 'x', side: 'a', type: 'infantry', strength: 100, keys: [
   { t: '07:00', x: 0, y: 0, h: 350 },
@@ -40,6 +40,11 @@ assert.equal(box('07:01', 0).x0, -200, 'chapter focus framed; idle unit left out
 assert.ok(box('07:01', 0).x1 >= 330 && box('07:01', 120).x1 >= 390, 'marching unit framed now and where it will be');
 const [pre, at] = [actionBox(cb, parseTime('07:10') - 0.01, 60, 0), box('07:10', 60)];
 assert.ok(['x0', 'y0', 'x1', 'y1'].every(k => Math.abs(pre[k] - at[k]) < 1), 'no jump at the chapter boundary');
+const tanks = { id: 't', side: 'a', type: 'armor', strength: 17, keys: [{ t: '07:00', x: 0, y: 0, state: 'column' }, { t: '07:10', state: 'line' }, { t: '07:20', strength: 12 }] };
+const tb = normalizeBattle({ start: '07:00', end: '08:00', menPerDot: 20, units: [tanks] });
+assert.equal(dots(tanks, unitAt(tanks, parseTime('07:10')), 20).length, 34, 'armor: a dot per tank whatever menPerDot is');
+assert.deepEqual([shape(tanks, unitAt(tanks, parseTime('07:00')), 20).F, shape(tanks, unitAt(tanks, parseTime('07:10')), 20).F], [4, 850], 'armor: one tank wide in column, 50 m a tank in line');
+assert.equal(tb.fallen.length, 5, 'armor: a marker per tank lost');
 console.log('sim.js: ok');
 
 let bad = 0;
