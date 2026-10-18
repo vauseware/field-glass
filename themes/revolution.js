@@ -143,7 +143,7 @@ export default {
   faces: [`17px ${FELL}`, `italic 15px ${FELL}`],
   kicker: 'A Plan of the',
   paper: '#ece0c0',
-  night: [88, 70, 54],
+  night: [125, 104, 84],
   ring: ['rgba(255,248,225,0.95)', '#8a2617'],
   build,
   feature,

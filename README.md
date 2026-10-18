@@ -12,13 +12,13 @@ the battle through at the default settings (Follow and Time-lapse on, chapter sp
 to `battles/index.json`. A link with a battle in it (`#cowpens`) skips the start screen; `?plan=yorktown`
 picks the backdrop.
 
-![Cowpens, the main line engaged](docs/screenshots/cowpens-main-line.png)
-![Kings Mountain, the columns close round the ridge](docs/screenshots/kings-mountain-noose.png)
-![Guilford Courthouse, the first line](docs/screenshots/guilford-first-line.png)
-![The Waxhaws, the charge](docs/screenshots/waxhaws-charge.png)
-![Yorktown, the night of 14 October](docs/screenshots/yorktown-redoubts.png)
-![Bunker Hill, the first assault](docs/screenshots/bunker-hill-first-assault.png)
-![Princeton, the orchard](docs/screenshots/princeton-orchard.png)
+![Cowpens, the main line engaged](docs/screenshots/cowpens-main-line.jpg)
+![Kings Mountain, the columns close round the ridge](docs/screenshots/kings-mountain-noose.jpg)
+![Guilford Courthouse, the first line](docs/screenshots/guilford-first-line.jpg)
+![The Waxhaws, the charge](docs/screenshots/waxhaws-charge.jpg)
+![Yorktown, the night of 14 October](docs/screenshots/yorktown-redoubts.jpg)
+![Bunker Hill, the first assault](docs/screenshots/bunker-hill-first-assault.jpg)
+![Princeton, the orchard](docs/screenshots/princeton-orchard.jpg)
 
 Battles so far: Bunker Hill (17 June 1775), Trenton and Princeton (25 December 1776 to 3 January 1777), the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781),
 Guilford Courthouse (15 March 1781) and the siege of Yorktown (28 September to 19 October 1781).

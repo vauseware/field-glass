@@ -270,10 +270,11 @@ function draw() {
   skin.surround(ctx, r, V);
   skin.under?.(ctx, V);
   drawFeatures(); drawFallen();
+  drawNight(); // the ground darkens; the regiments stay readable above it
   const labels = drawUnits();
   drawSmoke(); drawLabels(labels);
   skin.over?.(ctx, V);
-  drawNight(); drawPops();
+  drawPops();
 }
 
 // Features that come and go (siegeworks dug, ships burnt) and every place name; the rest are baked into the layer.
