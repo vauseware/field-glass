@@ -1,0 +1,7 @@
+// Static site on Workers: tools/build.sh copies what the browser loads into dist/, and `npm run deploy` uploads it.
+{
+  "name": "fieldglass",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "dist" },
+  "routes": [{ "pattern": "fieldglass.vause.dev", "custom_domain": true }]
+}

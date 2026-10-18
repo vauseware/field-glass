@@ -34,6 +34,12 @@ npm run check      # validates every battle and self-checks sim.js
 On claw-mini the launch agent `com.vauseware.battle-sim` serves this folder on 127.0.0.1:8803 and
 `tailscale serve --https=8803` proxies it, so the tailnet URL is https://claw-mini.tailcaa12e.ts.net:8803/.
 
+## Deploy
+
+`npm run deploy` copies the page, `app.js`, `sim.js` and each battle's `battle.json` and `terrain.json` into
+`dist/` (`tools/build.sh`) and uploads it as the Worker `fieldglass`, served at https://fieldglass.vause.dev/.
+The vause.dev zone redirects every other host to vauseware.com; its redirect rule must leave this host out.
+
 Static files only. `index.html` is the shell, `app.js` draws, `sim.js` is the DOM-free timeline
 logic. `#cowpens@07:45` opens a battle at a time of day (`#yorktown@1781-10-14T20:00` for a dated one);
 `#cowpens@07:45,play` starts it playing. `,warp` pre-runs five seconds of frames, which is how headless

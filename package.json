@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "serve": "python3 -m http.server 8000",
-    "check": "node tools/check.mjs"
+    "check": "node tools/check.mjs",
+    "deploy": "bash tools/build.sh && npx -y wrangler@4 deploy"
   }
 }
