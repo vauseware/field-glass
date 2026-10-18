@@ -2,6 +2,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime, actionBox, tracks, shape } from '../sim.js';
+import { WARS } from '../splash.js';
 
 const u = { id: 'x', side: 'a', type: 'infantry', strength: 100, keys: [
   { t: '07:00', x: 0, y: 0, h: 350 },
@@ -58,6 +59,7 @@ for (const entry of index) {
   const terrain = existsSync(`${dir}/terrain.json`) ? JSON.parse(readFileSync(`${dir}/terrain.json`, 'utf8')) : null;
   const problems = validate(battle, terrain);
   if (!terrain) problems.push('no terrain.json (run tools/fetch_terrain.py)');
+  if (!WARS.some(w => w.war === entry.war)) problems.push(`war "${entry.war}" has no entry in WARS (splash.js), so the start screen would not list it`);
   console.log(`${id}: ${battle.units.length} units, ${battle.events.length} events, ${battle.fallen.length} casualty markers${problems.length ? '' : ', ok'}`);
   for (const p of problems) console.log('  ! ' + p);
   bad += problems.length;

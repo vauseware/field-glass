@@ -463,3 +463,6 @@ export default {
     ],
   },
 };
+
+// The start screen draws its backdrop for this war with the skin's own counters and arrows (splash.js).
+export { counter, looks, arrowPath };

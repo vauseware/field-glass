@@ -1,13 +1,14 @@
-import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, actionBox, advance, defaultSpeed, fmtTime, parseTime, hash, mulberry32, mod } from './sim.js';
+import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, actionBox, advance, defaultSpeed, fmtTime, parseTime, mod } from './sim.js';
 import { themeFor } from './themes.js';
-import { contours, isStatic, canvas as newCanvas } from './themes/paint.js';
+import { WARS, showSplash } from './splash.js';
+import { isStatic, canvas as newCanvas } from './themes/paint.js';
 
 const $ = s => document.querySelector(s);
 const canvas = $('#map'), ctx = canvas.getContext('2d');
 const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $('#clock'), follow: $('#follow'), bar: $('#bar'),
   top: $('#top'), topFold: $('#top-fold'), title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'), capWhen: $('#cap-when'), capFold: $('#cap-fold'),
   hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse'),
-  marks: $('#marks'), splash: $('#splash'), splashList: $('#splash-list'), plan: $('#plan'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list'),
+  marks: $('#marks'), splash: $('#splash'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list'),
   outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body'),
   card: $('#card'), cardSwatch: $('#card-swatch'), cardName: $('#card-name'), cardCmd: $('#card-cmd'), cardKind: $('#card-kind'), cardLive: $('#card-live'), cardClose: $('#card-close'),
   fx: $('#fx'), fonts: $('#theme-fonts'), kicker: $('#kicker'), hours: $('#hours'), loading: $('#loading') };
@@ -747,120 +748,13 @@ function frame(now) {
 
 for (const s of SPEEDS) ui.speed.add(new Option(`${s}×`, s));
 const list = (await (await fetch('battles/index.json')).json()).sort((a, b) => a.date.localeCompare(b.date));
-// ---------- start screen ----------
-
-// A period battle plan as the backdrop: one battle's own contours, roads and creeks in sepia ink, its regiments as
-// washed blocks at the hottest moment of the fight, and dashed arrows for where they had come from.
-async function drawPlan(cv, entry) {
-  const [raw, T] = await Promise.all([fetch(`battles/${entry.id}/battle.json`).then(r => r.json()), fetch(`battles/${entry.id}/terrain.json`).then(r => r.json())]);
-  const b = normalizeBattle(raw), g = cv.getContext('2d'), CW = cv.width, CH = cv.height, rnd = mulberry32(hash(b.id + 'plan'));
-  try { await document.fonts.load('italic 20px "IM Fell English"'); } catch {}
-  // Paper: a warm gradient, darker at the edges, flecked, foxed and folded in four.
-  const pg = g.createRadialGradient(CW / 2, CH / 2, CH * 0.2, CW / 2, CH / 2, CW * 0.75);
-  pg.addColorStop(0, '#efe2c2'); pg.addColorStop(0.7, '#dcc79a'); pg.addColorStop(1, '#a98455');
-  g.fillStyle = pg; g.fillRect(0, 0, CW, CH);
-  for (let i = 0; i < 9000; i++) { g.fillStyle = `rgba(90,60,25,${(rnd() * 0.12).toFixed(3)})`; g.fillRect(rnd() * CW, rnd() * CH, 1 + rnd() * 1.5, 1 + rnd() * 1.5); }
-  for (let i = 0; i < 14; i++) {
-    const x = rnd() * CW, y = rnd() * CH, r = 20 + rnd() * 90, f = g.createRadialGradient(x, y, 0, x, y, r);
-    f.addColorStop(0, 'rgba(140,90,40,0.16)'); f.addColorStop(1, 'rgba(140,90,40,0)'); g.fillStyle = f; g.fillRect(x - r, y - r, 2 * r, 2 * r);
-  }
-  // Focus on the chapter with the most units in action.
-  const busy = ev => b.units.filter(u => { const p = unitAt(u, ev.t); return p && u.type !== 'artillery' && ['firing', 'charge', 'skirmish'].includes(p.state); }).length;
-  const ev = b.events.reduce((best, e) => (e.at && busy(e) > busy(best) ? e : best), b.events.find(e => e.at) ?? b.events[0]);
-  const at = ev.at ?? [0, 0], k = CW / Math.max(1200, (ev.view ?? b.extent / 2) * 1.4);
-  const X = x => CW * 0.66 + (x - at[0]) * k, // the fight sits right of the card on a wide screen
-    Y = y => CH / 2 - (y - at[1]) * k, J = () => (rnd() - 0.5) * 1.2; // hand-drawn wobble
-  const ink = a => `rgba(62,38,18,${a})`, half = (T.cols * T.spacing) / 2, sp = T.spacing;
-  let zmin = Infinity, zmax = -Infinity;
-  for (const v of T.z) if (v) { zmin = Math.min(zmin, v); zmax = Math.max(zmax, v); }
-  const Z = T.z.map(v => v || zmin);
-  if (b.water != null) { // a one-pixel-per-cell mask, scaled up smooth, so the shore has no stair steps or seams
-    const m = document.createElement('canvas'); m.width = T.cols; m.height = T.rows;
-    const mg = m.getContext('2d'), img = mg.createImageData(T.cols, T.rows);
-    for (let i = 0; i < Z.length; i++) if (Z[i] <= b.water) img.data.set([95, 110, 110, 70], i * 4);
-    mg.putImageData(img, 0, 0); g.imageSmoothingEnabled = true; g.drawImage(m, X(-half), Y(half), 2 * half * k, 2 * half * k);
-  }
-  for (const f of b.features ?? []) if (f.type === 'water') { g.beginPath(); f.poly.forEach(([x, y], i) => (i ? g.lineTo(X(x), Y(y)) : g.moveTo(X(x), Y(y)))); g.fillStyle = 'rgba(95,110,110,0.22)'; g.fill(); }
-  const iv = Math.max(b.contourInterval ?? 5, Math.ceil((zmax - zmin) / 45)); // no more than about 45 contours
-  for (let lv = Math.ceil(zmin / iv) * iv, n = 0; lv <= zmax; lv += iv, n++) {
-    g.beginPath(); g.strokeStyle = ink(n % 5 ? 0.22 : 0.4); g.lineWidth = n % 5 ? 0.8 : 1.3;
-    contours(Z, T.cols, T.rows, lv, (x0, y0, x1, y1) => { g.moveTo(X((x0 + 0.5) * sp - half) + J(), Y(half - (y0 + 0.5) * sp) + J()); g.lineTo(X((x1 + 0.5) * sp - half) + J(), Y(half - (y1 + 0.5) * sp) + J()); });
-    g.stroke();
-  }
-  const line = (pts, w, a, dash = [], color = ink(a)) => { g.beginPath(); g.setLineDash(dash); pts.forEach(([x, y], i) => (i ? g.lineTo(X(x) + J(), Y(y) + J()) : g.moveTo(X(x), Y(y)))); g.lineWidth = w; g.strokeStyle = color; g.stroke(); g.setLineDash([]); };
-  for (const f of b.features ?? []) {
-    if (f.pts && f.type === 'road') { line(f.pts, 3.4, 0.55); line(f.pts, 1.4, 0, [], '#e6d5ae'); } // a cased road
-    else if (f.pts && f.type === 'creek') line(f.pts, 1.6, 0.5, [7, 3]);
-    else if (f.pts && (f.type === 'works' || f.type === 'trench' || f.type === 'fence')) line(f.pts, 2.4, 0.75);
-    if (f.poly && f.type !== 'water' && f.type !== 'camp' && (f.from == null || f.from <= ev.t) && (f.until == null || f.until > ev.t)) {
-      g.beginPath(); f.poly.forEach(([x, y], i) => (i ? g.lineTo(X(x), Y(y)) : g.moveTo(X(x), Y(y)))); g.closePath(); g.fillStyle = ink(0.25); g.fill(); g.lineWidth = 1.5; g.strokeStyle = ink(0.8); g.stroke();
-    }
-  }
-  // Where each regiment had come from since the chapter before last, as a dashed ink arrow.
-  const i0 = b.events.indexOf(ev), t0 = b.events[Math.max(0, i0 - 2)].t;
-  for (const u of b.units) {
-    const pts = [];
-    for (let i = 0; i <= 24; i++) { const p = unitAt(u, t0 + ((ev.t - t0) * i) / 24); if (p) pts.push([p.x, p.y]); }
-    if (pts.length < 2 || Math.hypot(pts.at(-1)[0] - pts[0][0], pts.at(-1)[1] - pts[0][1]) * k < 30) continue;
-    line(pts, 1.4, 0.7, [8, 5]);
-    const [ax, ay] = pts.at(-1), [bx, by] = pts.at(-3) ?? pts[0], ang = Math.atan2(Y(ay) - Y(by), X(ax) - X(bx));
-    g.beginPath(); g.moveTo(X(ax), Y(ay)); g.lineTo(X(ax) - 11 * Math.cos(ang - 0.4), Y(ay) - 11 * Math.sin(ang - 0.4)); g.lineTo(X(ax) - 11 * Math.cos(ang + 0.4), Y(ay) - 11 * Math.sin(ang + 0.4)); g.closePath(); g.fillStyle = ink(0.75); g.fill();
-  }
-  // The regiments, washed in their side's colour and hatched, as Faden and Des Barres drew them.
-  const named = [];
-  for (const u of b.units) {
-    const p = unitAt(u, ev.t);
-    if (!p || p.state === 'rout' || p.state === 'surrender') continue; // a plan shows formed bodies only
-    const { ranks, F, rankD } = shape(u, p, b.menPerDot), w = Math.max(10, F * k), h = Math.max(5, ranks * rankD * k);
-    g.save(); g.translate(X(p.x), Y(p.y)); g.rotate((p.h * Math.PI) / 180);
-    g.globalAlpha = 0.6; g.fillStyle = B_SIDE(b, u.side); g.fillRect(-w / 2, 0, w, h); g.globalAlpha = 1;
-    g.beginPath(); g.rect(-w / 2, 0, w, h); g.clip(); g.strokeStyle = ink(0.35); g.lineWidth = 0.8;
-    for (let x = -w / 2 - h; x < w / 2; x += 4) { g.moveTo(x, h); g.lineTo(x + h, 0); }
-    g.stroke(); g.restore();
-    g.save(); g.translate(X(p.x), Y(p.y)); g.rotate((p.h * Math.PI) / 180); g.lineWidth = 1.2; g.strokeStyle = ink(0.85); g.strokeRect(-w / 2, 0, w, h); g.restore();
-    if (u.type !== 'artillery') named.push([p.strength, u.short ?? u.name, X(p.x), Y(p.y) - 10]);
-  }
-  g.font = 'italic 17px "IM Fell English", Georgia, serif'; g.textAlign = 'center'; g.fillStyle = ink(0.85);
-  const boxes = []; // biggest units first; a label that would overlap one already written is left off
-  for (const [, n, x, y] of named.sort((a, c) => c[0] - a[0])) {
-    const w = g.measureText(n).width / 2 + 4, r = [x - w, y - 16, x + w, y + 4];
-    if (boxes.length >= 10 || boxes.some(q => r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1])) continue;
-    boxes.push(r); g.fillText(n, x, y);
-  }
-  // Compass rose and the cartouche.
-  const cx = CW - 120, cy = 130;
-  g.strokeStyle = ink(0.7); g.fillStyle = ink(0.7); g.lineWidth = 1;
-  for (let i = 0; i < 8; i++) {
-    const a = (i * Math.PI) / 4, L = i % 2 ? 34 : 64;
-    g.beginPath(); g.moveTo(cx, cy); g.lineTo(cx + Math.sin(a - 0.12) * 12, cy - Math.cos(a - 0.12) * 12); g.lineTo(cx + Math.sin(a) * L, cy - Math.cos(a) * L); g.closePath(); i % 2 ? g.stroke() : g.fill();
-  }
-  g.beginPath(); g.arc(cx, cy, 44, 0, 6.283); g.stroke();
-  g.font = '22px "IM Fell English", Georgia, serif'; g.fillText('N', cx, cy - 72);
-  g.font = 'italic 24px "IM Fell English", Georgia, serif'; g.textAlign = 'left';
-  g.textAlign = 'right'; g.fillText(`Plan of ${/^(Battle|Siege)/.test(b.name) ? 'the ' : ''}${b.name}`, CW - 60, CH - 82); g.font = 'italic 19px "IM Fell English", Georgia, serif'; g.fillText(`${b.dateText ?? b.date}: ${ev.title}`, CW - 60, CH - 54);
-  g.strokeStyle = 'rgba(80,50,20,0.12)'; g.lineWidth = 2; g.beginPath(); g.moveTo(CW / 2, 0); g.lineTo(CW / 2, CH); g.moveTo(0, CH / 2); g.lineTo(CW, CH / 2); g.stroke(); // folds
-}
-const B_SIDE = (b, side) => (side === 'british' ? '#b0382c' : side === 'french' ? '#d8cfb0' : '#3d5a99'); // period washes: red, buff, blue
-
-function showSplash(list) {
-  const fmt = s => (s < 90 ? `${s} s` : `${Math.round(s / 60)} min`);
-  const wars = new Map();
-  for (const b of list) { if (!wars.has(b.war)) wars.set(b.war, []); wars.get(b.war).push(b); }
-  ui.splashList.innerHTML = [...wars].map(([war, bs]) => `<h2>${war}</h2>` + bs.map(b =>
-    `<button data-id="${b.id}"><span>${b.name}</span><i></i><span class="rt">${b.runtime ? fmt(b.runtime) : ''}</span></button>`).join('')).join('');
-  ui.splash.hidden = false;
-  const pick = list.find(b => b.id === new URLSearchParams(location.search).get('plan')) ?? list[Math.floor(Math.random() * list.length)]; // ?plan=id for screenshots
-  drawPlan(ui.plan, pick).catch(() => {}); // the backdrop is decoration; the list works without it
-  ui.splashList.onclick = async e => {
-    const id = e.target.closest('button')?.dataset.id;
-    if (!id) return;
-    ui.splash.hidden = true; location.hash = id;
-    await loadBattle(id); setPlaying(true); foldTop(true);
-  };
-}
-
-const want = location.hash.slice(1).split(/[@,]/)[0];
-if (list.some(b => b.id === want)) await loadBattle(want);
-else showSplash(list);
-ui.home.onclick = () => location.assign(location.pathname); // a real page load, so the URL drops the battle and Back returns to it
+const named = () => location.hash.slice(1).split(/[@,]/)[0]; // a battle, a war (#ww2) or nothing (the Revolution)
+if (list.some(b => b.id === named())) await loadBattle(named());
+else showSplash(list, WARS.some(w => w.id === named()) ? named() : WARS[0].id, async id => {
+  ui.splash.hidden = true;
+  await loadBattle(id); setPlaying(true); foldTop(true); // loadBattle puts the battle in the hash
+});
+// The battles and the war lists are hashes of one page, so All battles, Back and Forward change only the hash: load what it names.
+addEventListener('hashchange', () => { if (named() !== B?.id) location.reload(); });
+ui.home.onclick = () => { location.hash = WARS.find(w => w.war === list.find(e => e.id === B.id).war).id; };
 requestAnimationFrame(frame);
