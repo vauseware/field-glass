@@ -13607,15 +13607,15 @@
  "sides": {
   "union": {
    "name": "Union (McDowell)",
-   "color": "#2a4fa8",
-   "light": "#5a7fd8",
-   "dark": "#16285a"
+   "color": "#2c4f96",
+   "light": "#6f8fca",
+   "dark": "#16294f"
   },
   "confederate": {
    "name": "Confederate (Beauregard, Johnston)",
-   "color": "#8a8f98",
-   "light": "#b9bec6",
-   "dark": "#43464c"
+   "color": "#b23a2e",
+   "light": "#d77a6c",
+   "dark": "#5c1a14"
   }
  },
  "features": [

@@ -754,8 +754,9 @@ battle = dict(
     id="first-manassas", name="First Manassas", date="1861-07-21", dateText="21 July 1861", place="Bull Run, near Manassas Junction, Virginia",
     origin=dict(lat=LAT0, lon=LON0), extent=11000, start="02:30", end="21:00", sunrise="04:46", sunset="19:14", speed=60, lapse=1800, menPerDot=20,
     terrainExaggeration=2, contourInterval=3, trees=dict(density=0.0004), fields=FIELDS, wind=dict(x=0.6, y=0.3), view=dict(x=0, y=1200, width=10500),
-    sides=dict(union=dict(name="Union (McDowell)", color="#2a4fa8", light="#5a7fd8", dark="#16285a"),
-               confederate=dict(name="Confederate (Beauregard, Johnston)", color="#8a8f98", light="#b9bec6", dark="#43464c")),
+    # Bachelder's convention, Union blue and Confederate red: in 1861 both armies still wore blue and grey
+    sides=dict(union=dict(name="Union (McDowell)", color="#2c4f96", light="#6f8fca", dark="#16294f"),
+               confederate=dict(name="Confederate (Beauregard, Johnston)", color="#b23a2e", light="#d77a6c", dark="#5c1a14")),
     features=features, units=units, events=events,
     outcome={"result": "Confederate victory: the Union army falls back to Washington", "losses": [
         ["union", "2,708 by the Official Records return: 481 killed, 1,011 wounded, 1,216 missing. Battles and Leaders gives 2,896 (460, 1,124, 1,312). 25 guns lost."],
