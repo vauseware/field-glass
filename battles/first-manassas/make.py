@@ -49,7 +49,10 @@ PLACES = {
     'lewis_ford': (38.81639, -77.49912), 'balls_ford': (38.81086, -77.49085), 'poplar_ford': (38.84240, -77.50672),
     'portici': (38.80798, -77.50544), 'sudley_ford': (38.84398, -77.53765),
     # from the narrative: the turn half a mile past Cub Run, and McLean's Ford between Blackburn's and Union Mills; a few hundred metres
-    'flank_turn': (38.83162, -77.47040), 'mcleans_ford': (38.79164, -77.43351),
+    'flank_turn': (38.83162, -77.47040), 'mcleans_ford': (38.79209, -77.43651),
+    # camps and posts the night before, from the narrative; a few hundred metres
+    'tyler_camp': (38.83881, -77.44158), 'hunter_camp': (38.84240, -77.42774), 'heintzelman_camp': (38.83431, -77.42832),
+    'miles_camp': (38.83611, -77.43466), 'richardson_post': (38.81186, -77.44677),
 }
 P = {k: M(*v) for k, v in PLACES.items()}
 
@@ -178,7 +181,547 @@ features = [
         ('sudley_ford', "Sudley Ford"), ('mitchells_ford', "Mitchell's Ford"), ('blackburns_ford', "Blackburn's Ford"), ('mcleans_ford', "McLean's Ford"), ('cub_run_bridge', "Cub Run bridge")]],
 ]
 
-units, events = [], []
+# ---- order of battle: one row per regiment, battalion and battery ----
+# Strengths. Fry's Union figures (Battles and Leaders) give the force that crossed Bull Run by division: Tyler's two
+# brigades 5,352, Hunter's 5,969, Heintzelman's 7,232. Porter put his brigade at 3,700, the Marines were 350, Keyes about
+# 2,500 (his regiments 575-640, quoted from his report) and the 1st Michigan took 475 into action. Beauregard's report gives
+# Jackson's five regiments 2,611, Bee's and Bartow's 2,732 bayonets, Hampton 600, Stuart some 300, Evans about 900 on Matthews
+# Hill and Elzey (Wilshin) 1,700. The Park Service field return gives Cocke's brigade with Wheat 3,065 and the 8th Louisiana 481.
+# Every other regiment is apportioned from those totals or, for the reserves, estimated at an 1861 regiment's 600-800; such
+# figures are marked ~ in the comments. Batteries are about 100 men to six guns.
+OOB = [
+    # Union: Tyler's division
+    ("ct1", "union", "1st Conn.", "1st Connecticut (Keyes's brigade)", "Lt. Col. John Speidel", "infantry", 575, {}),
+    ("ct2", "union", "2nd Conn.", "2nd Connecticut (Keyes's brigade)", "Col. Alfred H. Terry", "infantry", 625, {}),
+    ("ct3", "union", "3rd Conn.", "3rd Connecticut (Keyes's brigade), which charged the Robinson hill with the 2nd Maine", "Col. John L. Chatfield", "infantry", 600, {}),
+    ("me2", "union", "2nd Maine", "2nd Maine (Keyes's brigade), which charged the Robinson hill", "Col. Charles D. Jameson", "infantry", 640, {}),
+    ("nysm2", "union", "2nd N.Y.S.M.", "2nd New York Militia (Schenck's brigade), demonstrating at the Stone Bridge", "Col. George W. B. Tompkins", "infantry", 550, {}),  # ~
+    ("oh1", "union", "1st Ohio", "1st Ohio (Schenck's brigade)", "Col. Alexander M. McCook", "infantry", 650, {}),  # ~
+    ("oh2", "union", "2nd Ohio", "2nd Ohio (Schenck's brigade)", "Lt. Col. Rodney Mason", "infantry", 650, {}),  # ~
+    ("carlisle", "union", "Carlisle", "Battery E, 2nd U.S. Artillery, at the Stone Bridge; lost at Cub Run in the retreat", "Capt. J. Howard Carlisle", "artillery", 100, dict(guns=6)),
+    ("hains", "union", "30-pdr Parrott", "The 30-pounder Parrott rifle of Battery G, 1st U.S., whose shot at the Stone Bridge opened the battle", "Lt. Peter C. Hains", "artillery", 30, dict(guns=1)),
+    ("ny13", "union", "13th N.Y.", "13th New York (Sherman's brigade)", "Col. Isaac F. Quinby", "infantry", 480, {}),  # ~
+    ("ny69", "union", "69th N.Y.", "69th New York Militia, the Irish regiment, third of Sherman's up Henry Hill", "Col. Michael Corcoran (wounded and captured)", "infantry", 950, {}),  # ~
+    ("ny79", "union", "79th N.Y.", "79th New York, the Highlanders, second of Sherman's up Henry Hill", "Col. James Cameron (killed)", "infantry", 760, {}),  # ~
+    ("wi2", "union", "2nd Wis.", "2nd Wisconsin, in grey, first of Sherman's regiments up Henry Hill", "Lt. Col. Henry W. Peck", "infantry", 610, {}),  # ~
+    ("ayres", "union", "Ayres", "Battery E, 3rd U.S. Artillery; it could not follow Sherman over the ford", "Capt. Romeyn B. Ayres", "artillery", 100, dict(guns=6)),
+    ("ma1", "union", "1st Mass.", "1st Massachusetts (Richardson's brigade), at Blackburn's Ford", "Col. Robert Cowdin", "infantry", 750, {}),  # ~
+    ("mi2", "union", "2nd Mich.", "2nd Michigan (Richardson's brigade)", "Maj. Adolphus W. Williams", "infantry", 750, {}),  # ~
+    ("mi3", "union", "3rd Mich.", "3rd Michigan (Richardson's brigade)", "Col. Daniel McConnell", "infantry", 750, {}),  # ~
+    ("ny12", "union", "12th N.Y.", "12th New York (Richardson's brigade)", "Col. Ezra L. Walrath", "infantry", 700, {}),  # ~
+    ("hunt", "union", "Hunt", "Battery M, 2nd U.S. Artillery, with Davies's brigade at Blackburn's Ford", "Maj. Henry J. Hunt", "artillery", 80, dict(guns=4)),
+    ("edwards", "union", "Edwards", "Two 20-pounder Parrotts of Battery G, 1st U.S., firing on Blackburn's Ford", "Lt. John Edwards", "artillery", 40, dict(guns=2)),
+    # Hunter's division
+    ("ri2", "union", "2nd R.I.", "2nd Rhode Island, at the head of the flank march and first into the fight on Matthews Hill", "Col. John S. Slocum (killed)", "infantry", 490, {}),  # ~
+    ("riB", "union", "R.I. Battery", "2nd Rhode Island Battery of James rifles, with Burnside", "Capt. William H. Reynolds", "artillery", 110, dict(guns=6)),
+    ("ny71", "union", "71st N.Y.", "71st New York Militia (Burnside's brigade), with two boat howitzers", "Col. Henry P. Martin", "infantry", 600, {}),  # ~
+    ("nh2", "union", "2nd N.H.", "2nd New Hampshire (Burnside's brigade)", "Col. Gilman Marston (wounded)", "infantry", 600, {}),  # ~
+    ("ri1", "union", "1st R.I.", "1st Rhode Island (Burnside's brigade)", "Maj. Joseph P. Balch", "infantry", 480, {}),  # ~
+    ("griffin", "union", "Griffin", "Battery D, 5th U.S. Artillery, taken on Henry Hill by the 33rd Virginia", "Capt. Charles Griffin", "artillery", 100, dict(guns=6)),
+    ("marines", "union", "Marines", "Battalion of U.S. Marines, recruits, supporting Griffin's guns", "Maj. John G. Reynolds", "infantry", 350, {}),
+    ("ny27", "union", "27th N.Y.", "27th New York (Porter's brigade)", "Col. Henry W. Slocum (wounded)", "infantry", 800, {}),  # ~
+    ("ny14", "union", "14th Brooklyn", "14th Brooklyn (14th New York Militia), in red trousers; it retook Ricketts's guns", "Col. Alfred M. Wood (wounded)", "infantry", 750, {}),  # ~
+    ("nysm8", "union", "8th N.Y.S.M.", "8th New York Militia (Porter's brigade)", "Col. George Lyons", "infantry", 700, {}),  # ~
+    ("sykes", "union", "Sykes's regulars", "Battalion of U.S. Regular Infantry, eight companies; the rear guard in the retreat", "Maj. George Sykes", "infantry", 450, {}),  # ~
+    ("palmer", "union", "Palmer's cavalry", "Seven companies of U.S. Regular Cavalry", "Maj. Innis N. Palmer", "cavalry", 400, {}),  # ~
+    # Heintzelman's division (the 4th Michigan was left at Fairfax Court House)
+    ("ma5", "union", "5th Mass.", "5th Massachusetts Militia (Franklin's brigade)", "Col. Samuel C. Lawrence (wounded)", "infantry", 750, {}),  # ~
+    ("ma11", "union", "11th Mass.", "11th Massachusetts (Franklin's brigade)", "Col. George Clark Jr.", "infantry", 800, {}),  # ~
+    ("mn1", "union", "1st Minn.", "1st Minnesota (Franklin's brigade), on the right of the guns", "Col. Willis A. Gorman", "infantry", 900, {}),  # ~
+    ("ricketts", "union", "Ricketts", "Battery I, 1st U.S. Artillery, six 10-pounder Parrotts by the Henry House", "Capt. James B. Ricketts (wounded and captured)", "artillery", 100, dict(guns=6)),
+    ("ny11", "union", "11th N.Y.", "11th New York, the Fire Zouaves, scattered by Stuart's charge", "Col. Noah L. Farnham (mortally wounded)", "infantry", 900, {}),  # ~
+    ("ny38", "union", "38th N.Y.", "38th New York (Willcox's brigade)", "Col. J. H. Hobart Ward", "infantry", 750, {}),  # ~
+    ("mi1", "union", "1st Mich.", "1st Michigan (Willcox's brigade), 475 into action", "Maj. Alonzo F. Bidwell", "infantry", 475, {}),
+    ("arnold", "union", "Arnold", "Battery D, 2nd U.S. Artillery; part of the rear guard", "Capt. Richard Arnold", "artillery", 80, dict(guns=4)),
+    ("me3", "union", "3rd Maine", "3rd Maine (Howard's brigade)", "Maj. Henry G. Staples", "infantry", 580, {}),  # ~
+    ("me4", "union", "4th Maine", "4th Maine (Howard's brigade)", "Col. Hiram G. Berry", "infantry", 600, {}),  # ~
+    ("me5", "union", "5th Maine", "5th Maine (Howard's brigade)", "Col. Mark H. Dunnell", "infantry", 570, {}),  # ~
+    ("vt2", "union", "2nd Vt.", "2nd Vermont (Howard's brigade)", "Col. Henry Whiting", "infantry", 580, {}),  # ~
+    # Miles's division, the reserve at Centreville and Blackburn's Ford
+    ("ny8", "union", "8th N.Y.", "8th New York (Blenker's brigade), the rear guard on the turnpike", "Lt. Col. Julius Stahel", "infantry", 700, {}),  # ~
+    ("ny29", "union", "29th N.Y.", "29th New York (Blenker's brigade)", "Col. Adolph von Steinwehr", "infantry", 700, {}),  # ~
+    ("ny39", "union", "39th N.Y.", "39th New York, the Garibaldi Guard (Blenker's brigade)", "Col. Frederick G. D'Utassy", "infantry", 800, {}),  # ~
+    ("pa27", "union", "27th Pa.", "27th Pennsylvania (Blenker's brigade)", "Col. Max Einstein", "infantry", 700, {}),  # ~
+    ("tidball", "union", "Tidball", "Battery A, 2nd U.S. Artillery, at Centreville", "Capt. John C. Tidball", "artillery", 100, dict(guns=6)),
+    ("brookwood", "union", "Brookwood", "Brookwood's New York battery, at Centreville", "Capt. Charles Brookwood", "artillery", 100, dict(guns=6)),
+    ("ny16", "union", "16th N.Y.", "16th New York (Davies's brigade)", "Lt. Col. Samuel Marsh", "infantry", 750, {}),  # ~
+    ("ny18", "union", "18th N.Y.", "18th New York (Davies's brigade)", "Col. William A. Jackson", "infantry", 750, {}),  # ~
+    ("ny31", "union", "31st N.Y.", "31st New York (Davies's brigade)", "Col. Calvin E. Pratt", "infantry", 750, {}),  # ~
+    ("ny32", "union", "32nd N.Y.", "32nd New York (Davies's brigade)", "Col. Roderick N. Matheson", "infantry", 750, {}),  # ~
+    ("greene", "union", "Greene", "Battery G, 2nd U.S. Artillery, with Davies", "Lt. Oliver D. Greene", "artillery", 80, dict(guns=4)),
+    # Confederate: Army of the Potomac (Beauregard)
+    ("sc4", "confederate", "4th S.C.", "Six companies of the 4th South Carolina, Evans's line on Matthews Hill", "Col. J. B. E. Sloan", "infantry", 360, {}),
+    ("sc4b", "confederate", "4th S.C. (bridge)", "Four companies of the 4th South Carolina left to hold the Stone Bridge", "", "infantry", 240, {}),
+    ("wheat", "confederate", "Wheat's Tigers", "1st Louisiana Special Battalion, Wheat's Tigers, five companies (Evans)", "Maj. Chatham R. Wheat (wounded)", "infantry", 450, {}),
+    ("davidson", "confederate", "Davidson", "Section of the Lynchburg Artillery, two 6-pounders with Evans", "Lt. George S. Davidson", "artillery", 40, dict(guns=2)),
+    ("terry", "confederate", "Terry's troopers", "Troops A and I, 30th Virginia Cavalry, with Evans", "Capt. William R. Terry", "cavalry", 100, {}),  # ~
+    ("hampton", "confederate", "Hampton's Legion", "Hampton's Legion, six companies of infantry, off the train that morning", "Col. Wade Hampton (wounded)", "infantry", 600, {}),
+    ("va18", "confederate", "18th Va.", "18th Virginia (Cocke's brigade), which took Ricketts's guns the last time", "Col. Robert E. Withers", "infantry", 650, {}),  # ~
+    ("va19", "confederate", "19th Va.", "19th Virginia (Cocke's brigade), at Lewis Ford", "Lt. Col. John B. Strange", "infantry", 650, {}),  # ~
+    ("va28", "confederate", "28th Va.", "28th Virginia (Cocke's brigade)", "Col. Robert T. Preston", "infantry", 600, {}),  # ~
+    ("va8", "confederate", "8th Va.", "Seven companies of the 8th Virginia (Cocke's brigade)", "Col. Eppa Hunton", "infantry", 450, {}),  # ~
+    ("va49", "confederate", "49th Va.", "Three companies of the 49th Virginia, on Jackson's left", "Col. William Smith", "infantry", 210, {}),  # ~
+    ("rogers", "confederate", "Rogers", "Loudoun Artillery, four 6-pounders, guarding the lower fords", "Capt. Arthur L. Rogers", "artillery", 80, dict(guns=4)),
+    ("latham", "confederate", "Latham", "Section of the Lynchburg Artillery at Lewis Ford", "Capt. H. Grey Latham", "artillery", 40, dict(guns=2)),
+    ("sc2", "confederate", "2nd S.C.", "2nd South Carolina (Bonham's brigade), sent to the left in the afternoon", "Col. Joseph B. Kershaw", "infantry", 750, {}),
+    ("sc8", "confederate", "8th S.C.", "8th South Carolina (Bonham's brigade), sent to the left with Kershaw", "Col. E. B. C. Cash", "infantry", 450, {}),  # ~
+    ("sc3", "confederate", "3rd S.C.", "3rd South Carolina (Bonham's brigade), at Mitchell's Ford", "Col. James H. Williams", "infantry", 650, {}),  # ~
+    ("sc7", "confederate", "7th S.C.", "7th South Carolina (Bonham's brigade), at Mitchell's Ford", "Col. Thomas G. Bacon", "infantry", 600, {}),  # ~
+    ("nc11", "confederate", "11th N.C.", "11th North Carolina (Bonham's brigade), at Mitchell's Ford", "Col. William W. Kirkland", "infantry", 650, {}),  # ~
+    ("la8", "confederate", "8th La.", "8th Louisiana, six companies, behind Mitchell's Ford", "Col. Henry B. Kelly", "infantry", 480, {}),
+    ("kemper", "confederate", "Kemper", "Alexandria Light Artillery, four 6-pounders; it shelled the Cub Run bridge in the rout", "Capt. Delaware Kemper", "artillery", 80, dict(guns=4)),
+    ("shields", "confederate", "Shields", "1st Company, Richmond Howitzers, at Mitchell's Ford", "Capt. John C. Shields", "artillery", 80, dict(guns=4)),
+    ("radford", "confederate", "Radford's cavalry", "30th Virginia Cavalry and attached troops, which charged on the turnpike near Cub Run", "Col. R. C. W. Radford", "cavalry", 400, {}),  # ~
+    ("nc5", "confederate", "5th N.C.", "5th North Carolina (Longstreet's brigade), at Blackburn's Ford", "Lt. Col. Joseph P. Jones", "infantry", 650, {}),  # ~
+    ("va1", "confederate", "1st Va.", "1st Virginia (Longstreet's brigade)", "Maj. Frederick G. Skinner", "infantry", 450, {}),  # ~
+    ("va11", "confederate", "11th Va.", "11th Virginia (Longstreet's brigade)", "Col. Samuel Garland Jr.", "infantry", 600, {}),  # ~
+    ("va17", "confederate", "17th Va.", "17th Virginia (Longstreet's brigade)", "Col. Montgomery D. Corse", "infantry", 600, {}),  # ~
+    ("va24", "confederate", "24th Va.", "Six companies of the 24th Virginia, Longstreet's reserve that day", "Lt. Col. Peter Hairston Jr.", "infantry", 350, {}),  # ~
+    ("garnett", "confederate", "Garnett", "Section of the Washington Artillery with Longstreet", "Lt. John J. Garnett", "artillery", 40, dict(guns=2)),
+    ("ms17", "confederate", "17th Miss.", "17th Mississippi (D. R. Jones's brigade)", "Col. Winfield S. Featherston", "infantry", 630, {}),
+    ("ms18", "confederate", "18th Miss.", "18th Mississippi (D. R. Jones's brigade)", "Col. Erasmus R. Burt", "infantry", 750, {}),  # ~
+    ("sc5", "confederate", "5th S.C.", "5th South Carolina (D. R. Jones's brigade), which held the far slope three-quarters of an hour", "Col. Micah Jenkins", "infantry", 740, {}),  # ~
+    ("waJones", "confederate", "Washington Arty", "Two guns of the Washington Artillery's 2nd Company with Jones", "Capt. Merritt B. Miller", "artillery", 40, dict(guns=2)),
+    ("va7", "confederate", "7th Va.", "7th Virginia (Early's brigade), which struck Howard's flank on Chinn Ridge", "Col. James L. Kemper", "infantry", 390, {}),
+    ("la7", "confederate", "7th La.", "7th Louisiana (Early's brigade)", "Col. Harry T. Hays", "infantry", 550, {}),  # ~
+    ("ms13", "confederate", "13th Miss.", "13th Mississippi (Early's brigade)", "Col. William Barksdale", "infantry", 550, {}),  # ~
+    ("walton", "confederate", "Washington Arty", "Five guns of the Washington Artillery, sent with Jackson; in his line on Henry Hill", "Maj. John B. Walton", "artillery", 130, dict(guns=5)),
+    # Army of the Shenandoah (Johnston)
+    ("va2", "confederate", "2nd Va.", "2nd Virginia (Jackson's brigade)", "Col. James W. Allen", "infantry", 520, {}),  # ~
+    ("va4", "confederate", "4th Va.", "4th Virginia (Jackson's brigade), which retook the guns", "Col. James F. Preston", "infantry", 600, {}),  # ~
+    ("va5", "confederate", "5th Va.", "5th Virginia (Jackson's brigade), on his right", "Col. Kenton Harper", "infantry", 640, {}),  # ~
+    ("va27", "confederate", "27th Va.", "27th Virginia, seven companies (Jackson's brigade)", "Lt. Col. John Echols", "infantry", 400, {}),  # ~
+    ("va33", "confederate", "33rd Va.", "33rd Virginia, eight companies, on Jackson's left; it took Griffin's guns", "Col. Arthur C. Cummings", "infantry", 450, {}),  # ~
+    ("rockbridge", "confederate", "Rockbridge Arty", "Rockbridge Artillery in Jackson's line of guns", "Lt. John P. Brockenbrough", "artillery", 100, dict(guns=4)),
+    ("stanard", "confederate", "Stanard", "Thomas Artillery in Jackson's line of guns", "Capt. Philip B. Stanard", "artillery", 100, dict(guns=4)),
+    ("ga7", "confederate", "7th Ga.", "7th Georgia (Bartow's brigade)", "Col. Lucius J. Gartrell", "infantry", 700, {}),
+    ("ga8", "confederate", "8th Ga.", "8th Georgia (Bartow's brigade), cut up in the thicket on Matthews Hill", "Lt. Col. William M. Gardner (wounded)", "infantry", 700, {}),
+    ("pelham", "confederate", "Pelham", "Wise Artillery with Bartow", "Lt. John Pelham", "artillery", 90, dict(guns=4)),
+    ("al4", "confederate", "4th Ala.", "4th Alabama (Bee's brigade)", "Col. Egbert Jones (mortally wounded)", "infantry", 750, {}),
+    ("ms2", "confederate", "2nd Miss.", "2nd Mississippi (Bee's brigade)", "Col. William C. Falkner", "infantry", 530, {}),
+    ("ms11", "confederate", "11th Miss.", "Two companies of the 11th Mississippi (Bee's brigade)", "Lt. Col. Philip F. Liddell", "infantry", 150, {}),
+    ("nc6", "confederate", "6th N.C.", "6th North Carolina, up from the train just before three; Fisher killed by the guns", "Col. Charles F. Fisher (killed)", "infantry", 600, {}),  # ~
+    ("imboden", "confederate", "Imboden", "Staunton Artillery on Henry Hill, firing on Matthews Hill", "Capt. John D. Imboden", "artillery", 100, dict(guns=4)),
+    ("md1", "confederate", "1st Md.", "1st Maryland Battalion (Kirby Smith's brigade)", "Lt. Col. George H. Steuart", "infantry", 500, {}),  # ~
+    ("tn3", "confederate", "3rd Tenn.", "3rd Tennessee (Kirby Smith's brigade)", "Col. John C. Vaughn", "infantry", 650, {}),  # ~
+    ("va10", "confederate", "10th Va.", "10th Virginia (Kirby Smith's brigade)", "Col. Simeon B. Gibbons", "infantry", 550, {}),  # ~
+    ("beckham", "confederate", "Beckham", "Culpeper Artillery with Kirby Smith's brigade", "Lt. Robert F. Beckham", "artillery", 90, dict(guns=4)),
+    ("stuart", "confederate", "1st Va. Cavalry", "1st Virginia Cavalry, which charged the Fire Zouaves", "Col. J. E. B. Stuart", "cavalry", 300, {}),
+]
+
+# ---- movement ----
+def sec(t): h, m, *s = map(int, t.split(':')); return h * 3600 + m * 60 + (s[0] if s else 0)
+def fmt(s): s = int(round(s)); return f"{s // 3600:02d}:{s % 3600 // 60:02d}" + (f":{s % 60:02d}" if s % 60 else "")
+def plus(t, mins): return fmt(sec(t) + mins * 60)
+def K(t, p, **kw): return dict(t=t, x=round(p[0]), y=round(p[1]), **kw)
+def heading(a, b): return round(math.degrees(math.atan2(b[0] - a[0], b[1] - a[1])) % 360)
+def rel(place, dx, dy): return (P[place][0] + dx, P[place][1] + dy)
+def length(pts): return sum(math.dist(a, b) for a, b in zip(pts, pts[1:]))
+def march(t0, t1, pts, state="column", **kw):  # keys along a path, times spread by distance; heading follows the path
+    pts = [p for i, p in enumerate(pts) if i == 0 or math.dist(p, pts[i - 1]) > 5]
+    if len(pts) < 2: return [K(t0, pts[0], state=state, **kw)]
+    d = [0]
+    for a, b in zip(pts, pts[1:]): d.append(d[-1] + math.dist(a, b))
+    out = []
+    for i, p in enumerate(pts):
+        h = heading(p, pts[i + 1]) if i + 1 < len(pts) else out[-1]["h"]
+        out.append(K(fmt(sec(t0) + (sec(t1) - sec(t0)) * d[i] / d[-1]), p, h=h, **(dict(state=state, **kw) if i == 0 else {})))
+    return out
+def move(t0, pts, kmh, state="column", **kw): return march(t0, fmt(sec(t0) + length(pts) / (kmh / 3.6)), pts, state, **kw)  # at a pace, not to a time
+def go(t0, t1, pts, h, state="line", moving="column", **kw): return march(t0, t1, pts, moving)[:-1] + [K(t1, pts[-1], h=h, state=state, **kw)]
+def along(line, a, b):  # the stretch of a road between the points on it nearest a and b
+    def proj(p):
+        best = None
+        for i, (u, v) in enumerate(zip(line, line[1:])):
+            dx, dy = v[0] - u[0], v[1] - u[1]; t = max(0, min(1, ((p[0] - u[0]) * dx + (p[1] - u[1]) * dy) / (dx * dx + dy * dy or 1)))
+            q = (u[0] + t * dx, u[1] + t * dy)
+            if best is None or math.dist(p, q) < best[0]: best = (math.dist(p, q), i + t, q)
+        return best[1], best[2]
+    (sa, qa), (sb, qb) = proj(a), proj(b)
+    mid = [line[i] for i in range(math.floor(min(sa, sb)) + 1, math.ceil(max(sa, sb)))]
+    return [qa] + (mid if sa <= sb else mid[::-1]) + [qb]
+PIKE, SUD, FLANK = L['turnpike'], L['sudley_rd'], L['flank_rd']
+def pike(a, b): return along(PIKE, a, b)
+def sudley(a, b): return along(SUD, a, b)
+KEYS = {}
+def keys(id, ks): KEYS[id] = KEYS.get(id, []) + ks
+# The way home: up the Sudley road, back over the ford and through the woods to the turnpike, then to Centreville.
+def by_sudley(p, camp): return [p] + sudley(p, P['sudley_church']) + FLANK[::-1][1:] + pike(P['flank_turn'], P[camp]) + [P[camp]]
+def by_farm_ford(p, camp): return [p, rel('pittsylvania', 0, -150), L['carter_rd'][4], P['farm_ford']] + L['farm_ford_lane'][2:] + pike(L['farm_ford_lane'][-1], P[camp]) + [P[camp]]
+def home(t0, path, n_end, kmh=4.5, state="rout"):  # a broken regiment going back, its missing men lost along the road
+    ks = move(t0, path, kmh, state)
+    return ks[:-1] + [K(ks[-1]["t"], path[-1], state="line", strength=n_end)]
+
+# ---- Union: the march from Centreville ----
+# Tyler down the turnpike from 2:30 (Schenck, Sherman, Keyes), to the halt before the Stone Bridge about six.
+TYLER_TO_BRIDGE = [P['tyler_camp']] + pike(P['tyler_camp'], (-450, 1221))
+def tyler(shift, spot, h, state="line"):
+    path = TYLER_TO_BRIDGE[:-1] + [spot]
+    return march(plus("02:30", shift), plus("05:40", shift), path) + [K(plus("05:45", shift), spot, h=h, state=state)]
+# Hunter and Heintzelman behind Tyler as far as the blacksmith's shop past Cub Run, then by the woods road to Sudley.
+# The head turned off about 5:30 and reached Sudley Springs at 9:30; each regiment follows its leader by `shift` minutes.
+def flank(camp, shift):
+    a = [P[camp]] + pike(P[camp], P['flank_turn'])
+    return march(plus("02:30", shift), plus("05:30", shift), a) + march(plus("05:30", shift), plus("09:30", shift), FLANK)[1:]
+def down_sudley(t0, t1, to, h, state="line", **kw):  # from Sudley Church down the road, then off it to a spot
+    return go(t0, t1, sudley(P['sudley_church'], to) + [to], h, state, **kw)
+
+# ---- Union: Tyler at the Stone Bridge, and Keyes and Sherman over the Farm Ford ----
+# Hains's 30-pounder fired the first shot at the bridge, 5:15 by Wilshin, 5:30 by the Park Service.
+keys("hains", march("02:30", "05:05", TYLER_TO_BRIDGE) + [K("05:10", (-450, 1221), h=255, state="line"), K("05:15", (-450, 1221), state="firing", fire=0.4),
+                  K("06:30", (-450, 1221), state="line"), K("12:00", (-450, 1221), state="firing", fire=0.3), K("12:40", (-450, 1221), state="line"), K("17:00", (-450, 1221))])
+for id, shift, spot in [("nysm2", 0, (-500, 1000)), ("oh1", 6, (-300, 820)), ("oh2", 12, (-120, 650)), ("carlisle", 15, (-380, 1120))]:
+    keys(id, tyler(shift, spot, 262))
+keys("carlisle", [K("06:00", (-380, 1120), state="firing", fire=0.3), K("06:40", (-380, 1120), state="line"), K("17:00", (-380, 1120))])
+for id, shift, spot in [("ny69", 20, (-300, 1880)), ("ny13", 24, (-380, 1720)), ("ny79", 28, (-480, 1560)), ("wi2", 32, (-560, 1400)), ("ayres", 36, (-600, 1300))]:
+    keys(id, tyler(shift, spot, 265))
+keys("ayres", [K("10:15", (-600, 1300), state="firing", fire=0.3), K("10:40", (-600, 1300), state="line"), K("17:00", (-600, 1300))])
+for id, shift, spot in [("ct1", 44, (300, 1350)), ("ct2", 48, (350, 1550)), ("ct3", 52, (400, 1750)), ("me2", 56, (450, 1950))]:
+    keys(id, tyler(shift, spot, 265))
+# Sherman's order to cross came about noon (his report; Keyes's report puts his own crossing at 9:15 and the advance at 10).
+CROSSING = [L['farm_ford_lane'][3], L['farm_ford_lane'][2], P['farm_ford'], L['carter_rd'][4]]
+REAR_OF_PORTER = (-3700, 1750)
+for n, id in enumerate(["ny69", "ny79", "wi2", "ny13"]):
+    t0 = plus("12:00", 5 * n); spot = KEYS[id][-1]
+    keys(id, march(t0, plus("13:00", 5 * n), [(spot["x"], spot["y"])] + CROSSING + [rel('pittsylvania', -300, 0), (REAR_OF_PORTER[0] + 120 * n, REAR_OF_PORTER[1] - 60 * n)]))
+    keys(id, [K(plus("13:05", 5 * n), (REAR_OF_PORTER[0] + 120 * n, REAR_OF_PORTER[1] - 60 * n), h=170, state="line")])
+for n, id in enumerate(["ct1", "ct2", "ct3", "me2"]):
+    t0 = plus("12:20", 5 * n); spot = KEYS[id][-1]
+    keys(id, go(t0, plus("13:15", 5 * n), [(spot["x"], spot["y"])] + CROSSING + [rel('pittsylvania', 100 + 150 * n, -350)], 190))
+# Keyes's charge up the Robinson hill at about two, then east under the brow of the hills to half a mile below the bridge.
+for id, n_front, lost in [("me2", (-2560, 600), 37), ("ct3", (-2380, 640), 17)]:
+    k0 = KEYS[id][-1]; s = dict(me2=640, ct3=600)[id]
+    keys(id, [K("13:55", (k0["x"], k0["y"]), h=195, state="charge"), K("14:05", n_front, state="firing"), K("14:12", n_front, state="retreat", h=60, strength=s - lost)])
+for id, d in [("me2", 0), ("ct3", 120), ("ct1", 240), ("ct2", 360)]:
+    keys(id, [K("14:30", (-2050 + d, 760 + d / 3), h=120, state="column"), K("15:00", (-1750 + d / 2, 560 + d / 3), h=200, state="line"),
+              K("15:30", (-1850 + d / 2, 820 + d / 3), h=200), K("16:05", (-1850 + d / 2, 820 + d / 3), h=0)])
+CAMP_T = 'tyler_camp'
+for id, d, n_end in [("me2", 0, 640 - 155), ("ct3", 120, 600 - 35), ("ct1", 240, 575 - 17), ("ct2", 360, 625 - 16)]:
+    keys(id, home("16:15", by_farm_ford((-1850 + d / 2, 820 + d / 3), CAMP_T), n_end, 4.5, "retreat"))
+# Sherman's regiments up Henry Hill one at a time from the cut of the Sudley road, about 3; disorder began at 3:30.
+def road_cut(y): return (-3196 + (404 - y) * 0.348, y)  # the Sudley road between the turnpike and the Henry House
+keys("ny13", go("13:40", "14:40", [REAR_OF_PORTER, (-3300, 800), (-2750, 400)], 150, "firing") + [K("15:35", (-2750, 400), state="line", strength=480 - 30), K("15:50", (-3300, 700), h=300, state="retreat")])
+for id, cut, front, t_up, s0, lost1, lost2 in [("wi2", 170, (-2840, 110), "14:50", 610, 50, 39), ("ny79", 260, (-2790, 50), "15:12", 760, 83, 0), ("ny69", 330, (-2760, 0), "15:22", 950, 97, 0)]:
+    c = road_cut(cut)
+    ks = go("13:50", plus(t_up, -12), [(KEYS[id][-1]["x"], KEYS[id][-1]["y"]), (-3300, 800), c], 160) + [K(plus(t_up, -2), c, h=85, state="line"), K(t_up, c, state="charge"),
+         K(plus(t_up, 4), front, state="firing"), K(plus(t_up, 10), front, state="retreat", strength=s0 - lost1), K(plus(t_up, 14), c, h=85, state="line")]
+    if id == "wi2": ks += [K("15:06", c, state="charge"), K("15:09", front, state="firing"), K("15:13", front, state="retreat", strength=s0 - lost1 - lost2), K("15:17", c, h=85, state="line")]
+    keys(id, ks + [K("15:45", (-3300, 700), h=300, state="retreat")])
+for id, n_end in [("ny13", 480 - 58), ("ny69", 950 - 192), ("ny79", 760 - 198), ("wi2", 610 - 152)]:
+    keys(id, home("16:00", by_farm_ford((-3300, 700), CAMP_T), n_end, 4.5))
+# Schenck's brigade and the guns hold the east bank until the retreat; Carlisle's guns and the 30-pounder are lost at Cub Run.
+for id, d, n_end in [("nysm2", 0, 550 - 35), ("oh1", 80, 650 - 12), ("oh2", 160, 650 - 11), ("ayres", 240, 100), ("hains", 300, 25), ("carlisle", 340, 80)]:
+    k0 = KEYS[id][-1]; path = [(k0["x"], k0["y"])] + pike((k0["x"], k0["y"]), P[CAMP_T]) + [P[CAMP_T]]
+    ks = move(plus("17:10", d / 40), path, 4, "retreat")
+    if id in ("hains", "carlisle"):  # abandoned when a wagon upset on the Cub Run bridge
+        t = next(k["t"] for k in ks if k["x"] > 2100)
+        ks = [k for k in ks if sec(k["t"]) < sec(t)] + [K(t, (2250, 2010), state="surrender", strength=n_end), K(plus(t, 20), (2250, 2010), state="hidden")]
+    else: ks[-1].update(state="line", strength=n_end)
+    keys(id, ks)
+
+# ---- Union: the flank march, Matthews Hill and Henry Hill ----
+ORDER = [("ri2", 0), ("riB", 4), ("ny71", 8), ("nh2", 12), ("ri1", 16), ("griffin", 22), ("marines", 26), ("ny27", 30), ("ny14", 34), ("nysm8", 38),
+         ("sykes", 42), ("palmer", 46), ("ma5", 54), ("ma11", 58), ("mn1", 62), ("ricketts", 66), ("ny11", 72), ("ny38", 76), ("mi1", 80), ("arnold", 84)]
+for id, shift in ORDER: keys(id, flank('hunter_camp' if shift < 50 else 'heintzelman_camp', shift))
+# Burnside's men halted at the ford to drink, then came down the road onto Matthews Hill and found Evans.
+MH = [("ri2", (-3700, 1550), 180, "10:10"), ("riB", (-3560, 1640), 185, "10:15"), ("ny71", (-3950, 1560), 170, "10:30"), ("nh2", (-3420, 1600), 185, "10:35"),
+      ("ri1", (-3230, 1560), 190, "10:40"), ("griffin", (-4050, 1680), 150, "10:45"), ("marines", (-4120, 1800), 150, "10:50"), ("ny27", (-4200, 1450), 160, "10:55"),
+      ("ny14", (-4350, 1350), 150, "11:00"), ("nysm8", (-4450, 1250), 140, "11:05"), ("sykes", (-3300, 1720), 180, "11:10"), ("palmer", (-4150, 1950), 170, "11:15")]
+for id, spot, h, t1 in MH:
+    t0 = plus(KEYS[id][-1]["t"], 12 if id == "ri2" else 3)
+    keys(id, down_sudley(t0, t1, spot, h))
+for id, s, lost in [("ri2", 490, 60), ("ny71", 600, 30), ("nh2", 600, 35), ("ri1", 480, 30)]:
+    spot = (KEYS[id][-1]["x"], KEYS[id][-1]["y"])
+    keys(id, [K(plus(KEYS[id][-1]["t"], 3), spot, state="firing"), K("11:40", spot, state="line", strength=s - lost)])
+keys("riB", [K("10:20", (-3560, 1640), state="firing", fire=0.6), K("11:45", (-3560, 1640), state="line"), K("12:00", (-3480, 1150), h=150), K("12:10", (-3480, 1150), state="firing", fire=0.3),
+             K("15:45", (-3480, 1150), state="line")])
+keys("griffin", [K("10:50", (-4050, 1680), state="firing", fire=0.6), K("11:45", (-4050, 1680), state="line")] + go("12:00", "12:20", [(-4050, 1680), (-3880, 950)], 110)
+     + [K("12:25", (-3880, 950), state="firing", fire=0.4), K("13:50", (-3880, 950), state="line")])
+# Burnside's brigade, its ammunition spent, went back to the woods by the road; it was not put in again.
+for id, spot in [("ri2", (-3750, 2000)), ("ny71", (-3950, 2080)), ("nh2", (-3560, 2050)), ("ri1", (-3400, 2000))]:
+    keys(id, go("11:50", "12:10", [(KEYS[id][-1]["x"], KEYS[id][-1]["y"]), spot], 180))
+# Porter's men followed the Confederates down to Young's Branch and the turnpike; the 27th went for the Stone House.
+keys("ny27", [K("11:12", (-4200, 1450), state="line"), K("11:15", (-4200, 1450), state="charge"), K("11:25", (-3500, 760), state="firing"), K("11:50", (-3500, 760), state="line", strength=800 - 70),
+              K("12:10", (-3620, 900), h=150)])
+keys("ny14", [K("11:40", (-4350, 1350), state="line")] + go("11:45", "12:25", [(-4350, 1350), (-3550, 620), (-3400, 560)], 110))
+keys("nysm8", [K("11:45", (-4450, 1250), state="line")] + go("11:50", "12:30", [(-4450, 1250), (-3700, 650), (-3600, 480)], 110))
+keys("sykes", [K("11:30", (-3300, 1720), state="line"), K("11:35", (-3300, 1720), state="firing"), K("11:50", (-3400, 1050), state="firing"), K("12:10", (-3350, 820), h=150, state="line")])
+keys("palmer", [K("15:30", (-4150, 1950), h=170)])
+keys("marines", go("12:00", "12:25", [(-4120, 1800), (-3950, 900)], 110))
+# Heintzelman's division came up about noon and formed west of the road; Ricketts's guns opened from Dogan Ridge.
+HZ = [("ma5", (-4150, 1150), 130), ("ma11", (-4250, 950), 120), ("mn1", (-4300, 750), 110), ("ricketts", (-4000, 1000), 110), ("ny11", (-3850, 780), 120),
+      ("ny38", (-3950, 620), 110), ("mi1", (-4100, 520), 100), ("arnold", (-3800, 1150), 120)]
+for id, spot, h in HZ:
+    t0 = plus(KEYS[id][-1]["t"], 3)
+    keys(id, go(t0, plus(t0, 50), sudley(P['sudley_church'], (-3946, 1971)) + [(-4300, 1500), spot], h))  # off the road before Evans's line
+keys("ricketts", [K("12:20", (-4000, 1000), state="firing", fire=0.5), K("13:50", (-4000, 1000), state="line")])
+keys("arnold", [K("12:20", (-3800, 1150), state="firing", fire=0.4), K("13:50", (-3800, 1150), state="line")] + go("13:55", "14:15", [(-3800, 1150), (-3550, 700)], 110)
+     + [K("14:20", (-3550, 700), state="firing", fire=0.4), K("15:45", (-3550, 700), state="line")])
+# About two Ricketts and Griffin took their eleven guns onto Henry Hill south of the house, 300 yards from Jackson's line.
+for id, spot, h in [("ricketts", P['ricketts_guns'], 95), ("griffin", P['griffin_guns'], 85)]:
+    k0 = KEYS[id][-1]
+    keys(id, go("13:55", "14:12", [(k0["x"], k0["y"])] + sudley((k0["x"], k0["y"]), spot) + [spot], h) + [K("14:15", spot, state="firing", fire=0.8), K("14:58", spot, state="firing"),
+         K("15:00", spot, state="surrender", strength=73), K("15:40", spot, state="hidden")])
+HH = [("marines", (-2760, -430), 85, "14:15"), ("ny11", (-2920, -330), 90, "14:15"), ("ny14", (-2970, -200), 90, "14:15"), ("mn1", (-3050, -520), 80, "14:20"),
+      ("ny38", (-3100, 50), 90, "14:25"), ("ma5", (-3280, 250), 90, "14:30"), ("ma11", (-3250, 60), 90, "14:30"), ("mi1", (-3150, -650), 80, "14:30")]
+for id, spot, h, t1 in HH:
+    k0 = KEYS[id][-1]; t0 = max(plus(t1, -25), k0["t"], key=sec)
+    keys(id, go(t0, t1, [(k0["x"], k0["y"]), spot], h))
+# Stuart's troopers rode into the Fire Zouaves' flank on the road; then the 33rd Virginia, taken for friends, shot down Griffin's
+# gunners at 70 yards. The guns changed hands three times as the Union regiments went up one after another.
+keys("ny11", [K("14:30", (-2920, -330), state="line"), K("14:33", (-3000, -250), state="rout", strength=860), K("14:40", (-3150, -80), strength=840), K("14:50", (-3120, -60), h=90, state="line"),
+              K("15:05", (-3120, -60), state="charge"), K("15:12", (-2850, -200), state="firing"), K("15:25", (-3130, -50), state="retreat", strength=775), K("15:35", (-3130, -50), h=90, state="line")])
+keys("marines", [K("14:55", (-2760, -430), state="firing"), K("15:00", (-2760, -430), state="rout", strength=330), K("15:10", (-3100, -250), strength=322), K("15:20", (-3150, -250), h=80, state="line")])
+keys("ny14", [K("15:00", (-2970, -200), state="charge"), K("15:06", (-2720, -220), state="firing"), K("15:16", (-3050, -120), state="retreat", strength=673), K("15:25", (-3050, -120), h=90, state="line")])
+keys("mn1", [K("14:58", (-2930, -480), state="firing"), K("15:20", (-3200, -450), state="retreat", strength=780), K("15:30", (-3200, -450), h=90, state="line")])
+keys("ny38", [K("15:05", (-3100, 50), state="charge"), K("15:10", (-2820, -120), state="firing"), K("15:28", (-3110, 60), state="retreat", strength=680), K("15:35", (-3110, 60), h=90, state="line")])
+keys("ma5", [K("15:08", (-3280, 250), state="charge"), K("15:13", (-2900, 140), state="firing"), K("15:30", (-3300, 260), state="retreat", strength=719), K("15:38", (-3300, 260), h=90, state="line")])
+keys("ma11", [K("15:10", (-3250, 60), state="charge"), K("15:15", (-2870, -40), state="firing"), K("15:32", (-3270, 70), state="retreat", strength=752), K("15:40", (-3270, 70), h=90, state="line")])
+keys("mi1", [K("15:15", (-2960, -720), state="firing"), K("15:45", (-3200, -620), state="retreat", strength=400)])
+keys("sykes", [K("14:30", (-3350, 820), state="line")] + go("14:35", "14:55", [(-3350, 820), (-3150, 420)], 100) + [K("15:00", (-3150, 420), state="firing"), K("15:40", (-3150, 420), state="line", strength=395)])
+# Howard's brigade, held back at the turn of the road as a reserve, came up the whole flank march late and went onto Chinn Ridge.
+for id, shift in [("me3", 90), ("me4", 94), ("me5", 98), ("vt2", 102)]:
+    a = [P['heintzelman_camp']] + pike(P['heintzelman_camp'], P['flank_turn'])
+    keys(id, march(plus("02:30", shift), plus("05:30", shift), a) + [K(plus("05:35", shift), P['flank_turn'], state="line", h=270)])
+    keys(id, march(plus("12:00", shift - 90), plus("14:30", shift - 90), FLANK))
+HOWARD = [("me4", (-3620, -430)), ("vt2", (-3450, -560)), ("me3", (-3720, -290)), ("me5", (-3540, -410))]
+for id, spot in HOWARD:
+    t0 = plus(KEYS[id][-1]["t"], 2)
+    keys(id, go(t0, "15:50", sudley(P['sudley_church'], (-3747, 1052)) + [(-3900, 300), spot], 140) + [K("16:00", spot, state="firing")])
+# The Union line breaks: from about 3:30 the men went back of their own accord, most by the Sudley road and the woods.
+HOWARD_LOSS = dict(me3=(580, 25, 25), me4=(600, 35, 35), me5=(570, 25, 25), vt2=(580, 30, 25))
+for id, spot in HOWARD:
+    s, kw, m = HOWARD_LOSS[id]
+    keys(id, [K("16:28", spot, state="firing", strength=s - kw), K("16:32", spot, state="rout")] + home("16:33", by_sudley(spot, 'heintzelman_camp'), s - kw - m))
+HC = 'heintzelman_camp'
+for id, t0, n_end, state in [("ny11", "15:50", 723, "rout"), ("marines", "15:50", 306, "rout"), ("ny14", "15:45", 608, "rout"), ("mn1", "15:50", 720, "rout"), ("ny38", "15:50", 622, "rout"),
+                             ("ma5", "15:52", 691, "rout"), ("ma11", "15:55", 712, "rout"), ("mi1", "15:55", 358, "rout"), ("ny27", "16:00", 670, "rout"), ("nysm8", "16:00", 662, "rout"),
+                             ("ri2", "16:15", 405, "retreat"), ("ny71", "16:15", 540, "retreat"), ("nh2", "16:15", 530, "retreat"), ("ri1", "16:15", 430, "retreat"), ("riB", "16:00", 105, "retreat")]:
+    k0 = KEYS[id][-1]
+    keys(id, home(t0, by_sudley((k0["x"], k0["y"]), HC if id in ("ny11", "ny14", "mn1", "ny38", "ma5", "ma11", "mi1", "marines") else 'hunter_camp'), n_end, 4.5, state))
+# The rear guard: Sykes's regulars, Palmer's cavalry and Arnold's guns on Buck Hill and Matthews Hill until about five.
+keys("sykes", go("15:55", "16:20", [(-3150, 420), (-3450, 1000)], 170) + [K("16:30", (-3450, 1000), state="firing"), K("17:05", (-3450, 1000), state="line", strength=367)]
+     + home("17:10", by_sudley((-3450, 1000), 'hunter_camp'), 367, 4, "retreat"))
+keys("palmer", go("16:00", "16:20", [(-4150, 1950), (-3700, 1350)], 170) + home("17:15", by_sudley((-3700, 1350), 'hunter_camp'), 391, 5, "retreat"))
+keys("arnold", go("15:55", "16:15", [(-3550, 700), (-3550, 1200)], 170) + [K("16:25", (-3550, 1200), state="firing", fire=0.5), K("17:05", (-3550, 1200), state="line")]
+     + home("17:10", by_sudley((-3550, 1200), HC), 70, 4.5, "retreat"))
+
+# ---- Union: Richardson and Davies at Blackburn's Ford, Blenker at Centreville ----
+for id, spot in [("ma1", (3250, -300)), ("ny12", (3400, -380)), ("mi2", (3550, -450)), ("mi3", (3300, -150))]:
+    keys(id, [K("02:30", spot, h=200, state="line"), K("21:00", spot)])
+keys("edwards", [K("02:30", (3820, -150), h=205, state="line"), K("05:15", (3820, -150), state="firing", fire=0.5), K("10:00", (3820, -150), state="line"), K("11:00", (3820, -150), state="firing", fire=0.4),
+                 K("13:00", (3820, -150), state="line"), K("15:58", (3820, -150), h=100), K("16:05", (3820, -150), state="firing", fire=0.9), K("16:35", (3820, -150), state="line"), K("21:00", (3820, -150))])
+# Davies took a road through the fields soon after daylight and struck the Blackburn's Ford road a mile south of Centreville.
+DAVIES_RT = [P['miles_camp'], (4600, 1500), (4250, 750)]
+for id, shift, spot, h in [("greene", 0, (3900, -180), 205), ("ny18", 5, (3980, -100), 205), ("ny32", 10, (4300, 900), 200), ("ny16", 15, (4450, 250), 150),
+                           ("ny31", 20, (4600, 350), 150), ("hunt", 25, (4400, 400), 150)]:
+    keys(id, go(plus("04:40", shift), plus("06:30", shift), DAVIES_RT + [spot], h))
+keys("greene", [K("07:00", (3900, -180), state="firing", fire=0.4), K("10:00", (3900, -180), state="line"), K("11:00", (3900, -180), state="firing", fire=0.4), K("13:00", (3900, -180), state="line"),
+                K("15:58", (3900, -180), h=100), K("16:05", (3900, -180), state="firing", fire=0.9), K("16:35", (3900, -180), state="line"), K("21:00", (3900, -180))])
+keys("hunt", go("11:00", "11:20", [(4400, 400), (3960, -120)], 205) + [K("11:25", (3960, -120), state="firing", fire=0.4), K("13:00", (3960, -120), state="line"), K("15:58", (3960, -120), h=100),
+              K("16:05", (3960, -120), state="firing", fire=0.9), K("16:35", (3960, -120), state="line"), K("21:00", (3960, -120))])
+keys("ny16", go("11:00", "11:25", [(4450, 250), (4050, -200)], 205) + [K("15:58", (4050, -200), h=100), K("21:00", (4050, -200), strength=748)])
+keys("ny31", go("11:05", "11:30", [(4600, 350), (4150, -150)], 205) + [K("15:58", (4150, -150), h=100), K("16:05", (4150, -150), state="skirmish"), K("16:40", (4150, -150), state="line", strength=749), K("21:00", (4150, -150))])
+keys("ny18", go("11:00", "11:20", [(3980, -100), (4000, 300)], 200) + [K("21:00", (4000, 300))])
+keys("ny32", [K("21:00", (4300, 900))])
+# Blenker's brigade held the heights of Centreville; about four it went forward on the turnpike and stood across it as the rout went by.
+for id, spot, fwd in [("ny8", (4500, 2450), (2800, 2187)), ("ny29", (4700, 2300), (3550, 2420)), ("ny39", (4900, 2150), (4150, 2500)), ("pa27", (4600, 2750), (4300, 2720)),
+                      ("tidball", (4400, 2550), (3300, 2330)), ("brookwood", (4800, 2750), (4050, 2650))]:
+    keys(id, [K("02:30", spot, h=250, state="line")] + go("16:00", plus("16:00", math.dist(spot, fwd) / 60), [spot, fwd], 250))
+keys("ny8", [K("19:30", (2800, 2187), state="skirmish"), K("19:50", (2800, 2187), state="line", strength=654), K("21:00", (2800, 2187))])
+keys("ny29", [K("19:40", (3550, 2420), state="line", strength=660), K("21:00", (3550, 2420))])
+keys("ny39", [K("21:00", (4150, 2500), strength=775)])
+keys("pa27", [K("21:00", (4300, 2720), strength=693)])
+keys("tidball", [K("21:00", (3300, 2330))]); keys("brookwood", [K("21:00", (4050, 2650))])
+
+# ---- Confederate: Evans, Bee and Bartow on Matthews Hill ----
+EVANS_RT = [(-1450, 980)] + L['carter_rd'][1:6] + [(-3000, 1300)]
+keys("sc4", [K("02:30", (-1450, 980), h=80, state="line")] + go("08:45", "09:30", EVANS_RT + [(-3620, 1000)], 355)
+     + [K("10:15", (-3620, 1000), state="firing"), K("11:35", (-3620, 1000), state="retreat", strength=290, h=130)] + go("11:36", "12:15", [(-3620, 1000), (-2900, 500), (-2250, -50)], 280, "line", "retreat"))
+keys("wheat", [K("02:30", (-1500, 900), h=80, state="line")] + go("08:47", "09:32", [(-1500, 900)] + EVANS_RT[1:] + [(-3380, 1180)], 345)
+     + [K("10:15", (-3380, 1180), state="firing"), K("10:30", (-3380, 1180), state="charge"), K("10:36", (-3420, 1380), state="firing", strength=420), K("10:50", (-3300, 1050), state="retreat"),
+        K("11:00", (-3300, 1050), h=345, state="firing"), K("11:35", (-3300, 1050), state="retreat", strength=402)] + go("11:36", "12:15", [(-3300, 1050), (-2800, 450), (-2250, -250)], 280, "line", "retreat"))
+keys("davidson", [K("02:30", (-1550, 850), h=80, state="line")] + go("08:50", "09:40", [(-1550, 850)] + EVANS_RT[1:] + [(-3450, 780)], 345)
+     + [K("09:45", (-3450, 780), state="firing", fire=0.5), K("11:35", (-3450, 780), state="line", strength=34)] + go("11:40", "12:10", [(-3450, 780), (-2800, 300), (-2350, -450)], 280))
+keys("terry", [K("02:30", (-1650, 780), h=80, state="line")] + go("08:50", "09:40", [(-1650, 780)] + EVANS_RT[1:] + [(-3300, 700)], 0) + go("11:40", "12:00", [(-3300, 700), (-2100, 350)], 270))
+keys("sc4b", [K("02:30", (-1300, 980), h=80, state="line"), K("05:30", (-1300, 980), state="skirmish"), K("06:40", (-1300, 980), state="line"), K("17:30", (-1300, 980), strength=235), K("21:00", (-1300, 980))])
+# Bee and Bartow, behind McLean's Ford at dawn, were sent toward the Stone Bridge and went on to Evans's right about eleven.
+BEE_RT = [(4100, -3000), (2700, -3100), (800, -2600), P['portici'], rel('henry_hill', 0, 250)]
+for id, shift, spot, h, s, lost in [("al4", 0, (-3250, 1050), 345, 750, 120), ("ms2", 5, (-3020, 1090), 335, 530, 60), ("ms11", 9, (-2880, 1060), 330, 150, 15),
+                                    ("ga7", 13, (-3080, 1300), 330, 700, 80), ("ga8", 17, (-3230, 1360), 340, 700, 140), ("pelham", 21, (-2650, 150), 330, 90, 0)]:
+    camp = (BEE_RT[0][0] - 60 * shift, BEE_RT[0][1])
+    keys(id, [K("02:30", camp, h=0, state="line")] + go(plus("07:45", shift), plus("10:45", shift), [camp] + BEE_RT[1:] + ([spot] if id != "pelham" else [spot]), h))
+    if id == "pelham":
+        keys(id, [K("11:10", spot, state="firing", fire=0.5), K("11:45", spot, state="line")] + go("11:50", "12:05", [spot, (-2490, 300)], 290)
+             + [K("12:15", (-2490, 300), state="firing", fire=0.4), K("14:00", (-2490, 300), fire=0.9), K("15:45", (-2490, 300), state="line"), K("21:00", (-2490, 300))])
+        continue
+    keys(id, [K(plus("10:47", shift), spot, state="firing"), K("11:35", spot, state="retreat", strength=s - lost, h=140)])
+BEHIND_JACKSON = dict(al4=(-2200, -300), ms2=(-2150, -150), ms11=(-2100, -50), ga7=(-2200, 250), ga8=(-2150, 100))
+for id, p in BEHIND_JACKSON.items():
+    k0 = KEYS[id][-1]; keys(id, go("11:36", "12:15", [(k0["x"], k0["y"]), (-2800, 400), p], 280, "line", "retreat"))
+
+# ---- Confederate: Jackson's line on Henry Hill, Hampton at the Robinson House ----
+JACKSON_CAMP = (3200, -2900)
+JACKSON_RT = [(1000, -2050), (-300, -1500), P['portici'], (-1900, -500)]
+JLINE = [("va5", (-2380, 280), 290, 640), ("va4", (-2310, 0), 280, 600), ("va27", (-2320, -200), 275, 400), ("va2", (-2400, -380), 270, 520), ("va33", (-2430, -560), 260, 450),
+         ("rockbridge", (-2510, 120), 285, 100), ("walton", (-2520, -60), 280, 130), ("stanard", (-2505, -230), 275, 100), ("imboden", (-2530, -400), 270, 100)]
+for n, (id, spot, h, s) in enumerate(JLINE):
+    camp = (JACKSON_CAMP[0] + 70 * n, JACKSON_CAMP[1])
+    interval = (JACKSON_RT[0][0] + 60 * n, JACKSON_RT[0][1] - 30 * n)
+    keys(id, [K("02:30", camp, h=0, state="line")] + go(plus("07:00", n), plus("07:50", n), [camp, interval], 330))
+    if id == "imboden":
+        keys(id, go("09:45", "10:40", [interval] + JACKSON_RT[1:] + [(-2750, 250)], 330) + [K("10:45", (-2750, 250), state="firing", fire=0.6), K("11:45", (-2750, 250), state="line")]
+             + go("11:48", "12:00", [(-2750, 250), spot], h) + [K("12:05", spot, state="firing", fire=0.5), K("13:30", spot, state="line", strength=94)] + go("13:35", "13:50", [spot, (-2100, -700)], 120) + [K("13:51", (-2100, -700), state="hidden")])
+        continue
+    keys(id, go(plus("10:30", n * 2), plus("11:45", n * 2), [interval] + JACKSON_RT[1:] + [spot], h))
+for id in ("rockbridge", "walton", "stanard"):
+    spot = (KEYS[id][-1]["x"], KEYS[id][-1]["y"])
+    keys(id, [K("12:15", spot, state="firing", fire=0.4), K("14:00", spot, state="firing", fire=0.9), K("15:45", spot, state="line"), K("21:00", spot)])
+# The 33rd Virginia on the left went for Griffin's guns; the 4th and 27th charged through them; Bee and Bartow fell leading what they had left.
+keys("va33", [K("14:45", (-2430, -560), state="line"), K("14:52", (-2560, -420), state="firing"), K("15:00", (-2560, -420), state="charge"), K("15:04", (-2650, -320), state="firing", strength=410),
+              K("15:12", (-2470, -520), state="retreat", strength=370), K("15:20", (-2470, -520), h=270, state="line")])
+keys("va4", [K("15:08", (-2310, 0), state="charge"), K("15:15", (-2700, -120), state="firing", strength=530), K("15:30", (-2650, -100), state="line")])
+keys("va27", [K("15:08", (-2320, -200), state="charge"), K("15:15", (-2720, -260), state="firing", strength=330), K("15:30", (-2650, -250), state="line")])
+keys("va2", [K("15:05", (-2400, -380), state="line"), K("15:10", (-2600, -420), state="firing", strength=470), K("15:35", (-2600, -420), state="line")])
+keys("va5", [K("14:50", (-2380, 280), state="firing"), K("15:40", (-2380, 280), state="line", strength=610)])
+keys("al4", [K("14:45", (-2200, -300), state="line")] + go("14:46", "14:58", [(-2200, -300), (-2550, -550)], 280) + [K("15:00", (-2550, -550), state="firing"), K("15:25", (-2550, -550), state="line", strength=580)])
+keys("ms2", [K("14:45", (-2150, -150), state="line")] + go("14:47", "15:00", [(-2150, -150), (-2480, -680)], 280) + [K("15:02", (-2480, -680), state="firing"), K("15:30", (-2480, -680), state="line", strength=440)])
+keys("ga7", [K("14:45", (-2200, 250), state="line")] + go("14:46", "14:58", [(-2200, 250), (-2450, 380)], 290) + [K("15:00", (-2450, 380), state="firing"), K("15:25", (-2450, 380), state="line", strength=560)])
+keys("ga8", [K("14:50", (-2150, 100), state="line")] + go("14:52", "15:02", [(-2150, 100), (-2330, 420)], 290) + [K("15:05", (-2330, 420), state="firing"), K("15:25", (-2330, 420), state="line", strength=520)])
+keys("hampton", march("08:45", "10:30", [(-600, -5450), (-900, -3000), (-1300, -1200), P['portici']]) + [K("10:35", P['portici'], h=330, state="line")]
+     + go("11:05", "11:25", [P['portici'], L['lewis_rd'][2], L['lewis_rd'][1], (-2500, 600)], 320) + [K("11:30", (-2500, 600), state="firing"), K("12:10", (-2500, 600), state="retreat", strength=545, h=120)]
+     + go("12:12", "12:25", [(-2500, 600), (-2350, 450)], 300) + [K("14:50", (-2350, 450), state="firing"), K("15:40", (-2350, 450), state="line", strength=515)])
+# Fisher's 6th North Carolina came up from the Junction to the left just before three.
+keys("nc6", march("13:50", "14:55", [(-1700, -5450), (-2403, -2026), (-2600, -1300), (-2700, -760)]) + [K("14:58", (-2700, -760), h=330, state="line"), K("15:05", (-2700, -760), state="charge"),
+     K("15:10", (-2700, -420), state="firing", strength=560), K("15:25", (-2650, -520), state="line", strength=540)])
+# Cocke's regiments came up from the lower fords through the afternoon: the 49th to Jackson's left, the 18th to the guns.
+COCKE = [("va18", (-300, -250)), ("va19", (-750, 200)), ("va28", (-500, -650)), ("va8", (-950, 450)), ("va49", (-1400, -300)), ("rogers", (-850, 50)), ("latham", (-1550, 1150))]
+for id, spot in COCKE: keys(id, [K("02:30", spot, h=60, state="line")])
+keys("latham", [K("12:15", (-1550, 1150), state="firing", fire=0.5), K("12:40", (-1550, 1150), state="line"), K("21:00", (-1550, 1150))])
+keys("rogers", [K("21:00", (-850, 50))]); keys("va19", [K("21:00", (-750, 200), strength=645)])
+keys("va49", go("13:30", "14:20", [(-1400, -300), P['portici'], (-2550, -750)], 280))
+keys("va18", go("14:50", "15:35", [(-300, -250), P['portici'], (-1900, -300), (-2300, 150)], 280) + [K("15:40", (-2300, 150), state="charge"), K("15:50", (-2770, -150), state="firing", strength=620)])
+keys("va28", go("15:00", "15:45", [(-500, -650), P['portici'], (-2700, -1000)], 290))
+keys("va8", go("15:00", "15:50", [(-950, 450), L['lewis_rd'][2], P['portici'], (-2800, -1100)], 290))
+# About 3:45 Beauregard's whole line went forward and swept the plateau to the Sudley road.
+FINAL = [("hampton", 420), ("va5", 290), ("ga7", 170), ("va4", 50), ("va18", -60), ("va27", -180), ("va2", -300), ("va33", -420), ("al4", -540), ("nc6", -660), ("va49", -780), ("ms2", -880),
+         ("ga8", 380), ("ms11", -950), ("sc4", 520), ("wheat", 600)]
+FINAL_LOSS = dict(hampton=479, va5=587, ga7=547, va4=469, va18=590, va27=259, va2=430, va33=304, al4=553, nc6=528, va49=190, ms2=422, ga8=500, ms11=122, sc4=275, wheat=402)
+for id, y in FINAL:
+    k0 = KEYS[id][-1]; spot = (road_cut(y)[0] + 120, y)
+    pre = [] if sec(k0["t"]) >= sec("15:45") else [K("15:45", (k0["x"], k0["y"]), h=275, state="line")]
+    keys(id, pre + [K("16:02", spot, state="firing"), K("16:20", spot, state="line", strength=FINAL_LOSS[id])])
+
+# ---- Confederate: Stuart, Kirby Smith, Early and Kershaw on the left; Chinn Ridge ----
+keys("stuart", [K("02:30", (1000, -1300), h=0, state="line")] + go("11:00", "12:15", [(1000, -1300), (-300, -1300), P['portici'], (-2400, -1200), (-3050, -950)], 10)
+     + [K("14:28", (-3050, -950), state="charge"), K("14:32", (-2950, -420), state="charge"), K("14:36", (-2950, -420), state="retreat", strength=290), K("14:46", (-3080, -950), h=10, state="line"),
+        K("16:35", (-3080, -950), state="column")] + march("16:36", "18:00", [(-3080, -950), (-4300, -200), (-4150, 1300), (-4100, 2400), (-4168, 2700)])[1:]
+     + [K("18:05", (-4168, 2700), h=0, state="line", strength=287)])
+# Kirby Smith's brigade came off the cars at the Junction and up the road; Smith fell as it arrived about 3:30 and Elzey led it.
+ELZEY_RT = L['sudley_rd_s'][::-1]
+ELZEY_C, ELZEY_H = (-3000, -1180), 310
+def eline(right, fwd=0, c=ELZEY_C): return (c[0] + right * math.cos(math.radians(ELZEY_H)) + fwd * math.sin(math.radians(ELZEY_H)), c[1] - right * math.sin(math.radians(ELZEY_H)) + fwd * math.cos(math.radians(ELZEY_H)))
+for id, shift, r, s, lost in [("va10", 0, -250, 550, 10), ("tn3", 4, 0, 650, 8), ("md1", 8, 250, 500, 9)]:
+    keys(id, march(plus("14:22", shift), plus("15:30", shift), ELZEY_RT[:-1] + [eline(r)]) + [K(plus("15:35", shift), eline(r), h=ELZEY_H, state="line"),
+         K("16:08", eline(r), state="line"), K("16:15", eline(r, 420), state="firing"), K("16:25", eline(r, 420), state="charge"), K("16:38", eline(r, 760), state="firing", h=330),
+         K("16:55", eline(r, 760), state="line", strength=s - lost), K("21:00", eline(r, 760))])
+keys("beckham", march("14:34", "15:42", ELZEY_RT[:-1] + [(-2900, -1350)]) + [K("15:45", (-2900, -1350), h=310, state="line"), K("15:50", (-2900, -1350), state="firing", fire=0.6),
+     K("16:30", (-2900, -1350), state="line")] + go("16:35", "16:50", [(-2900, -1350), (-3650, -600)], 0) + [K("16:52", (-3650, -600), state="firing", fire=0.5), K("17:15", (-3650, -600), state="line"), K("21:00", (-3650, -600))])
+keys("va28", [K("16:00", (-2700, -1000), state="column")] + go("16:01", "16:15", [(-2700, -1000), (-3300, -900)], 310) + [K("16:17", (-3300, -900), state="firing"), K("16:40", (-3550, -650), state="line", strength=588), K("21:00", (-3550, -650))])
+keys("va8", [K("16:00", (-2800, -1100), state="column")] + go("16:01", "16:12", [(-2800, -1100), (-3350, -1050)], 320) + [K("16:15", (-3350, -1050), state="firing"), K("16:40", (-3600, -780), state="line", strength=443), K("21:00", (-3600, -780))])
+# Early marched from behind McLean's Ford round the whole field and came in beyond Howard's right about four.
+EARLY_RT = [(4250, -3150), (2700, -3200), (800, -2700), (-1200, -1500), (-2400, -1600), (-3600, -1700)]
+EARLY_C = (-4300, -1000)
+for n, (id, r, s, lost) in enumerate([("ms13", -260, 550, 12), ("la7", 0, 550, 18), ("va7", 260, 390, 49)]):
+    camp = (EARLY_RT[0][0] + 80 * n, EARLY_RT[0][1]); spot = (EARLY_C[0] + r * math.cos(math.radians(40)), EARLY_C[1] - r * math.sin(math.radians(40)))
+    keys(id, [K("02:30", camp, h=0, state="line")] + go(plus("12:40", 4 * n), plus("16:05", 4 * n), [camp] + EARLY_RT[1:] + [spot], 40)
+         + [K("16:15", spot, state="line"), K("16:22", (spot[0] + 300, spot[1] + 300), state="firing"), K("16:32", (spot[0] + 300, spot[1] + 300), state="charge"),
+            K("16:42", (spot[0] + 500, spot[1] + 550), state="line", strength=s - lost)] + march("16:55", "18:10", [(spot[0] + 500, spot[1] + 550), (-4250 + r / 2, 300), (-4100 + r / 2, 1200), (-3950 + r / 2, 2000)])[1:]
+         + [K("18:12", (-3950 + r / 2, 2000), h=0, state="line"), K("21:00", (-3950 + r / 2, 2000))])
+# Kershaw's two regiments and Kemper's guns came from Mitchell's Ford; then followed the rout down the turnpike, and Kemper
+# shelled the Cub Run bridge, where a wagon upset and the retreat became a panic.
+KERSHAW_RT = [(800, -2400), P['portici'], (-2850, -850)]
+for id, spot, s in [("sc2", (2650, -2300), 750), ("sc8", (2950, -2300), 450), ("kemper", (2800, -2150), 80)]:
+    keys(id, [K("02:30", spot, h=20, state="line")] + go("14:00" if id != "kemper" else "14:05", "15:30", [spot] + KERSHAW_RT, 290))
+for id, bald, s, lost in [("sc2", (-3150, -760), 750, 47), ("sc8", (-3250, -650), 450, 29)]:
+    keys(id, go("15:55", "16:05", [(-2850, -850), bald], 300) + [K("16:07", bald, state="firing"), K("16:30", bald, state="charge"), K("16:40", (-3500, -500), state="line", strength=s - lost)])
+keys("kemper", go("15:52", "16:02", [(-2850, -850), (-3100, -680)], 300) + [K("16:05", (-3100, -680), state="firing", fire=0.7), K("16:40", (-3100, -680), state="line")])
+PURSUIT = [(-3500, -500), (-3300, 300)] + pike((-3300, 300), (800, 1530)) + [(800, 1530)]
+for id, d, end_spot in [("kemper", 0, (800, 1530)), ("sc2", 6, (650, 1480)), ("sc8", 12, (550, 1400))]:
+    path = [(-3100, -680) if id == "kemper" else (-3500, -500)] + PURSUIT[1:-1] + [end_spot]
+    keys(id, march(plus("17:00", d), plus("18:10", d), path))
+keys("kemper", [K("18:12", (800, 1530), h=65, state="firing", fire=0.8), K("18:45", (800, 1530), state="line")] + go("19:30", "20:30", [(800, 1530), (-1000, 1080)], 80))
+for id, spot in [("sc2", (650, 1480)), ("sc8", (550, 1400))]: keys(id, [K("18:25", spot, h=65, state="line")] + go("19:30", "20:30", [spot, (spot[0] - 1700, spot[1] - 350)], 80))
+keys("hampton", march("17:15", "18:40", [(-3080, 420)] + pike((-3080, 420), (1500, 1800)) + [(1500, 1800)]) + [K("18:45", (1500, 1800), h=65, state="line")]
+     + go("19:30", "20:40", [(1500, 1800), (-900, 1150)], 80))
+keys("terry", march("17:10", "18:00", [(-2100, 350), (-1837, 703)] + pike((-1837, 703), (600, 1500))) + [K("18:05", (600, 1500), state="line", h=65)] + go("19:00", "19:40", [(600, 1500), (-1000, 1100)], 80))
+
+# ---- Confederate: the right wing at the lower fords ----
+BONHAM = [("sc3", (2900, -2250)), ("sc7", (2500, -2200)), ("nc11", (2750, -2550)), ("la8", (2400, -2500)), ("shields", (2780, -2100)), ("radford", (2000, -2650))]
+for id, spot in BONHAM: keys(id, [K("02:30", spot, h=20, state="line")])
+keys("shields", [K("05:30", (2780, -2100), state="firing", fire=0.3), K("06:30", (2780, -2100), state="line")])
+# Late in the day Bonham and Longstreet crossed and pushed up the road toward Centreville a mile and more, halted at dark and
+# went back to Bull Run for water.
+for n, (id, spot) in enumerate(BONHAM[:5]):
+    halt = (3050 + 60 * n, -1250 + 40 * n)
+    keys(id, march(plus("17:30", 4 * n), plus("18:50", 4 * n), [spot, P['mitchells_ford']] + along(L['mitchell_rd'], P['mitchells_ford'], halt)) + [K(plus("18:52", 4 * n), halt, h=20, state="line")]
+         + march(plus("19:45", 4 * n), plus("20:40", 4 * n), [halt, P['mitchells_ford'], spot]) + [K(plus("20:42", 4 * n), spot, h=20, state="line")])
+# Radford's troopers crossed at Ball's Ford and rode into the column on the turnpike near Cub Run.
+keys("radford", march("17:15", "18:15", [(2000, -2650), (800, -2300), P['balls_ford'], (-600, 700), (-200, 1300)] + pike((-200, 1300), (1900, 1880)))
+     + [K("18:18", (1900, 1880), h=60, state="charge"), K("18:28", (2150, 1980), state="line", strength=392)] + go("19:20", "20:30", [(2150, 1980), (-200, 1300)], 240))
+LONGSTREET = [("va1", (3400, -1500), (3420, -1180)), ("va11", (3550, -1550), (3480, -1060)), ("va17", (3700, -1500), (3660, -1230)), ("nc5", (3250, -1650), (3720, -1110)),
+              ("va24", (3500, -1800), (3550, -1260)), ("garnett", (3550, -1450), (3540, -1140))]
+for id, south, north in LONGSTREET:
+    keys(id, [K("02:30", south, h=20, state="line")] + go("05:15", "05:45", [south, P['blackburns_ford'], north], 20) + go("07:40", "08:10", [north, P['blackburns_ford'], south], 20)
+         + go("12:30", "13:00", [south, P['blackburns_ford'], north], 20))
+keys("garnett", [K("13:05", (3540, -1140), state="firing", fire=0.3), K("14:00", (3540, -1140), state="line")])
+LS_END = dict(va11=594, va1=448, va17=598)
+for n, (id, south, north) in enumerate(LONGSTREET):
+    if id == "nc5": keys(id, [K("21:00", north, strength=646)]); continue
+    halt = (3500 + 50 * n, -900 + 30 * n)
+    keys(id, go(plus("17:40", 3 * n), plus("18:40", 3 * n), [north, halt], 20) + go("19:45", "20:30", [halt, north, P['blackburns_ford'], south], 20, **({"strength": LS_END[id]} if id in LS_END else {})))
+# D. R. Jones crossed McLean's Ford before dawn to wait for Ewell, who never had the order; he was called back at 10:30, sent
+# forward again at 11:50, and about four came down a ravine on Davies's flank and was shot back by six guns.
+JONES = [("sc5", (4450, -2850), (5100, -1950), (4350, -200), 740, 50), ("ms18", (4600, -3000), (5250, -2000), (4520, -320), 750, 22),
+         ("ms17", (4800, -2900), (5400, -1900), (4750, 30), 630, 3), ("waJones", (4650, -2800), (5300, -1850), (4700, 120), 40, 0)]
+for id, south, kinch, attack, s, lost in JONES:
+    keys(id, [K("02:30", south, h=330, state="line")] + go("03:30", "04:30", [south, P['mcleans_ford'], kinch], 330) + go("10:35", "11:20", [kinch, P['mcleans_ford'], south], 200)
+         + go("13:30", "15:45", [south, P['mcleans_ford'], (5000, -1500), (4900, -600), attack], 280))
+keys("sc5", [K("16:05", (4350, -200), state="firing"), K("16:50", (4350, -200), state="retreat", strength=690)])
+keys("ms18", [K("16:05", (4520, -320), state="firing"), K("16:15", (4520, -320), state="retreat", strength=740), K("16:25", (4800, -450), state="line", h=280)])
+keys("ms17", [K("16:05", (4750, 30), state="line"), K("16:50", (4750, 30), strength=627)])
+keys("waJones", [K("15:55", (4700, 120), state="firing", fire=0.4), K("16:08", (4700, 120), state="retreat"), K("16:20", (4950, -350), state="line", h=280)])
+for id, south, kinch, attack, s, lost in JONES:
+    k0 = KEYS[id][-1]; keys(id, go("16:55", "17:50", [(k0["x"], k0["y"]), (4900, -600), (5000, -1500), P['mcleans_ford'], south], 0) + [K("21:00", south)])
+for id in ("va18", "va27", "va4", "va2", "va33", "va5", "al4", "nc6", "va49", "ms2", "ga7", "ga8", "ms11", "sc4", "wheat", "davidson", "sc4b", "stanard", "rockbridge", "walton"):
+    k = KEYS[id][-1]
+    if k["t"] != "21:00": keys(id, [K("21:00", (k["x"], k["y"]))])
+
+# Hold in place through long gaps: without this a unit creeps toward a key hours away and the time-lapse never engages.
+def add_holds(ks):
+    out = []
+    for a, c in zip(ks, ks[1:] + [None]):
+        out.append(a)
+        if c is None or a.get("state") == "hidden": continue
+        moved = (a["x"], a["y"]) != (c["x"], c["y"]); gap = sec(c["t"]) - sec(a["t"])
+        if moved and gap > 3 * 3600: out.append(dict(t=fmt(sec(c["t"]) - 900), x=a["x"], y=a["y"]))
+    return out
+assert set(KEYS) == {row[0] for row in OOB}, set(KEYS) ^ {row[0] for row in OOB}
+units = []
+for id, side, short, name, commander, type, strength, extra in OOB:
+    ks = add_holds(KEYS[id])
+    bad = [(a["t"], b["t"]) for a, b in zip(ks, ks[1:]) if sec(b["t"]) < sec(a["t"])]
+    assert not bad, (id, bad)
+    units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength, keys=ks, **extra))
+# Ricketts's and Griffin's guns changed hands three times and were never fired again; a unit keeps its side, so after the
+# gunners went down the guns themselves are drawn as a battery where they stood.
+def gun_park(p, h, w=70, d=24):
+    return [list(map(round, off)) for off in [(p[0] + dx * math.cos(math.radians(h)) + dy * math.sin(math.radians(h)), p[1] - dx * math.sin(math.radians(h)) + dy * math.cos(math.radians(h)))
+                                               for dx, dy in [(-w / 2, -d / 2), (w / 2, -d / 2), (w / 2, d / 2), (-w / 2, d / 2)]]]
+features += [dict(type="battery", poly=gun_park(P['ricketts_guns'], 95), **{"from": "15:00"}), dict(type="battery", poly=gun_park(P['griffin_guns'], 85), **{"from": "15:00"}),
+             dict(name="the guns, taken and retaken", at=[P['griffin_guns'][0] - 60, P['griffin_guns'][1] - 110], **{"from": "15:00"})]
+
+events = []
 battle = dict(
     id="first-manassas", name="First Manassas", date="1861-07-21", dateText="21 July 1861", place="Bull Run, near Manassas Junction, Virginia",
     origin=dict(lat=LAT0, lon=LON0), extent=11000, start="02:30", end="21:00", sunrise="04:46", sunset="19:14", speed=60, lapse=1800, menPerDot=20,
@@ -186,6 +729,19 @@ battle = dict(
     sides=dict(union=dict(name="Union (McDowell)", color="#2a4fa8", light="#5a7fd8", dark="#16285a"),
                confederate=dict(name="Confederate (Beauregard, Johnston)", color="#8a8f98", light="#b9bec6", dark="#43464c")),
     features=features, units=units, events=events,
+    outcome={"result": "Confederate victory: the Union army falls back to Washington", "losses": [
+        ["union", "2,708 by the Official Records return: 481 killed, 1,011 wounded, 1,216 missing. Battles and Leaders gives 2,896 (460, 1,124, 1,312). 25 guns lost."],
+        ["confederate", "1,982: 387 killed, 1,582 wounded, 13 missing (Official Records). Bee and Bartow killed or mortally wounded; Jackson, Kirby Smith, Hampton and Wheat wounded."]],
+        "note": "About 18,000 men were engaged on each side: Fry gives the Union force that crossed Bull Run as 18,572, Jordan the Confederates engaged as 18,053. Most of the Union missing were stragglers and prisoners taken in the rout."},
+    sources=[
+        "<i>The War of the Rebellion: Official Records of the Union and Confederate Armies</i>, Series I, vol. 2 (1880), read in the Internet Archive scan: the reports of McDowell, Tyler, Keyes, Sherman, Porter, Heintzelman, Willcox, Bidwell, Davies, Beauregard, Johnston, Jackson, Longstreet, D. R. Jones and Hampton; the Union casualty returns by regiment and the Confederate field return of 25 September 1861.",
+        "James B. Fry, \"McDowell's Advance to Bull Run\", and \"The Opposing Forces at the First Bull Run\", <i>Battles and Leaders of the Civil War</i>, vol. 1 (1887): the times, Fry's and Jordan's strengths and the losses by brigade.",
+        "Francis F. Wilshin, <i>Manassas (Bull Run) National Battlefield Park</i>, NPS Historical Handbook 15 (1953, rev. 1961): the morning's clock times, the arrivals of Johnston's brigades and the fight for Henry Hill.",
+        "National Park Service, Manassas National Battlefield Park: \"The Battle of First Manassas\", the orders of battle, the panel on the retreat from Chinn Ridge, and the battle maps of the General Management Plan (2005, figures A-1 and A-2), from which the fords, the farm roads, Pittsylvania, Van Pelt's, Portici and the wartime woods are read.",
+        "Daniel Schaible, <i>Fence Lines, Fields, and Forests: Manassas National Battlefield Cultural Landscape Report</i> (NPS, 2013), which reprints those maps; John Hennessy, <i>The First Battle of Manassas: An End to Innocence</i> (rev. 2015), and Bradley Gottfried, <i>The Maps of First Bull Run</i> (2009), not consulted.",
+        "Places: OpenStreetMap contributors (ODbL), the Park Service's markers for the houses and the batteries, US 29 on the Warrenton Turnpike and VA 234 on the Manassas-Sudley road. Terrain: USGS 3DEP elevation at 27.5 m over an 11 km square, with three modern quarries filled smooth.",
+        "What is reconstructed: every position between the recorded moments, read from the reports' descriptions, not a troop-movement map, and good to a few hundred metres; the line of the flank-march road and the McLean's Ford site; the woods east of Bull Run, outside the Park Service map; Howard's start from the turn of the road, Early's route and the hour Early and Kirby Smith left; and most regimental strengths, apportioned from the brigade and division totals named in the order of battle. The sources disagree by 15 to 30 minutes on the morning's times.",
+    ],
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1)
 print(len(units), "units,", len(events), "events,", len(features), "features,", len(FIELDS), "fields")
