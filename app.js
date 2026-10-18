@@ -393,6 +393,14 @@ function drawUnits() {
     ctx.fillRect(-wPx / 2, -2, wPx, hPx + 3);
     ctx.globalAlpha = 1; ctx.lineWidth = 1.5; ctx.strokeStyle = gone ? '#55554f' : side.dark ?? '#000';
     ctx.strokeRect(-wPx / 2, -2, wPx, hPx + 3);
+    if (!gone) { // an arrowhead on the front edge, fixed in pixels so the facing reads at any zoom; bolder on the march
+      const go = p.moving || p.state === 'column', L = go ? 10 : 7, hw = go ? 7 : 5;
+      ctx.globalAlpha = p.state === 'rout' ? 0.5 : 1;
+      ctx.beginPath(); ctx.moveTo(-hw, -3); ctx.lineTo(0, -3 - L); ctx.lineTo(hw, -3); ctx.closePath();
+      ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(245,240,225,0.9)'; ctx.stroke();
+      ctx.fillStyle = side.dark ?? '#000'; ctx.fill();
+      ctx.globalAlpha = 1;
+    }
     ctx.restore();
     if (F * z >= 24) {
       const pts = dots(u, p, mpd), d = Math.max(2.5, 2 * z), cav = u.type === 'cavalry';
@@ -530,6 +538,7 @@ function buildLegend(b) {
   const rows = [
     ...sides.map(s => [SVG(`<rect x="4" y="4" width="56" height="20" rx="3" fill="${s.color}"/>`), s.name]),
     [blockSvg(s0.color, s0.dark), `Infantry. Each white dot is ${mpd} men; the rows are ranks.`],
+    [blockSvg(s0.color, s0.dark, { extra: `<path d="M26 7 L32 0 L38 7 Z" fill="${s0.dark}" stroke="rgba(245,240,225,0.9)"/>` }), 'The arrowhead on the front rank shows which way a unit faces.'],
     (types.has('militia') || types.has('riflemen')) && [blockSvg(s0.light ?? s0.color, s0.dark), 'Militia and riflemen, in the lighter shade.'],
     states.has('column') && [blockSvg(s0.color, s0.dark, { w: 12, h: 26, files: 3, ranks: 6 }), 'A column on the march: narrow and long.'],
     types.has('cavalry') && [blockSvg(s0.color, s0.dark, { h: 16, cav: true }), 'Cavalry: taller dots, a mounted man each.'],

@@ -47,6 +47,7 @@ export function lerpAngle(a, b, f) {
   const d = ((b - a + 540) % 360) - 180;
   return (a + d * f + 360) % 360;
 }
+const angleGap = (a, b) => Math.abs(mod(b - a + 180, 360) - 180);
 
 const fireLevel = s => (s === 'firing' ? 1 : s === 'skirmish' ? 0.3 : 0);
 
@@ -65,6 +66,12 @@ export function normalizeBattle(b) {
     for (const k of u.keys) {
       x = k.x ?? x; y = k.y ?? y; h = k.h ?? h; strength = k.strength ?? strength; state = k.state ?? state;
       Object.assign(k, { x, y, h, strength, state, fire: k.fire ?? fireLevel(state) });
+    }
+    // A key's facing is reached as late as possible, just before that key: a line keeps firing at the enemy until it turns
+    // to go. A unit marching off along its new facing turns first, then marches.
+    for (let i = 0; i + 1 < u.keys.length; i++) {
+      const a = u.keys[i], c = u.keys[i + 1], m = (Math.atan2(c.x - a.x, c.y - a.y) * 180) / Math.PI;
+      a.turnFirst = (a.x !== c.x || a.y !== c.y) && angleGap(c.h, m) < angleGap(a.h, m);
     }
   }
   b.events = (b.events ?? []).map(e => ({ ...e, t: parseTime(e.t) })).sort((p, q) => p.t - q.t);
@@ -126,6 +133,7 @@ export function playTime(b, dt = 1 / 30) {
   return Math.round(secs);
 }
 
+const TURN = 50; // battle seconds a formation takes to wheel to a new facing, at the start or end of a segment (see turnFirst)
 // Pose of a unit at battle time t, or null while hidden. State is a step function of the previous key.
 export function unitAt(u, t) {
   const k = u.keys;
@@ -135,8 +143,9 @@ export function unitAt(u, t) {
   const a = k[i], c = k[i + 1];
   if (a.state === 'hidden') return null;
   if (!c || c.t <= a.t) return { x: a.x, y: a.y, h: a.h, strength: a.strength, state: a.state, fire: a.fire, moving: false };
-  const f = (t - a.t) / (c.t - a.t);
-  return { x: lerp(a.x, c.x, f), y: lerp(a.y, c.y, f), h: lerpAngle(a.h, c.h, f), strength: lerp(a.strength, c.strength, f), state: a.state, fire: a.fire,
+  const f = (t - a.t) / (c.t - a.t), span = Math.min(c.t - a.t, TURN);
+  const g = Math.min(1, Math.max(0, (a.turnFirst ? t - a.t : t - c.t + span) / span));
+  return { x: lerp(a.x, c.x, f), y: lerp(a.y, c.y, f), h: lerpAngle(a.h, c.h, g * g * (3 - 2 * g)), strength: lerp(a.strength, c.strength, f), state: a.state, fire: a.fire,
     moving: a.x !== c.x || a.y !== c.y };
 }
 
