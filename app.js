@@ -13,7 +13,8 @@ let B = null, T = null, layer = null;
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
 let cam = { x: 0, y: 0, zoom: 0.5 }, follow = true, lapse = true, lapsing = false;
 let W = 0, H = 0, DPR = 1, last = performance.now();
-const smoke = [], flashes = [], placed = []; // placed: label boxes drawn this frame, so labels avoid each other
+const smoke = [], pops = [], placed = []; // placed: label boxes drawn this frame, so labels avoid each other
+let popN = 0; // live muzzle flashes are pops[0..popN); the objects past it are kept for reuse
 let mouse = null, selected = null, cardAt = null, cardLive = '', cardSwap = 0; // cardAt: the card's eased screen position
 
 // ---------- loading ----------
@@ -286,6 +287,9 @@ function step(dt) {
   if (playing) {
     [t, lapsing] = advance(B, t, dt, speed, lapse);
     if (t >= B.endT) setPlaying(false);
+    let w = 0; // flashes age in real time; spent ones swap to the back of the pool
+    for (let i = 0; i < popN; i++) { const q = pops[i]; q.age += dt; if (q.age < q.life) { pops[i] = pops[w]; pops[w++] = q; } }
+    popN = w;
   }
   const ev = eventAt(B, t);
   if (ev !== curEvent) { // a chapter may set its own pace while the story is being followed
@@ -293,7 +297,6 @@ function step(dt) {
     if (follow) { speed = ev?.speed ?? defaultSpeed(B); ui.speed.value = speed; }
   }
   updateCamera(dt);
-  flashes.length = 0;
   for (const u of B.units) {
     const p = (u.pose = unitAt(u, t));
     if (playing && p && p.fire > 0 && p.state !== 'surrender') { const { F, nd } = shape(u, p, B.menPerDot); emit(u, p, F, nd, dt); }
@@ -322,7 +325,7 @@ function draw() {
   const half = B.extent / 2;
   ctx.imageSmoothingEnabled = true;
   ctx.drawImage(layer, w2sx(-half), w2sy(half), B.extent * cam.zoom, B.extent * cam.zoom);
-  drawFeatures(); drawFallen(); drawUnits(); drawFlashes(); drawSmoke(); drawNight();
+  drawFeatures(); drawFallen(); drawUnits(); drawSmoke(); drawNight(); drawPops(); // flashes glow through smoke and dark
 }
 
 const FEATURE_STYLE = { road: ['rgba(90,70,40,0.6)', 6, '#dccb9f', 4], creek: ['rgba(40,70,120,0.5)', 4, '#7aa8dc', 2.2], fence: ['rgba(70,50,30,0.6)', 2],
@@ -446,15 +449,32 @@ function emit(u, p, F, nd, dt) {
     const uu = (Math.random() - 0.5) * F, x = p.x + uu * dy + 2 * dx, y = p.y - uu * dx + 2 * dy;
     if (smoke.length < 2500) smoke.push({ x, y, vx: wind.x + dx * 1.2 + Math.random() - 0.5, vy: wind.y + dy * 1.2 + Math.random() - 0.5,
       age: 0, life: art ? 4.5 : 2.4 + Math.random() * 1.6, r0: art ? 4 : 2, r1: art ? 22 : 11 });
-    flashes.push(x, y);
+    if (popN < 400) { // a musket pops for a tenth of a second or so; a gun's flash is bigger and lasts longer
+      const q = (pops[popN++] ??= {});
+      q.x = x; q.y = y; q.age = 0;
+      q.life = art ? 0.18 + Math.random() * 0.1 : 0.08 + Math.random() * 0.12;
+      q.r = art ? 11 + Math.random() * 7 : 3.5 + Math.random() * 3; // glow radius in pixels; the white core is a fifth of it
+    }
   }
 }
 
-function drawFlashes() {
-  const d = Math.max(2, 1.5 * cam.zoom);
-  ctx.fillStyle = '#fff1a8';
-  for (let i = 0; i < flashes.length; i += 2) ctx.fillRect(w2sx(flashes[i]) - d / 2, w2sy(flashes[i + 1]) - d / 2, d, d);
-  flashes.length = 0;
+const popSprite = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 32;
+  const g = c.getContext('2d'), r = g.createRadialGradient(16, 16, 0, 16, 16, 16);
+  r.addColorStop(0, 'rgba(255,243,192,1)'); r.addColorStop(0.2, 'rgba(255,243,192,0.95)'); r.addColorStop(0.45, 'rgba(255,154,46,0.6)'); r.addColorStop(1, 'rgba(255,154,46,0)');
+  g.fillStyle = r; g.fillRect(0, 0, 32, 32);
+  return c;
+})();
+function drawPops() {
+  if (!playing || !popN) return;
+  const s = Math.min(2, Math.max(0.8, Math.sqrt(cam.zoom))); // a little bigger close up, never lost far out
+  ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < popN; i++) {
+    const q = pops[i], f = q.age / q.life, r = q.r * s * (1 - 0.4 * f);
+    ctx.globalAlpha = 1 - f * f;
+    ctx.drawImage(popSprite, w2sx(q.x) - r, w2sy(q.y) - r, 2 * r, 2 * r);
+  }
+  ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
 }
 
 function drawSmoke() {
@@ -548,8 +568,8 @@ function buildLegend(b) {
     states.has('surrender') && [blockSvg('#9a9a92', '#55554f', { dot: '#e8e8e2' }), 'Surrendered: grey.'],
     [scatter([[8, 6], [20, 18], [31, 9], [44, 20], [55, 7], [15, 22], [38, 5], [50, 15], [26, 14]], (x, y, i) => `<rect x="${x}" y="${y}" width="3" height="3" fill="${sides[i % sides.length].dark ?? '#3a2a20'}" opacity="0.6"/>`),
       `Where men fell: a dark mark for every ${mpd} men a unit lost, in that side's colour.`],
-    [SVG(`<rect x="22" y="18" width="20" height="6" fill="${s0.color}" stroke="${s0.dark}"/><circle cx="30" cy="12" r="5" fill="#d8d4c8" opacity="0.5"/><circle cx="40" cy="9" r="7" fill="#d8d4c8" opacity="0.4"/><circle cx="50" cy="6" r="8" fill="#d8d4c8" opacity="0.3"/><rect x="26" y="15" width="3" height="3" fill="#fff1a8"/>`),
-      'Powder smoke drifts downwind from units firing.'],
+    [SVG(`<rect x="22" y="18" width="20" height="6" fill="${s0.color}" stroke="${s0.dark}"/><circle cx="30" cy="12" r="5" fill="#d8d4c8" opacity="0.5"/><circle cx="40" cy="9" r="7" fill="#d8d4c8" opacity="0.4"/><circle cx="50" cy="6" r="8" fill="#d8d4c8" opacity="0.3"/><circle cx="27.5" cy="16.5" r="2.5" fill="#ffb347"/><circle cx="27.5" cy="16.5" r="1.2" fill="#fff3c0"/>`),
+      'Muzzle flashes, and powder smoke drifting downwind from units firing.'],
     (feats.has('redoubt') || feats.has('battery')) && [polySvg('14,22 14,8 26,4 38,4 50,8 50,22', POLY_FILL.redoubt, bg), 'Redoubt or battery: an earthwork fort.'],
     feats.has('works') && [lineSvg(...FEATURE_STYLE.works), 'Fortified line of earthworks.'],
     feats.has('trench') && [lineSvg(...FEATURE_STYLE.trench), 'Siege trench: the parallels and the approaches between them.'],
@@ -670,7 +690,7 @@ ui.topFold.onclick = () => foldTop(!ui.top.classList.contains('folded'));
 
 const nudge = () => Math.max(30, (B.endT - B.startT) / 240); // arrow keys: 30 s, or 1/240 of a long battle
 function setPlaying(v) { playing = v; ui.play.textContent = v ? '❚❚' : '▶'; ui.play.setAttribute('aria-label', v ? 'Pause' : 'Play'); }
-function seek(v) { t = Math.max(B.startT, Math.min(B.endT, v)); smoke.length = 0; }
+function seek(v) { t = Math.max(B.startT, Math.min(B.endT, v)); smoke.length = 0; popN = 0; }
 
 ui.play.onclick = () => { if (!playing && t >= B.endT) seek(B.startT); setPlaying(!playing); };
 ui.speed.onchange = () => { speed = +ui.speed.value; };
