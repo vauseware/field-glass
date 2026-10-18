@@ -862,5 +862,5 @@ function showSplash(list) {
 const want = location.hash.slice(1).split(/[@,]/)[0];
 if (list.some(b => b.id === want)) await loadBattle(want);
 else showSplash(list);
-ui.home.onclick = () => { setPlaying(false); showSplash(list); };
+ui.home.onclick = () => location.assign(location.pathname); // a real page load, so the URL drops the battle and Back returns to it
 requestAnimationFrame(frame);
