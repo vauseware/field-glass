@@ -7,8 +7,9 @@ import ww2, { counter, looks, arrowPath } from './themes/ww2.js';
 import { ground, INK, SHEET } from './themes/civil-war.js';
 
 // In date order. `war` is the index.json "war" string; ids match the skins in themes.js where a war has one.
-// draw(cv, o): o = { id: the battle to draw, fx, fy: where the fight sits as a share of width and height, refW: the
-// width the scale is judged by, bottom: px kept clear at the foot, cartouche: bool }.
+// draw(g, W, H, o): g is scaled to CSS pixels and W, H are in them. o = { id: the battle to draw, fx, fy: where the fight
+// sits as a share of width and height, refW: the width the scale is judged by, bottom: px kept clear at the foot,
+// cartouche: bool }.
 export const WARS = [
   { id: 'revolution', name: 'American Revolution', years: '1775–1783', from: 1775, to: 1783, war: 'American Revolutionary War', draw: drawPlan },
   { id: 'civil-war', name: 'Civil War', years: '1861–1865', from: 1861, to: 1865, war: 'Civil War', draw: drawSurvey },
@@ -26,9 +27,9 @@ const busiest = b => {
 
 // Revolution: a period battle plan. One battle's own contours, roads and creeks in sepia ink, its regiments as washed
 // blocks at the hottest moment of the fight, and dashed arrows for where they had come from.
-async function drawPlan(cv, o) {
+async function drawPlan(g, CW, CH, o) {
   const [{ b, T }] = await Promise.all([load(o.id), faces(['italic 20px "IM Fell English"'])]);
-  const g = cv.getContext('2d'), CW = cv.width, CH = cv.height, rnd = mulberry32(hash(b.id + 'plan'));
+  const rnd = mulberry32(hash(b.id + 'plan'));
   // Paper: a warm gradient, darker at the edges, flecked, foxed and folded in four.
   const pg = g.createRadialGradient(CW / 2, CH / 2, CH * 0.2, CW / 2, CH / 2, Math.max(CW, CH) * 0.75);
   pg.addColorStop(0, '#efe2c2'); pg.addColorStop(0.7, '#dcc79a'); pg.addColorStop(1, '#a98455');
@@ -115,10 +116,9 @@ const B_SIDE = side => (side === 'british' ? '#b0382c' : side === 'french' ? '#d
 
 // Second World War: the recon mosaic on the operations table, under the lamp, with the skin's counters and arrows.
 const sheets = new Map(); // the mosaic is the skin's whole layer: built once per battle
-async function drawTable(cv, o) {
+async function drawTable(g, CW, CH, o) {
   const [{ b, T }] = await Promise.all([load(o.id), faces(['700 13px "Courier Prime"', '700 15px "Courier Prime"', '700 13px "Stardos Stencil"'])]);
   const S = sheets.get(b.id) ?? sheets.set(b.id, ww2.build(b, T, 1)).get(b.id), L = looks(b);
-  const g = cv.getContext('2d'), CW = cv.width, CH = cv.height;
   g.fillStyle = '#141310'; g.fillRect(0, 0, CW, CH);
   const ev = b.events.find(e => e.title === 'The pincers meet') ?? busiest(b);
   const at = ev.at ?? [0, 0], k = o.refW / Math.max(3000, (ev.view ?? 15000) * 1.25), E = b.extent;
@@ -201,10 +201,10 @@ async function drawTable(cv, o) {
 
 // Civil War: one battle's ground as the skin's survey sheet, centred on the hottest moment of the fight, ground only.
 const surveys = new Map(); // id -> the ground, built once
-async function drawSurvey(cv, o) {
+async function drawSurvey(g, CW, CH, o) {
   const [{ b, T }] = await Promise.all([load(o.id), faces(['italic 11px "Old Standard TT"', 'italic 12px "Old Standard TT"', '700 14px "Playfair Display SC"', '13px "Playfair Display SC"'])]);
   if (!surveys.has(b.id)) surveys.set(b.id, ground(b, T, 1));
-  const { layer, ivft } = surveys.get(b.id), g = cv.getContext('2d'), CW = cv.width, CH = cv.height;
+  const { layer, ivft } = surveys.get(b.id);
   const ev = busiest(b), at = ev.at ?? [0, 0], E = b.extent, k = o.refW / Math.max(1440, E / 3); // ground only, so wide enough for the place names
   const X = x => CW * o.fx + (x - at[0]) * k, Y = y => CH * o.fy - (y - at[1]) * k;
   g.fillStyle = SHEET; g.fillRect(0, 0, CW, CH);
@@ -253,12 +253,13 @@ export function showSplash(list, war, open) {
     + WARS.map(w => `<button class="tl-war" data-war="${w.id}" style="left:clamp(0px, calc(${pc((w.from + w.to) / 2)}% - 130px), calc(100% - 260px))"><b>${w.name}</b><small>${w.years}, ${count(w)}</small></button>`).join('');
 
   async function backdrop() {
-    const w = WARS.find(x => x.id === war), W = innerWidth, H = innerHeight, wide = W > 800, bar = wide ? 140 : 0, key = `${war} ${W}x${H}`;
+    const w = WARS.find(x => x.id === war), W = innerWidth, H = innerHeight, r = devicePixelRatio || 1, wide = W > 800, bar = wide ? 140 : 0, key = `${war} ${W}x${H}@${r}`;
     if (cv.dataset.key === key) return;
-    cv.dataset.key = key; cv.width = W; cv.height = H;
+    cv.dataset.key = key; cv.width = Math.round(W * r); cv.height = Math.round(H * r);
     if (!drawn.has(key)) drawn.set(key, (async () => {
-      const c = document.createElement('canvas'); c.width = W; c.height = H;
-      await w.draw(c, { id: pick.get(w), fx: wide ? Math.min(0.75, (680 + (W - 680) / 2) / W) : 0.5, fy: wide ? (H - bar) / 2 / H : 0.74, refW: wide ? W : 900, bottom: bar, cartouche: wide });
+      const c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height;
+      const g = c.getContext('2d'); g.scale(r, r);
+      await w.draw(g, W, H, { id: pick.get(w), fx: wide ? Math.min(0.75, (680 + (W - 680) / 2) / W) : 0.5, fy: wide ? (H - bar) / 2 / H : 0.74, refW: wide ? W : 900, bottom: bar, cartouche: wide });
       return c;
     })());
     const c = await drawn.get(key).catch(() => null); // the backdrop is decoration; the list works without it
