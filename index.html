@@ -213,6 +213,31 @@
   .theme-revolution #scrub::-webkit-slider-thumb { width: 22px; height: 30px; margin-top: -27px; border: 0; border-radius: 0; box-shadow: none; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='30' viewBox='0 0 22 30'><circle cx='11' cy='6' r='4.5' fill='none' stroke='%232a1a0c' stroke-width='1.2'/><path d='M11 29 L4.5 16 H8.5 V10 H13.5 V16 H17.5 Z' fill='%23a3202f' stroke='%232a1a0c' stroke-width='1'/></svg>") center / 22px 30px no-repeat; }
   .theme-revolution #scrub::-moz-range-thumb { width: 22px; height: 30px; border: 0; border-radius: 0; box-shadow: none; transform: translateY(-12px); background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='30' viewBox='0 0 22 30'><circle cx='11' cy='6' r='4.5' fill='none' stroke='%232a1a0c' stroke-width='1.2'/><path d='M11 29 L4.5 16 H8.5 V10 H13.5 V16 H17.5 Z' fill='%23a3202f' stroke='%232a1a0c' stroke-width='1'/></svg>") center / 22px 30px no-repeat; }
 
+  /* Civil War: an engineer's survey sheet. Panels of ruled linen with a rule inside the border and titles in small
+     capitals; the bar in blue cloth with a gilt rule, as on the start screen; a lantern over the sheet at night (#fx). */
+  body.theme-civil-war { --paper: rgba(241,236,224,0.96); --paper-solid: #f1ece0; --ink: #1d2230; --muted: #4c5160; --rule: #1d2230; --accent: #8c2a1c;
+    --fell: "Old Standard TT", Georgia, serif; --sc: "Playfair Display SC", Georgia, serif; --text: "Old Standard TT", Georgia, serif; --cloth: #1f2a44; --gilt: #c9a961;
+    --panel-bg: repeating-linear-gradient(0deg, rgba(60,50,30,0.035) 0 1px, transparent 1px 2px), repeating-linear-gradient(90deg, rgba(60,50,30,0.03) 0 1px, transparent 1px 2px), #f1ece0;
+    --frame: inset 0 0 0 4px #f1ece0, inset 0 0 0 5px rgba(29,34,48,0.55), 0 10px 28px rgba(8,10,20,0.45);
+    --vignette: radial-gradient(ellipse 80% 75% at 50% 48%, transparent 55%, rgba(150,140,120,0.25) 82%, rgba(40,40,52,0.55) 100%); }
+  .theme-civil-war :is(#top h1, #cap-title, #card-name, #hover b, dialog h2) { font-family: var(--sc); font-weight: 700; }
+  .theme-civil-war #top h1 { font-size: 29px; } .theme-civil-war #cap-title { font-size: 25px; }
+  .theme-civil-war #cap-when { font: italic 18px/1.3 var(--text); }
+  .theme-civil-war #fx .lantern { mix-blend-mode: screen; opacity: var(--dark); background: radial-gradient(circle at 50% 48%, rgba(255,214,150,0.45), rgba(255,190,120,0.14) 45%, transparent 75%); }
+  .theme-civil-war #bar { --panel-bg: repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 4px), var(--cloth); color: #efe6cc; border-color: #0d1322;
+    box-shadow: inset 0 0 0 3px var(--cloth), inset 0 0 0 4px var(--gilt), 0 10px 26px rgba(8,10,20,0.55); }
+  .theme-civil-war #bar :is(#play, #speed) { color: #efe6cc; background: #2a3657; border-color: var(--gilt); }
+  .theme-civil-war #bar :is(#play, #speed):hover { background: #34426a; }
+  .theme-civil-war option { background: var(--cloth); color: #efe6cc; }
+  .theme-civil-war #clock { font: 400 27px/1 var(--fell); } .theme-civil-war #clock small { color: var(--gilt); }
+  .theme-civil-war #hours { color: #c9bfa3; }
+  .theme-civil-war #bar input[type=checkbox] { accent-color: var(--gilt); }
+  .theme-civil-war #scrub::-webkit-slider-runnable-track { border-color: var(--gilt); background: linear-gradient(var(--gilt), var(--gilt)) 0 / var(--p, 0%) 100% no-repeat, #121a2e; }
+  .theme-civil-war #scrub::-moz-range-track { border-color: var(--gilt); background: #121a2e; }
+  .theme-civil-war #scrub::-moz-range-progress { background: var(--gilt); }
+  .theme-civil-war #loading { color: var(--ink); font: italic 28px var(--fell); background: radial-gradient(ellipse at 50% 45%, #f6f2e8, #f1ece0 60%, #cfc6b0); }
+  @media (max-width: 640px) { .theme-civil-war #top h1 { font-size: 21px; } .theme-civil-war #cap-title { font-size: 20px; } .theme-civil-war #clock { font-size: 20px; } }
+
   /* Second World War: an operations room. Dark boards with chalk stencilling, the story as a yellow teleprinter strip that
      ends STOP, an amber scrubber, a sector clock in the bar, and a lamp swaying over the table (#fx). */
   body.theme-ww2 { --paper: rgba(29,33,27,0.97); --paper-solid: #1d211b; --ink: #e9e4d2; --chalk: #e9e4d2; --muted: #a9ad9b; --rule: #000; --accent: #f0b53c; --tape: #f2e6b4;

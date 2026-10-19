@@ -62,9 +62,11 @@ room; labels that would overlap are dropped, biggest unit first.
 Each war gets its own look, a skin (`themes.js`, with the drawing in `themes/`). A skin owns the terrain baked into
 the map layer, how units, fire, the fallen and the night are drawn, what shows beyond the map edge, the ambient layers
 over the map, the clock, the legend's swatches and the panels' dress (`body.theme-<id>` in `index.html`). A battle
-wears the skin its `theme` field names; with none, a battle dated 1939 to 1945 wears the Second World War skin and any
-other the Revolution skin. `?theme=ww2` in a link (`index.html?theme=ww2#guilford@14:03`) shows a battle in another
-skin; the skin may recolour the sides for it, and the Second World War skin paints them olive drab against field grey.
+wears the skin its `theme` field names; with none, a battle dated 1861 to 1865 wears the Civil War skin, 1939 to 1945
+the Second World War skin, and any other the Revolution skin. `?theme=ww2` in a link
+(`index.html?theme=ww2#guilford@14:03`) shows a battle in another skin; the skin may recolour the sides for it. The
+Second World War skin paints them olive drab against field grey, and the Civil War skin Union blue against Confederate
+red.
 
 The Revolution skin is an engraved and hand-coloured plan on laid paper. Hachures shade the slopes, woods
 are clumped engraved canopies, fields are ruled with furrows, fences zig-zag, creeks and shores are water-lined, and a
@@ -90,9 +92,16 @@ swaying over the table is a page layer. See `docs/adr/0004-wwii-skin-before-its-
 
 ![The Second World War skin previewed on Guilford Courthouse](docs/screenshots/ww2-guilford.jpg)
 
-The Civil War skin is chosen and deferred until a battle of that war arrives: a topographical engineer's survey (brown
-contours in feet, scalloped woods, red-ochre roads, units ruled into companies under small flags). See
-`docs/adr/0002-per-war-skins.md`.
+The Civil War skin (`civil-war`) is a topographical engineer's survey after Hotchkiss and Bachelder: brown contours in
+feet with every fifth heavier and figured, woods edged in scallops, red-ochre roads, Prussian-blue streams widening
+downstream, worm fences, and a black square for each named building. A regiment is a block in its side's colour ruled
+into companies, its front rank heavier, under a small flag (a swallow-tailed guidon for cavalry); a battery is a row of
+guns; small crosses mark the fallen. A meridian arrow and a scale of feet sit in a free corner. Colour a Civil War
+battle's sides Union blue and Confederate red in `battle.json`, as Bachelder did. Night falls blue-grey and a lantern
+lights the sheet. The panels are ruled linen and the bar blue cloth with a gilt rule, as on the start screen, whose
+specimen sheet is drawn from the same ground. See `docs/adr/0006-civil-war-skin.md`.
+
+![The Civil War skin previewed on Guilford Courthouse](docs/screenshots/civil-war-guilford.jpg)
 
 `,bench` on a link measures the cost of a frame; `bash tools/bench.sh 'guilford@14:02,play,warp'` runs it in headless
 Chrome and prints milliseconds per frame and the time the layer took to build.

@@ -273,11 +273,11 @@ export const furrow = p => Math.atan2(p[1][1] - p[0][1], p[1][0] - p[0][0]);
 
 // Static features baked into the layer through the skin's own `feature` drawing; ones that come and go are drawn per frame.
 export const isStatic = f => f.from == null && f.until == null;
-export function bakeFeatures(g, b, L, feature, types) {
+export function bakeFeatures(g, b, L, feature, types, k = 1) {
   for (const f of b.features ?? []) {
     if (!isStatic(f) || !types.includes(f.type)) continue;
-    if (f.pts) feature(g, f.type, densify(L.pts(f.pts), 2), 1, false);
-    else if (f.poly) feature(g, f.type, L.pts(f.poly), 1, true);
+    if (f.pts) feature(g, f.type, densify(L.pts(f.pts), 2 * k), k, false);
+    else if (f.poly) feature(g, f.type, L.pts(f.poly), k, true);
   }
 }
 
@@ -385,6 +385,14 @@ export function plate(layer, L, bySide, recent, style) {
       ctx.save(); style(ctx, side, k, true); ctx.stroke(); ctx.restore();
     }
   };
+}
+
+// Where a w × h box of map furniture fits: the bottom right corner above the bar, or the clear part of the window's
+// corner, never under a panel, a chapter name or a unit. Its [right, bottom], or undefined when neither is clear.
+export function freeCorner(V, w, h) {
+  const fits = (r, b) => r - w >= 0 && b - h >= 0 && !V.avoid.some(p => p.t < b - 4 && p.b > b - h && p.l < r && p.r > r - w) &&
+    !V.B.units.some(u => u.pose && u.screen && Math.abs(u.screen.x - (r - w / 2)) < w / 2 + u.screen.w / 2 && Math.abs(u.screen.y - (b - h / 2)) < h / 2 + u.screen.w / 2);
+  return [[V.W - 24, V.safe.bar - 14], [V.safe.r - 10, V.safe.b]].find(([r, b]) => fits(r, b));
 }
 
 // Text with a halo, the map-label staple.

@@ -12,13 +12,14 @@
 // ambient(el, sheet), clock(t) => [main html, small], hours?(t), when?(event, b) => [caption time, tag],
 // preview?(b) (recolours another war's battle shown in this skin), legend: { text, swatch, extra(b, sheet) } }.
 import revolution from './themes/revolution.js';
+import civilWar from './themes/civil-war.js';
 import ww2 from './themes/ww2.js';
 
-export const THEMES = { revolution, ww2 };
+export const THEMES = { revolution, 'civil-war': civilWar, ww2 };
 
-// The skin asked for (the `?theme=` preview), else the battle's `theme`, else its war's by the year: 1939 to 1945 is the
-// Second World War, and anything else the Revolution, the other skin built so far.
+// The skin asked for (the `?theme=` preview), else the battle's `theme`, else its war's by the year: 1861 to 1865 is the
+// Civil War, 1939 to 1945 the Second World War, and anything else the Revolution.
 export function themeFor(b, want = null) {
   const year = +String(b.date ?? '').slice(0, 4);
-  return THEMES[want] ?? THEMES[b.theme] ?? (year >= 1939 && year <= 1945 ? THEMES.ww2 : THEMES.revolution);
+  return THEMES[want] ?? THEMES[b.theme] ?? (year >= 1861 && year <= 1865 ? civilWar : year >= 1939 && year <= 1945 ? ww2 : revolution);
 }
