@@ -36,6 +36,7 @@ Journeys are puppeteer-core scripts in `journeys/`. Each prints one `PASS` or `F
 ```bash
 bash $F/fg.sh drive <dir> $F/journeys/start-screen.cjs           # the war timeline, opening a battle, All battles, Back
 bash $F/fg.sh drive <dir> $F/journeys/playback.cjs [battle id]   # play, pause, Space, scrubber, arrow keys, speed, Legend, Sources
+bash $F/fg.sh drive <dir> $F/journeys/laptop.cjs [ids]           # the target laptop: 1536x830 at DPR 1.25 and 1280x700 at 1.5; no scroll, nothing covered, 16 px text, 44 px targets, sharp canvas
 ```
 
 `drive` writes the output to `<dir>/<journey>.log` and exits 1 if any line starts with `FAIL`. To prove something new, copy the closest journey, keep its `ok()` and `shot()` helpers, and drive the page the way a user would: click the real buttons and type real keys. Handles worth using are `#splash`, `.tl-war[data-war=<war id>]`, `.row[data-id=<battle id>]`, `#play` (its `aria-label` is `Play` or `Pause`), `#speed`, `#scrub`, `#clock`, `#cap-title`, `#home` (All battles), `#legend-btn` with `#legend-dlg`, and `#src-btn` with `#sources`. The feature files name more.
