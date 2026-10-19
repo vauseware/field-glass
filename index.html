@@ -21,17 +21,17 @@
   #map { position: fixed; inset: 0; touch-action: none; cursor: grab; }
   #map:active { cursor: grabbing; }
   .panel { position: fixed; background: var(--panel-bg, var(--paper)); border: 1px solid var(--rule); box-shadow: var(--frame); }
-  #top { left: 21px; top: 21px; padding: 12px 18px 14px; max-width: min(490px, calc(100vw - 42px)); max-height: calc(100vh - 170px); overflow-y: auto; scrollbar-color: var(--rule) transparent; }
+  #top { left: 21px; top: 21px; z-index: 1; padding: 12px 18px 14px; max-width: min(490px, calc(100vw - 42px)); max-height: calc(100vh - 170px); overflow-y: auto; scrollbar-color: var(--rule) transparent; }
   #top h1 { margin: 0; font: 400 30px/1.1 var(--fell); letter-spacing: 0.01em; }
   .top-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
   #top.folded { padding-bottom: 12px; } #top.folded > :not(.top-head) { display: none; }
   #sub { color: var(--muted); font: italic 18px/1.3 var(--fell); margin-top: 3px; }
-  #hint { color: var(--muted); font-size: 15px; margin-top: 6px; }
+  #hint { color: var(--muted); font-size: 16px; margin-top: 6px; }
   #legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(107,74,42,0.45); font: 18px var(--fell); }
   #legend span { display: inline-flex; align-items: center; gap: 7px; }
   #legend i { width: 18px; height: 14px; border: 1px solid var(--ink); display: inline-block; }
   #outcome { margin-top: 8px; border-top: 1px solid rgba(107,74,42,0.45); }
-  #outcome summary { display: flex; align-items: center; gap: 8px; min-height: 40px; cursor: pointer; font: 19px/1.2 var(--fell); list-style: none; }
+  #outcome summary { display: flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; font: 19px/1.2 var(--fell); list-style: none; }
   #outcome summary::-webkit-details-marker { display: none; }
   #outcome summary::before { content: "▸"; color: var(--muted); font: 16px var(--text); width: 12px; } #outcome[open] summary::before { content: "▾"; }
   #out-result { color: var(--accent); }
@@ -40,7 +40,7 @@
   #out-body i { display: inline-block; width: 14px; height: 11px; margin-right: 3px; border: 1px solid var(--ink); }
   #out-body .note { color: var(--muted); font-style: italic; font-size: 16px; }
   #top .row { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
-  #top .row button { min-height: 42px; padding: 6px 14px; }
+  #top .row button { min-height: 44px; padding: 6px 14px; }
   select, button { font: 19px/1.2 var(--fell); color: var(--ink); background: linear-gradient(#faf3e2, #e7d6ad); border: 1px solid var(--rule); border-radius: 3px; padding: 8px 14px; min-height: 48px;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 2px rgba(40,25,10,0.3); }
   button { cursor: pointer; }
@@ -60,7 +60,7 @@
   #card-swatch { flex: none; width: 16px; height: 12px; border: 1px solid var(--ink); }
   #card-cmd, #card-kind { color: var(--muted); }
   #card-live { margin-top: 4px; padding-top: 4px; border-top: 1px solid rgba(107,74,42,0.45); font-weight: 700; }
-  #card-close { position: absolute; top: 8px; right: 8px; min-height: 0; width: 36px; height: 36px; padding: 0; font: 26px/1 var(--text); }
+  #card-close { position: absolute; top: 4px; right: 4px; min-height: 0; width: 44px; height: 44px; padding: 0; font: 26px/1 var(--text); }
   #caption { right: 21px; top: 21px; transform: translateY(-8px); width: min(440px, calc(100vw - 42px)); max-height: calc(100vh - 170px); overflow-y: auto; padding: 14px 20px 18px; opacity: 0; transition: opacity 0.4s, transform 0.4s; scrollbar-color: var(--rule) transparent; }
   #caption.show { opacity: 1; transform: none; }
   .nofade #caption { transition: none; }
@@ -68,7 +68,7 @@
   #cap-text { font-size: 20px; line-height: 1.5; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(107,74,42,0.45); }
   .cap-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
   #cap-when { color: var(--muted); font: 19px/1.3 var(--sc); }
-  #cap-fold, #top-fold { flex: none; min-height: 40px; padding: 4px 12px; font-size: 17px; }
+  #cap-fold, #top-fold { flex: none; min-height: 44px; padding: 4px 12px; font-size: 17px; }
   #caption.folded #cap-text { display: none; }
   #bar { left: 21px; right: 21px; bottom: 21px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; }
   #play { width: 56px; min-width: 56px; font-size: 22px; }
@@ -89,7 +89,7 @@
   #marks button:hover, #marks button.on { color: var(--accent); } #marks button.on { border-color: var(--accent); border-width: 2px; line-height: 18px; }
   #clock { flex: none; position: relative; margin-left: 12px; font-variant-numeric: tabular-nums lining-nums; text-align: left; font-size: 21px; font-weight: 700; white-space: nowrap; }
   #clock.lapsing::before { content: "»"; position: absolute; right: 100%; padding-right: 4px; } /* time-lapse running; outside the width so it never shifts the bar */
-  #bar label { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; font: 19px var(--fell); cursor: pointer; }
+  #bar label { display: inline-flex; align-items: center; min-height: 44px; gap: 7px; white-space: nowrap; font: 19px var(--fell); cursor: pointer; }
   #bar input[type=checkbox] { width: 22px; height: 22px; margin: 0; accent-color: var(--muted); }
   dialog { background: var(--paper-solid); color: var(--ink); border: 1px solid var(--rule); box-shadow: var(--frame); max-width: min(640px, calc(100vw - 42px)); max-height: calc(100vh - 42px); padding: 20px 26px; }
   dialog::backdrop { background: rgba(30,18,8,0.55); }
@@ -116,10 +116,10 @@
   .tl-axis { position: relative; flex: 1; height: 100px; }
   .tl-rule { position: absolute; left: 0; right: 0; bottom: 22px; height: 10px; border-top: 1.5px solid currentColor;
     background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px calc(100% / 18)); opacity: 0.6; }
-  .tl-yr { position: absolute; bottom: 0; transform: translateX(-50%); font-size: 14px; opacity: 0.85; }
+  .tl-yr { position: absolute; bottom: 0; transform: translateX(-50%); font-size: 16px; opacity: 0.85; }
   .tl-span { position: absolute; bottom: 22px; height: 12px; min-width: 6px; background: currentColor; }
   #splash .tl-war { position: absolute; top: 0; width: 260px; white-space: nowrap; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 10px; border: 1px solid currentColor; border-radius: 2px; line-height: 1.1; }
-  .tl-war b { font-weight: inherit; font-size: 19px; } .tl-war small { font-size: 14px; margin-top: 3px; }
+  .tl-war b { font-weight: inherit; font-size: 19px; } .tl-war small { font-size: 16px; margin-top: 3px; }
   #splash .tl-war[aria-pressed="true"] { box-shadow: 0 0 0 3px currentColor; }
   /* Revolution: the engraved plan's parchment card. */
   #splash.war-revolution { color: #3b2614; font-family: var(--fell); }
@@ -143,7 +143,7 @@
   .war-civil-war .go { display: flex; flex-direction: column; gap: 8px; align-items: stretch; margin: 16px 0 4px; }
   #splash.war-civil-war .go button { font-size: 18px; border: 1px solid #1d2230; border-radius: 2px; padding: 10px 14px; min-height: 48px; }
   #splash.war-civil-war .go button:hover { background: rgba(46,74,134,0.1); }
-  .war-civil-war .foot { font: italic 15px/1.45 "Old Standard TT", Georgia, serif; margin: 18px 0 0; color: #3a3428; }
+  .war-civil-war .foot { font: italic 16px/1.45 "Old Standard TT", Georgia, serif; margin: 18px 0 0; color: #3a3428; }
   .war-civil-war .timeline { color: #efe6cc; border: 1px solid #0d1322; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 4px), #1f2a44;
     box-shadow: inset 0 0 0 3px #1f2a44, inset 0 0 0 4px #c9a961, 0 10px 26px rgba(8,10,20,0.55); }
   .war-civil-war .tl-war b { font-family: "Playfair Display SC", Georgia, serif; }
@@ -188,9 +188,9 @@
   #loading { position: fixed; inset: 0; z-index: 9; display: grid; place-items: center; margin: 0; color: #3b2614; font: italic 28px "IM Fell English", Georgia, serif;
     background: radial-gradient(ellipse at 50% 45%, #f3e7cb, #dcc79a 70%, #b8966a); }
   #loading[hidden] { display: none; }
-  #kicker { color: var(--muted); font: 15px var(--sc); letter-spacing: 0.2em; } #kicker:empty { display: none; }
-  #clock small { display: block; margin-top: -2px; color: var(--muted); font: italic 13px/1.1 var(--fell); }
-  #hours { position: absolute; left: 13px; right: 13px; top: 47px; height: 14px; pointer-events: none; font: italic 13px/14px var(--fell); color: var(--muted); }
+  #kicker { color: var(--muted); font: 16px var(--sc); letter-spacing: 0.2em; } #kicker:empty { display: none; }
+  #clock small { display: block; margin-top: -2px; color: var(--muted); font: italic 16px/1.1 var(--fell); }
+  #hours { position: absolute; left: 13px; right: 13px; top: 47px; height: 16px; pointer-events: none; font: italic 16px/16px var(--fell); color: var(--muted); }
   #hours span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
 
   /* Revolution: an engraved plan on laid paper. Grain and a soft light in the panels, a second ruled border inside, the
@@ -249,38 +249,38 @@
   .theme-ww2 #fx { mix-blend-mode: multiply; } /* #fx is fixed, an isolated group: the blend must be on it to reach the map */
   .theme-ww2 #fx .lamp { inset: -10%; background-size: 256px 256px, 100% 100%; background-repeat: repeat, no-repeat; animation: sway 8s ease-in-out infinite alternate; }
   @keyframes sway { from { transform: translate(-3%, -1.5%); } to { transform: translate(3%, 1.5%); } }
-  .theme-ww2 #kicker { display: flex; justify-content: space-between; gap: 24px; font: 12px var(--sc); letter-spacing: 0.25em; text-transform: uppercase; color: #9da38f; border-bottom: 1px solid #3a4035; padding-bottom: 6px; margin-bottom: 8px; }
+  .theme-ww2 #kicker { display: flex; justify-content: space-between; gap: 24px; font: 16px var(--sc); letter-spacing: 0.15em; text-transform: uppercase; color: #9da38f; border-bottom: 1px solid #3a4035; padding-bottom: 6px; margin-bottom: 8px; }
   .theme-ww2 #kicker::after { content: "Table 2"; }
   .theme-ww2 #top h1 { font: 700 31px/1.02 var(--fell); letter-spacing: 0.03em; text-transform: uppercase; color: var(--chalk); }
-  .theme-ww2 #sub { color: var(--muted); font: 15px/1.4 var(--text); letter-spacing: 0.04em; text-transform: uppercase; margin-top: 6px; }
-  .theme-ww2 #hint { font-size: 15px; }
+  .theme-ww2 #sub { color: var(--muted); font: 16px/1.4 var(--text); letter-spacing: 0.04em; text-transform: uppercase; margin-top: 6px; }
+  .theme-ww2 #hint { font-size: 16px; }
   .theme-ww2 #legend, .theme-ww2 #outcome { border-top-color: #3a4035; }
-  .theme-ww2 #legend { font: 14px var(--fell); letter-spacing: 0.1em; text-transform: uppercase; gap: 10px 20px; }
+  .theme-ww2 #legend { font: 16px var(--fell); letter-spacing: 0.1em; text-transform: uppercase; gap: 10px 20px; }
   .theme-ww2 :is(#legend, #out-body) i, .theme-ww2 #card-swatch { border: 0; border-radius: 2px; box-shadow: 0 3px 4px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.25); }
   .theme-ww2 #legend i { width: 32px; height: 18px; }
   .theme-ww2 #outcome summary { font: 16px/1.2 var(--fell); letter-spacing: 0.08em; text-transform: uppercase; }
-  .theme-ww2 #out-body { font-size: 15px; } .theme-ww2 #out-body b { font: 700 15px var(--fell); letter-spacing: 0.06em; text-transform: uppercase; }
-  .theme-ww2 :is(#top, #bar, #card, #caption, dialog) :is(button, select) { font: 15px/1.2 var(--fell); letter-spacing: 0.12em; text-transform: uppercase; color: var(--chalk);
+  .theme-ww2 #out-body { font-size: 16px; } .theme-ww2 #out-body b { font: 700 16px var(--fell); letter-spacing: 0.06em; text-transform: uppercase; }
+  .theme-ww2 :is(#top, #bar, #card, #caption, dialog) :is(button, select) { font: 16px/1.2 var(--fell); letter-spacing: 0.1em; text-transform: uppercase; color: var(--chalk);
     background: linear-gradient(#2f352b, #1a1e17); border: 1px solid #000; border-radius: 3px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 3px rgba(0,0,0,0.6); }
   .theme-ww2 :is(#top, #bar, #card, #caption, dialog) :is(button, select):hover { background: linear-gradient(#3a4135, #22271e); }
   .theme-ww2 :is(#top, #bar, #card, #caption, dialog) button:active { background: #161914; box-shadow: inset 0 2px 3px rgba(0,0,0,0.6); }
   .theme-ww2 option { background: #1d211b; color: var(--chalk); }
   .theme-ww2 #speed { font: 600 18px var(--num); letter-spacing: 0.04em; }
   .theme-ww2 #bar #play { width: 52px; min-width: 52px; height: 52px; padding: 0; border-radius: 50%; color: var(--accent); font-size: 18px; }
-  .theme-ww2 #hover, .theme-ww2 #card { font-size: 15px; line-height: 1.5; }
+  .theme-ww2 #hover, .theme-ww2 #card { font-size: 16px; line-height: 1.5; }
   .theme-ww2 :is(#hover b, #card-name) { font: 700 17px/1.25 var(--fell); letter-spacing: 0.04em; text-transform: uppercase; }
   .theme-ww2 #card-swatch { width: 26px; height: 15px; align-self: center; }
   .theme-ww2 #card-live { border-top-color: #3a4035; color: var(--tape); }
   .theme-ww2 #card #card-close { font: 24px/1 var(--text); letter-spacing: 0; }
   .theme-ww2 #caption { --panel-bg: var(--tape); color: #1f1c14; padding: 0 0 16px; box-shadow: 0 14px 30px rgba(0,0,0,0.65); scrollbar-color: #1f1c14 transparent; }
-  .theme-ww2 #caption::before { content: "Priority"; display: block; padding: 6px 18px; background: #1f1c14; color: var(--tape); font: 700 13px var(--text); letter-spacing: 0.2em; text-transform: uppercase; }
-  .theme-ww2 #caption::after { content: attr(data-tag); position: absolute; top: 6px; right: 18px; color: var(--tape); font: 700 13px var(--text); letter-spacing: 0.2em; }
+  .theme-ww2 #caption::before { content: "Priority"; display: block; padding: 6px 18px; background: #1f1c14; color: var(--tape); font: 700 16px var(--text); letter-spacing: 0.2em; text-transform: uppercase; }
+  .theme-ww2 #caption::after { content: attr(data-tag); position: absolute; top: 6px; right: 18px; color: var(--tape); font: 700 16px var(--text); letter-spacing: 0.2em; }
   .theme-ww2 .cap-head { padding: 10px 18px 0; align-items: center; }
-  .theme-ww2 #cap-when { color: #1f1c14; font: 700 14px/1.3 var(--text); letter-spacing: 0.06em; white-space: pre-wrap; }
+  .theme-ww2 #cap-when { color: #1f1c14; font: 700 16px/1.3 var(--text); letter-spacing: 0.06em; white-space: pre-wrap; }
   .theme-ww2 #cap-title { color: #1f1c14; font: 700 22px/1.2 var(--text); text-transform: uppercase; margin-top: 2px; }
   .theme-ww2 #cap-text { margin: 8px 18px 0; padding-top: 8px; border-top: 1px dashed rgba(31,28,20,0.4); font: 16px/1.55 var(--text); text-transform: uppercase; }
   .theme-ww2 #cap-text::after { content: " STOP"; font-weight: 700; }
-  .theme-ww2 #caption #cap-fold { background: #1f1c14; color: var(--tape); border-color: #1f1c14; box-shadow: none; font-size: 14px; }
+  .theme-ww2 #caption #cap-fold { background: #1f1c14; color: var(--tape); border-color: #1f1c14; box-shadow: none; font-size: 16px; }
   .theme-ww2 #bar { padding: 8px 18px; gap: 14px; }
   .theme-ww2 #scrub::-webkit-slider-runnable-track { height: 6px; border: 0; border-radius: 3px; box-shadow: inset 0 1px 2px #000, 0 1px 0 rgba(255,255,255,0.07);
     background: linear-gradient(90deg, rgba(240,181,60,0.3), var(--accent)) 0 / var(--p, 0%) 100% no-repeat, #0d0f0b; }
@@ -289,18 +289,18 @@
   .theme-ww2 #scrub::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -7px; border: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff1c8, var(--accent) 60%, #8a5a10); box-shadow: 0 0 10px rgba(240,181,60,0.75); }
   .theme-ww2 #scrub::-moz-range-thumb { width: 18px; height: 18px; border: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff1c8, var(--accent) 60%, #8a5a10); box-shadow: 0 0 10px rgba(240,181,60,0.75); }
   .theme-ww2 #marks path { stroke: #7d826f; } .theme-ww2 #marks path.on { stroke: var(--accent); }
-  .theme-ww2 #bar #marks button { font: 13px/20px var(--fell); letter-spacing: 0.08em; color: #c3c7b4; background: #1d211b; box-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+  .theme-ww2 #bar #marks button { font: 16px/20px var(--fell); letter-spacing: 0.08em; color: #c3c7b4; background: #1d211b; box-shadow: 0 2px 4px rgba(0,0,0,0.6); }
   .theme-ww2 #bar #marks button:hover, .theme-ww2 #bar #marks button.on { color: var(--accent); } .theme-ww2 #bar #marks button.on { border-color: var(--accent); line-height: 18px; }
-  .theme-ww2 #hours { font: 12px/14px var(--num); letter-spacing: 0.06em; color: #8b907c; }
+  .theme-ww2 #hours { font: 16px/16px var(--num); letter-spacing: 0.06em; color: #8b907c; }
   .theme-ww2 #clock { display: grid; grid-template-columns: auto auto; column-gap: 12px; align-items: center; font: 600 30px/1 var(--num); letter-spacing: 0.04em; color: var(--chalk); }
   .theme-ww2 #clock .dial { grid-row: 1 / span 2; width: 60px; height: 60px; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.6)); }
-  .theme-ww2 #clock small { margin-top: 3px; color: #9da38f; font: 12px/1.1 var(--sc); letter-spacing: 0.2em; }
-  .theme-ww2 #bar label { font: 14px var(--fell); letter-spacing: 0.12em; text-transform: uppercase; color: #b9bda9; }
+  .theme-ww2 #clock small { margin-top: 3px; color: #9da38f; font: 16px/1.1 var(--sc); letter-spacing: 0.12em; }
+  .theme-ww2 #bar label { font: 16px var(--fell); letter-spacing: 0.12em; text-transform: uppercase; color: #b9bda9; }
   .theme-ww2 #bar input[type=checkbox] { accent-color: var(--accent); }
   .theme-ww2 dialog { background: var(--panel-bg); color: var(--chalk); font: 16px/1.5 var(--text); }
   .theme-ww2 dialog::backdrop { background: rgba(0,0,0,0.65); }
   .theme-ww2 dialog h2 { font: 700 24px var(--fell); letter-spacing: 0.08em; text-transform: uppercase; border-bottom-color: #3a4035; padding-bottom: 4px; }
-  .theme-ww2 #legend-list { font-size: 15px; } .theme-ww2 #legend-list canvas { border: 1px solid #000; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+  .theme-ww2 #legend-list { font-size: 16px; } .theme-ww2 #legend-list canvas { border: 1px solid #000; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
   .theme-ww2 #loading { color: var(--tape); font: 700 22px var(--text); letter-spacing: 0.25em; text-transform: uppercase; background: radial-gradient(ellipse at 50% 45%, #2c3127, #141310 70%, #0a0907); }
   .theme-ww2 #loading p::after { content: "_"; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
