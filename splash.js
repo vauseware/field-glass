@@ -5,13 +5,16 @@ import { normalizeBattle, unitAt, shape, hash, mulberry32, MONTHS } from './sim.
 import * as P from './themes/paint.js';
 import ww2, { counter, looks, arrowPath } from './themes/ww2.js';
 import { ground, INK, SHEET } from './themes/civil-war.js';
+import { ground as chart, rose, INK as NAVY, PAPER as CREAM, BACK } from './themes/war-of-1812.js';
 
 // In date order. `war` is the index.json "war" string; ids match the skins in themes.js where a war has one.
+// `sample` is the battle a war with no battles yet draws its backdrop from.
 // draw(g, W, H, o): g is scaled to CSS pixels and W, H are in them. o = { id: the battle to draw, fx, fy: where the fight
 // sits as a share of width and height, refW: the width the scale is judged by, bottom: px kept clear at the foot,
 // cartouche: bool }.
 export const WARS = [
   { id: 'revolution', name: 'American Revolution', years: '1775–1783', from: 1775, to: 1783, war: 'American Revolutionary War', draw: drawPlan },
+  { id: 'war-of-1812', name: 'War of 1812', years: '1812–1815', from: 1812, to: 1815, war: 'War of 1812', draw: drawChart, sample: 'fort-fisher', note: 'The first battle will be New Orleans, 8 January 1815.' },
   { id: 'civil-war', name: 'Civil War', years: '1861–1865', from: 1861, to: 1865, war: 'Civil War', draw: drawSurvey },
   { id: 'ww2', name: 'Second World War', years: '1939–1945', from: 1939, to: 1945, war: 'World War II', draw: drawTable },
 ];
@@ -234,6 +237,39 @@ async function drawSurvey(g, CW, CH, o) {
   }
 }
 
+// War of 1812: one battle's ground as the skin's chart, ground only, on its blue backing paper.
+const charts = new Map(); // id -> the ground, built once
+async function drawChart(g, CW, CH, o) {
+  const [{ b, T }] = await Promise.all([load(o.id), faces(['italic 11px Cardo', 'italic 12px Cardo', '15px Cardo'])]);
+  if (!charts.has(b.id)) charts.set(b.id, chart(b, T));
+  const { layer } = charts.get(b.id);
+  const ev = busiest(b), at = ev.at ?? [0, 0], E = b.extent, k = o.refW / Math.max(1440, E / 3);
+  const X = x => CW * o.fx + (x - at[0]) * k, Y = y => CH * o.fy - (y - at[1]) * k;
+  g.fillStyle = BACK; g.fillRect(0, 0, CW, CH);
+  const l = Math.max(24, X(-E / 2)), t = Math.max(24, Y(E / 2)), r = Math.min(CW - 24, X(E / 2)), bt = Math.min(CH - 24, Y(-E / 2)); // the sheet, on the backing
+  g.fillStyle = CREAM; g.fillRect(l - 30, t - 30, r - l + 60, bt - t + 60);
+  g.save(); g.beginPath(); g.rect(l, t, r - l, bt - t); g.clip();
+  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  g.drawImage(layer, X(-E / 2), Y(E / 2), E * k, E * k);
+  g.restore();
+  g.strokeStyle = NAVY; g.lineWidth = 1; g.strokeRect(l - 4, t - 4, r - l + 8, bt - t + 8); g.strokeRect(l - 12, t - 12, r - l + 24, bt - t + 24);
+  for (let x = l - 4, i = 0; x < r + 4; x += 24, i++) { g.fillStyle = i % 2 ? NAVY : CREAM; const w = Math.min(24, r + 4 - x); g.fillRect(x, t - 12, w, 8); g.fillRect(x, bt + 4, w, 8); }
+  for (let y = t - 4, i = 0; y < bt + 4; y += 24, i++) { g.fillStyle = i % 2 ? NAVY : CREAM; const h = Math.min(24, bt + 4 - y); g.fillRect(l - 12, y, 8, h); g.fillRect(r + 4, y, 8, h); }
+  g.globalCompositeOperation = 'multiply'; // paper grain and a vignette, as on the battle screen
+  g.globalAlpha = 0.3; g.drawImage(P.grainCanvas(CW, CH, 13, 225, 255), 0, 0); g.globalAlpha = 1;
+  const vg = g.createRadialGradient(CW / 2, CH / 2, Math.min(CW, CH) * 0.4, CW / 2, CH / 2, Math.hypot(CW, CH) * 0.6);
+  vg.addColorStop(0, 'rgba(255,255,255,1)'); vg.addColorStop(1, 'rgba(170,175,180,1)');
+  g.fillStyle = vg; g.fillRect(0, 0, CW, CH); g.globalCompositeOperation = 'source-over';
+  if (o.cartouche) { // the rose in the top corner and a scale of yards at the foot
+    const fb = CH - o.bottom, yd = 0.9144 * k, len = [500, 1000, 2000, 5000].find(n => n * yd >= 200) ?? 5000, w = len * yd, x0 = CW - 80 - w, y0 = fb - 70;
+    g.drawImage(rose(1), CW - 200, 50, 150, 150);
+    for (let i = 0; i < 10; i++) { g.fillStyle = i % 2 ? CREAM : NAVY; g.fillRect(x0 + (i * w) / 10, y0, w / 10, 4); }
+    g.strokeStyle = NAVY; g.lineWidth = 1; g.strokeRect(x0, y0, w, 4);
+    g.fillStyle = NAVY; g.textAlign = 'center'; g.font = 'italic 15px Cardo'; g.fillText('Scale of Yards', x0 + w / 2, y0 - 12);
+    g.font = 'italic 12px Cardo'; g.fillText('0', x0, y0 + 18); g.fillText(String(len), x0 + w, y0 + 18);
+  }
+}
+
 // ---------- the screen ----------
 
 const Y0 = 1770, Y1 = 1950; // the timeline's span, ruled every ten years
@@ -259,7 +295,7 @@ export function showSplash(list, war, open) {
     if (!drawn.has(key)) drawn.set(key, (async () => {
       const c = document.createElement('canvas'); c.width = cv.width; c.height = cv.height;
       const g = c.getContext('2d'); g.scale(r, r);
-      await w.draw(g, W, H, { id: pick.get(w), fx: wide ? Math.min(0.75, (680 + (W - 680) / 2) / W) : 0.5, fy: wide ? (H - bar) / 2 / H : 0.74, refW: wide ? W : 900, bottom: bar, cartouche: wide });
+      await w.draw(g, W, H, { id: pick.get(w) ?? w.sample, fx: wide ? Math.min(0.75, (680 + (W - 680) / 2) / W) : 0.5, fy: wide ? (H - bar) / 2 / H : 0.74, refW: wide ? W : 900, bottom: bar, cartouche: wide });
       return c;
     })());
     const c = await drawn.get(key).catch(() => null); // the backdrop is decoration; the list works without it
