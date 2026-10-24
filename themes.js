@@ -14,12 +14,13 @@
 import revolution from './themes/revolution.js';
 import civilWar from './themes/civil-war.js';
 import ww2 from './themes/ww2.js';
+import warOf1812 from './themes/war-of-1812.js';
 
-export const THEMES = { revolution, 'civil-war': civilWar, ww2 };
+export const THEMES = { revolution, 'civil-war': civilWar, 'war-of-1812': warOf1812, ww2 };
 
-// The skin asked for (the `?theme=` preview), else the battle's `theme`, else its war's by the year: 1861 to 1865 is the
-// Civil War, 1939 to 1945 the Second World War, and anything else the Revolution.
+// The skin asked for (the `?theme=` preview), else the battle's `theme`, else its war's by the year: 1812 to 1815 is the
+// War of 1812, 1861 to 1865 the Civil War, 1939 to 1945 the Second World War, and anything else the Revolution.
 export function themeFor(b, want = null) {
   const year = +String(b.date ?? '').slice(0, 4);
-  return THEMES[want] ?? THEMES[b.theme] ?? (year >= 1861 && year <= 1865 ? civilWar : year >= 1939 && year <= 1945 ? ww2 : revolution);
+  return THEMES[want] ?? THEMES[b.theme] ?? (year >= 1812 && year <= 1815 ? warOf1812 : year >= 1861 && year <= 1865 ? civilWar : year >= 1939 && year <= 1945 ? ww2 : revolution);
 }

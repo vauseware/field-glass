@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Playfair+Display+SC:wght@400;700;900&family=Stardos+Stencil:wght@400;700&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Playfair+Display+SC:wght@400;700;900&family=Cardo:ital,wght@0,400;0,700;1,400&family=Stardos+Stencil:wght@400;700&family=Courier+Prime:wght@400;700&display=swap">
 <link id="theme-fonts" rel="stylesheet">
 <style>
   /* The battle screen wears the start screen's dress: parchment panels, ink double rules, Fell type for names, Georgia for reading. */
@@ -113,14 +113,15 @@
   #splash .list .row .rt { white-space: nowrap; }
   #splash .timeline { position: fixed; left: 16px; right: 16px; bottom: 14px; z-index: 5; display: flex; align-items: stretch; gap: 20px; padding: 12px 20px 10px; }
   #splash .ask { flex: none; align-self: center; font-size: 21px; margin: 0; }
-  .tl-axis { position: relative; flex: 1; height: 100px; }
+  .tl-axis { position: relative; flex: 1; height: 160px; }
   .tl-rule { position: absolute; left: 0; right: 0; bottom: 22px; height: 10px; border-top: 1.5px solid currentColor;
     background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px calc(100% / 18)); opacity: 0.6; }
   .tl-yr { position: absolute; bottom: 0; transform: translateX(-50%); font-size: 16px; opacity: 0.85; }
   .tl-span { position: absolute; bottom: 22px; height: 12px; min-width: 6px; background: currentColor; }
-  #splash .tl-war { position: absolute; top: 0; width: 260px; white-space: nowrap; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 10px; border: 1px solid currentColor; border-radius: 2px; line-height: 1.1; }
+  #splash .tl-war { position: absolute; top: 0; width: 240px; white-space: nowrap; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 10px; border: 1px solid currentColor; border-radius: 2px; line-height: 1.1; }
   .tl-war b { font-weight: inherit; font-size: 19px; } .tl-war small { font-size: 16px; margin-top: 3px; }
   #splash .tl-war[aria-pressed="true"] { box-shadow: 0 0 0 3px currentColor; }
+  #splash .tl-war:nth-of-type(even) { top: 66px; }
   /* Revolution: the engraved plan's parchment card. */
   #splash.war-revolution { color: #3b2614; font-family: var(--fell); }
   .war-revolution .card { background: rgba(244,233,208,0.94); border: 1px solid #6b4a2a; box-shadow: 0 0 0 6px rgba(244,233,208,0.7), 0 0 0 7px #6b4a2a, 0 24px 70px rgba(40,25,10,0.5); }
@@ -149,6 +150,22 @@
   .war-civil-war .tl-war b { font-family: "Playfair Display SC", Georgia, serif; }
   #splash.war-civil-war .tl-war[aria-pressed="true"] { background: #c9a961; color: #1f2a44; border-color: #c9a961; box-shadow: 0 0 0 3px #c9a961; }
   .war-civil-war .tl-span { background: #c9a961; }
+  /* War of 1812: the chart's cream sheet with its graduated border, on a timeline of blue backing paper. */
+  #splash.war-war-of-1812 { color: #1e2a38; font: 17px/1.5 Cardo, Georgia, serif; background: #9fb3bd; }
+  .war-war-of-1812 .card { text-align: center; background: #eee9d8; border: 1px solid #1e2a38;
+    box-shadow: inset 0 0 0 5px #eee9d8, inset 0 0 0 6px #1e2a38, 0 14px 40px rgba(20,28,38,0.45); }
+  .war-war-of-1812 h1 { margin: 2px 0 0; font: 700 60px/1 Cardo, Georgia, serif; letter-spacing: 0.04em; }
+  .war-war-of-1812 .tag { font: italic 20px/1.35 Cardo, Georgia, serif; margin: 8px 0 0; }
+  .war-war-of-1812 .rule2 { height: 8px; margin: 16px 40px 18px; border-top: 1px solid #1e2a38; border-bottom: 1px solid #1e2a38; background: repeating-linear-gradient(90deg, #1e2a38 0 24px, transparent 24px 48px); background-clip: content-box; padding: 1px 0; }
+  .war-war-of-1812 .empty p { margin: 0 0 12px; font-size: 18px; } .war-war-of-1812 .empty .lead { font: 700 24px/1.3 Cardo, Georgia, serif; margin: 0 0 6px; }
+  .war-war-of-1812 .go { display: flex; flex-direction: column; gap: 8px; align-items: stretch; margin: 16px 0 4px; }
+  #splash.war-war-of-1812 .go button { font-size: 18px; border: 1px solid #1e2a38; border-radius: 2px; padding: 10px 14px; min-height: 48px; }
+  #splash.war-war-of-1812 .go button:hover { background: rgba(30,42,56,0.08); }
+  #splash.war-war-of-1812 .row { font-size: 20px; } #splash.war-war-of-1812 .row:is(:hover, :focus-visible) { background: rgba(30,42,56,0.1); }
+  .war-war-of-1812 .foot { font: italic 16px/1.45 Cardo, Georgia, serif; margin: 18px 0 0; color: #3a4452; }
+  .war-war-of-1812 .timeline { color: #eee9d8; background: #4e6676; border: 1px solid #1e2a38; box-shadow: inset 0 0 0 3px #4e6676, inset 0 0 0 4px #eee9d8, 0 10px 26px rgba(20,28,38,0.5); }
+  .war-war-of-1812 .tl-war b { font-weight: 700; }
+  #splash.war-war-of-1812 .tl-war[aria-pressed="true"] { background: #eee9d8; color: #1e2a38; border-color: #eee9d8; box-shadow: 0 0 0 3px #eee9d8; }
   /* Second World War: a typed manila file card with a stencilled label, on the operations table's dark board. */
   #splash.war-ww2 { color: #1f1c14; font-family: "Courier Prime", "Courier New", monospace; background: #141310; }
   .war-ww2 .card { border-radius: 3px; box-shadow: 0 2px 0 #b89c5f, 0 28px 60px rgba(0,0,0,0.75);
@@ -170,9 +187,10 @@
     .war-revolution h1 { font-size: 44px; } .war-revolution .tag { font-size: 18px; } .war-revolution .row { font-size: 18px; }
     .war-civil-war h1 { font-size: 42px; } .war-civil-war .tag { font-size: 17px; } .war-civil-war .rule2 { margin: 12px 20px 14px; }
     .war-ww2 h1 { font-size: 38px; } #splash.war-ww2 .row { font-size: 16px; } .war-ww2 .tag { font-size: 15px; }
+    .war-war-of-1812 h1 { font-size: 42px; } .war-war-of-1812 .tag { font-size: 17px; } .war-war-of-1812 .rule2 { margin: 12px 20px 14px; }
     #splash .timeline { left: 8px; right: 8px; bottom: 8px; padding: 8px; flex-direction: column; gap: 6px; }
     #splash .ask { font-size: 16px; text-align: center; }
-    .tl-axis { height: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .tl-axis { height: auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
     .tl-rule, .tl-yr, .tl-span { display: none; }
     #splash .tl-war { position: static; width: auto; min-height: 58px; padding: 4px; white-space: normal; } .tl-war b { font-size: 15px !important; } .tl-war small { font-size: 12px; }
   }
@@ -213,6 +231,17 @@
   .theme-revolution #scrub::-webkit-slider-thumb { width: 22px; height: 30px; margin-top: -27px; border: 0; border-radius: 0; box-shadow: none; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='30' viewBox='0 0 22 30'><circle cx='11' cy='6' r='4.5' fill='none' stroke='%232a1a0c' stroke-width='1.2'/><path d='M11 29 L4.5 16 H8.5 V10 H13.5 V16 H17.5 Z' fill='%23a3202f' stroke='%232a1a0c' stroke-width='1'/></svg>") center / 22px 30px no-repeat; }
   .theme-revolution #scrub::-moz-range-thumb { width: 22px; height: 30px; border: 0; border-radius: 0; box-shadow: none; transform: translateY(-12px); background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='30' viewBox='0 0 22 30'><circle cx='11' cy='6' r='4.5' fill='none' stroke='%232a1a0c' stroke-width='1.2'/><path d='M11 29 L4.5 16 H8.5 V10 H13.5 V16 H17.5 Z' fill='%23a3202f' stroke='%232a1a0c' stroke-width='1'/></svg>") center / 22px 30px no-repeat; }
 
+  /* War of 1812: a blue-back chart. Cream panels with a navy rule inside the border; the bar and the page beyond the
+     sheet in the chart's blue paper backing; a binnacle lamp over the chart at night (#fx). */
+  body.theme-war-of-1812 { --paper: rgba(238,233,216,0.97); --paper-solid: #eee9d8; --ink: #1e2a38; --muted: #4e5a68; --rule: #1e2a38; --accent: #b3331f; --fell: Cardo, Georgia, serif; --sc: Cardo, Georgia, serif; --text: Cardo, Georgia, serif;
+    --panel-bg: #eee9d8; background: #9fb3bd; }
+  .theme-war-of-1812 .panel::before { content: ""; position: absolute; inset: 5px; border: 1px solid var(--ink); pointer-events: none; }
+  .theme-war-of-1812 :is(#top h1, #cap-title, #card-name, dialog h2) { letter-spacing: 0.04em; }
+  .theme-war-of-1812 #bar { --panel-bg: #9fb3bd; color: #141c26; border-color: #1e2a38; }
+  .theme-war-of-1812 #bar :is(#play, #speed) { background: #eee9d8; border-color: var(--ink); }
+  .theme-war-of-1812 #clock { font: 400 27px/1 var(--fell); } .theme-war-of-1812 #clock small, .theme-war-of-1812 #hours { color: #2c3a4a; }
+  .theme-war-of-1812 #fx .binnacle { mix-blend-mode: screen; opacity: var(--dark); background: radial-gradient(circle at 50% 50%, rgba(200,225,235,0.4), rgba(170,200,220,0.12) 45%, transparent 75%); }
+  .theme-war-of-1812 #loading { color: var(--ink); font: italic 28px var(--fell); background: #9fb3bd; }
   /* Civil War: an engineer's survey sheet. Panels of ruled linen with a rule inside the border and titles in small
      capitals; the bar in blue cloth with a gilt rule, as on the start screen; a lantern over the sheet at night (#fx). */
   body.theme-civil-war { --paper: rgba(241,236,224,0.96); --paper-solid: #f1ece0; --ink: #1d2230; --muted: #4c5160; --rule: #1d2230; --accent: #8c2a1c;
