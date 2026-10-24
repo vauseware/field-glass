@@ -63,11 +63,25 @@
   "runtime": 1160
  },
  {
+  "id": "fort-fisher",
+  "name": "Fort Fisher, 13–15 Jan 1865",
+  "date": "1865-01-13",
+  "war": "Civil War",
+  "runtime": 925
+ },
+ {
   "id": "sidi-bou-zid",
   "name": "Sidi Bou Zid, 14–17 Feb 1943",
   "date": "1943-02-14",
   "war": "World War II",
   "runtime": 926
+ },
+ {
+  "id": "kasserine",
+  "name": "Kasserine Pass, 19–23 Feb 1943",
+  "date": "1943-02-19",
+  "war": "World War II",
+  "runtime": 1794
  },
  {
   "id": "monmouth",
