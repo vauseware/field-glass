@@ -82,5 +82,12 @@
   "date": "1943-02-19",
   "war": "World War II",
   "runtime": 1794
+ },
+ {
+  "id": "monmouth",
+  "name": "Monmouth, 28 Jun 1778",
+  "date": "1778-06-28",
+  "war": "American Revolutionary War",
+  "runtime": 868
  }
 ]
