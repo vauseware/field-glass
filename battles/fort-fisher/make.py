@@ -8,7 +8,7 @@
 # disagree by about 300 m on the Mound, so it is put between them, about 1,000 m from the bastion. Since 1865 the sea
 # has taken the bastion, 2,100 ft of the sea face and 100 ft of the land face, and New Inlet, south of Buchanan, has
 # closed: the DEM is raised to beach height over the lost strip and the inlet is drawn as a water polygon.
-import json, math, datetime as dt
+import json, math
 HERE = "battles/fort-fisher/"
 LAT0, LON0 = 33.9690, -77.9240
 KX, KY = 111320 * math.cos(math.radians(LAT0)), 111320  # tools/fetch_terrain.py's metres per degree
@@ -72,8 +72,8 @@ def ellipse(c, a, b, n=16): return [[round(c[0] + a * math.cos(2 * math.pi * i /
 
 # ---- the clock: 13 to 15 January 1865 ----
 def D(day, hm): return f"1865-01-{day:02d} {hm}"
-def sec(t): return dt.datetime.strptime(t, "%Y-%m-%d %H:%M").timestamp()
-def fmt(s): return dt.datetime.fromtimestamp(round(s / 60) * 60).strftime("%Y-%m-%d %H:%M")
+def sec(t): h, m = map(int, t[11:].split(":")); return ((int(t[8:10]) - 13) * 24 + h) * 3600 + m * 60   # seconds from midnight on the 13th
+def fmt(s): m = round(s / 60); return D(13 + m // 1440, f"{m % 1440 // 60:02d}:{m % 60:02d}")
 def plus(t, mins): return fmt(sec(t) + mins * 60)
 def K(t, p, **kw): return dict(t=t, x=round(p[0]), y=round(p[1]), **kw)
 def heading(a, b): return round(math.degrees(math.atan2(b[0] - a[0], b[1] - a[1])) % 360)
@@ -266,7 +266,7 @@ def add_holds(ks):
     return out
 for u in units:
     u["keys"] = add_holds(u["keys"])
-    bad = [(a["t"], b["t"]) for a, b in zip(u["keys"], u["keys"][1:]) if sec(b["t"]) < sec(a["t"])]
+    bad = [(a["t"], b["t"]) for a, b in zip(u["keys"], u["keys"][1:]) if sec(b["t"]) <= sec(a["t"])]
     assert not bad, (u["id"], bad)
 
 # ---- ground ----
