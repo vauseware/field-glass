@@ -166,7 +166,7 @@ bde26("lancers", "17/21 Lancers", "17th/21st Lancers (less a squadron), 26th Arm
 bde26("lothians", "2 Lothians", "2nd Lothians and Border Horse, 26th Armoured Brigade: Valentines. Some of the brigade's remaining tanks counterattacked just before dawn on the 22nd and lost five or more", 25, 800, -300, 0, 7, 3, 12, True, 7)
 BUFFS = M(35.455, 8.709)
 al("buffs", "10 RB", "The 26th Armoured Brigade's motor battalion (less Gore's company), on the Thala road with the tanks", "", "infantry", 400,
-   [K(T0, M(35.568, 8.678), h=180, state="line")] + march(D(20, "10:30"), D(20, "13:30"), [M(35.568, 8.678), M(35.44, 8.713)])[1:] + [K(D(20, "13:35"), M(35.44, 8.713), state="line", h=180),
+   [K(T0, M(35.568, 8.678), h=180, state="line")] + march(D(20, "10:30"), D(20, "13:30"), [M(35.568, 8.678), M(35.44, 8.713)]) + [K(D(20, "13:35"), M(35.44, 8.713), state="line", h=180),
     K(D(21, "06:00"), BUFFS, state="line", h=180), K(D(21, "10:00"), BUFFS, state="firing"), K(D(21, "16:00"), BUFFS, strength=370, state="retreat", h=0), K(D(21, "17:00"), off(RIDGE2, 0, 300), state="firing", h=180),
     K(D(21, "18:00"), off(RIDGE2, 0, 300), state="retreat", h=0, strength=350), K(D(21, "19:00"), M(35.549, 8.694), state="line", h=180), K(D(21, "19:20"), M(35.549, 8.694), state="firing"), K(D(21, "22:00"), M(35.549, 8.694), state="line", strength=320)], loose=True)
 LEIC = P['ridge_leic']
@@ -221,7 +221,7 @@ al("i16_2", "2/16 Inf", "2nd Battalion, 16th Infantry, 1st Infantry Division, wi
 # the 1600 counterattack and the Bersaglieri overtaken near Hill 732. Inferred: every tank count and the headcounts.
 def to_hamra(p, fight, back, t_out=D(21, "14:00"), t_fight=D(21, "16:30"), n_fight=None, bc=None, n_bc=None, back2=None, n_back2=None, n_end=None):
     # out of the pass along the Tébessa road on the afternoon of the 21st, pushed back at dusk, round by the south in the night to Bou Chebka pass, back into the pass in the night of 22-23
-    road = [q for q in [M(35.2639, 8.7059), M(35.2946, 8.6566), M(35.3060, 8.6371)] if q[0] < fight[0]]
+    road = [q for q in [M(35.2639, 8.7059), M(35.2946, 8.6566), M(35.3060, 8.6371)] if fight[0] < q[0] < p[0]]  # the road vertices between start and fight, westbound
     keys = march(t_out, t_fight, [p] + road + [fight]) + [K(fmt(sec(t_fight) + 300), fight, state="firing", h=280), K(D(21, "18:00"), fight, state="retreat", h=120, **({"strength": n_fight} if n_fight else {})), K(D(21, "19:30"), back, state="line", h=280)]
     if bc:
         keys += march(D(22, "01:00"), D(22, "06:30"), [back, M(35.27, 8.60), bc]) + [K(D(22, "07:00"), bc, state="firing", h=290), K(D(22, "15:30"), bc, state="line", **({"strength": n_bc} if n_bc else {})),
@@ -231,7 +231,7 @@ def to_hamra(p, fight, back, t_out=D(21, "14:00"), t_fight=D(21, "16:30"), n_fig
 ax("recon33", "33d Recon", "33d Reconnaissance Battalion, Kampfgruppe DAK: 'too small' to take the pass by surprise at daybreak on the 19th; it led the move on Djebel el Hamra at 0200 on the 21st with a few Italian tanks", "Generalmajor Karl Buelowius (Kampfgruppe DAK)", "light_infantry", 400,
    march(D(19, "06:00"), D(19, "07:00"), [SE, M(35.238, 8.760)]) + [K(D(19, "07:05"), M(35.238, 8.760), state="skirmish", h=320), K(D(19, "08:30"), M(35.232, 8.768), state="line", h=320, strength=385),
     K(D(20, "16:30"), M(35.232, 8.768), state="column", h=hd(M(35.232, 8.768), M(35.262, 8.712))), K(D(20, "19:00"), M(35.262, 8.712), state="line", h=300)] +
-   march(D(21, "02:00"), D(21, "04:30"), [M(35.262, 8.712), M(35.2946, 8.6566), M(35.3060, 8.6371), off(P['point732'], 0, 400)])[1:] + [K(D(21, "04:35"), off(P['point732'], 0, 400), state="skirmish", h=280), K(D(21, "05:30"), off(P['point732'], 0, 400), state="line", h=280),
+   march(D(21, "02:00"), D(21, "04:30"), [M(35.262, 8.712), M(35.2946, 8.6566), M(35.3060, 8.6371), off(P['point732'], 0, 400)]) + [K(D(21, "04:35"), off(P['point732'], 0, 400), state="skirmish", h=280), K(D(21, "05:30"), off(P['point732'], 0, 400), state="line", h=280),
     K(D(21, "16:30"), off(P['point732'], 0, 400), state="firing"), K(D(21, "18:00"), off(P['point732'], 0, 400), state="retreat", h=120, strength=370), K(D(21, "19:30"), M(35.29, 8.655), state="line", h=280),
     K(D(22, "22:30"), M(35.29, 8.655), state="column", h=140)] + march(D(22, "22:30"), D(23, "03:30"), [M(35.29, 8.655), M(35.2639, 8.7059), M(35.245, 8.738)])[1:] + [K(D(23, "03:35"), M(35.245, 8.738), state="line", h=300)], loose=True)
 def menton(id, short, name, n, p_unload, climb, night, n_night, day2, t_day2, fight, back, bc, n_bc, back2, n_end, **x):
@@ -252,30 +252,30 @@ STOTTEN_IN = M(35.243, 8.741)
 ax("stotten", "I/8 Pz Regt", "Group Stotten: 1st Battalion, 8th Panzer Regiment, the DAK's tanks. Five were lost in the minefield on the Tébessa road on the 19th; on the 20th they finished Gore Force. Its count is not recorded", "Major Stotten", "armor", 25,
    march(D(19, "14:30"), D(19, "15:30"), [SE, STOTTEN_IN]) + [K(D(19, "15:35"), STOTTEN_IN, state="firing", h=300), K(D(19, "17:30"), STOTTEN_IN, strength=20), K(D(19, "18:15"), STOTTEN_IN, state="retreat", h=140)] +
    march(D(19, "18:30"), D(19, "20:30"), [STOTTEN_IN, SE, P['dak_bivouac']])[1:] + [K(D(19, "20:35"), P['dak_bivouac'], state="line", h=300)] +
-   march(D(20, "13:00"), D(20, "14:30"), [P['dak_bivouac'], SE, P['fork'], off(INNER, 600, -500)])[1:] + [K(D(20, "14:35"), off(INNER, 600, -500), state="firing", h=300), K(D(20, "16:30"), off(INNER, 600, -500), state="column", h=hd(INNER, M(35.278, 8.742))),
+   march(D(20, "13:00"), D(20, "14:30"), [P['dak_bivouac'], SE, P['fork'], off(INNER, 600, -500)]) + [K(D(20, "14:35"), off(INNER, 600, -500), state="firing", h=300), K(D(20, "16:30"), off(INNER, 600, -500), state="column", h=hd(INNER, M(35.278, 8.742))),
     K(D(20, "17:00"), M(35.276, 8.743), state="firing", h=340), K(D(20, "18:30"), off(P['hill704'], 300, -400), state="line", h=330, strength=18)] +
    to_hamra(off(P['hill704'], 300, -400), M(35.335, 8.535), M(35.318, 8.615), n_fight=17, bc=M(35.290, 8.556), n_bc=16, back2=M(35.305, 8.638), n_back2=15))
 CENTAURO = M(35.185, 8.78)
 ax("centauro", "Centauro tanks", "The Centauro Division's tank battalion, Italian M14s, which joined the DAK in the night of 19–20 February and pursued five miles down the Tébessa road on the 20th and 'found no one'. Its count is not recorded", "", "armor", 20,
    march(D(19, "23:30"), D(20, "02:00"), [SOUTH_EDGE, P['kasserine'], CENTAURO]) + [K(D(20, "02:05"), CENTAURO, state="line", h=310)] +
-   march(D(20, "14:00"), D(20, "15:30"), [CENTAURO, SE, P['fork'], off(INNER, 300, -700)])[1:] + [K(D(20, "15:35"), off(INNER, 300, -700), state="firing", h=300), K(D(20, "16:30"), off(INNER, 300, -700), state="column", h=300)] +
+   march(D(20, "14:00"), D(20, "15:30"), [CENTAURO, SE, P['fork'], off(INNER, 300, -700)]) + [K(D(20, "15:35"), off(INNER, 300, -700), state="firing", h=300), K(D(20, "16:30"), off(INNER, 300, -700), state="column", h=300)] +
    march(D(20, "16:30"), D(20, "17:30"), [off(INNER, 300, -700), M(35.2639, 8.7059), M(35.2946, 8.6566)])[1:] + [K(D(20, "19:00"), M(35.267, 8.703), state="line", h=300, strength=19)] +
-   march(D(21, "02:00"), D(21, "04:30"), [M(35.267, 8.703), M(35.2946, 8.6566), M(35.3060, 8.6371), off(P['point732'], 600, -300)])[1:] + [K(D(21, "04:35"), off(P['point732'], 600, -300), state="firing", h=280), K(D(21, "05:30"), off(P['point732'], 600, -300), state="line", h=280)] +
+   march(D(21, "02:00"), D(21, "04:30"), [M(35.267, 8.703), M(35.2946, 8.6566), M(35.3060, 8.6371), off(P['point732'], 600, -300)]) + [K(D(21, "04:35"), off(P['point732'], 600, -300), state="firing", h=280), K(D(21, "05:30"), off(P['point732'], 600, -300), state="line", h=280)] +
    to_hamra(off(P['point732'], 600, -300), M(35.325, 8.545), M(35.308, 8.605), n_fight=18, bc=M(35.300, 8.548), n_bc=17, back2=M(35.315, 8.655)))
 BERSAG = M(35.19, 8.80)
 ax("bersag", "5th Bersaglieri", "5th Bersaglieri Battalion, up from Fériana in the night of 19–20 February; overtaken near Hill 732 by Combat Command B's tanks on the 22nd with the loss of 'many vehicles and supplies'", "", "infantry", 600,
    march(D(19, "23:00"), D(20, "02:00"), [SOUTH_EDGE, P['kasserine'], BERSAG]) + [K(D(20, "02:05"), BERSAG, state="line", h=310)] +
-   march(D(20, "16:30"), D(20, "18:30"), [BERSAG, SE, P['fork'], M(35.252, 8.716)])[1:] + [K(D(20, "18:35"), M(35.252, 8.716), state="line", h=300)] +
-   march(D(21, "14:30"), D(21, "17:00"), [M(35.252, 8.716), M(35.2639, 8.7059), M(35.2946, 8.6566), M(35.300, 8.590)])[1:] + [K(D(21, "17:05"), M(35.300, 8.590), state="firing", h=280), K(D(21, "18:00"), M(35.300, 8.590), state="retreat", h=120), K(D(21, "19:30"), M(35.292, 8.668), state="line", h=280)] +
-   march(D(22, "01:30"), D(22, "07:00"), [M(35.292, 8.668), M(35.275, 8.61), M(35.268, 8.584)])[1:] + [K(D(22, "07:05"), M(35.268, 8.584), state="firing", h=290), K(D(22, "16:00"), M(35.268, 8.584), state="retreat", h=90),
-    K(D(22, "17:00"), off(P['point732'], 0, -700), state="rout", h=120, strength=470), K(D(22, "19:00"), M(35.283, 8.672), state="line", h=280)] +
-   march(D(22, "23:00"), D(23, "04:30"), [M(35.283, 8.672), M(35.2639, 8.7059), M(35.240, 8.748)])[1:] + [K(D(23, "04:35"), M(35.240, 8.748), state="line", h=300)], loose=True)
+   march(D(20, "16:30"), D(20, "18:30"), [BERSAG, SE, P['fork'], M(35.252, 8.716)]) + [K(D(20, "18:35"), M(35.252, 8.716), state="line", h=300)] +
+   march(D(21, "14:30"), D(21, "17:00"), [M(35.252, 8.716), M(35.2639, 8.7059), M(35.2946, 8.6566), M(35.300, 8.590)]) + [K(D(21, "17:05"), M(35.300, 8.590), state="firing", h=280), K(D(21, "18:00"), M(35.300, 8.590), state="retreat", h=120), K(D(21, "19:30"), M(35.292, 8.668), state="line", h=280)] +
+   march(D(22, "01:30"), D(22, "07:00"), [M(35.292, 8.668), M(35.275, 8.61), M(35.268, 8.584)]) + [K(D(22, "07:05"), M(35.268, 8.584), state="firing", h=290), K(D(22, "16:00"), M(35.268, 8.584), state="retreat", h=hd(M(35.268, 8.584), off(P['point732'], 0, -700))),
+    K(D(22, "17:00"), off(P['point732'], 0, -700), state="rout", h=hd(off(P['point732'], 0, -700), M(35.283, 8.672)), strength=470), K(D(22, "19:00"), M(35.283, 8.672), state="line", h=280)] +
+   march(D(22, "23:00"), D(23, "04:30"), [M(35.283, 8.672), M(35.2639, 8.7059), M(35.240, 8.748)]) + [K(D(23, "04:35"), M(35.240, 8.748), state="line", h=300)], loose=True)
 DAK_GUNS = M(35.226, 8.777)
 ax("dak_arty", "DAK guns", "Kampfgruppe DAK's artillery: the corps guns, dual-purpose 88s and 'a battery of new German rocket projectors', the Nebelwerfer, whose first barrage on American troops opened the 0830 assault on the 20th", "Generalmajor Karl Buelowius (Kampfgruppe DAK)", "artillery", 500,
    [K(D(19, "11:00"), DAK_GUNS, h=310, state="line"), K(D(19, "15:30"), DAK_GUNS, state="firing", fire=0.6), K(D(19, "18:15"), DAK_GUNS, state="line"), K(D(20, "08:30"), DAK_GUNS, state="firing", fire=0.8), K(D(20, "18:00"), DAK_GUNS, state="line")] +
-   march(D(21, "14:00"), D(21, "16:00"), [DAK_GUNS, SE, P['fork'], M(35.2639, 8.7059), M(35.282, 8.678)])[1:] + [K(D(21, "16:05"), M(35.282, 8.678), state="firing", fire=0.6, h=280), K(D(21, "18:30"), M(35.282, 8.678), state="line"),
+   march(D(21, "14:00"), D(21, "16:00"), [DAK_GUNS, SE, P['fork'], M(35.2639, 8.7059), M(35.282, 8.678)]) + [K(D(21, "16:05"), M(35.282, 8.678), state="firing", fire=0.6, h=280), K(D(21, "18:30"), M(35.282, 8.678), state="line"),
     K(D(22, "07:00"), M(35.282, 8.678), state="firing", fire=0.5), K(D(22, "17:30"), M(35.282, 8.678), state="line")] +
-   march(D(22, "23:00"), D(23, "04:00"), [M(35.282, 8.678), M(35.2639, 8.7059), M(35.236, 8.758)])[1:] + [K(D(23, "04:05"), M(35.236, 8.758), state="line", h=300)], guns=24)
+   march(D(22, "23:00"), D(23, "04:00"), [M(35.282, 8.678), M(35.2639, 8.7059), M(35.236, 8.758)]) + [K(D(23, "04:05"), M(35.236, 8.758), state="line", h=300)], guns=24)
 H974 = P['hill974']
 ax("h974co", "On Hill 974", "The German party that took Hill 974 on Semmama's shoulder about noon on the 19th and 'could not get down its west face'", "", "infantry", 150,
    march(D(19, "09:30"), D(19, "12:00"), [M(35.322, 8.765), H974]) + [K(D(19, "12:05"), H974, state="firing", h=270), K(D(19, "13:00"), H974, state="line", strength=140), K(D(20, "16:30"), H974, state="charge", h=260),
@@ -318,7 +318,7 @@ SP10 = M(35.42, 8.718)
 ax("sp10", "10th Pz SP guns", "10th Panzer Division's twenty self-propelled guns, whose shelling of Thala on the morning of the 22nd Irwin's 48 guns answered", "Generalleutnant Fritz Freiherr von Broich (10th Panzer)", "artillery", 300,
    march(D(21, "07:00"), D(21, "11:00"), [M(35.30, 8.737), P['bend'], SP10]) + [K(D(21, "11:05"), SP10, state="firing", fire=0.5, h=0), K(D(21, "16:30"), SP10, state="column", h=0), K(D(21, "17:30"), M(35.478, 8.706), state="firing", fire=0.5, h=0),
     K(D(21, "22:30"), M(35.478, 8.706), state="line"), K(D(22, "06:00"), M(35.478, 8.706), state="firing", fire=0.6), K(D(22, "13:00"), M(35.478, 8.706), state="line")] +
-   march(D(22, "22:30"), D(23, "05:30"), [M(35.478, 8.706), P['bend'], M(35.296, 8.740)])[1:] + [K(D(23, "05:35"), M(35.296, 8.740), state="line", h=0)], guns=20)
+   march(D(22, "22:30"), D(23, "05:30"), [M(35.478, 8.706), P['bend'], M(35.296, 8.740)]) + [K(D(23, "05:35"), M(35.296, 8.740), state="line", h=0)], guns=20)
 REC580 = M(35.243, 8.762)
 ax("rec580", "580th Recon", "580th Reconnaissance Battalion, sent from the 21st Panzer Division to hold the pass in the night of 20–21 February", "", "light_infantry", 400,
    march(D(21, "00:00"), D(21, "03:00"), [EAST_EDGE, P['kasserine'], SE, REC580]) + [K(D(21, "03:05"), REC580, state="line", h=300), K(D(23, "07:30"), REC580)], loose=True)
@@ -376,14 +376,16 @@ WHEN = {"Pull a Stonewall Jackson": "6:00 AM", "The probe": "7:30 AM", "Trucks u
         "The Leicesters' ridge": "about 7:00 PM", "Irwin's guns": "the early hours", "Bou Chebka": "daylight", "Rommel decides": "4:00 PM"}  # chapter times the sources record; the story gives the others to the nearest hour
 
 # Hold in place through long gaps: without this a unit creeps toward a key hours away and the time-lapse never engages.
-# A turn in place takes its last two minutes; a move of more than three hours takes its last fifteen.
+# A turn in place takes its last two minutes; a move of more than three hours takes its last fifteen. A unit already on the
+# move (column, charge, retreat, rout) is marching, and each leg of a march takes its real hours.
+MOVING = {"column", "charge", "retreat", "rout"}
 def add_holds(units):
     ts = lambda s: dt.datetime.strptime(s.replace("T", " ")[:16], "%Y-%m-%d %H:%M").timestamp()
     for u in units:
-        ks, out = u["keys"], []
+        ks, out, state = u["keys"], [], "line"
         for a, c in zip(ks, ks[1:] + [None]):
-            out.append(a)
-            if c is None or a.get("state") == "hidden": continue
+            out.append(a); state = a.get("state", state)
+            if c is None or state == "hidden" or state in MOVING: continue
             moved = (a["x"], a["y"]) != (c["x"], c["y"]); turned = "h" in c and c["h"] != next((k["h"] for k in reversed(out) if "h" in k), c["h"])
             gap = ts(c["t"]) - ts(a["t"]); lead = 900 if moved else 120
             if (moved and gap > 3 * 3600) or (turned and not moved and gap > 600):
