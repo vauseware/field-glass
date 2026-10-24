@@ -44,7 +44,7 @@ PLACES = {
     'narrows': (35.255, 8.750), 'tebessa_rd_hatab': (35.2541, 8.7226), 'zebbeus': (35.2483, 8.7176), 'hill712': (35.2554, 8.7562),
     'hill704': (35.290, 8.730), 'hill974': (35.3255, 8.7308), 'hill1191': (35.277, 8.768), 'point732': (35.2986, 8.6042),
     'hamra': (35.3282, 8.4401), 'hamra_centre': (35.3405, 8.41), 'hamra_north': (35.372, 8.4625), 'bou_chebka': (35.25, 8.53),
-    'ridge1': (35.4617, 8.7137), 'ridge_leic': (35.545, 8.685), 'irwin155': (35.572, 8.655), 'irwin105': (35.548, 8.672),
+    'ridge1': (35.4617, 8.7137), 'ridge_leic': (35.545, 8.685), 'irwin155': (35.572, 8.655), 'irwin105': (35.550, 8.662),
     # from the narrative, within a few kilometres
     'rommel_cp': (35.20, 8.80), 'dak_bivouac': (35.17, 8.75), 'se_entrance': (35.215, 8.790),
 }
@@ -152,9 +152,9 @@ gore("gore_bty", "Gore's battery", "Gore Force's field battery", "artillery", 80
 # 1600 at the cost of fifteen tanks; the second line for over an hour; through the Leicesters about 1900; 21 tanks by midnight;
 # five or more lost in the dawn counterattack of the 22nd. Inferred: how those losses fell between the two regiments.
 RIDGE2 = M(35.50, 8.700)
-MELEE = M(35.551, 8.681)
-def bde26(id, short, name, n, dx, fog, first, second, night, dawn, dawn_out):
-    thala, south, r1, r2, m = off(M(35.565, 8.676), dx, 0), off(M(35.43, 8.714), dx, 0), off(P['ridge1'], dx, 0), off(RIDGE2, dx, 0), off(MELEE, dx, 0)
+MELEE = M(35.553, 8.681)
+def bde26(id, short, name, n, dx, dy, fog, first, second, night, dawn, dawn_out):
+    thala, south, r1, r2, m = off(M(35.565, 8.676), dx, 0), off(M(35.43, 8.714), dx, dy), off(P['ridge1'], dx, dy), off(RIDGE2, dx, dy), off(MELEE, dx, dy)
     keys = [K(T0, thala, h=180, state="line"), K(D(20, "10:00"), thala, state="column", h=180)] + march(D(20, "10:00"), D(20, "13:00"), [thala, south])[1:] + [K(D(20, "13:05"), south, state="line", h=180),
             K(D(21, "05:30"), south, state="column", h=0), K(D(21, "06:00"), r1, state="line", h=180), K(D(21, "07:30"), r1, strength=n - fog), K(D(21, "09:30"), r1, state="firing"), K(D(21, "16:00"), r1, strength=n - fog - first),
             K(D(21, "16:10"), r1, state="retreat", h=0), K(D(21, "16:40"), r2, state="firing", h=180), K(D(21, "17:50"), r2, strength=n - fog - first - second), K(D(21, "18:00"), r2, state="retreat", h=0),
@@ -162,18 +162,18 @@ def bde26(id, short, name, n, dx, fog, first, second, night, dawn, dawn_out):
     if dawn: keys += [K(D(22, "06:20"), m, state="charge", h=180), K(D(22, "06:40"), off(m, 0, -1200), state="firing", h=180), K(D(22, "07:30"), off(m, 0, -1200), strength=dawn_out, state="retreat", h=0), K(D(22, "08:00"), m, state="line", h=180)]
     keys += [K(D(23, "07:30"), m)]
     al(id, short, name, "Brig. Charles Dunphie (26th Armoured Brigade)", "armor", n, keys)
-bde26("lancers", "17/21 Lancers", "17th/21st Lancers (less a squadron), 26th Armoured Brigade: Valentines and some Crusaders. Six light Crusaders were knocked out in the morning fog of the 21st", 25, -600, 6, 8, 2, 9, False, 9)
-bde26("lothians", "2 Lothians", "2nd Lothians and Border Horse, 26th Armoured Brigade: Valentines. Some of the brigade's remaining tanks counterattacked just before dawn on the 22nd and lost five or more", 25, 600, 0, 7, 3, 12, True, 7)
+bde26("lancers", "17/21 Lancers", "17th/21st Lancers (less a squadron), 26th Armoured Brigade: Valentines and some Crusaders. Six light Crusaders were knocked out in the morning fog of the 21st", 25, -800, 300, 6, 8, 2, 9, False, 9)
+bde26("lothians", "2 Lothians", "2nd Lothians and Border Horse, 26th Armoured Brigade: Valentines. Some of the brigade's remaining tanks counterattacked just before dawn on the 22nd and lost five or more", 25, 800, -300, 0, 7, 3, 12, True, 7)
 BUFFS = M(35.455, 8.709)
 al("buffs", "10 RB", "The 26th Armoured Brigade's motor battalion (less Gore's company), on the Thala road with the tanks", "", "infantry", 400,
    [K(T0, M(35.568, 8.678), h=180, state="line")] + march(D(20, "10:30"), D(20, "13:30"), [M(35.568, 8.678), M(35.44, 8.713)])[1:] + [K(D(20, "13:35"), M(35.44, 8.713), state="line", h=180),
     K(D(21, "06:00"), BUFFS, state="line", h=180), K(D(21, "10:00"), BUFFS, state="firing"), K(D(21, "16:00"), BUFFS, strength=370, state="retreat", h=0), K(D(21, "17:00"), off(RIDGE2, 0, 300), state="firing", h=180),
-    K(D(21, "18:00"), off(RIDGE2, 0, 300), state="retreat", h=0, strength=350), K(D(21, "19:00"), M(35.552, 8.676), state="line", h=180), K(D(21, "19:20"), M(35.552, 8.676), state="firing"), K(D(21, "22:00"), M(35.552, 8.676), state="line", strength=320)], loose=True)
+    K(D(21, "18:00"), off(RIDGE2, 0, 300), state="retreat", h=0, strength=350), K(D(21, "19:00"), M(35.549, 8.694), state="line", h=180), K(D(21, "19:20"), M(35.549, 8.694), state="firing"), K(D(21, "22:00"), M(35.549, 8.694), state="line", strength=320)], loose=True)
 LEIC = P['ridge_leic']
 al("leic", "2/5 Leicesters", "2nd/5th Battalion, Leicestershire Regiment, on 'the last ridge south of Thala' from the 21st. About 300 were taken prisoner that night; Atkinson has the battalion muster forty able-bodied men afterwards", "Brig. Cameron Nicholson (Nickforce)", "infantry", 800,
    [K(D(21, "06:00"), LEIC, h=180, state="line"), K(D(21, "19:00"), LEIC, state="firing"), K(D(21, "22:00"), LEIC, state="line", strength=480), K(D(22, "06:20"), LEIC, state="firing"), K(D(22, "08:00"), LEIC, state="line", strength=460),
     K(D(23, "07:30"), LEIC)], loose=True)
-NICK_GUNS = M(35.556, 8.676)
+NICK_GUNS = M(35.560, 8.672)
 al("nick_arty", "Nickforce guns", "Nickforce's field and anti-tank batteries behind the Leicesters: F Battery, 12th (HAC) Regiment RHA, a troop of the 71st and a battery each of the 23rd Field and 58th Anti-Tank Regiments", "Brig. Cameron Nicholson (Nickforce)", "artillery", 250,
    [K(D(21, "06:00"), NICK_GUNS, h=180, state="line"), K(D(21, "11:00"), NICK_GUNS, state="firing", fire=0.5), K(D(21, "22:30"), NICK_GUNS, state="line"), K(D(22, "06:20"), NICK_GUNS, state="firing", fire=0.5), K(D(22, "15:00"), NICK_GUNS, state="line"),
     K(D(23, "07:30"), NICK_GUNS)], guns=12)
@@ -293,8 +293,8 @@ ax("mtnco", "Mountain coy", "A mountain company that tried to get round the Amer
 S_RIDGE1 = M(35.445, 8.7145)
 S_RIDGE2 = M(35.487, 8.704)
 STOPPED = M(35.530, 8.690)
-def ridges(n_r1=None, n_r2=None, n_night=None, melee=M(35.540, 8.687), dx=0):  # the two ridges, the night melee, back 1,200 yards, into the pass on the 23rd
-    r1, r2, m, s = off(S_RIDGE1, dx, 0), off(S_RIDGE2, dx, 0), off(melee, dx, 0), off(STOPPED, dx, 0)
+def ridges(n_r1=None, n_r2=None, n_night=None, melee=M(35.540, 8.687), dx=0, dy=0):  # the two ridges, the night melee, back 1,200 yards, into the pass on the 23rd
+    r1, r2, m, s = off(S_RIDGE1, dx, dy), off(S_RIDGE2, dx, dy), off(melee, dx, dy), off(STOPPED, dx, dy)
     keys = [K(D(21, "11:00"), r1, state="firing", h=0), K(D(21, "16:00"), r1, **({"strength": n_r1} if n_r1 else {})),
             K(D(21, "16:10"), r1, state="column", h=0), K(D(21, "16:40"), r2, state="firing", h=0), K(D(21, "18:00"), r2, **({"strength": n_r2} if n_r2 else {})), K(D(21, "18:50"), r2, state="charge", h=0), K(D(21, "19:15"), m, state="firing", h=0),
             K(D(21, "22:00"), m, state="retreat", h=180, **({"strength": n_night} if n_night else {})), K(D(21, "22:30"), s, state="line", h=0), K(D(22, "06:20"), s, state="firing"), K(D(22, "08:00"), s, state="line")]
@@ -306,14 +306,14 @@ ax("krad10", "Krad Bn 10", "10th Panzer Division's motorcycle battalion, committ
    march(D(20, "11:00"), D(20, "13:00"), [SE, P['fork'], P['thala_rd_hatab'], KRAD]) + [K(D(20, "13:05"), KRAD, state="firing", h=330), K(D(20, "16:30"), KRAD, state="charge", h=330), K(D(20, "17:30"), M(35.278, 8.752), state="firing", h=340),
     K(D(20, "18:30"), off(P['hill704'], 400, 400), state="line", h=340, strength=470)] +
    march(D(21, "03:00"), D(21, "07:00"), [off(P['hill704'], 400, 400), P['bend'], off(START_LINE, -600, 500)]) + [K(D(21, "07:05"), off(START_LINE, -600, 500), state="skirmish", h=0), K(D(21, "09:30"), off(START_LINE, -600, 500), state="column", h=0)] +
-   ridges(n_r1=450, n_night=420, melee=M(35.537, 8.684), dx=-600), loose=True)
+   ridges(n_r1=450, n_night=420, melee=M(35.537, 8.684), dx=-700, dy=-400), loose=True)
 PZ7 = M(35.195, 8.790)
 ax("pz7", "7th Pz Regt", "7th Panzer Regiment, 10th Panzer Division: 'thirty tanks' for Thala, the division being at half strength and its Tigers left with von Arnim. A captured Valentine led its column through the Leicesters on the night of the 21st (Atkinson); nine panzers were lost at Thala", "Generalleutnant Fritz Freiherr von Broich (10th Panzer)", "armor", 30,
    march(D(20, "15:00"), D(20, "18:00"), [EAST_EDGE, P['kasserine'], PZ7]) + [K(D(20, "18:05"), PZ7, state="line", h=310)] + march(D(21, "06:00"), D(21, "09:30"), [PZ7, P['fork'], P['thala_rd_hatab'], P['bend'], START_LINE]) + ridges(n_r1=28, n_r2=26, n_night=21))
 PZGREN10 = M(35.318, 8.747)
 ax("pzgren10", "10th Pz PzGren", "10th Panzer Division's armoured infantry, in thirty-five half-track carriers: over Hill 974 to the valley floor at 1630 on the 20th, then up the Thala road behind the tanks", "Generalleutnant Fritz Freiherr von Broich (10th Panzer)", "infantry", 900,
    march(D(20, "12:00"), D(20, "14:30"), [SE, M(35.26, 8.80), M(35.30, 8.77), PZGREN10]) + [K(D(20, "14:35"), PZGREN10, state="line", h=270), K(D(20, "16:30"), PZGREN10, state="charge", h=265), K(D(20, "18:00"), M(35.318, 8.721), state="firing", h=270),
-    K(D(20, "19:00"), M(35.318, 8.721), state="line", strength=870)] + march(D(21, "07:00"), D(21, "09:30"), [M(35.318, 8.721), P['bend'], off(START_LINE, 500, -400)]) + ridges(n_r1=850, n_night=800, melee=M(35.536, 8.690), dx=500), loose=True)
+    K(D(20, "19:00"), M(35.318, 8.721), state="line", strength=870)] + march(D(21, "07:00"), D(21, "09:30"), [M(35.318, 8.721), P['bend'], off(START_LINE, 500, -400)]) + ridges(n_r1=850, n_night=800, melee=M(35.536, 8.690), dx=700, dy=-1000), loose=True)
 SP10 = M(35.42, 8.718)
 ax("sp10", "10th Pz SP guns", "10th Panzer Division's twenty self-propelled guns, whose shelling of Thala on the morning of the 22nd Irwin's 48 guns answered", "Generalleutnant Fritz Freiherr von Broich (10th Panzer)", "artillery", 300,
    march(D(21, "07:00"), D(21, "11:00"), [M(35.30, 8.737), P['bend'], SP10]) + [K(D(21, "11:05"), SP10, state="firing", fire=0.5, h=0), K(D(21, "16:30"), SP10, state="column", h=0), K(D(21, "17:30"), M(35.478, 8.706), state="firing", fire=0.5, h=0),
@@ -366,7 +366,7 @@ events = [
     (D(21, "09:30"), "The Thala road", "About 9:30 the 7th Panzer Regiment begins to advance up the Thala road: thirty tanks, twenty self-propelled guns and thirty-five half-track carriers, in fog that has already cost the 17th/21st Lancers six light Crusaders. Dunphie's fifty tanks, 'mostly obsolete Valentines' by Atkinson's count, hold a ridge about nine miles south of Thala until four at the cost of fifteen tanks, then a second line for over an hour, then fall back on the Leicesters.", P['ridge1'], 20000),
     (D(21, "14:00"), "Buelowius turns west", "'General Buelowius' main force left Kasserine pass at 1400' for Djebel el Hamra along the Tébessa road. About 3:30 a battalion of its infantry comes up beside the 33d Reconnaissance near Point 732. At 4:30 the column comes under the fire of Combat Command B's artillery, Stukas strike CCB, and the tanks in hull defilade stop the attack 'about four miles short' of the ridge. About six the DAK pulls back south-east, and Rommel authorises a wide envelopment to the south during the night.", M(35.31, 8.59), 24000),
     (D(21, "19:00"), "The Leicesters' ridge", "About seven Dunphie's vehicles pass through the 2nd/5th Leicesters on the last ridge south of Thala, and German tanks follow 'directly after' them; Atkinson has a captured Valentine lead eight panzers through the line. For three hours British tanks, infantry and guns fight the 10th Panzer in the dark among their own positions. 'After three hours, the enemy's offensive was stopped'; the Germans withdraw 1,200 yards with about 700 prisoners, some 300 of them Leicesters. At eight, by Atkinson's account, Brig. Gen. Irwin reaches Thala with the 9th Division's artillery after a march of more than 800 miles in four days.", P['ridge_leic'], 8000),
-    (D(22, "03:00"), "Irwin's guns", "In the early hours the 34th Field Artillery's twelve 155s are emplaced along the road west of Thala and the 105s of the 60th and 84th about 3,000 yards south: 48 guns and 2,200 men. Just before dawn Nicholson counterattacks with some of his remaining tanks and loses five or more; von Broich reads it as a major Allied attack and at seven, by Atkinson, telephones Rommel to put off his own. Through the morning Irwin's guns answer the German shelling, and XII Air Support Command flies 114 sorties over Thala in low cloud.", P['irwin105'], 12000),
+    (D(22, "03:00"), "Irwin's guns", "In the early hours the 34th Field Artillery's twelve 155s are emplaced along the road west of Thala and the 105s of the 60th and 84th about 3,000 yards south: 48 guns and 2,200 men. Just before dawn Nicholson counterattacks with some of his remaining tanks and loses five or more; von Broich reads it as a major Allied attack and at seven, by Atkinson, telephones Rommel to put off his own. Through the morning Irwin's guns answer the German shelling, and XII Air Support Command flies 114 sorties over Thala in low cloud.", M(35.562, 8.672), 10000),
     (D(22, "07:00"), "Bou Chebka", "At daylight the DAK's envelopment strikes the 2nd Battalion, 16th Infantry, the 2nd Battalion, 6th Armored Infantry and the 33d Field Artillery near Bou Chebka pass. Battery C is cut off and loses five howitzers, three 40 mm guns and thirty vehicles. About 9:30 a reconnaissance report misleads Buelowius about what stands in front of him.", BC_RIDGE, 14000),
     (D(22, "16:00"), "Rommel decides", "In the afternoon Kesselring comes to Rommel's command post and they agree to break off and turn against Montgomery at Mareth; Rommel orders his forces to pass to the defensive (Rickard puts the decision at 2:15). At four Combat Command B counterattacks: the 16th Infantry on the right, the 2nd Battalion, 6th Armored Infantry on the left, Company G of the 13th Armored sortieing. Battery C's eight guns and its vehicles are recovered serviceable, and the 5th Bersaglieri are overtaken near Hill 732 and lose 'many vehicles and supplies'. At 11:10 that night Ambrosio's radio order to retire arrives.", M(35.295, 8.60), 20000),
     (D(23, "07:00"), "Back in the pass", "By the forenoon the Axis withdrawal into the pass is complete; the 10th Panzer holds it and the DAK leaves for Fériana in the afternoon, under 'no significant Allied pressure'. Maj. Gen. Harmon arrived in the night to take charge of the front; Nickforce is dissolved at eight that evening. Rommel claims 845 prisoners, 66 tanks, 74 self-propelled guns and reconnaissance vehicles and 48 anti-tank guns for 19–22 February; the German loss table for 16–24 February gives 989 men and 20 tanks. The 1st Battalion, 26th Infantry, the 19th Engineers and the 3rd Battalion, 39th lost 465 men in the pass, most of them missing.", P['narrows'], 34000),
