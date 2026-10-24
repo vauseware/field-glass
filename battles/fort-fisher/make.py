@@ -11,8 +11,6 @@
 import json, math
 HERE = "battles/fort-fisher/"
 LAT0, LON0 = 33.9690, -77.9240
-KX, KY = 111320 * math.cos(math.radians(LAT0)), 111320  # tools/fetch_terrain.py's metres per degree
-def M(lat, lon): return (round((lon - LON0) * KX), round((lat - LAT0) * KY))
 
 # ---- terrain: the 3DEP tiles return noise over open water; the 1865 beach and sea face are raised from the sea ----
 T = json.load(open(HERE + "terrain.json"))
@@ -46,7 +44,7 @@ if T["z"] != before: json.dump(T, open(HERE + "terrain.json", "w"), separators=(
 
 # ---- geography ----
 SHEP, BASTION, HQ, BUCHANAN = (415, 334), (675, 50), (533, 41), (-1598, -962)   # Coast Survey points and the UDC column
-MOUND, PULPIT, HOLLAND = (120, -880), (610, -90), (970, 720)                        # see the header; Holland is "500 yards north of the fort"
+MOUND, PULPIT, HOLLAND = (120, -880), (610, -90), (840, 480)                        # see the header; Holland is "500 yards north of the fort", up the beach
 GATE = (392, 356)            # the River Road gate at the river end of the land face, over the slough by a causeway and bridge
 FACE = (BASTION[0] - SHEP[0], BASTION[1] - SHEP[1]); FL = math.hypot(*FACE)        # the land face, 385 m, bearing 138
 FU, FN = (FACE[0] / FL, FACE[1] / FL), (-FACE[1] / FL, FACE[0] / FL)               # along it, and its outward normal (north-east)
@@ -55,9 +53,14 @@ IN = round(math.degrees(math.atan2(-FN[0], -FN[1])) % 360)   # the heading of an
 OUT = (IN + 180) % 360
 ALONG = round(math.degrees(math.atan2(*FU)) % 360)            # along the face toward the bastion, 138
 SEA = [BASTION, (700, 10), (640, -120), (560, -260), (470, -420), (380, -560), (290, -690), (200, -800), MOUND]   # the sea face to the Mound
-SEA_DIR = math.atan2(MOUND[0] - BASTION[0], MOUND[1] - BASTION[1])
-def sea(d, w=0):  # d metres down the sea face from the bastion, w metres inland of it
-    return (round(BASTION[0] + math.sin(SEA_DIR) * d + math.cos(SEA_DIR) * w), round(BASTION[1] + math.cos(SEA_DIR) * d - math.sin(SEA_DIR) * w))
+def along(pts, d, w=0):  # d metres along a polyline from its first point, w metres to the right of it
+    for a, b in zip(pts, pts[1:]):
+        L = math.dist(a, b)
+        if d <= L or b is pts[-1]:
+            ux, uy = (b[0] - a[0]) / L, (b[1] - a[1]) / L
+            return (round(a[0] + ux * d + uy * w), round(a[1] + uy * d - ux * w))
+        d -= L
+def sea(d, w=0): return along(SEA, d, w)   # d metres down the sea face from the bastion, w metres inland of the curtain
 RIVER_RD = [(640, 2000), (560, 1500), (470, 1000), (430, 700), (410, 480), GATE]  # the road down the peninsula to the river gate
 BEACH = [(1180, 2000), (1120, 1500), (1020, 1000), (900, 600), (800, 300), (720, 120)]  # the 1865 beach north of the bastion
 WHARF = (-1480, -900)        # Buchanan's steamer wharf, on the river side
@@ -271,10 +274,11 @@ for u in units:
 
 # ---- ground ----
 features = [
-    dict(type="works", name="the land face", pts=[(370, 372), SHEP] + [face(i / 16) for i in range(1, 16)] + [BASTION], at=list(face(0.45, 75)), rot=-42),
-    dict(type="works", name="the sea face", pts=SEA, at=[sea(600)[0] - 150, sea(600)[1]], rot=59),
+    # The skin hachures the right-hand side of a works line, so both faces run with the ditch on the right.
+    dict(type="works", name="the land face", pts=[BASTION] + [face(i / 16) for i in range(15, 0, -1)] + [SHEP, (370, 372)], at=list(face(0.45, 75)), rot=-42),
+    dict(type="works", name="the sea face", pts=SEA[::-1], at=[sea(600)[0] - 150, sea(600)[1]], rot=59),
     dict(type="redoubt", name="Shepherd's Battery", poly=rect(SHEP, IN, 44, 34, -10), at=[SHEP[0] - 175, SHEP[1] - 20]),
-    *[dict(type="redoubt", poly=rect(face(i / 16), IN, 9, 24, -4)) for i in range(1, 16)],   # the fifteen traverses
+    *[dict(type="redoubt", poly=rect(face(i / 16), IN, 9, 10, -8)) for i in range(1, 16)],   # the fifteen traverses: the parapet's 25 ft and 30 ft back
     dict(type="redoubt", name="Northeast Bastion", poly=rect(BASTION, IN, 60, 50, -22), at=[BASTION[0] + 150, BASTION[1] - 30]),
     dict(type="redoubt", name="the sally-port redoubt", poly=rect(face(0.5, 14), OUT, 20, 16), at=[face(0.5, 150)[0] + 60, face(0.5, 150)[1]]),
     dict(type="redoubt", name="the Pulpit", poly=ellipse(PULPIT, 22, 18), at=[PULPIT[0] - 110, PULPIT[1] - 20]),
@@ -290,13 +294,16 @@ features = [
     *ship_features,
     dict(name="headquarters", at=[HQ[0] - 10, HQ[1] - 40]), dict(name="River Road gate", at=[GATE[0] - 115, GATE[1] + 75]),
     dict(name="Battery Holland, Terry's post", at=[HOLLAND[0] + 40, HOLLAND[1] + 50]), dict(name="the beach", at=[1080, 1300], rot=-78),
-    dict(name="Buchanan's wharf", at=[WHARF[0] + 30, WHARF[1] + 75]), dict(name="Federal Point", at=[-700, -700]),
+    dict(name="Buchanan's wharf", at=[WHARF[0] + 30, WHARF[1] + 75]), dict(name="Federal Point", at=[-1500, -1120]),
     dict(name="Cape Fear River", at=[-900, 800], rot=-62), dict(name="the Atlantic", at=[1500, -1300], rot=-70),
     dict(name="to Myrtle Sound and the landing, four miles", at=[700, 1930]), dict(name="Terry's line, two miles north; Hoke at Sugar Loaf beyond it", at=[760, 1880]),
 ]
 
-# Woods on the ocean side of the peninsula north of the fort; open sand near the fort and along the beach.
-CLEAR = [(-2000, 560), (150, 560), (330, 620), (520, 690), (700, 740), (820, 820), (880, 980), (930, 1200), (960, 1450), (1010, 1700), (1050, 2000), (2000, 2000), (2000, -2000), (-2000, -2000)]
+# Woods on the ocean side of the peninsula north of the fort, between the River Road and the dunes; open sand near the
+# fort, along the beach and on the river side.
+CLEAR = [[(-2000, -2000), (2000, -2000), (2000, 650), (-2000, 650)],
+         [(-2000, 650), (460, 650), (510, 1000), (600, 1500), (680, 2000), (-2000, 2000)],
+         [(2000, 650), (2000, 2000), (1100, 2000), (1040, 1500), (940, 1000), (830, 650)]]
 
 # ---- chapters: (time, title, text, camera centre, metres across, playback speed, clock time the sources record or None) ----
 CHAPTERS = [
@@ -325,8 +332,8 @@ events = [dict(t=t, title=a, text=b, at=at, view=v, speed=s, **({"when": w} if w
 battle = dict(
     id="fort-fisher", name="Fort Fisher", date="1865-01-13", dateText="13 to 15 January 1865", place="Federal Point, below Wilmington, North Carolina",
     origin=dict(lat=LAT0, lon=LON0), extent=4000, start=D(13, "07:00"), end=END, sunrise="07:05", sunset="17:12", speed=60, lapse=7200, menPerDot=10,
-    water=0.05, terrainExaggeration=2, contourInterval=1, trees=dict(density=0.0005, clear=[CLEAR]),
-    wind=dict(x=-0.4, y=0.3), view=dict(x=500, y=300, width=3400),
+    water=0.05, terrainExaggeration=2, contourInterval=1, trees=dict(density=0.0005, clear=CLEAR),
+    wind=dict(x=-0.4, y=0.3), view=dict(x=0, y=-100, width=4000),
     # Bachelder's convention, Union blue and Confederate red
     sides=dict(union=dict(name="Union (Terry, Porter)", color="#2c4f96", light="#6f8fca", dark="#16294f"),
                confederate=dict(name="Confederate (Lamb, Whiting)", color="#b23a2e", light="#d77a6c", dark="#5c1a14")),
