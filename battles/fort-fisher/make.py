@@ -65,6 +65,19 @@ RIVER_RD = [(640, 2000), (560, 1500), (470, 1000), (430, 700), (410, 480), GATE]
 BEACH = [(1180, 2000), (1120, 1500), (1020, 1000), (900, 600), (800, 300), (720, 120)]  # the 1865 beach north of the bastion
 WHARF = (-1480, -900)        # Buchanan's steamer wharf, on the river side
 PLAIN = [sea(500, 45), sea(900, 45), (-300, -920), (-1100, -940), WHARF]   # the way across the sand plain from the fort to Buchanan
+ROUTE = [face(0.95, -40), sea(150, 45), sea(400, 45), sea(650, 45), sea(900, 45)] + PLAIN[2:]   # the retreat: inside the sea face, then the plain
+def onward(pts, p):  # the waypoints of `pts` beyond the point of it nearest `p`
+    best, s0, run = None, 0, 0
+    for a, b in zip(pts, pts[1:]):
+        L = math.dist(a, b); f = max(0, min(1, ((p[0] - a[0]) * (b[0] - a[0]) + (p[1] - a[1]) * (b[1] - a[1])) / (L * L)))
+        d = math.dist(p, (a[0] + f * (b[0] - a[0]), a[1] + f * (b[1] - a[1])))
+        if best is None or d < best: best, s0 = d, run + f * L
+        run += L
+    out, run = [], 0
+    for i, q in enumerate(pts):
+        if i: run += math.dist(pts[i - 1], q)
+        if run > s0 + 30: out.append(q)
+    return out
 def rect(c, h, w, d, back=0):  # a rectangle w across the heading h, from `back` to d along it
     s, co = math.sin(math.radians(h)), math.cos(math.radians(h))
     return [[round(c[0] + a * co + b * s), round(c[1] - a * s + b * co)] for a, b in [(-w / 2, back), (w / 2, back), (w / 2, d), (-w / 2, d)]]
@@ -178,80 +191,92 @@ def assault(id, path, t_form, t_go, hit, back, lane, lost):
 for n, (id, f) in enumerate([("ny117", 0.04), ("ny142", 0.14), ("ny112", 0.24), ("ny3", 0.34)]):
     assault(id, [BIV[id], (520 + 70 * n, 900), face(f, 270)], D(15, "13:00"), D(15, "15:25"), face(f * 0.6 + 0.02, 12), 0.04 + 0.06 * n, 25 + 18 * n, 57)
 # Pennypacker at 3:35, overlapping Curtis's right: the 203rd Pennsylvania breaks the river gate, the rest go over the palisade.
-for n, (id, f) in enumerate([("pa203", -0.08), ("pa97", 0.02), ("ny47", 0.12), ("ny48", 0.22), ("pa76", 0.32)]):
-    assault(id, [BIV[id], (500 + 70 * n, 900), face(f, 440)], D(15, "13:40"), D(15, "15:35"), GATE if id == "pa203" else face(max(0.02, f * 0.6), 12), 0.08 + 0.05 * n, 50 + 12 * n, 56)
+for n, (id, f, back) in enumerate([("pa203", -0.08, 0.1), ("pa97", 0.02, 0.0), ("ny47", 0.12, 0.05), ("ny48", 0.22, 0.1), ("pa76", 0.32, 0.15)]):
+    assault(id, [BIV[id], (500 + 70 * n, 900), face(f, 440)], D(15, "13:40"), D(15, "15:35"), GATE if id == "pa203" else face(max(0.02, f * 0.6), 12), back, 50 + 12 * n, 56)
 # Bell at 3:50 over the causeway at the river gate; Bell shot crossing it.
 for n, id in enumerate(["in13", "nh4", "ny115", "ny169"]):
     s, t_go = STR[id], plus(D(15, "15:50"), 3 * n)
     U(id)["keys"] += go(D(15, "14:20"), D(15, "15:20"), [BIV[id], (560, 1000), (470, 1000), (445 + 10 * n, 640 + 50 * n)], 190) + [K(t_go, (445 + 10 * n, 640 + 50 * n), state="charge"), K(plus(t_go, 5), GATE), K(plus(t_go, 9), face(0.03 + 0.04 * n, -40), state="firing", strength=s - 10)] \
         + hold(0.0 + 0.04 * n, 110 + 12 * n, s - 10, 19, plus(t_go, 12))
-# Abbott's brigade through the river gate at six; in the evening it goes along inside the works and takes the last traverses.
+# Abbott's brigade through the river gate at six; in the evening it goes back out the gate and along the outside of the
+# face, between the palisade and the rifle pits, to turn the flank of the last traverses.
 for n, (id, short, name, cmd, s, biv) in enumerate(ABBOTT):
     f0, f1 = 0.16 + 0.08 * n, 0.6 + 0.08 * n
     U(id)["keys"] += go(plus(D(15, "17:15"), 5 * n), plus(D(15, "18:00"), 5 * n), [biv, (470, 1000), (430, 700), (410, 480), GATE, face(f0, -110)], ALONG) \
-        + [K(plus(D(15, "19:30"), 4 * n), face(f0, -110), state="column"), K(plus(D(15, "20:05"), 4 * n), face(f1 - 0.1, -120), state="charge"),
-           K(plus(D(15, "20:25"), 4 * n), face(f1, -45), state="firing", strength=s - 6), K(D(15, "21:00"), face(f1, -45), state="line"), K(END, face(f1, -45))]
-# The 27th U.S.C.T. down the sea face to Buchanan at half past nine; the garrison surrenders there about ten.
-U("usct27")["keys"] += [K(D(15, "20:40"), (860, 1680), state="column")] + march(D(15, "20:41"), D(15, "21:20"), [(860, 1680), (470, 1000), (430, 700), GATE, (430, 250), sea(140, 60)])[1:] \
-    + march(D(15, "21:30"), D(15, "22:05"), [sea(140, 60)] + PLAIN[:-1] + [(-1340, -930)]) + [K(D(15, "22:10"), (-1340, -930), h=250, state="line", strength=395), K(END, (-1340, -930))]
+        + march(plus(D(15, "19:30"), 4 * n), plus(D(15, "20:05"), 4 * n), [face(f0, -110), GATE, face(0.1, 70), face(f1 - 0.12, 70)]) \
+        + [K(plus(D(15, "20:06"), 4 * n), face(f1 - 0.12, 70), state="charge", h=IN), K(plus(D(15, "20:25"), 4 * n), face(f1, 10), state="firing", strength=s - 6),
+           K(D(15, "21:00"), face(f1, 10), state="line"), K(END, face(f1, 10))]
+# The 27th U.S.C.T. down the beach to the empty bastion, then down the sea face to Buchanan at half past nine; the
+# garrison surrenders there about ten.
+U("usct27")["keys"] += [K(D(15, "20:55"), (860, 1680), state="column")] + march(D(15, "20:56"), D(15, "21:30"), [(860, 1680)] + BEACH[2:] + [BASTION])[1:] \
+    + march(D(15, "21:31"), D(15, "22:05"), [BASTION] + ROUTE[1:-1] + [(-1340, -930)]) + [K(D(15, "22:10"), (-1340, -930), h=250, state="line", strength=395), K(END, (-1340, -930))]
 
 # ---- Confederate: the garrison by sector, Hagood's men, Buchanan ----
-# Lamb's deployment at 3:25: 250 at the western salient, 500 along the Northeast Bastion, Hagood's 350 in a commissary
-# bombproof. The gun crews are the 36th North Carolina by sector; most land-face guns were in ruins by the night of the 14th.
+# About 850 in the fort on the morning of the 13th and 700 more by steamer during the day, 1,550 by its sectors; Hagood's
+# 350 make about 1,900 on the 15th. Lamb's deployment at 3:25: 250 at the western salient, 500 along the Northeast
+# Bastion, Hagood's 350 in a commissary bombproof. The gun crews are the 36th North Carolina by sector; most land-face
+# guns were in ruins by the night of the 14th. Terry's "some 400 prisoners" at the gate are the river end of the face.
 BOMBARD = [(13, "09:00"), (14, "08:00"), (15, "08:00")]
-def under_fire(p, h, n, fall, fire=None):  # a sector thinned by the shelling; a battery (fire given) answers the fleet by day
+REINF = D(13, "16:00")       # the 700 are in their sectors
+def under_fire(p, h, n0, n, fall, fire=None):  # a sector of n0, n once the 700 are in, thinned by the shelling; a battery (fire given) answers the fleet by day
     ks = [K(D(13, "07:00"), p, h=h, state="line")]
     for day, t in BOMBARD:
-        ks += ([K(D(day, t), p, state="firing", fire=fire)] if fire else []) + [K(D(day, "17:15" if day < 15 else "12:00"), p, state="line", strength=n - round(fall * (day - 12) / 3))]
+        ks += [K(D(day, t), p, state="firing", fire=fire)] if fire else []
+        if day == 13 and n != n0: ks += [K(plus(REINF, -1), p, strength=n0), K(REINF, p, strength=n)]
+        ks += [K(D(day, "17:15" if day < 15 else "12:00"), p, state="line", strength=n - round(fall * (day - 12) / 3))]
     return ks
 GIVE_UP = iter([(-1440, -900), (-1480, -950), (-1440, -1000), (-1540, -975), (-1400, -950), (-1520, -890), (-1560, -1000), (-1460, -1050)])
-def to_buchanan(t0, p, n):  # the retreat down the sea face and across the sand plain to Buchanan at nine; the surrender about ten
+def to_buchanan(t0, p, n):  # the retreat from p down the sea face and across the sand plain to Buchanan at nine; the surrender about ten
     end = next(GIVE_UP)
-    return [K(t0, p, state="retreat")] + march(plus(t0, 1), D(15, "21:45"), [p] + PLAIN[:-1] + [end], "retreat")[1:] \
+    return [K(t0, p, state="retreat")] + march(plus(t0, 1), D(15, "21:45"), [p] + onward(ROUTE, p) + [end], "retreat")[1:] \
         + [K(D(15, "21:50"), end, h=70, state="line", strength=n), K(D(15, "22:00"), end, state="surrender"), K(END, end)]
-cs("salient", "Western salient", "The western salient: about 250 men at Shepherd's Battery and the river gate", "Col. William Lamb", "infantry", 250,
-   under_fire(face(0.08, -20), OUT, 250, 20) + [K(D(15, "14:00"), face(0.08, -20), state="firing"), K(D(15, "15:33"), face(0.08, -20), strength=205), K(D(15, "15:36"), face(0.22, -25), state="retreat", h=OUT),
+cs("reinf", "From Wilmington", "About 700 men sent down from Wilmington by steamer to Buchanan's wharf on the 13th, who fill out the sectors", "", "infantry", 700,
+   go(D(13, "13:00"), plus(REINF, -10), PLAIN[::-1] + [HQ], OUT) + [K(REINF, HQ, state="hidden")], ranks=8)
+cs("salient", "Western salient", "The western salient: about 250 men at Shepherd's Battery", "Col. William Lamb", "infantry", 130,
+   under_fire(face(0.08, -20), OUT, 130, 250, 20) + [K(D(15, "15:25"), face(0.08, -20), state="firing"), K(D(15, "15:33"), face(0.08, -20), strength=205), K(D(15, "15:36"), face(0.22, -25), state="retreat", h=OUT),
    K(D(15, "15:45"), face(0.3, -25), state="firing", strength=180), K(D(15, "16:00"), face(0.23, -20), state="charge"), K(D(15, "16:08"), face(0.33, -25), state="firing", strength=140),
    K(D(15, "16:45"), face(0.5, -25), strength=110), K(D(15, "20:00"), face(0.62, -25), strength=90), K(D(15, "20:40"), face(0.85, -30), strength=70)] + to_buchanan(D(15, "21:00"), face(0.85, -30), 65), ranks=4)
 cs("gateguns", "Gate guns", "A Parrott rifle and a 12-pounder Napoleon at the river gate", "", "artillery", 20,
    [K(D(13, "07:00"), (408, 338), h=OUT, state="line"), K(D(15, "15:25"), (408, 338), state="firing"), K(D(15, "15:38"), (408, 338), state="surrender", strength=12), K(D(15, "16:30"), (408, 338), state="hidden")], guns=2)
-cs("landface", "Land-face guns", "The land-face gun crews, 36th North Carolina: 24 guns among the traverses, most dismounted by the night of the 14th", "Maj. James Reilly", "infantry", 300,
-   under_fire(face(0.5, -14), OUT, 300, 110) + [K(D(15, "15:25"), face(0.5, -14), state="firing"), K(D(15, "15:45"), face(0.5, -14), strength=175), K(D(15, "15:50"), face(0.58, -18), state="retreat", h=OUT),
-   K(D(15, "16:00"), face(0.4, -18), state="charge"), K(D(15, "16:10"), face(0.55, -18), state="firing", strength=150), K(D(15, "16:45"), face(0.66, -18), strength=120), K(D(15, "20:00"), face(0.74, -18), strength=100),
-   K(D(15, "20:40"), face(0.9, -25), strength=80)] + to_buchanan(D(15, "21:00"), face(0.9, -25), 75), ranks=4)
-cs("bastion", "Bastion garrison", "The Northeast Bastion: about 500 men, who broke the naval column", "Maj. Gen. W. H. C. Whiting; Col. Lamb", "infantry", 500,
-   under_fire(face(0.95, -30), 30, 500, 40) + [K(D(15, "15:00"), face(0.95, -30), h=OUT), K(D(15, "15:25"), face(0.95, -30), state="firing"), K(D(15, "15:50"), face(0.95, -30), strength=440),
-   K(D(15, "16:30"), face(0.95, -30), strength=300), K(D(15, "16:45"), face(0.95, -30), state="firing", strength=290), K(D(15, "20:00"), face(0.95, -30), strength=270),
-   K(D(15, "20:40"), face(0.98, -60), state="retreat", h=200)] + to_buchanan(D(15, "20:50"), face(0.98, -60), 230), ranks=4)
-cs("reilly", "Reilly's party", "Reilly's counterattack along the land face, about 150 men, two-thirds of whom fell", "Maj. James Reilly", "infantry", 150,
-   [K(D(15, "16:30"), face(0.62, -30), h=(ALONG + 180) % 360, state="charge"), K(D(15, "16:38"), face(0.47, -22), state="firing", strength=70), K(D(15, "16:44"), face(0.47, -22), state="retreat", h=ALONG, strength=50),
-    K(D(15, "16:52"), face(0.9, -40), state="line", h=OUT), K(D(15, "16:55"), face(0.9, -40), state="hidden")], ranks=4)
-cs("seaface", "Sea-face guns", "The sea-face batteries and the Pulpit: 22 guns, 36th and 40th North Carolina", "", "infantry", 200,
-   under_fire(sea(450, 30), heading(BASTION, (1800, 300)), 200, 40) + [K(D(15, "15:25"), sea(450, 30), state="line")] + to_buchanan(D(15, "21:00"), sea(450, 30), 155), ranks=4)
+cs("rivergate", "River-end crews", "The river end of the land face: about 400 men at the chambers between the gate and the sally port, cut off and taken when the gate broke", "", "infantry", 200,
+   under_fire(face(0.25, -22), OUT, 200, 400, 40) + [K(D(15, "15:25"), face(0.25, -22), state="firing"), K(D(15, "15:38"), face(0.2, -30), state="surrender", strength=340), K(D(15, "16:00"), face(0.2, -30), state="hidden")], ranks=4)
+cs("landface", "Land-face guns", "The land-face gun crews east of the sally port, 36th North Carolina: 24 guns among the traverses, most dismounted by the night of the 14th", "", "infantry", 50,
+   under_fire(face(0.65, -14), OUT, 50, 100, 30) + [K(D(15, "15:25"), face(0.65, -14), state="firing"), K(D(15, "15:45"), face(0.65, -14), strength=60), K(D(15, "15:50"), face(0.58, -18), state="retreat", h=OUT),
+   K(D(15, "16:00"), face(0.4, -18), state="charge"), K(D(15, "16:10"), face(0.55, -18), state="firing", strength=50), K(D(15, "16:45"), face(0.66, -18), strength=45), K(D(15, "20:00"), face(0.74, -18), strength=40),
+   K(D(15, "20:40"), face(0.9, -25), strength=35)] + to_buchanan(D(15, "21:00"), face(0.9, -25), 30), ranks=4)
+cs("bastion", "Bastion garrison", "The Northeast Bastion: about 500 men with Reilly's party, who broke the naval column", "Maj. Gen. W. H. C. Whiting; Col. Lamb", "infantry", 60,
+   under_fire(face(0.95, -30), 30, 60, 300, 40) + [K(D(15, "15:00"), face(0.95, -30), h=OUT), K(D(15, "15:25"), face(0.95, -30), state="firing"), K(D(15, "15:50"), face(0.95, -30), strength=230),
+   K(D(15, "16:45"), face(0.95, -30), strength=220), K(D(15, "20:00"), face(0.95, -30), strength=205),
+   K(D(15, "20:40"), face(0.98, -60), state="retreat", h=200)] + to_buchanan(D(15, "20:50"), face(0.98, -60), 190), ranks=4)
+cs("reilly", "Reilly's party", "About 150 men held at the bastion; Reilly led them back along the land face at half past four, two-thirds fell, and he carried Lamb and Whiting to Buchanan that night", "Maj. James Reilly", "infantry", 150,
+   under_fire(face(0.9, -50), OUT, 150, 150, 10) + [K(D(15, "16:30"), face(0.9, -50), h=(ALONG + 180) % 360, state="charge"), K(D(15, "16:38"), face(0.47, -22), state="firing", strength=70),
+    K(D(15, "16:44"), face(0.47, -22), state="retreat", h=ALONG, strength=50), K(D(15, "16:52"), face(0.9, -50), state="line", h=OUT)] + to_buchanan(D(15, "20:50"), face(0.9, -50), 45), ranks=4)
+cs("seaface", "Sea-face guns", "The sea-face batteries and the Pulpit: 22 guns, 36th and 40th North Carolina", "", "infantry", 100,
+   under_fire(sea(450, 30), heading(BASTION, (1800, 300)), 100, 190, 40) + [K(D(15, "15:25"), sea(450, 30), state="line")] + to_buchanan(D(15, "21:00"), sea(450, 30), 145), ranks=4)
 cs("mound", "Mound guns", "The Mound Battery: two heavy guns on a mound 43 or 60 feet high, by one account or the other", "", "artillery", 40,
-   under_fire(MOUND, 110, 40, 10, fire=0.5) + [K(D(15, "15:25"), MOUND, state="line")] + to_buchanan(D(15, "21:00"), MOUND, 30), guns=2)
+   under_fire(MOUND, 110, 40, 40, 10, fire=0.5) + [K(D(15, "15:25"), MOUND, state="line")] + to_buchanan(D(15, "21:00"), MOUND, 30), guns=2)
 cs("buchanan", "Chapman's sailors", "Battery Buchanan: four guns and a Confederate Navy detachment, which left by boat at nine", "Capt. Robert T. Chapman, CSN", "artillery", 100,
-   under_fire(BUCHANAN, 80, 100, 5, fire=0.3) + [K(D(15, "14:30"), BUCHANAN, state="line"), K(D(15, "21:00"), BUCHANAN, state="column"), K(D(15, "21:10"), WHARF), K(D(15, "21:12"), WHARF, state="hidden")], guns=4)
+   under_fire(BUCHANAN, 80, 100, 100, 5, fire=0.3) + [K(D(15, "14:30"), BUCHANAN, state="line"), K(D(15, "21:00"), BUCHANAN, state="column"), K(D(15, "21:10"), WHARF), K(D(15, "21:12"), WHARF, state="hidden")], guns=4)
 cs("sc21", "21st S.C.", "21st South Carolina (Hagood's brigade), landed at Buchanan before dawn on the 15th", "", "infantry", 100,
    go(D(15, "05:00"), D(15, "06:40"), PLAIN[::-1] + [HQ], OUT) + [K(D(15, "15:25"), HQ, state="line"), K(D(15, "15:40"), HQ, state="column"), K(D(15, "15:50"), face(0.4, -60), h=OUT, state="firing"),
    K(D(15, "16:00"), face(0.3, -40), state="charge"), K(D(15, "16:10"), face(0.42, -50), state="firing", strength=75), K(D(15, "16:45"), face(0.55, -50), strength=65), K(D(15, "20:00"), face(0.68, -50), strength=60),
    K(D(15, "20:40"), face(0.9, -70), strength=55)] + to_buchanan(D(15, "21:00"), face(0.9, -70), 50), ranks=4)
 cs("sc11", "11th and 25th S.C.", "11th and 25th South Carolina (Hagood's brigade): 250 who reached the fort from Buchanan at half past two, under the fleet's fire", "", "infantry", 250,
-   go(D(15, "13:15"), D(15, "14:30"), PLAIN[::-1] + [face(0.6, -80)], OUT) + [K(D(15, "14:31"), face(0.6, -80), strength=235), K(D(15, "15:35"), face(0.6, -80), state="firing"),
+   go(D(15, "12:45"), D(15, "14:30"), PLAIN[::-1] + [face(0.6, -80)], OUT) + [K(D(15, "14:31"), face(0.6, -80), strength=235), K(D(15, "15:35"), face(0.6, -80), state="firing"),
    K(D(15, "16:00"), face(0.5, -60), state="charge"), K(D(15, "16:10"), face(0.62, -70), state="firing", strength=200), K(D(15, "16:45"), face(0.72, -70), strength=175), K(D(15, "20:00"), face(0.8, -70), strength=160),
    K(D(15, "20:40"), face(0.95, -90), strength=145)] + to_buchanan(D(15, "21:00"), face(0.95, -90), 140), ranks=4)
 
 # ---- the naval column: 1,600 sailors and 400 marines on the beach north of the bastion ----
 # Landed about midday, worked forward in trenches, and charged the bastion in one mass at 3:25; stopped about 500 yards
-# out by some accounts, and routed up the beach. Losses are the Navy's return, split by division.
-NAVY = [("cushman", "Cushman's sailors", "1st Division of the naval landing party", "Lt. Cdr. Charles H. Cushman", 530, 0, 150, 110),
-        ("parker", "Parker's sailors", "2nd Division of the naval landing party", "Lt. Cdr. James Parker", 530, 1, 260, 100),
-        ("selfridge", "Selfridge's sailors", "3rd Division of the naval landing party", "Lt. Cdr. Thomas O. Selfridge Jr.", 530, 2, 380, 90),
+# out by some accounts, and routed up the beach. Losses are the Navy's return, 332 sailors and 61 marines, split by division.
+NAVY = [("cushman", "Cushman's sailors", "1st Division of the naval landing party", "Lt. Cdr. Charles H. Cushman", 530, 0, 150, 111),
+        ("parker", "Parker's sailors", "2nd Division of the naval landing party", "Lt. Cdr. James Parker", 530, 1, 260, 111),
+        ("selfridge", "Selfridge's sailors", "3rd Division of the naval landing party", "Lt. Cdr. Thomas O. Selfridge Jr.", 530, 2, 380, 110),
         ("marines", "Dawson's marines", "4th Division, the marines, to cover the column with rifle fire", "Capt. Lucien L. Dawson, USMC", 400, 3, 320, 61)]
 def on_beach(d): return (BEACH[-1][0] + 140 + d * 0.22, BASTION[1] + 150 + d * 0.97)  # d metres up the beach from the bastion, on the sand by the surf
 for id, short, name, cmd, s, n, stop, lost in NAVY:
     land = (1150 + 60 * (n % 2), 1600 - 90 * n)
-    us(id, short, name, cmd, "infantry", s, [K(D(15, "11:40"), (1990, land[1] + 120), h=270, state="column"), K(plus(D(15, "12:00"), 5 * n), land, h=200, state="line")]
+    us(id, short, name, cmd, "infantry", s, [K(plus(D(15, "11:40"), 5 * n), land, h=200, state="line")]
        + go(plus(D(15, "12:20"), 5 * n), plus(D(15, "14:30"), 5 * n), [land, on_beach(1000 + 120 * n), on_beach(620 + 110 * n)], heading(on_beach(600), BASTION))
        + [K(D(15, "15:25"), on_beach(620 + 110 * n), state="charge"), K(plus(D(15, "15:33"), n), on_beach(stop), state="firing"), K(plus(D(15, "15:40"), n), on_beach(stop), state="rout", h=20, strength=s - lost // 2),
           K(plus(D(15, "15:58"), 2 * n), on_beach(900 + 120 * n), strength=s - lost), K(plus(D(15, "16:10"), 2 * n), on_beach(1050 + 120 * n), h=200, state="line"), K(END, on_beach(1050 + 120 * n))], ranks=6)
