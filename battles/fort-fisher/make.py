@@ -326,9 +326,9 @@ features = [
 
 # Woods on the ocean side of the peninsula north of the fort, between the River Road and the dunes; open sand near the
 # fort, along the beach and on the river side.
-CLEAR = [[(-2000, -2000), (2000, -2000), (2000, 650), (-2000, 650)],
-         [(-2000, 650), (460, 650), (510, 1000), (600, 1500), (680, 2000), (-2000, 2000)],
-         [(2000, 650), (2000, 2000), (1100, 2000), (1040, 1500), (940, 1000), (830, 650)]]
+CLEAR = [[(-2000, -2000), (2000, -2000), (2000, 620), (830, 620), (720, 700), (600, 660), (460, 720), (-2000, 720)],
+         [(-2000, 720), (460, 720), (510, 1000), (600, 1500), (680, 2000), (-2000, 2000)],
+         [(2000, 620), (2000, 2000), (1100, 2000), (1040, 1500), (940, 1000), (830, 620)]]
 
 # ---- chapters: (time, title, text, camera centre, metres across, playback speed, clock time the sources record or None) ----
 CHAPTERS = [
