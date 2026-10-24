@@ -764,7 +764,7 @@
    "id": "eng19e",
    "side": "allied",
    "name": "19th Combat Engineer Regiment, its right half: from the Hatab through Hill 712 to the Tébessa road. Its command post was overrun before noon on the 20th",
-   "short": "19th Engr",
+   "short": "19th Engr E",
    "commander": "Col. Anderson T. W. Moore (19th Engineers)",
    "type": "infantry",
    "strength": 550,
@@ -787,7 +787,7 @@
      "x": 9077,
      "y": -13414,
      "state": "line",
-     "strength": 520
+     "strength": 530
     },
     {
      "t": "1943-02-20 08:30",
@@ -799,46 +799,46 @@
      "t": "1943-02-20 11:30",
      "x": 9077,
      "y": -13414,
-     "strength": 440
+     "strength": 505
     },
     {
-     "t": "1943-02-20 13:23",
+     "t": "1943-02-20 12:08",
      "x": 9077,
      "y": -13414
     },
     {
-     "t": "1943-02-20 13:25",
+     "t": "1943-02-20 12:10",
      "x": 9077,
      "y": -13414,
      "state": "retreat",
      "h": 289
     },
     {
-     "t": "1943-02-20 14:54",
+     "t": "1943-02-20 12:46",
      "x": 5982,
      "y": -12368,
      "h": 307
     },
     {
-     "t": "1943-02-20 17:21",
+     "t": "1943-02-20 13:41",
      "x": 1507,
      "y": -8950,
      "h": 307
     },
     {
-     "t": "1943-02-20 20:09",
+     "t": "1943-02-20 14:44",
      "x": -3631,
      "y": -5009,
      "h": 269
     },
     {
-     "t": "1943-02-21 01:30",
+     "t": "1943-02-20 16:45",
      "x": -15931,
      "y": -5153,
      "h": 269
     },
     {
-     "t": "1943-02-21 01:35",
+     "t": "1943-02-20 16:50",
      "x": -15931,
      "y": -5153,
      "state": "line",
@@ -851,7 +851,7 @@
    "id": "eng19w",
    "side": "allied",
    "name": "19th Combat Engineer Regiment, its left half: across the Tébessa road to Djebel Zebbeus (Hill 812). Howe calls the whole line 'almost three miles' long",
-   "short": "19th Engr",
+   "short": "19th Engr W",
    "commander": "Col. Anderson T. W. Moore (19th Engineers)",
    "type": "infantry",
    "strength": 550,
@@ -874,7 +874,7 @@
      "x": 7443,
      "y": -13748,
      "state": "line",
-     "strength": 520
+     "strength": 530
     },
     {
      "t": "1943-02-20 08:30",
@@ -886,46 +886,46 @@
      "t": "1943-02-20 11:30",
      "x": 7443,
      "y": -13748,
-     "strength": 440
+     "strength": 505
     },
     {
-     "t": "1943-02-20 14:23",
+     "t": "1943-02-20 12:38",
      "x": 7443,
      "y": -13748
     },
     {
-     "t": "1943-02-20 14:25",
+     "t": "1943-02-20 12:40",
      "x": 7443,
      "y": -13748,
      "state": "retreat",
      "h": 313
     },
     {
-     "t": "1943-02-20 15:23",
+     "t": "1943-02-20 13:07",
      "x": 5982,
      "y": -12368,
      "h": 307
     },
     {
-     "t": "1943-02-20 17:54",
+     "t": "1943-02-20 14:08",
      "x": 1507,
      "y": -8950,
      "h": 299
     },
     {
-     "t": "1943-02-20 20:32",
+     "t": "1943-02-20 15:13",
      "x": -3631,
      "y": -6123,
      "h": 271
     },
     {
-     "t": "1943-02-21 01:30",
+     "t": "1943-02-20 17:15",
      "x": -14731,
      "y": -5853,
      "h": 271
     },
     {
-     "t": "1943-02-21 01:35",
+     "t": "1943-02-20 17:20",
      "x": -14731,
      "y": -5853,
      "state": "line",
@@ -1463,7 +1463,7 @@
   {
    "id": "td894",
    "side": "allied",
-   "name": "894th Tank Destroyer Battalion, brought up early on the 20th for a counterattack that never came; with Combat Command B on Djebel el Hamra from the 21st. Its strength is not recorded",
+   "name": "894th Tank Destroyer Battalion, brought up early on the 20th for a counterattack; it fell back along the Tébessa road at dusk and was with Combat Command B on Djebel el Hamra from the 21st. Its strength is not recorded",
    "short": "894th TD",
    "commander": "Lt. Col. Charley P. Eastburn",
    "type": "armor",
@@ -1646,44 +1646,13 @@
      "t": "1943-02-20 17:45",
      "x": 7988,
      "y": -10019,
-     "strength": 1
+     "strength": 0
     },
     {
-     "t": "1943-02-20 17:58",
-     "x": 7988,
-     "y": -10019
-    },
-    {
-     "t": "1943-02-20 18:00",
+     "t": "1943-02-20 17:50",
      "x": 7988,
      "y": -10019,
-     "state": "retreat",
-     "h": 340
-    },
-    {
-     "t": "1943-02-20 18:23",
-     "x": 8169,
-     "y": -9462,
-     "h": 347
-    },
-    {
-     "t": "1943-02-20 20:37",
-     "x": 6862,
-     "y": -3729,
-     "h": 359
-    },
-    {
-     "t": "1943-02-21 01:00",
-     "x": 6626,
-     "y": 7792,
-     "h": 359
-    },
-    {
-     "t": "1943-02-21 01:05",
-     "x": 6626,
-     "y": 7792,
-     "state": "line",
-     "h": 180
+     "state": "hidden"
     }
    ]
   },
@@ -2339,7 +2308,7 @@
   {
    "id": "leic",
    "side": "allied",
-   "name": "2nd/5th Battalion, Leicestershire Regiment, on 'the last ridge south of Thala' from the 21st. About 300 were taken prisoner that night; Atkinson has the battalion muster forty able-bodied men afterwards",
+   "name": "2nd/5th Battalion, Leicestershire Regiment, on 'the last ridge south of Thala' from the 21st. About 300 were taken prisoner that night",
    "short": "2/5 Leicesters",
    "commander": "Brig. Cameron Nicholson (Nickforce)",
    "type": "infantry",
@@ -2443,7 +2412,7 @@
    "short": "34th FA",
    "commander": "Brig. Gen. S. LeRoy Irwin (9th Division Artillery)",
    "type": "artillery",
-   "strength": 300,
+   "strength": 550,
    "keys": [
     {
      "t": "1943-02-21 18:00",
@@ -2514,11 +2483,11 @@
   {
    "id": "irwin105",
    "side": "allied",
-   "name": "60th and 84th Field Artillery Battalions, twenty-four 105 mm howitzers, about 3,000 yards south of the 155s; the twelve 75s of the 47th and 60th Infantry's cannon companies went in with them",
+   "name": "60th and 84th Field Artillery Battalions, twenty-four 105 mm howitzers, about 3,000 yards south of the 155s; the twelve 75s of the 47th and 60th Infantry's cannon companies went in with them, 36 guns here",
    "short": "60th & 84th FA",
    "commander": "Brig. Gen. S. LeRoy Irwin (9th Division Artillery)",
    "type": "artillery",
-   "strength": 600,
+   "strength": 1650,
    "keys": [
     {
      "t": "1943-02-21 18:15",
@@ -2584,16 +2553,16 @@
      "y": 19481
     }
    ],
-   "guns": 24
+   "guns": 36
   },
   {
    "id": "ar13_2",
    "side": "allied",
-   "name": "2nd Battalion, 13th Armored Regiment (with Companies G and I), Combat Command B's tanks, 'in hull defilade astride the enemy's path' on Djebel el Hamra. Howe gives no count; II Corps had 99 medium tanks running on the evening of the 20th",
+   "name": "2nd Battalion, 13th Armored Regiment (less Company G), Combat Command B's tanks, 'in hull defilade astride the enemy's path' on Djebel el Hamra. Howe gives no count; II Corps had 99 medium tanks running on the evening of the 20th",
    "short": "2/13 AR",
    "commander": "Brig. Gen. Paul McD. Robinett (CCB)",
    "type": "armor",
-   "strength": 40,
+   "strength": 30,
    "keys": [
     {
      "t": "1943-02-21 00:00",
@@ -2638,42 +2607,126 @@
      "x": -15612,
      "y": -1447,
      "state": "line",
-     "strength": 38
+     "strength": 28
     },
     {
-     "t": "1943-02-22 15:58",
+     "t": "1943-02-23 05:58",
      "x": -15612,
      "y": -1447
     },
     {
-     "t": "1943-02-22 16:00",
+     "t": "1943-02-23 06:00",
      "x": -15612,
      "y": -1447,
      "state": "column",
      "h": 119
     },
     {
-     "t": "1943-02-22 17:30",
+     "t": "1943-02-23 07:30",
+     "x": -6808,
+     "y": -6345
+    }
+   ]
+  },
+  {
+   "id": "g13",
+   "side": "allied",
+   "name": "Company G, 13th Armored Regiment, with Combat Command B on Djebel el Hamra; it sortied in the counterattack at 1600 on the 22nd, and the tanks that overtook the 5th Bersaglieri near Hill 732 were CCB's. Its count is not recorded",
+   "short": "G/13 AR",
+   "commander": "Brig. Gen. Paul McD. Robinett (CCB)",
+   "type": "armor",
+   "strength": 12,
+   "keys": [
+    {
+     "t": "1943-02-21 00:10",
+     "x": -17636,
+     "y": 21106,
+     "h": 177,
+     "state": "column"
+    },
+    {
+     "t": "1943-02-21 02:23",
+     "x": -17064,
+     "y": 10575,
+     "h": 175
+    },
+    {
+     "t": "1943-02-21 04:42",
+     "x": -16111,
+     "y": -334,
+     "h": 156
+    },
+    {
+     "t": "1943-02-21 05:10",
+     "x": -15212,
+     "y": -2347,
+     "h": 156
+    },
+    {
+     "t": "1943-02-21 07:15",
+     "x": -15212,
+     "y": -2347,
+     "state": "line",
+     "h": 110
+    },
+    {
+     "t": "1943-02-21 16:30",
+     "x": -15212,
+     "y": -2347,
+     "state": "firing"
+    },
+    {
+     "t": "1943-02-21 18:30",
+     "x": -15212,
+     "y": -2347,
+     "state": "line"
+    },
+    {
+     "t": "1943-02-22 15:58",
+     "x": -15212,
+     "y": -2347
+    },
+    {
+     "t": "1943-02-22 16:00",
+     "x": -15212,
+     "y": -2347,
+     "h": 115,
+     "state": "column"
+    },
+    {
+     "t": "1943-02-22 16:54",
      "x": -6808,
      "y": -6345,
+     "h": 132
+    },
+    {
+     "t": "1943-02-22 17:15",
+     "x": -4149,
+     "y": -8705,
+     "h": 132
+    },
+    {
+     "t": "1943-02-22 17:20",
+     "x": -4149,
+     "y": -8705,
      "state": "firing",
      "h": 100
     },
     {
      "t": "1943-02-22 18:30",
-     "x": -6808,
-     "y": -6345,
+     "x": -4149,
+     "y": -8705,
      "state": "line"
     },
     {
      "t": "1943-02-23 06:28",
-     "x": -6808,
-     "y": -6345
+     "x": -4149,
+     "y": -8705
     },
     {
      "t": "1943-02-23 06:30",
-     "x": -6808,
-     "y": -6345,
+     "x": -4149,
+     "y": -8705,
      "state": "column",
      "h": 120
     },
@@ -2945,11 +2998,11 @@
   {
    "id": "i16_2",
    "side": "allied",
-   "name": "2nd Battalion, 16th Infantry, 1st Infantry Division, with Senegalese troops, at the crossroads east of Djebel el Hamra and Bou Chebka pass; Company G went north at midnight to cover the 33d FA",
+   "name": "2nd Battalion, 16th Infantry, 1st Infantry Division, with Senegalese troops, at the crossroads east of Djebel el Hamra and Bou Chebka pass, less Company G, which went north at midnight to cover the 33d Field Artillery",
    "short": "2/16 Inf",
    "commander": "Lt. Col. Joseph B. Crawford",
    "type": "infantry",
-   "strength": 800,
+   "strength": 650,
    "keys": [
     {
      "t": "1943-02-21 07:00",
@@ -2999,7 +3052,7 @@
      "t": "1943-02-22 12:00",
      "x": -12435,
      "y": -8572,
-     "strength": 740
+     "strength": 600
     },
     {
      "t": "1943-02-22 15:58",
@@ -3024,6 +3077,75 @@
      "t": "1943-02-22 18:30",
      "x": -7080,
      "y": -10241,
+     "state": "line"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "g16",
+   "side": "allied",
+   "name": "Company G, 16th Infantry, sent north at midnight on the 21st to cover the 33d Field Artillery on the ridge north of Bou Chebka pass",
+   "short": "G/16 Inf",
+   "commander": "Lt. Col. Joseph B. Crawford",
+   "type": "infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "1943-02-21 23:50",
+     "x": -12435,
+     "y": -8572,
+     "state": "column",
+     "h": 134
+    },
+    {
+     "t": "1943-02-22 01:00",
+     "x": -9031,
+     "y": -11866,
+     "state": "line",
+     "h": 110
+    },
+    {
+     "t": "1943-02-22 07:08",
+     "x": -9031,
+     "y": -11866
+    },
+    {
+     "t": "1943-02-22 07:10",
+     "x": -9031,
+     "y": -11866,
+     "state": "firing",
+     "h": 100
+    },
+    {
+     "t": "1943-02-22 12:00",
+     "x": -9031,
+     "y": -11866,
+     "strength": 135
+    },
+    {
+     "t": "1943-02-22 15:58",
+     "x": -9031,
+     "y": -11866
+    },
+    {
+     "t": "1943-02-22 16:00",
+     "x": -9031,
+     "y": -11866,
+     "state": "column",
+     "h": 51
+    },
+    {
+     "t": "1943-02-22 17:30",
+     "x": -7715,
+     "y": -10798,
+     "state": "firing",
+     "h": 100
+    },
+    {
+     "t": "1943-02-22 18:30",
+     "x": -7715,
+     "y": -10798,
      "state": "line"
     }
    ],
@@ -3467,11 +3589,11 @@
   {
    "id": "menton2",
    "side": "axis",
-   "name": "2nd Battalion, Panzer Grenadier Regiment Afrika, Group Menton: a detachment of it reached Hill 1191 after dark on the 19th",
+   "name": "2nd Battalion, Panzer Grenadier Regiment Afrika, Group Menton, less the detachment it sent up to Hill 1191: on Semmama's eastern spurs on the 19th, over the pass on the 20th and west with the 1st Battalion. Headcounts are not recorded",
    "short": "II/PzGren Afrika",
    "commander": "Oberst Menton (Panzer Grenadier Regiment Afrika)",
    "type": "infantry",
-   "strength": 600,
+   "strength": 450,
    "keys": [
     {
      "t": "1943-02-19 10:15",
@@ -3517,7 +3639,7 @@
      "x": 13615,
      "y": -12245,
      "state": "line",
-     "strength": 570
+     "strength": 420
     },
     {
      "t": "1943-02-19 18:43",
@@ -3529,45 +3651,45 @@
      "x": 13615,
      "y": -12245,
      "state": "column",
-     "h": 304
+     "h": 315
     },
     {
      "t": "1943-02-19 20:30",
-     "x": 11918,
-     "y": -11109,
+     "x": 13315,
+     "y": -11945,
      "state": "firing",
      "h": 270
     },
     {
      "t": "1943-02-19 21:30",
-     "x": 11918,
-     "y": -11109,
+     "x": 13315,
+     "y": -11945,
      "state": "line",
-     "strength": 550
+     "strength": 410
     },
     {
      "t": "1943-02-20 08:30",
-     "x": 11918,
-     "y": -11109,
+     "x": 13315,
+     "y": -11945,
      "state": "firing"
     },
     {
      "t": "1943-02-20 13:00",
-     "x": 11918,
-     "y": -11109,
-     "strength": 510
+     "x": 13315,
+     "y": -11945,
+     "strength": 370
     },
     {
      "t": "1943-02-20 16:28",
-     "x": 11918,
-     "y": -11109
+     "x": 13315,
+     "y": -11945
     },
     {
      "t": "1943-02-20 16:30",
-     "x": 11918,
-     "y": -11109,
+     "x": 13315,
+     "y": -11945,
      "state": "charge",
-     "h": 258
+     "h": 279
     },
     {
      "t": "1943-02-20 17:00",
@@ -3581,7 +3703,7 @@
      "x": 10166,
      "y": -11466,
      "state": "line",
-     "strength": 480
+     "strength": 340
     },
     {
      "t": "1943-02-21 13:58",
@@ -3637,7 +3759,7 @@
      "y": -7792,
      "state": "retreat",
      "h": 120,
-     "strength": 460
+     "strength": 320
     },
     {
      "t": "1943-02-21 19:30",
@@ -3682,7 +3804,7 @@
      "x": -8351,
      "y": -13915,
      "state": "line",
-     "strength": 460
+     "strength": 320
     },
     {
      "t": "1943-02-22 16:28",
@@ -3739,7 +3861,64 @@
      "y": -13659,
      "state": "line",
      "h": 300,
-     "strength": 440
+     "strength": 300
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "menton2_det",
+   "side": "axis",
+   "name": "The detachment of Menton's 2nd Battalion that reached Hill 1191 after dark on the 19th, 'a hard climb of more than a mile'; it held the hill through the 20th. Its size is not recorded",
+   "short": "II/PzGren det",
+   "commander": "Oberst Menton (Panzer Grenadier Regiment Afrika)",
+   "type": "infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "1943-02-19 18:45",
+     "x": 13615,
+     "y": -12245,
+     "h": 304,
+     "state": "column"
+    },
+    {
+     "t": "1943-02-19 20:30",
+     "x": 11918,
+     "y": -11109,
+     "h": 304
+    },
+    {
+     "t": "1943-02-19 20:35",
+     "x": 11918,
+     "y": -11109,
+     "state": "firing",
+     "h": 270
+    },
+    {
+     "t": "1943-02-19 21:30",
+     "x": 11918,
+     "y": -11109,
+     "state": "line",
+     "strength": 140
+    },
+    {
+     "t": "1943-02-20 08:30",
+     "x": 11918,
+     "y": -11109,
+     "state": "firing"
+    },
+    {
+     "t": "1943-02-20 18:30",
+     "x": 11918,
+     "y": -11109,
+     "state": "line"
+    },
+    {
+     "t": "1943-02-20 19:00",
+     "x": 11918,
+     "y": -11109,
+     "state": "hidden"
     }
    ],
    "loose": true
@@ -3747,43 +3926,54 @@
   {
    "id": "menton3",
    "side": "axis",
-   "name": "The 'nearly two battalions' of infantry Rommel added to Group Menton on the morning of the 20th; they went along the Tébessa road onto Djebel Zebbeus at 1630, and a battalion of them reached Point 732 at 1530 on the 21st",
+   "name": "The 'nearly two battalions' of infantry Rommel added to Group Menton on the morning of the 20th. The map has them as the column that went between two of the engineer companies and over Moore's command post before noon; at 1630 they went along the Tébessa road onto Djebel Zebbeus, and a battalion of them reached Point 732 at 1530 on the 21st",
    "short": "Rommel's battalions",
    "commander": "Generalmajor Karl Buelowius (Kampfgruppe DAK)",
    "type": "infantry",
    "strength": 1000,
    "keys": [
     {
-     "t": "1943-02-20 11:00",
+     "t": "1943-02-20 10:00",
      "x": 13615,
      "y": -17811,
-     "h": 304,
+     "h": 307,
      "state": "column"
     },
     {
-     "t": "1943-02-20 13:00",
-     "x": 10166,
-     "y": -15473,
-     "h": 304
+     "t": "1943-02-20 11:15",
+     "x": 9712,
+     "y": -14850,
+     "h": 311
     },
     {
-     "t": "1943-02-20 13:05",
-     "x": 10166,
-     "y": -15473,
+     "t": "1943-02-20 11:45",
+     "x": 8260,
+     "y": -13581,
+     "h": 311
+    },
+    {
+     "t": "1943-02-20 11:50",
+     "x": 8260,
+     "y": -13581,
      "state": "firing",
      "h": 300
     },
     {
+     "t": "1943-02-20 15:58",
+     "x": 8260,
+     "y": -13581
+    },
+    {
      "t": "1943-02-20 16:00",
-     "x": 10166,
-     "y": -15473,
+     "x": 8260,
+     "y": -13581,
      "state": "charge",
-     "h": 300
+     "h": 258
     },
     {
      "t": "1943-02-20 16:30",
-     "x": 7625,
-     "y": -13915,
+     "x": 7244,
+     "y": -13804,
      "state": "firing",
      "h": 300
     },
@@ -3792,7 +3982,6 @@
      "x": 7244,
      "y": -13804,
      "state": "line",
-     "h": 300,
      "strength": 940
     },
     {
@@ -6007,6 +6196,6 @@
   "J. Rickard, 'Battle of the Kasserine Pass, 19–22 February 1943', historyofwar.org (2017): a few clock times Howe lacks, marked as his.",
   "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. GLO-30 sampled at 100 m over a 52 km square; it is a surface model, so the modern city of Kasserine and the farms of the Foussana basin show. Roads and the Oued el Hatab from OpenStreetMap; the Tébessa road west of the basin, the track from Haïdra and the Bou Chebka road are drawn from the narrative.",
   "Clock: the times as recorded, read as a GMT+1 clock; sunrise 7:08 and sunset 18:12 are computed for 19 February on that assumption. Fog and rain covered the field on 20 and 21 February and low cloud and showers on the 22nd.",
-  "What is reconstructed: the named hills (1191, 974, 712, 704, Zebbeus, Point 732, the Thala ridges, the Hamra passes, Bou Chebka pass), fitted to Howe's prose on the Copernicus DEM within a kilometre or two; every Axis tank and infantry count below the figures Howe gives (30 tanks, 20 self-propelled guns and 35 half-tracks for the 10th Panzer at Thala; eleven tanks for Gore; eight for Company I, 13th Armored); the 19th Engineers', 805th and 894th Tank Destroyers' strengths; the routes between recorded places; and the hours of the night movements of 19–20 and 20–21 February, which Howe says cannot be clearly reconstructed."
+  "What is reconstructed: the named hills (1191, 974, 712, 704, Zebbeus, Point 732, the Thala ridges, the Hamra passes, Bou Chebka pass), fitted to Howe's prose on the Copernicus DEM within a kilometre or two; every Axis tank and infantry count below the figures Howe gives (30 tanks, 20 self-propelled guns and 35 half-tracks for the 10th Panzer at Thala; eleven tanks for Gore; eight for Company I, 13th Armored); the 19th Engineers', 805th and 894th Tank Destroyers', Company G, 13th Armored's and the Hill 1191 detachment's strengths; the routes between recorded places; and the hours of the night movements of 19–20 and 20–21 February, which Howe says cannot be clearly reconstructed."
  ]
 }

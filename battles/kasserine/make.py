@@ -95,15 +95,16 @@ def on_1191(id, short, name, n, t_up, p):  # Company A, 26th and Company L, 39th
     al(id, short, name, "", "infantry", n, keys, loose=True)
 on_1191("a26", "A/26", "Company A, 26th Infantry, on Hill 1191, the key to the Semmama side; its commander was briefly captured in the night of 19–20 February", 150, T0, H1191)
 on_1191("l39", "L/39", "Company L, 39th Infantry, sent up to Hill 1191 with Company A on the afternoon of the 19th", 150, D(19, "16:00"), off(H1191, 400, -300))
-def engineers(id, short, name, n, p, h, path_out, t_out, dest):
-    keys = [K(T0, p, h=h, state="line"), K(D(19, "15:30"), p, state="firing"), K(D(19, "18:15"), p, state="line", strength=n - 30),
-            K(D(20, "08:30"), p, state="firing"), K(D(20, "11:30"), p, strength=n - 110), K(fmt(sec(t_out) - 300), p, state="retreat", h=hd(p, path_out[0]))]
-    keys += march(t_out, D(21, "01:30"), [p] + path_out + [dest], strength=n - 130)[1:] + [K(D(21, "01:35"), dest, state="line", h=100)]
+def engineers(id, short, name, n, p, h, path_out, t_out, dest):  # Howe's 128 for the regiment, 64 a half; the line broke when the column came through it before noon
+    t_in = fmt(sec(t_out) + 4.5 * 3600)
+    keys = [K(T0, p, h=h, state="line"), K(D(19, "15:30"), p, state="firing"), K(D(19, "18:15"), p, state="line", strength=n - 20),
+            K(D(20, "08:30"), p, state="firing"), K(D(20, "11:30"), p, strength=n - 45), K(fmt(sec(t_out) - 300), p, state="retreat", h=hd(p, path_out[0]))]
+    keys += march(t_out, t_in, [p] + path_out + [dest], strength=n - 64)[1:] + [K(fmt(sec(t_in) + 300), dest, state="line", h=100)]
     al(id, short, name, "Col. Anderson T. W. Moore (19th Engineers)", "infantry", n, keys, loose=True)
-engineers("eng19e", "19th Engr", "19th Combat Engineer Regiment, its right half: from the Hatab through Hill 712 to the Tébessa road. Its command post was overrun before noon on the 20th", 550, M(35.2545, 8.740), 140,
-          [M(35.2639, 8.7059), M(35.2946, 8.6566), M(35.33, 8.60)], D(20, "13:30"), off(HAMRA_FOOT, -500, -700))
-engineers("eng19w", "19th Engr", "19th Combat Engineer Regiment, its left half: across the Tébessa road to Djebel Zebbeus (Hill 812). Howe calls the whole line 'almost three miles' long", 550, M(35.2515, 8.722), 140,
-          [M(35.2639, 8.7059), M(35.2946, 8.6566), M(35.32, 8.60)], D(20, "14:30"), off(HAMRA_FOOT, 700, -1400))
+engineers("eng19e", "19th Engr E", "19th Combat Engineer Regiment, its right half: from the Hatab through Hill 712 to the Tébessa road. Its command post was overrun before noon on the 20th", 550, M(35.2545, 8.740), 140,
+          [M(35.2639, 8.7059), M(35.2946, 8.6566), M(35.33, 8.60)], D(20, "12:15"), off(HAMRA_FOOT, -500, -700))
+engineers("eng19w", "19th Engr W", "19th Combat Engineer Regiment, its left half: across the Tébessa road to Djebel Zebbeus (Hill 812). Howe calls the whole line 'almost three miles' long", 550, M(35.2515, 8.722), 140,
+          [M(35.2639, 8.7059), M(35.2946, 8.6566), M(35.32, 8.60)], D(20, "12:45"), off(HAMRA_FOOT, 700, -1400))
 GUNS33 = M(35.270, 8.733)
 al("fa33", "33d FA", "Two batteries of the 33d Field Artillery Battalion, 105 mm howitzers, behind the line; pulled back early on the afternoon of the 20th and found on the ridge north of Bou Chebka pass on the 22nd, where Battery C lost five howitzers", "", "artillery", 200,
    [K(T0, GUNS33, h=140, state="line"), K(D(19, "12:30"), GUNS33, state="firing", fire=0.5), K(D(19, "18:15"), GUNS33, state="line"), K(D(20, "08:30"), GUNS33, state="firing", fire=0.5), K(D(20, "13:00"), GUNS33, state="line")] +
@@ -129,7 +130,7 @@ al("ai6_3", "3/6 AI", "3rd Battalion, 6th Armored Infantry, put under Stark earl
    march(D(20, "04:00"), D(20, "07:00"), [P['bend'], M(35.3059, 8.7302), M(35.282, 8.745), AI6_3]) + [K(D(20, "07:05"), AI6_3, state="line", h=120), K(D(20, "10:00"), M(35.276, 8.763), state="firing", h=110), K(D(20, "17:00"), M(35.276, 8.763), strength=470)] +
    cut_off(M(35.276, 8.763), 470, 420, dest=M(35.455, 8.708), via=M(35.35, 8.745), t_in=D(21, "06:30")), loose=True)
 TD894 = M(35.2814, 8.6795)
-al("td894", "894th TD", "894th Tank Destroyer Battalion, brought up early on the 20th for a counterattack that never came; with Combat Command B on Djebel el Hamra from the 21st. Its strength is not recorded", "Lt. Col. Charley P. Eastburn", "armor", 12,
+al("td894", "894th TD", "894th Tank Destroyer Battalion, brought up early on the 20th for a counterattack; it fell back along the Tébessa road at dusk and was with Combat Command B on Djebel el Hamra from the 21st. Its strength is not recorded", "Lt. Col. Charley P. Eastburn", "armor", 12,
    march(D(20, "05:00"), D(20, "08:00"), [WEST_EDGE, M(35.372, 8.4625), M(35.3499, 8.5151), M(35.3210, 8.6035), TD894]) + [K(D(20, "08:05"), TD894, state="line", h=120), K(D(20, "14:00"), M(35.263, 8.705), state="firing", h=130),
     K(D(20, "16:30"), M(35.263, 8.705), strength=10), K(D(20, "17:00"), M(35.263, 8.705), state="retreat", h=300)] +
    march(D(20, "17:15"), D(21, "06:00"), [M(35.263, 8.705), M(35.2946, 8.6566), M(35.3210, 8.6035), M(35.3499, 8.5151), M(35.338, 8.462)])[1:] + [K(D(21, "06:05"), M(35.338, 8.462), state="line", h=100)])
@@ -140,10 +141,11 @@ GORE_IN = [M(35.36, 8.715), P['bend'], M(35.3059, 8.7302), GORE]
 def gore(id, short, name, type, n, dx, dy, n_end, **x):
     p, f = off(GORE, dx, dy), off(M(35.285, 8.728), dx, dy)
     keys = march(D(20, "02:00"), D(20, "04:00"), [off(q, dx, dy) for q in GORE_IN]) + [K(D(20, "04:05"), p, state="line", h=150), K(D(20, "10:00"), p, state="column", h=hd(p, f)), K(D(20, "10:30"), f, state="line", h=150),
-            K(D(20, "13:00"), f, state="firing"), K(D(20, "16:30"), f, strength=round((n + n_end) / 2)), K(D(20, "17:45"), f, strength=n_end), K(D(20, "18:00"), f, state="retreat", h=340)]
-    keys += march(D(20, "18:10"), D(21, "01:00"), [f, off(P['hill704'], dx, dy), P['bend'], M(35.445, 8.713)])[1:] + [K(D(21, "01:05"), M(35.445, 8.713), state="line", h=180)]
+            K(D(20, "13:00"), f, state="firing"), K(D(20, "16:30"), f, strength=round((n + n_end) / 2)), K(D(20, "17:45"), f, strength=n_end)]
+    if n_end: keys += [K(D(20, "18:00"), f, state="retreat", h=340)] + march(D(20, "18:10"), D(21, "01:00"), [f, off(P['hill704'], dx, dy), P['bend'], M(35.445, 8.713)])[1:] + [K(D(21, "01:05"), M(35.445, 8.713), state="line", h=180)]
+    else: keys += [K(D(20, "17:50"), f, state="hidden")]  # the last tank destroyed; only the company and the battery came out
     al(id, short, name, "Lt. Col. A. C. Gore", type, n, keys, **x)
-gore("gore", "Gore Force", "Gore Force's eleven tanks, from the 26th Armoured Brigade: they fought in the north-west corner of the pass 'until their last tank was destroyed'", "armor", 11, 0, 0, 1)
+gore("gore", "Gore Force", "Gore Force's eleven tanks, from the 26th Armoured Brigade: they fought in the north-west corner of the pass 'until their last tank was destroyed'", "armor", 11, 0, 0, 0)
 gore("gore_inf", "Gore's company", "Gore Force's motor company (Howe writes '10th Battalion, Royal Buffs'; the brigade's motor battalion was the 10th Rifle Brigade), with its anti-tank guns", "infantry", 150, -500, 300, 90, loose=True)
 gore("gore_bty", "Gore's battery", "Gore Force's field battery", "artillery", 80, -300, 900, 70, guns=4)
 
@@ -170,7 +172,7 @@ al("buffs", "10 RB", "The 26th Armoured Brigade's motor battalion (less Gore's c
     K(D(21, "06:00"), BUFFS, state="line", h=180), K(D(21, "10:00"), BUFFS, state="firing"), K(D(21, "16:00"), BUFFS, strength=370, state="retreat", h=0), K(D(21, "17:00"), off(RIDGE2, 0, 300), state="firing", h=180),
     K(D(21, "18:00"), off(RIDGE2, 0, 300), state="retreat", h=0, strength=350), K(D(21, "19:00"), M(35.549, 8.694), state="line", h=180), K(D(21, "19:20"), M(35.549, 8.694), state="firing"), K(D(21, "22:00"), M(35.549, 8.694), state="line", strength=320)], loose=True)
 LEIC = P['ridge_leic']
-al("leic", "2/5 Leicesters", "2nd/5th Battalion, Leicestershire Regiment, on 'the last ridge south of Thala' from the 21st. About 300 were taken prisoner that night; Atkinson has the battalion muster forty able-bodied men afterwards", "Brig. Cameron Nicholson (Nickforce)", "infantry", 800,
+al("leic", "2/5 Leicesters", "2nd/5th Battalion, Leicestershire Regiment, on 'the last ridge south of Thala' from the 21st. About 300 were taken prisoner that night","Brig. Cameron Nicholson (Nickforce)", "infantry", 800,
    [K(D(21, "06:00"), LEIC, h=180, state="line"), K(D(21, "19:00"), LEIC, state="firing"), K(D(21, "22:00"), LEIC, state="line", strength=480), K(D(22, "06:20"), LEIC, state="firing"), K(D(22, "08:00"), LEIC, state="line", strength=460),
     K(D(23, "07:30"), LEIC)], loose=True)
 NICK_GUNS = M(35.560, 8.672)
@@ -183,8 +185,8 @@ def irwin(id, short, name, n, guns, p, t_in, dt_h):  # the 9th Division Artiller
     keys += [K(t_up, off(P['thala'], 300, 400), state="column", h=hd(off(P['thala'], 300, 400), p)), K(fmt(sec(t_up) + dt_h * 3600), p, state="line", h=180), K(D(22, "07:00"), p, state="firing", fire=0.6), K(D(22, "15:30"), p, state="line"),
              K(D(23, "07:30"), p)]
     al(id, short, name, "Brig. Gen. S. LeRoy Irwin (9th Division Artillery)", "artillery", n, keys, guns=guns)
-irwin("irwin155", "34th FA", "34th Field Artillery Battalion, twelve 155 mm howitzers, emplaced along the road west of Thala; with the 105s and the cannon companies, 48 guns and 2,200 men that fired 1,904 rounds on 22–23 February", 300, 12, P['irwin155'], D(21, "18:00"), 1.0)
-irwin("irwin105", "60th & 84th FA", "60th and 84th Field Artillery Battalions, twenty-four 105 mm howitzers, about 3,000 yards south of the 155s; the twelve 75s of the 47th and 60th Infantry's cannon companies went in with them", 600, 24, P['irwin105'], D(21, "18:15"), 1.5)
+irwin("irwin155", "34th FA", "34th Field Artillery Battalion, twelve 155 mm howitzers, emplaced along the road west of Thala; with the 105s and the cannon companies, 48 guns and 2,200 men that fired 1,904 rounds on 22–23 February", 550, 12, P['irwin155'], D(21, "18:00"), 1.0)
+irwin("irwin105", "60th & 84th FA", "60th and 84th Field Artillery Battalions, twenty-four 105 mm howitzers, about 3,000 yards south of the 155s; the twelve 75s of the 47th and 60th Infantry's cannon companies went in with them, 36 guns here", 1650, 36, P['irwin105'], D(21, "18:15"), 1.5)
 
 # ---- Combat Command B on Djebel el Hamra and the 1st Infantry Division at Bou Chebka, 21-22 February ----
 # Recorded: CCB down the dirt road from Haïdra in the night of 20-21, on the ridge's eastern face and in its passes by morning,
@@ -194,9 +196,15 @@ HAMRA_E = M(35.362, 8.468)
 CCB_IN = [P['haidra'], M(35.47, 8.452), P['hamra_north']]
 def counter(p, q, t0=D(22, "16:00")):  # the 1600 counterattack on the 22nd: forward to q, fire, and stand there
     return [K(t0, p, state="column", h=hd(p, q)), K(fmt(sec(t0) + 5400), q, state="firing", h=100), K(D(22, "18:30"), q, state="line")]
-al("ar13_2", "2/13 AR", "2nd Battalion, 13th Armored Regiment (with Companies G and I), Combat Command B's tanks, 'in hull defilade astride the enemy's path' on Djebel el Hamra. Howe gives no count; II Corps had 99 medium tanks running on the evening of the 20th", "Brig. Gen. Paul McD. Robinett (CCB)", "armor", 40,
-   march(D(21, "00:00"), D(21, "05:00"), CCB_IN + [HAMRA_E]) + [K(D(21, "07:05"), HAMRA_E, state="line", h=110), K(D(21, "16:30"), HAMRA_E, state="firing"), K(D(21, "18:30"), HAMRA_E, state="line", strength=38)] +
-   counter(HAMRA_E, M(35.318, 8.565)) + [K(D(23, "06:30"), M(35.318, 8.565), state="column", h=120), K(D(23, "07:30"), M(35.305, 8.61))])
+al("ar13_2", "2/13 AR", "2nd Battalion, 13th Armored Regiment (less Company G), Combat Command B's tanks, 'in hull defilade astride the enemy's path' on Djebel el Hamra. Howe gives no count; II Corps had 99 medium tanks running on the evening of the 20th", "Brig. Gen. Paul McD. Robinett (CCB)", "armor", 30,
+   march(D(21, "00:00"), D(21, "05:00"), CCB_IN + [HAMRA_E]) + [K(D(21, "07:05"), HAMRA_E, state="line", h=110), K(D(21, "16:30"), HAMRA_E, state="firing"), K(D(21, "18:30"), HAMRA_E, state="line", strength=28),
+    K(D(23, "06:00"), HAMRA_E, state="column", h=hd(HAMRA_E, M(35.318, 8.565))), K(D(23, "07:30"), M(35.318, 8.565))])
+G13 = off(HAMRA_E, 400, -900)
+NEAR732 = off(P['point732'], -900, -200)
+al("g13", "G/13 AR", "Company G, 13th Armored Regiment, with Combat Command B on Djebel el Hamra; it sortied in the counterattack at 1600 on the 22nd, and the tanks that overtook the 5th Bersaglieri near Hill 732 were CCB's. Its count is not recorded", "Brig. Gen. Paul McD. Robinett (CCB)", "armor", 12,
+   march(D(21, "00:10"), D(21, "05:10"), CCB_IN + [G13]) + [K(D(21, "07:15"), G13, state="line", h=110), K(D(21, "16:30"), G13, state="firing"), K(D(21, "18:30"), G13, state="line")] +
+   march(D(22, "16:00"), D(22, "17:15"), [G13, M(35.318, 8.565), NEAR732]) + [K(D(22, "17:20"), NEAR732, state="firing", h=100), K(D(22, "18:30"), NEAR732, state="line"),
+    K(D(23, "06:30"), NEAR732, state="column", h=120), K(D(23, "07:30"), M(35.305, 8.61))])
 AI6_2 = M(35.312, 8.455)
 al("ai6_2", "2/6 AI", "2nd Battalion, 6th Armored Infantry, Combat Command B, on the southern end of Djebel el Hamra; the DAK's envelopment struck it near Bou Chebka pass at daylight on the 22nd", "Brig. Gen. Paul McD. Robinett (CCB)", "infantry", 700,
    march(D(21, "00:30"), D(21, "06:00"), CCB_IN + [M(35.345, 8.445), AI6_2]) + [K(D(21, "08:05"), AI6_2, state="line", h=110), K(D(21, "23:00"), AI6_2, state="column", h=hd(AI6_2, M(35.285, 8.515))), K(D(22, "01:30"), M(35.285, 8.515), state="line", h=120),
@@ -210,9 +218,12 @@ al("recon13", "Recon/13 AR", "Reconnaissance Company, 13th Armored Regiment, out
    march(D(20, "23:30"), D(21, "01:30"), [P['hamra_north'], M(35.34, 8.53), RECON13]) + [K(D(21, "01:35"), RECON13, state="line", h=110), K(D(21, "03:00"), RECON13, state="skirmish"), K(D(21, "05:30"), RECON13, state="retreat", h=290, strength=115),
     K(D(21, "07:30"), M(35.352, 8.492), state="line", h=110), K(D(23, "07:30"), M(35.352, 8.492))], loose=True)
 I16_2 = M(35.298, 8.503)
-al("i16_2", "2/16 Inf", "2nd Battalion, 16th Infantry, 1st Infantry Division, with Senegalese troops, at the crossroads east of Djebel el Hamra and Bou Chebka pass; Company G went north at midnight to cover the 33d FA", "Lt. Col. Joseph B. Crawford", "infantry", 800,
-   march(D(21, "07:00"), D(21, "10:00"), [WEST_EDGE, M(35.36, 8.42), M(35.32, 8.47), I16_2]) + [K(D(21, "10:05"), I16_2, state="line", h=110), K(D(22, "07:10"), I16_2, state="firing", h=100), K(D(22, "12:00"), I16_2, strength=740)] +
+al("i16_2", "2/16 Inf", "2nd Battalion, 16th Infantry, 1st Infantry Division, with Senegalese troops, at the crossroads east of Djebel el Hamra and Bou Chebka pass, less Company G, which went north at midnight to cover the 33d Field Artillery", "Lt. Col. Joseph B. Crawford", "infantry", 650,
+   march(D(21, "07:00"), D(21, "10:00"), [WEST_EDGE, M(35.36, 8.42), M(35.32, 8.47), I16_2]) + [K(D(21, "10:05"), I16_2, state="line", h=110), K(D(22, "07:10"), I16_2, state="firing", h=100), K(D(22, "12:00"), I16_2, strength=600)] +
    counter(I16_2, M(35.283, 8.562)), loose=True)
+G16 = off(BC_RIDGE, 500, -400)
+al("g16", "G/16 Inf", "Company G, 16th Infantry, sent north at midnight on the 21st to cover the 33d Field Artillery on the ridge north of Bou Chebka pass", "Lt. Col. Joseph B. Crawford", "infantry", 150,
+   [K(D(21, "23:50"), I16_2, state="column", h=hd(I16_2, G16)), K(D(22, "01:00"), G16, state="line", h=110), K(D(22, "07:10"), G16, state="firing", h=100), K(D(22, "12:00"), G16, strength=135)] + counter(G16, M(35.278, 8.555)), loose=True)
 
 # ---- Kampfgruppe DAK: the pass on 19-20 February, Djebel el Hamra on the 21st, Bou Chebka on the 22nd ----
 # Recorded: the 33d Recon's failed surprise at daybreak; 35-40 truckloads unloading at 1015; the two Panzer Grenadier battalions;
@@ -242,12 +253,17 @@ def menton(id, short, name, n, p_unload, climb, night, n_night, day2, t_day2, fi
     ax(id, short, name, "Oberst Menton (Panzer Grenadier Regiment Afrika)", "infantry", n, keys, loose=True, **x)
 menton("menton1", "I/PzGren Afrika", "1st Battalion, Panzer Grenadier Regiment Afrika, Group Menton: up the eastern spurs of Semmama on the 19th, over the centre of the pass on the 20th, to Djebel el Hamra on the 21st and round by Bou Chebka on the 22nd. Headcounts are not recorded", 600,
        off(SE, -300, 400), M(35.262, 8.775), M(35.268, 8.762), 540, M(35.260, 8.750), D(20, "16:30"), M(35.318, 8.552), M(35.300, 8.628), M(35.262, 8.560), 440, M(35.283, 8.640), 420)
-menton("menton2", "II/PzGren Afrika", "2nd Battalion, Panzer Grenadier Regiment Afrika, Group Menton: a detachment of it reached Hill 1191 after dark on the 19th", 600,
-       off(SE, 300, 900), M(35.265, 8.790), off(H1191, 300, -200), 550, M(35.272, 8.752), D(20, "17:00"), M(35.305, 8.556), M(35.312, 8.640), M(35.250, 8.548), 460, M(35.296, 8.652), 440)
-ROMMEL_BNS = M(35.250, 8.724)
-ax("menton3", "Rommel's battalions", "The 'nearly two battalions' of infantry Rommel added to Group Menton on the morning of the 20th; they went along the Tébessa road onto Djebel Zebbeus at 1630, and a battalion of them reached Point 732 at 1530 on the 21st", "Generalmajor Karl Buelowius (Kampfgruppe DAK)", "infantry", 1000,
-   march(D(20, "11:00"), D(20, "13:00"), [SE, M(35.236, 8.752)]) + [K(D(20, "13:05"), M(35.236, 8.752), state="firing", h=300), K(D(20, "16:00"), M(35.236, 8.752), state="charge", h=300), K(D(20, "16:30"), ROMMEL_BNS, state="firing", h=300),
-    K(D(20, "18:30"), off(P['zebbeus'], 200, 300), state="line", h=300, strength=940)] + to_hamra(off(P['zebbeus'], 200, 300), M(35.293, 8.575), M(35.288, 8.618), t_fight=D(21, "15:30"), n_fight=910, bc=M(35.278, 8.565), n_bc=860, back2=M(35.272, 8.660), n_end=850), loose=True)
+SPUR2 = M(35.265, 8.790)
+menton("menton2", "II/PzGren Afrika", "2nd Battalion, Panzer Grenadier Regiment Afrika, Group Menton, less the detachment it sent up to Hill 1191: on Semmama's eastern spurs on the 19th, over the pass on the 20th and west with the 1st Battalion. Headcounts are not recorded", 450,
+       off(SE, 300, 900), SPUR2, off(SPUR2, -300, 300), 410, M(35.272, 8.752), D(20, "17:00"), M(35.305, 8.556), M(35.312, 8.640), M(35.250, 8.548), 320, M(35.296, 8.652), 300)
+DET1191 = off(H1191, 300, -200)
+ax("menton2_det", "II/PzGren det", "The detachment of Menton's 2nd Battalion that reached Hill 1191 after dark on the 19th, 'a hard climb of more than a mile'; it held the hill through the 20th. Its size is not recorded", "Oberst Menton (Panzer Grenadier Regiment Afrika)", "infantry", 150,
+   march(D(19, "18:45"), D(19, "20:30"), [SPUR2, DET1191]) + [K(D(19, "20:35"), DET1191, state="firing", h=270), K(D(19, "21:30"), DET1191, state="line", strength=140), K(D(20, "08:30"), DET1191, state="firing"),
+    K(D(20, "18:30"), DET1191, state="line"), K(D(20, "19:00"), DET1191, state="hidden")], loose=True)
+GAP = M(35.253, 8.731)                                  # between the two engineer companies, where the column overran Moore's command post
+ax("menton3", "Rommel's battalions", "The 'nearly two battalions' of infantry Rommel added to Group Menton on the morning of the 20th. The map has them as the column that went between two of the engineer companies and over Moore's command post before noon; at 1630 they went along the Tébessa road onto Djebel Zebbeus, and a battalion of them reached Point 732 at 1530 on the 21st", "Generalmajor Karl Buelowius (Kampfgruppe DAK)", "infantry", 1000,
+   march(D(20, "10:00"), D(20, "11:45"), [SE, P['fork'], GAP]) + [K(D(20, "11:50"), GAP, state="firing", h=300), K(D(20, "16:00"), GAP, state="charge", h=hd(GAP, off(P['zebbeus'], 200, 300))), K(D(20, "16:30"), off(P['zebbeus'], 200, 300), state="firing", h=300),
+    K(D(20, "18:30"), off(P['zebbeus'], 200, 300), state="line", strength=940)] + to_hamra(off(P['zebbeus'], 200, 300), M(35.293, 8.575), M(35.288, 8.618), t_fight=D(21, "15:30"), n_fight=910, bc=M(35.278, 8.565), n_bc=860, back2=M(35.272, 8.660), n_end=850), loose=True)
 STOTTEN_IN = M(35.243, 8.741)
 ax("stotten", "I/8 Pz Regt", "Group Stotten: 1st Battalion, 8th Panzer Regiment, the DAK's tanks. Five were lost in the minefield on the Tébessa road on the 19th; on the 20th they finished Gore Force. Its count is not recorded", "Major Stotten", "armor", 25,
    march(D(19, "14:30"), D(19, "15:30"), [SE, STOTTEN_IN]) + [K(D(19, "15:35"), STOTTEN_IN, state="firing", h=300), K(D(19, "17:30"), STOTTEN_IN, strength=20), K(D(19, "18:15"), STOTTEN_IN, state="retreat", h=140)] +
@@ -413,7 +429,7 @@ battle = dict(
         "J. Rickard, 'Battle of the Kasserine Pass, 19–22 February 1943', historyofwar.org (2017): a few clock times Howe lacks, marked as his.",
         "Terrain: " + T["source"] + ". GLO-30 sampled at 100 m over a 52 km square; it is a surface model, so the modern city of Kasserine and the farms of the Foussana basin show. Roads and the Oued el Hatab from OpenStreetMap; the Tébessa road west of the basin, the track from Haïdra and the Bou Chebka road are drawn from the narrative.",
         "Clock: the times as recorded, read as a GMT+1 clock; sunrise 7:08 and sunset 18:12 are computed for 19 February on that assumption. Fog and rain covered the field on 20 and 21 February and low cloud and showers on the 22nd.",
-        "What is reconstructed: the named hills (1191, 974, 712, 704, Zebbeus, Point 732, the Thala ridges, the Hamra passes, Bou Chebka pass), fitted to Howe's prose on the Copernicus DEM within a kilometre or two; every Axis tank and infantry count below the figures Howe gives (30 tanks, 20 self-propelled guns and 35 half-tracks for the 10th Panzer at Thala; eleven tanks for Gore; eight for Company I, 13th Armored); the 19th Engineers', 805th and 894th Tank Destroyers' strengths; the routes between recorded places; and the hours of the night movements of 19–20 and 20–21 February, which Howe says cannot be clearly reconstructed.",
+        "What is reconstructed: the named hills (1191, 974, 712, 704, Zebbeus, Point 732, the Thala ridges, the Hamra passes, Bou Chebka pass), fitted to Howe's prose on the Copernicus DEM within a kilometre or two; every Axis tank and infantry count below the figures Howe gives (30 tanks, 20 self-propelled guns and 35 half-tracks for the 10th Panzer at Thala; eleven tanks for Gore; eight for Company I, 13th Armored); the 19th Engineers', 805th and 894th Tank Destroyers', Company G, 13th Armored's and the Hill 1191 detachment's strengths; the routes between recorded places; and the hours of the night movements of 19–20 and 20–21 February, which Howe says cannot be clearly reconstructed.",
     ],
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1, ensure_ascii=False)
