@@ -79,14 +79,14 @@ features = [
     dict(type="fence", name="the hedgerow (about here)", pts=HEDGEROW, at=[-900, -480], rot=70),
     dict(type="water", poly=quad(-1870, -280, 170, 110)), dict(type="water", poly=[(2700, -800), (3050, -980), (3120, -1120), (2760, -960)]),
     dict(name="West Ravine", at=[-1870, -560]), dict(name="East Morass", at=[2950, -1200]),
-    dict(name="the Parsonage (about here)", at=[P['hedge_n'][0] + 40, P['hedge_n'][1] - 110]), dict(name="Point of Woods (about here)", at=[P['point_of_woods'][0], P['point_of_woods'][1] - 110]),
+    dict(name="the Parsonage (about here)", at=[P['hedge_n'][0] - 130, P['hedge_n'][1] - 30]), dict(name="Point of Woods (about here)", at=[P['point_of_woods'][0] - 60, P['point_of_woods'][1] - 200]),
     dict(name="Perrine Hill", at=[P['perrine_hill'][0], P['perrine_hill'][1] + 110]), dict(name="Combs Hill", at=[COMBS[0], COMBS[1] - 110]),
     dict(name="Sutfin farm", at=[P['sutfin'][0], P['sutfin'][1] - 90]), dict(name="Craig house", at=[P['craig'][0], P['craig'][1] + 90]),
     dict(name="Rhea farm (about here)", at=[P['rhea'][0], P['rhea'][1] - 100]), dict(name="Ker's house (about here)", at=[P['ker'][0], P['ker'][1] - 100]),
     dict(name="Tennent meeting house", at=[P['tennent'][0], P['tennent'][1] + 100]), dict(name="Englishtown", at=[P['englishtown'][0] + 150, P['englishtown'][1] - 120]),
     dict(name="Monmouth Court House", at=[P['courthouse'][0], P['courthouse'][1] - 100]), dict(name="Covenhoven house, Clinton's headquarters", at=[P['covenhoven'][0], P['covenhoven'][1] - 100]),
-    dict(name="Wikoff farm", at=[P['wikoff'][0], P['wikoff'][1] + 90]), dict(name="the park's Molly Pitcher well (1992 marker)", at=[P['pitcher_well'][0] + 60, P['pitcher_well'][1] - 90]),
-    dict(name="Washington meets Lee (the park's site)", at=[P['meet'][0], P['meet'][1] - 100]), dict(name="to Middletown, 12 miles", at=[4150, 1700], rot=-65),
+    dict(name="Wikoff farm", at=[P['wikoff'][0], P['wikoff'][1] + 90]), dict(name="the park's Molly Pitcher well (1992 marker)", at=[P['pitcher_well'][0] + 80, P['pitcher_well'][1] + 70]),
+    dict(name="Washington meets Lee (the park's site)", at=[P['meet'][0] + 60, P['meet'][1] + 110]), dict(name="to Middletown, 12 miles", at=[4150, 1700], rot=-65),
     dict(name="Battle monument (1884)", at=[P['monument'][0], P['monument'][1] + 90]),
 ]
 
@@ -101,7 +101,7 @@ OOB = [
     ("maxwell", "american", "Maxwell", "New Jersey brigade", "Brig. Gen. William Maxwell", "infantry", 1000, {}),
     ("oswald", "american", "Oswald", "Lee's artillery, eight of its twelve pieces", "Lt. Col. Eleazer Oswald", "artillery", 100, dict(guns=8)),
     ("oswald4", "american", "Oswald's four", "The four guns that stood with Lee's rearguard on the hill east of the bridge and at the hedgerow", "Lt. Col. Eleazer Oswald", "artillery", 50, dict(guns=4)),
-    ("dickinson", "american", "Dickinson", "New Jersey and Pennsylvania militia, out in front since the 27th; about 800 by Hamilton's count", "Maj. Gen. Philemon Dickinson", "militia", 800, dict(loose=True)),
+    ("dickinson", "american", "Dickinson", "New Jersey and Pennsylvania militia, out in front since the 27th; about 800 by Hamilton's count", "Maj. Gen. Philemon Dickinson", "militia", 800, {}),
     # Washington's main body: Stirling's line on the Perrine ridge
     ("learned", "american", "Learned", "Learned's brigade", "Col. John Bailey", "infantry", 373, {}),
     ("glover", "american", "Glover", "Glover's brigade", "Brig. Gen. John Glover", "infantry", 636, {}),
@@ -126,7 +126,7 @@ OOB = [
     ("weedon", "american", "Weedon", "Weedon's Virginia brigade", "Brig. Gen. George Weedon", "infantry", 587, {}),
     # Cornwallis's division: the rear guard under Erskine, then the whole division turned back
     ("dragoons16", "british", "16th L.D.", "16th Light Dragoons", "Lt. Col. William Harcourt", "cavalry", 365, {}),
-    ("rangers", "british", "Queen's Rangers", "Queen's American Rangers", "Lt. Col. John Graves Simcoe", "light_infantry", 454, dict(loose=True)),
+    ("rangers", "british", "Queen's Rangers", "Queen's American Rangers", "Lt. Col. John Graves Simcoe", "light_infantry", 454, {}),
     ("li1", "british", "1st Light Inf.", "1st Light Infantry battalion", "Lt. Col. Robert Abercromby", "light_infantry", 730, {}),
     ("gren1", "british", "1st Grenadiers", "1st Grenadier battalion", "Lt. Col. William Meadows", "infantry", 761, {}),
     ("gren2", "british", "2nd Grenadiers", "2nd Grenadier battalion; Monckton killed at the hedgerow", "Lt. Col. Henry Monckton (killed)", "infantry", 737, {}),
@@ -184,7 +184,7 @@ ENG, TEN, BRG, CSW, CH = P['englishtown'], P['tennent'], P['bridge'], P['causewa
 EDGE_NE, EDGE_NW = (4500, 1950), (-4500, 2900)
 
 # ---- Dickinson's militia: out in front at the West Ravine all night, then off to the left ----
-keys("dickinson", [K("04:00", (-250, -360), h=100, state="skirmish"), K("08:00", (-250, -360), state="firing"), K("08:20", (-250, -360), h=290, state="retreat", strength=795),
+keys("dickinson", [K("04:00", (-250, -360), h=100, state="line"), K("08:00", (-250, -360), state="firing"), K("08:20", (-250, -360), h=290, state="retreat", strength=795),
                    K("08:40", (-700, -60), h=110, state="line"), K("11:00", (-700, -60), state="column")] + go("11:01", "11:40", [(-700, -60), (-1000, 150), (-1250, 220)], 120) + [K("24:00", (-1250, 220))])
 
 # ---- Lee's vanguard: Englishtown to the court house, the clash, the retreat, the rearguard, the rear ----
@@ -223,19 +223,19 @@ back("oswald4", "11:06", "11:55", (950, -520), "12:15", "12:35", (-240, -330), 1
 back("oswald", "11:06", "11:50", (900, -450), "12:05", "12:55", (-650, 60), 150)
 back("wayne", "11:41", "12:00", (1150, -760), "12:22", "12:45", (-85, -560), 90)
 back("scott", "11:31", "12:10", (1000, -950), "12:30", "13:40", (-800, 300), 150)
-back("jackson", "11:51", "12:12", (950, -380), "12:28", "13:30", (-1600, 1150), 150)
+back("jackson", "11:51", "12:12", (950, -380), "12:28", "13:30", (-1300, 900), 150)
 back("maxwell", "11:46", "12:15", (1100, -880), "12:35", "13:35", (-1200, 800), 150)
 # the rearguard fight, a quarter to one to half past: two battalions and four guns on the hill east of the bridge,
 # pushed back to the hedgerow; Wayne in the Point of Woods; Monckton killed; the last men over the bridge about half past one
 def stand(id, t_fire, hill, t_hedge, hedge, t_off, n1, n2, rear, t_rear):
     keys(id, [K(t_fire, hill, state="firing"), K(plus(t_fire, 15), hill, strength=n1), K(t_hedge, hedge, h=90, state="firing"), K(plus(t_hedge, 12), hedge, strength=n2),
               K(t_off, hedge, h=300, state="retreat")] + go(plus(t_off, 1), t_rear, [hedge, BRG, (-900, 300), rear], 150, moving="retreat"))
-stand("grayson", "12:45", (-200, -280), "13:05", (-560, -480), "13:28", 580, 570, (-1700, 1050), "14:05")
-stand("durkee", "12:47", (-300, -380), "13:06", (-640, -640), "13:29", 285, 275, (-1800, 950), "14:08")
+stand("grayson", "12:45", (-200, -280), "13:05", (-560, -480), "13:28", 580, 570, (-1400, 950), "14:05")
+stand("durkee", "12:47", (-300, -380), "13:06", (-640, -640), "13:29", 285, 275, (-1500, 850), "14:08")
 stand("oswald4", "12:45", (-240, -330), "13:04", (-520, -420), "13:25", 50, 45, (-1050, 420), "13:50")
 keys("wayne", [K("13:00", (-85, -560), state="firing"), K("13:12", (-85, -560), strength=935), K("13:24", (-85, -560), strength=915), K("13:32", (-85, -560), h=300, state="retreat")]
-     + go("13:33", "14:10", [(-85, -560), (-250, -300), BRG, (-900, 300), (-1500, 1000)], 150, moving="retreat"))
-keys("oswald", [K("13:00", (-650, 60), state="line")] + go("13:01", "13:30", [(-650, 60), (-1300, 1000)], 150))
+     + go("13:33", "14:10", [(-85, -560), (-250, -300), BRG, (-900, 300), (-1350, 1050)], 150, moving="retreat"))
+keys("oswald", [K("13:00", (-650, 60), state="line")] + go("13:01", "13:30", [(-650, 60), (-1200, 1000)], 150))
 keys("scott", [K("13:45", (-800, 300), h=160, state="line")])
 # the main line on the Perrine ridge, Stirling's four brigades with Knox's guns in front, faces the hedgerow ground
 RIDGE, RH = (-800, 560), 160
@@ -243,23 +243,24 @@ RIDGE, RH = (-800, 560), 160
 for id in ("grayson", "durkee", "jackson", "maxwell", "oswald", "oswald4", "scott", "wayne"): hold(id, "24:00")
 
 # ---- Washington's main body: over Englishtown at ten, Tennent by half past eleven, the ridge by one ----
-def main_body(id, t_in, t_eng, t_ten, t_line, spot, h, state="line"):
-    keys(id, march(t_in, t_eng, [EDGE_NW, ENG]) + march(plus(t_eng, 10), t_ten, road(ENG, TEN)) + go(plus(t_ten, 5), t_line, road(TEN, (-900, 300)) + [spot], h, state))
-main_body("learned", "09:30", "10:00", "11:05", "12:30", slot(RIDGE, RH, 450), RH)
-main_body("glover", "09:35", "10:05", "11:10", "12:35", slot(RIDGE, RH, 150), RH)
-main_body("knox", "09:38", "10:08", "11:15", "12:40", slot(RIDGE, RH, 0, -60), RH)
-main_body("huntington", "09:40", "10:10", "11:20", "12:45", slot(RIDGE, RH, -150), RH)
-main_body("poor", "09:45", "10:15", "11:25", "12:50", slot(RIDGE, RH, -450), RH)
-main_body("cilley", "09:47", "10:17", "11:27", "12:55", slot(RIDGE, RH, -700), RH)
-main_body("irvine", "09:50", "10:20", "11:30", "13:00", (-500, 280), RH)
-main_body("pa2", "09:55", "10:25", "11:35", "13:05", (-200, 330), RH)
-main_body("pa3", "10:00", "10:30", "11:40", "13:10", (-650, 420), RH)
-main_body("clark", "10:05", "10:35", "11:45", "13:15", (-700, 900), RH)
-main_body("smallwood", "10:10", "10:40", "11:50", "13:20", (-1000, 850), RH)
-# Greene's wing goes right from Tennent about half past twelve, round by the West Ravine to Combs Hill by three
-for id, t_in, spot, h in (("woodford", "10:15", (-1060, -960), 40), ("duplessis", "10:18", COMBS, 35)):
-    keys(id, march(t_in, plus(t_in, 30), [EDGE_NW, ENG]) + march(plus(t_in, 40), "11:55", road(ENG, TEN))
-         + go("12:30", "15:00", [TEN, (-1900, 400), (-2050, -400), (-1650, -900), (-1300, -1020), spot], h))
+def main_body(id, t_in, halt, t_on, t_line, spot, h, state="line"):
+    keys(id, march(t_in, plus(t_in, 30), [EDGE_NW, ENG]) + march(plus(t_in, 35), plus(t_in, 85), road(ENG, TEN) + [halt]) + [K(t_on, halt, state="column")]
+         + go(plus(t_on, 1), t_line, [halt] + road(halt, (-900, 300))[1:] + [spot], h, state))
+main_body("learned", "09:30", (-1400, 1150), "11:50", "12:20", slot(RIDGE, RH, 450), RH)
+main_body("glover", "09:34", (-1480, 1230), "11:54", "12:25", slot(RIDGE, RH, 150), RH)
+main_body("knox", "09:38", (-1560, 1310), "11:58", "12:30", slot(RIDGE, RH, 0, -60), RH)
+main_body("huntington", "09:42", (-1640, 1390), "12:02", "12:35", slot(RIDGE, RH, -150), RH)
+main_body("poor", "09:46", (-1720, 1470), "12:06", "12:40", slot(RIDGE, RH, -450), RH)
+main_body("cilley", "09:50", (-1800, 1550), "12:10", "12:45", slot(RIDGE, RH, -700), RH)
+main_body("irvine", "09:54", (-1300, 1050), "12:14", "12:50", (-500, 280), RH)
+main_body("pa2", "09:58", (-1380, 1130), "12:18", "12:55", (-200, 330), RH)
+main_body("pa3", "10:02", (-1460, 1210), "12:22", "13:00", (-650, 420), RH)
+main_body("clark", "10:06", (-1540, 1290), "12:26", "13:00", (-700, 900), RH)
+main_body("smallwood", "10:10", (-1620, 1370), "12:30", "13:02", (-1000, 850), RH)
+# Greene's wing is sent right from Tennent and goes round by the West Ravine to Combs Hill by three
+for id, t_in, halt, spot, h in (("woodford", "10:00", (-1700, 1450), (-1060, -960), 40), ("duplessis", "10:04", (-1780, 1530), COMBS, 35)):
+    keys(id, march(t_in, plus(t_in, 30), [EDGE_NW, ENG]) + march(plus(t_in, 35), plus(t_in, 85), road(ENG, TEN) + [halt]) + [K("13:40", halt, state="column")]
+         + go("13:41", "15:00", [halt, TEN, (-1900, 400), (-2050, -400), (-1650, -900), (-1300, -1020), spot], h))
 keys("duplessis", [K("15:15", COMBS, state="firing"), K("16:30", COMBS, state="line"), K("24:00", COMBS)])
 keys("woodford", [K("24:00", (-1060, -960))])
 # Steuben's four brigades wait at Englishtown and are ordered forward at six; they reach Tennent as the sun sets
@@ -292,30 +293,30 @@ for id, t0, t1 in OUT:
     keys(id, [K("04:00", CAMP[id], h=40, state="line"), K(t0, CAMP[id], state="column")] + march(plus(t0, 1), t1, [CAMP[id]] + NJ79(CAMP[id], EDGE_NE)[1:] + [EDGE_NE]) + [K(plus(t1, 1), EDGE_NE, state="hidden")])
 # Erskine's rear guard: the Rangers push out to the West Ravine and fire on the militia about eight, then come back;
 # by a quarter past nine the three units stand on the Middletown road, the last British troops near the court house
-keys("rangers", [K("04:00", CAMP["rangers"], h=270, state="skirmish"), K("06:40", CAMP["rangers"], state="column")] + march("06:41", "07:55", [CAMP["rangers"], (3000, -400)] + road(CSW, (-100, -430))[1:])
+keys("rangers", [K("04:00", CAMP["rangers"], h=270, state="line"), K("06:40", CAMP["rangers"], state="column")] + march("06:41", "07:55", [CAMP["rangers"], (3000, -400)] + road(CSW, (-100, -430))[1:])
      + [K("08:00", (-100, -430), h=280, state="firing"), K("08:20", (-100, -430), strength=450), K("08:25", (-100, -430), h=100, state="retreat")]
-     + go("08:26", "09:40", [(-100, -430)] + road((-100, -430), CSW)[1:] + [(3300, -400), P['clash_br']], 270, state="skirmish", moving="retreat"))
+     + go("08:26", "09:40", [(-100, -430)] + road((-100, -430), CSW)[1:] + [(3300, -400), P['clash_br']], 270, moving="retreat"))
 keys("li1", [K("04:00", CAMP["li1"], h=270, state="line"), K("09:00", CAMP["li1"], state="column")] + go("09:01", "09:15", [CAMP["li1"], (3900, 300)], 270))
 keys("dragoons16", [K("04:00", CAMP["dragoons16"], h=270, state="line"), K("09:00", CAMP["dragoons16"], state="column")] + go("09:01", "09:15", [CAMP["dragoons16"], (4000, 650)], 270))
 # the clash: Wayne comes on, the dragoons charge and are shot back, the rear guard holds until the division returns
 keys("dragoons16", [K("10:35", (4000, 650), h=250, state="charge"), K("10:44", (3800, 500), strength=353), K("10:48", (3800, 500), h=70, state="retreat"), K("11:00", (4050, 700), h=250, state="line")])
 keys("li1", [K("10:40", (3900, 300), state="firing"), K("11:00", (3900, 300), strength=720), K("11:10", (3900, 300), state="line")])
-keys("rangers", [K("10:40", P['clash_br'], state="firing"), K("11:00", P['clash_br'], strength=448), K("11:10", P['clash_br'], state="skirmish")])
+keys("rangers", [K("10:40", P['clash_br'], state="firing"), K("11:00", P['clash_br'], strength=448), K("11:10", P['clash_br'], state="line")])
 # Clinton turns Cornwallis back between half past ten and half past eleven: Guards on the right and Grenadiers on the
 # left in two columns down the Middletown road, the 3rd Brigade sent across the creek to cut the vanguard's retreat,
 # the 4th following in line, the 5th in reserve and the Hessian grenadiers left in a line to fall back on
 def back_in(id, t_in, t_dep, spot, h, state="line"):
     keys(id, [K(plus(t_in, -1), EDGE_NE, state="hidden"), K(t_in, EDGE_NE, state="column")] + go(plus(t_in, 1), t_dep, NJ79(EDGE_NE, (3849, 500)) + [spot], h, state))
-back_in("guards1", "10:45", "11:30", (3500, 500), 250)
-back_in("guards2", "10:50", "11:35", (3450, 300), 250)
-back_in("gren1", "10:55", "11:40", (3400, 50), 250)
-back_in("gren2", "11:00", "11:45", (3350, -150), 250)
-back_in("ra", "11:05", "11:45", (3550, 150), 250)
-back_in("bde3", "11:10", "12:00", (3000, -1100), 250)
-back_in("r42", "11:15", "12:05", (2850, -950), 250)
-back_in("bde4", "11:20", "12:10", (3200, -400), 250)
-back_in("bde5", "11:30", "12:20", (3400, -700), 250)
-back_in("hessians", "11:40", "12:30", (1150, -900), 270)
+back_in("guards1", "10:40", "11:10", (3500, 500), 250)
+back_in("guards2", "10:44", "11:14", (3450, 300), 250)
+back_in("gren1", "10:48", "11:18", (3400, 50), 250)
+back_in("gren2", "10:52", "11:22", (3350, -150), 250)
+back_in("ra", "10:56", "11:24", (3550, 150), 250)
+back_in("bde3", "11:00", "11:30", (3000, -1100), 250)
+back_in("r42", "11:02", "11:32", (2850, -950), 250)
+back_in("bde4", "11:04", "11:34", (3200, -400), 250)
+back_in("bde5", "11:06", "11:36", (3400, -700), 250)
+back_in("hessians", "11:08", "12:20", (1200, -850), 270)
 # The pursuit west: the Guards and Grenadiers cross the Middle Ravine about half past twelve and come at the Point of
 # Woods and the hill east of the bridge; the grenadiers carry the hedgerow and Monckton falls leading the 2nd battalion
 def pursue(id, t0, t1, pts, h, **kw): keys(id, [K(t0, last(id), state="column")] + go(plus(t0, 1), t1, [last(id)] + pts, h, **kw))
@@ -324,12 +325,12 @@ pursue("guards2", "11:40", "12:55", [(2300, -650), (1400, -750), (800, -700), (2
 pursue("gren1", "11:45", "12:58", [(2600, -300), (1800, -450), (1000, -400), (60, -340)], 280)
 pursue("gren2", "11:50", "13:03", [(2500, -450), (1700, -550), (950, -480), (0, -470)], 280)
 pursue("ra", "11:50", "13:25", [(2600, -400), (1700, -480), (700, -500), (-380, -470)], 340)
-pursue("bde4", "12:15", "13:30", [(2400, -550), (1500, -650), (350, -450)], 270)
-pursue("bde5", "12:25", "13:45", [(2500, -700), (1600, -800), (900, -350)], 270)
-pursue("bde3", "12:05", "13:30", [(2500, -900), (1800, -800), (600, -400)], 270)
-pursue("r42", "12:10", "13:35", [(2400, -1000), (1700, -900), (500, -550)], 270)
+pursue("bde4", "12:00", "13:30", [(2400, -550), (1500, -650), (350, -450)], 270)
+pursue("bde5", "12:10", "13:45", [(2500, -700), (1600, -800), (900, -350)], 270)
+pursue("bde3", "11:50", "13:30", [(2500, -900), (1800, -800), (600, -400)], 270)
+pursue("r42", "11:55", "13:35", [(2400, -1000), (1700, -900), (500, -550)], 270)
 pursue("li1", "11:15", "13:30", [(3500, -200), (2500, -400), (1600, -500), (300, -300)], 290)
-pursue("rangers", "11:15", "13:35", [(3600, 50), (2600, -200), (1700, -350), (500, -250)], 290, state="skirmish")
+pursue("rangers", "11:15", "13:35", [(3600, 50), (2600, -200), (1700, -350), (500, -250)], 290)
 pursue("dragoons16", "11:30", "13:40", [(3700, 100), (2700, -250), (1800, -400), (700, -300)], 290)
 keys("guards1", [K("13:00", (250, -600), state="firing"), K("13:15", (250, -600), strength=490), K("13:20", (250, -600), state="charge"), K("13:32", (-100, -560), state="line", strength=477)])
 keys("guards2", [K("13:03", (250, -800), state="firing"), K("13:18", (250, -800), strength=460), K("13:22", (250, -800), state="charge"), K("13:34", (-80, -760), state="line", strength=445)])
@@ -338,8 +339,8 @@ keys("gren2", [K("13:05", (0, -470), state="firing"), K("13:14", (0, -470), stre
 # the artillery duel, half past one to half past three; Greene's guns on Combs Hill rake the hedgerow and the British
 # guns limber up; the right wing crosses the creek toward the Sutfin farm and the American left and is held there
 keys("ra", [K("13:30", (-380, -470), state="firing"), K("14:30", (-380, -470), strength=145), K("15:25", (-380, -470), strength=140), K("15:30", (-380, -470), h=100, state="retreat"), K("15:50", (250, -520), h=320, state="line")])
-keys("li1", [K("14:00", (300, -300), state="column")] + go("14:01", "14:25", [(300, -300), (350, -150), (300, 150)], 300, state="skirmish") + [K("15:00", (300, 150), strength=715), K("16:30", (300, 150), state="line")])
-keys("rangers", [K("14:05", (500, -250), state="column")] + go("14:06", "14:30", [(500, -250), (550, -120), (520, 300)], 300, state="skirmish") + [K("15:00", (520, 300), strength=444), K("16:30", (520, 300), state="line")])
+keys("li1", [K("14:00", (300, -300), state="column")] + go("14:01", "14:25", [(300, -300), (350, -150), (300, 150)], 300, state="firing") + [K("15:00", (300, 150), strength=715, state="line")])
+keys("rangers", [K("14:05", (500, -250), state="column")] + go("14:06", "14:30", [(500, -250), (550, -120), (520, 300)], 300, state="firing") + [K("15:00", (520, 300), strength=444, state="line")])
 keys("dragoons16", [K("14:10", (700, -300), state="column")] + go("14:11", "14:35", [(700, -300), (750, -150), (720, 100)], 300))
 keys("bde3", [K("14:30", (600, -400), state="column")] + go("14:31", "14:55", [(600, -400), (150, -120), (-150, 50)], 320) + [K("15:30", (-150, 50), strength=1004)])
 keys("r42", [K("14:35", (500, -550), state="column")] + go("14:36", "15:05", [(500, -550), (100, -100), (-300, 120)], 330) + [K("15:20", (-300, 120), state="firing"), K("16:00", (-300, 120), strength=615), K("16:30", (-300, 120), state="line")])
@@ -378,13 +379,14 @@ CHAPTERS = [
     ("04:00", "Monmouth Court House, before dawn", "Clinton has halted his army at the court house since the 26th, headquarters in the Covenhoven house, and sends Knyphausen's division and the 1,500-wagon train off for Middletown about four. Washington followed him from Valley Forge with about 14,000 men; Lee's vanguard, some 4,700 with twelve guns, lies at Englishtown, Dickinson's militia out in front at the West Ravine. Hamilton brought Lee Washington's orders between one and two. Cornwallis's division, some 9,500 men, will follow the train up the Middletown road from five and not clear the court house until a quarter past nine. The day will be clear and, by Stone's reckoning, about 96 degrees.", [-300, 300], 9000, 300, "4 AM"),
     ("06:00", "Lee's advance", "Grayson's detachment forms at daylight and leaves Englishtown about six, once a guide is found; the rest of the vanguard files after it toward Tennent meeting house and the West Ravine. Scott's detachment was ordered to move at five. Lee rides ahead at seven.", [-2300, 1300], 5200, 300, "about 6 AM"),
     ("08:00", "First shots at the bridge", "About eight the Queen's Rangers fire on Dickinson's militia near a bridge over a ravine, which this plan puts at the West Ravine. Grayson comes up in support, and the column halts while Lee sorts out whether the enemy is retreating or advancing. He goes on about a quarter to nine.", [-450, -150], 2400, 60, "about 8 AM"),
+    ("09:15", "Over the East Morass", "The last British troops leave the court house about a quarter past nine, Erskine's rear guard standing on the Middletown road behind them. Lee's column comes on over the East Morass causeway; about half past nine he goes forward with Wayne, who crosses the morass three-quarters of a mile east of the court house to come at the rear guard. Washington's main body reaches Englishtown at ten.", [2700, -800], 3600, 120, "about a quarter past 9"),
     ("10:30", "The first clash", "Over the East Morass and north toward the Middletown road, Lee comes out of the woods about half past ten to find Wayne already engaged with Erskine's rear guard: Simcoe's Rangers, the 16th Light Dragoons and the 1st Light Infantry, about 1,500 men. The dragoons charge and are shot back. Behind them Clinton has turned Cornwallis's whole division round.", [3300, 250], 3000, 30, "about half past 10"),
-    ("11:35", "The retreat over the ravines", "The Guards and Grenadiers come back down the road in two columns, the 3rd Brigade crossing the creek to cut the vanguard off, the 4th behind it, the 5th in reserve, the Hessian grenadiers left as a line to fall back on. Scott pulls back south-west over Spotswood Middle Brook, Maxwell after him, Jackson down from the north brook. Lee, with barely half his vanguard still under his hand, falls back toward a line from Craig's house to Ker's, then gives that up too. By noon he is near Ker's house.", [2500, -300], 4200, 60, None),
+    ("11:35", "The retreat over the ravines", "The Guards and Grenadiers come back down the road in two columns, the 3rd Brigade crossing the creek to cut the vanguard off, the 4th behind it, the 5th in reserve, the Hessian grenadiers left as a line to fall back on. Scott pulls back south-west over Spotswood Middle Brook, Maxwell after him, Jackson down from the north brook. Lee, with barely half his vanguard still under his hand, falls back toward a line from Craig's house to Ker's, then gives that up too. By noon he is near Ker's house.", [2300, -350], 3000, 60, None),
     ("12:45", "Washington meets Lee", "Washington's main body, over Englishtown at ten, has Stirling's brigades climbing the Perrine ridge when he rides forward and meets the retreat about a quarter to one, by the park's reckoning here on the Rhea farm: 'whence arises this disorder and confusion?' Lender and Stone find the exchange less harsh than tradition has it. Lee is told to hold the enemy while the line forms. The Guards and Grenadiers crossed the Middle Ravine about half past twelve.", [-100, -200], 2600, 30, "about a quarter to 1"),
     ("13:05", "The hedgerow", "Two battalions and four of Oswald's guns stand on the hill east of the bridge and are pushed back to the hedgerow, a fence, Stewart told the court, 'about fifty yards in front'. Wayne's men fire from the Point of Woods. The grenadiers carry the hedgerow with the bayonet and Monckton, leading the 2nd battalion, is killed; he is the highest-ranking British casualty of the day. The rearguard action lasts about half an hour, and Lee is among the last over the bridge at half past one.", [-350, -480], 1700, 20, None),
     ("13:45", "Perrine Hill: the artillery duel", "Knox's ten guns on the ridge and Clinton's ten in front of the hedgerow fire at each other across 1,200 yards of open ground for two hours. Stirling's four brigades, 2,400 men, hold the ridge with the Pennsylvanians and Scott's men in front of them and Lafayette's reserve behind. The light infantry and the Rangers try the American left over the creek and are held. Men drop from the heat on both sides.", [-500, 50], 2600, 120, None),
     ("14:30", "Molly Pitcher", "A surgeon wrote five days later of a patient's story of a woman at a gun; two veterans told of one decades on, one carrying cartridges and one water; Joseph Plumb Martin's memoir of 1830 has her serving a piece. Mary Ludwig Hays is the name most often given. Lender and Stone conclude that very likely several women helped the gun crews that afternoon, and that the legend is an amalgam. The park's marker of 1992 is at a well near Stirling's artillery line, shown here.", [-400, 100], 1900, 120, None),
-    ("15:15", "Combs Hill", "Greene, sent right from Tennent at half past twelve, has brought Woodford's brigade and du Plessis's four guns round by the West Ravine onto Combs Hill, about three by Stone and a quarter to four by Lender and Stone. The guns rake the hedgerow from the flank and the British artillery withdraws out of their reach.", [-650, -650], 2300, 60, None),
+    ("15:15", "Combs Hill", "Greene, sent right from Tennent, has brought Woodford's brigade and du Plessis's four guns round by the West Ravine onto Combs Hill, about three by Stone and a quarter to four by Lender and Stone. The guns rake the hedgerow from the flank and the British artillery withdraws out of their reach.", [-650, -650], 2300, 60, None),
     ("16:45", "Wayne at the Parsonage", "At half past four Washington learns the 3rd Brigade is withdrawing and orders an attack. Wayne takes the 3rd Pennsylvania, about 400 men, over the bridge against the grenadiers at the Parsonage and its orchard, is repulsed, and falls back to the Parsonage farm. By five, in Washington's words, the British and Hessians are so spent they can do no more.", [-380, -330], 1600, 20, "a quarter to 5"),
     ("17:20", "The British withdrawal", "Cilley's picked New England battalion works down from the left under cover of the brook bottom onto the 42nd Foot in the Sutfin orchard, and the Highlanders give way. The battle ends shortly after five. Clinton pulls his units back across the Middle Ravine to the Craig and Ker farms.", [-50, 0], 2800, 60, "shortly after 5 PM"),
     ("19:00", "Sunset", "Poor's brigade is sent to probe the British right at seven and is halted by sunset, at 7:31, before making contact. Steuben's four brigades, ordered up from Englishtown at six, reach Tennent as the light goes. The armies rest within a mile of each other, the nearest British at Ker's house. Washington's return gives 69 killed, 161 wounded and 140 missing; Clinton's 65 killed, 170 wounded, 64 missing and 59 dead of fatigue. Stone has nearly half the losses on both sides down to the heat, and the Monmouth County historians count 304 British dead buried on the field.", [-200, -100], 5200, 300, "about 7 PM"),
@@ -395,7 +397,7 @@ events = [dict(t=t, title=a, text=b, at=at, view=v, speed=s, **({"when": w} if w
 battle = dict(
     id="monmouth", name="Battle of Monmouth", date="1778-06-28", dateText="28 June 1778", place="Monmouth Court House (Freehold), New Jersey",
     origin=dict(lat=LAT0, lon=LON0), extent=9000, start="04:00", end="24:00", sunrise="04:29", sunset="19:31", speed=60, lapse=1800, menPerDot=10,
-    terrainExaggeration=2, contourInterval=3, trees=dict(density=0.0005), fields=FIELDS, wind=dict(x=0.5, y=0.3), view=dict(x=0, y=-100, width=8800),
+    terrainExaggeration=2, contourInterval=3, trees=dict(density=0.0005), fields=FIELDS, wind=dict(x=0.5, y=0.3), view=dict(x=-300, y=300, width=9000),
     palette=dict(ground="#b0ab86", high="#d8d2aa", tree="rgba(95,80,55,0.42)", field="rgba(236,222,170,0.55)"),
     sides=dict(american=dict(name="Americans (Washington, Lee)", color="#1f55c4", light="#4a83e6", dark="#122c66"),
                british=dict(name="British and Hessians (Clinton, Cornwallis)", color="#c02a1f", light="#e2584a", dark="#5e1510")),
