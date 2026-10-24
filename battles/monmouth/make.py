@@ -62,6 +62,9 @@ MCGELLAIRDS = [(-4100, 2560), (-2800, 2200)] + [M(*p) for p in MCGELLAIRDS_LL] +
 WEMROCK = [P['west_ravine'], (-1500, -450), (-1200, -600), (-1000, -680), (-750, -730), (-680, -820), (-640, -900), (-600, -1000), (-500, -1060), (-300, -1100), (0, -1100), (150, -1120), (170, -1200), (175, -1300), (190, -1450), (200, -1600)]
 # The Middle Ravine: from the valley head 620 m south of the Craig house down to Wemrock Brook's bottom
 MIDDLE = thin(valley((850, -550), (0, -25), 30, window=150, stop=lambda zz, p: zz < 33.5), 3)
+def label_on(pts, off=90):  # a label at a line's middle, along it and `off` metres to its south-east side
+    i = len(pts) // 2; a, b = sorted((pts[i - 1], pts[i + 1])); ux, uy = (b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b)
+    return dict(at=[round(pts[i][0] + off * uy), round(pts[i][1] - off * ux)], rot=round(math.degrees(math.atan2(uy, ux))))
 # The Englishtown road: the modern CR 522 to the bridge, then 50 to 150 m south of it across the Rhea farm to the
 # East Morass causeway, and down Throckmorton Street into Freehold. The Middletown road (NJ 79) leaves the court house north-east.
 ROAD = [(-4500, 2900), P['englishtown'], (-3600, 2050), (-2600, 1500), P['tennent'], P['cr522_n'], P['bridge'], (-100, -430), P['meet'], P['rhea'], (900, -560), (1300, -600), P['old_rd'], (2300, -660), P['causeway'], (2880, -1250), P['courthouse']]
@@ -74,7 +77,7 @@ features = [
     dict(type="creek", name="Weamaconk Creek (Spotswood Middle Brook)", pts=WEAMACONK, at=[-1700, -120], rot=-10),
     dict(type="creek", name="McGellaird's Brook (Spotswood North Brook)", pts=MCGELLAIRDS, at=[-700, 1300], rot=-20),
     dict(type="creek", name="Wemrock Brook (Spotswood South Brook)", pts=WEMROCK, at=[-1200, -800], rot=-30),
-    dict(type="creek", name="Middle Ravine (about here)", pts=MIDDLE, at=[480, -960], rot=40),
+    dict(type="creek", name="Middle Ravine (about here)", pts=MIDDLE, **label_on(MIDDLE)),
     dict(type="road", name="Englishtown road", pts=ROAD, at=[-2700, 1700], rot=-28), dict(type="road", name="Middletown road", pts=MIDDLETOWN_RD, at=[3750, 900], rot=-65),
     dict(type="fence", name="the hedgerow (about here)", pts=HEDGEROW, at=[-900, -480], rot=70),
     dict(type="water", poly=quad(-1870, -280, 170, 110)), dict(type="water", poly=[(2700, -800), (3050, -980), (3120, -1120), (2760, -960)]),
