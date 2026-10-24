@@ -6792,12 +6792,12 @@
   {
    "t": "1865-01-13 07:00",
    "title": "Fort Fisher",
-   "text": "An L of sand at the tip of Federal Point, guarding New Inlet and the blockade-runners' road to Wilmington. The land face runs a third of a mile from the river to the Northeast Bastion: a parapet 25 feet thick with twenty-odd guns in barbette among fifteen traverses, each a bombproof, a palisade in front and torpedo wires beyond it. The sea face runs nearly a mile down the beach to the Mound Battery; a mile of sand plain separates that from Battery Buchanan at the point. Colonel William Lamb built it and commands it.",
+   "text": "An L of sand at the tip of Federal Point, guarding New Inlet and the blockade-runners' road to Wilmington. The land face runs some 1,300 feet from the river to the Northeast Bastion: a parapet 25 feet thick with twenty-odd guns in barbette among fifteen traverses, each a bombproof, a palisade in front and torpedo wires beyond it. The sea face runs two-thirds of a mile down the beach to the Mound Battery; a mile of sand plain separates that from Battery Buchanan at the point. Colonel William Lamb built it and commands it.",
    "at": [
-    430,
-    -250
+    -300,
+    -450
    ],
-   "view": 2600,
+   "view": 3400,
    "speed": 300
   },
   {
@@ -6884,19 +6884,19 @@
   {
    "t": "1865-01-15 14:00",
    "title": "Three hundred yards",
-   "text": "By two the sharpshooters of the 13th Indiana are within 175 yards of the western salient and Curtis's brigade is deployed 300 yards north of the fort, Pennypacker and Bell behind it. Lamb puts 250 men at the western salient, 500 along the Northeast Bastion, and Hagood's 350 in a commissary bombproof.",
+   "text": "By two the sharpshooters of the 13th Indiana are within 175 yards of the western salient and Curtis's brigade is deployed 300 yards north of the fort, Pennypacker and Bell behind it. The 11th and 25th South Carolina are still coming up the sea face from Buchanan under the fleet's fire.",
    "at": [
-    620,
-    350
+    500,
+    100
    ],
-   "view": 1300,
+   "view": 1800,
    "speed": 60,
    "when": "2 PM"
   },
   {
    "t": "1865-01-15 15:00",
    "title": "The signal",
-   "text": "At three precisely, by Towle, Terry signals the Navy to shift its fire from the land face; the Malvern's whistle sounds at 3:25, and Terry's dispatch puts the lodgment at 3:30. The sources give three, 3:25 and 3:30 for the start.",
+   "text": "At three precisely, by Towle, Terry signals the Navy to shift its fire from the land face; the Malvern's whistle sounds at 3:25, and Terry's dispatch puts the lodgment at 3:30. The sources give three, 3:25 and 3:30 for the start. As the fire lifts Lamb puts 250 men at the western salient, 500 along the Northeast Bastion, and Hagood's 350 in a commissary bombproof.",
    "at": [
     700,
     250
