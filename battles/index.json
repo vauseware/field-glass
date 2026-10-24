@@ -68,5 +68,12 @@
   "date": "1943-02-14",
   "war": "World War II",
   "runtime": 926
+ },
+ {
+  "id": "kasserine",
+  "name": "Kasserine Pass, 19–23 Feb 1943",
+  "date": "1943-02-19",
+  "war": "World War II",
+  "runtime": 56
  }
 ]

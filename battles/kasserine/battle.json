@@ -1,0 +1,481 @@
+{
+ "id": "kasserine",
+ "name": "Kasserine Pass",
+ "date": "1943-02-19",
+ "dateText": "19 to 23 February 1943",
+ "place": "Kasserine Pass, Tunisia",
+ "origin": {
+  "lat": 35.375,
+  "lon": 8.64
+ },
+ "extent": 52000,
+ "start": "1943-02-19 06:00",
+ "end": "1943-02-23 07:30",
+ "speed": 300,
+ "lapse": 7200,
+ "menPerDot": 20,
+ "sunrise": "07:08",
+ "sunset": "18:12",
+ "terrainExaggeration": 2,
+ "contourInterval": 10,
+ "sides": {
+  "allied": {
+   "name": "Allies (US II Corps, British 26th Armoured Brigade, French)",
+   "color": "#1f55c4",
+   "light": "#4a83e6",
+   "dark": "#122c66"
+  },
+  "axis": {
+   "name": "Axis (Kampfgruppe DAK, 10th Panzer Division, Centauro)",
+   "color": "#b8322a",
+   "light": "#de5d50",
+   "dark": "#5c1712"
+  }
+ },
+ "tints": [
+  {
+   "color": "rgba(200,206,214,0.35)",
+   "from": "1943-02-20 06:30",
+   "until": "1943-02-21 17:00"
+  },
+  {
+   "color": "rgba(205,210,218,0.25)",
+   "from": "1943-02-22 07:00",
+   "until": "1943-02-22 17:30"
+  }
+ ],
+ "features": [
+  {
+   "type": "road",
+   "name": "Thala road",
+   "pts": [
+    [
+     14006,
+     -22320
+    ],
+    [
+     9712,
+     -14850
+    ],
+    [
+     9667,
+     -13481
+    ],
+    [
+     9821,
+     -12958
+    ],
+    [
+     9549,
+     -12167
+    ],
+    [
+     9004,
+     -10720
+    ],
+    [
+     8850,
+     -9139
+    ],
+    [
+     8187,
+     -7692
+    ],
+    [
+     7361,
+     -6123
+    ],
+    [
+     6862,
+     -3729
+    ],
+    [
+     6690,
+     9651
+    ],
+    [
+     2805,
+     21908
+    ],
+    [
+     2160,
+     23822
+    ],
+    [
+     1362,
+     25715
+    ]
+   ],
+   "at": [
+    8490,
+    11651
+   ],
+   "rot": -78
+  },
+  {
+   "type": "road",
+   "name": "Tébessa road",
+   "pts": [
+    [
+     9712,
+     -14850
+    ],
+    [
+     8895,
+     -14227
+    ],
+    [
+     7497,
+     -13459
+    ],
+    [
+     6844,
+     -13247
+    ],
+    [
+     5982,
+     -12368
+    ],
+    [
+     3585,
+     -10420
+    ],
+    [
+     1507,
+     -8950
+    ],
+    [
+     -263,
+     -7681
+    ],
+    [
+     -3313,
+     -6011
+    ],
+    [
+     -6817,
+     -5154
+    ],
+    [
+     -9231,
+     -3863
+    ],
+    [
+     -11337,
+     -2794
+    ],
+    [
+     -16111,
+     -334
+    ],
+    [
+     -25597,
+     779
+    ]
+   ],
+   "at": [
+    -6817,
+    -6054
+   ],
+   "rot": -20
+  },
+  {
+   "type": "road",
+   "name": "track from Haïdra",
+   "pts": [
+    [
+     -17636,
+     21106
+    ],
+    [
+     -17064,
+     10575
+    ],
+    [
+     -16111,
+     -334
+    ]
+   ],
+   "at": [
+    -15564,
+    10575
+   ],
+   "rot": -85
+  },
+  {
+   "type": "road",
+   "name": "to Bou Chebka",
+   "pts": [
+    [
+     -263,
+     -7681
+    ],
+    [
+     -5446,
+     -10575
+    ],
+    [
+     -9984,
+     -13915
+    ],
+    [
+     -24507,
+     -25492
+    ]
+   ],
+   "at": [
+    -9984,
+    -15115
+   ],
+   "rot": 40
+  },
+  {
+   "type": "road",
+   "pts": [
+    [
+     14006,
+     -22320
+    ],
+    [
+     17845,
+     -22954
+    ],
+    [
+     25597,
+     -21707
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "pts": [
+    [
+     17845,
+     -22954
+    ],
+    [
+     17246,
+     -25938
+    ]
+   ]
+  },
+  {
+   "type": "creek",
+   "name": "Oued el Hatab",
+   "pts": [
+    [
+     -14568,
+     5032
+    ],
+    [
+     -4783,
+     -2315
+    ],
+    [
+     1017,
+     -6412
+    ],
+    [
+     7979,
+     -11722
+    ],
+    [
+     9667,
+     -13481
+    ],
+    [
+     10702,
+     -15117
+    ],
+    [
+     14078,
+     -16264
+    ],
+    [
+     17890,
+     -18078
+    ],
+    [
+     20840,
+     -19125
+    ],
+    [
+     25597,
+     -20038
+    ]
+   ],
+   "at": [
+    6179,
+    -10822
+   ],
+   "rot": -30
+  },
+  {
+   "name": "Kasserine",
+   "at": [
+    17845,
+    -22054
+   ]
+  },
+  {
+   "name": "Kasserine Pass",
+   "at": [
+    11184,
+    -12758
+   ]
+  },
+  {
+   "name": "Bordj Chambi",
+   "at": [
+    11012,
+    -15350
+   ]
+  },
+  {
+   "name": "Djebel Chambi (1544)",
+   "at": [
+    3749,
+    -19613
+   ]
+  },
+  {
+   "name": "Djebel Zebbeus (812)",
+   "at": [
+    6544,
+    -14904
+   ]
+  },
+  {
+   "name": "Hill 712",
+   "at": [
+    11447,
+    -13014
+   ]
+  },
+  {
+   "name": "Hill 704",
+   "at": [
+    7069,
+    -9162
+   ]
+  },
+  {
+   "name": "Hill 974",
+   "at": [
+    9242,
+    -5110
+   ]
+  },
+  {
+   "name": "Hill 1191",
+   "at": [
+    12618,
+    -11409
+   ]
+  },
+  {
+   "name": "Djebel Semmama (1356)",
+   "at": [
+    13143,
+    -4009
+   ]
+  },
+  {
+   "name": "Bahiret Foussana",
+   "at": [
+    -1307,
+    -316
+   ]
+  },
+  {
+   "name": "Foussana",
+   "at": [
+    -1307,
+    -2316
+   ]
+  },
+  {
+   "name": "Point 732 (about here)",
+   "at": [
+    -3249,
+    -9305
+   ]
+  },
+  {
+   "name": "Djebel el Hamra (1112)",
+   "at": [
+    -18145,
+    -6410
+   ],
+   "rot": -80
+  },
+  {
+   "name": "Bou Chebka pass (about here)",
+   "at": [
+    -9984,
+    -13015
+   ]
+  },
+  {
+   "name": "Thala",
+   "at": [
+    2805,
+    22808
+   ]
+  },
+  {
+   "name": "Haïdra",
+   "at": [
+    -17636,
+    22006
+   ]
+  },
+  {
+   "name": "to Tébessa",
+   "at": [
+    -23397,
+    1379
+   ]
+  },
+  {
+   "name": "to Sbeïtla and Sbiba",
+   "at": [
+    22997,
+    -21107
+   ]
+  },
+  {
+   "name": "to Fériana and Thélepte",
+   "at": [
+    14446,
+    -25238
+   ]
+  },
+  {
+   "name": "to Le Kef",
+   "at": [
+    -438,
+    25215
+   ]
+  },
+  {
+   "name": "Rommel's CP (about here)",
+   "at": [
+    14523,
+    -20181
+   ],
+   "from": "1943-02-20 11:00",
+   "until": "1943-02-22 20:00"
+  }
+ ],
+ "units": [],
+ "events": [],
+ "sources": [
+  "George F. Howe, <i>Northwest Africa: Seizing the Initiative in the West</i> (US Army Center of Military History, 1957), chapters XXIII and XXIV: the ground, Stark Force and its reinforcements, Gore Force, the German groups, the clock times, the Thala and Djebel el Hamra fighting, the claims and the loss table for 16–24 February.",
+  "Rick Atkinson, <i>An Army at Dawn</i> (2002), the Thala chapter: the 26th Armoured Brigade's tank counts, the Leicesters, Irwin's march and the night of 21–22 February.",
+  "J. Rickard, 'Battle of the Kasserine Pass, 19–22 February 1943', historyofwar.org (2017): a few clock times Howe lacks, marked as his.",
+  "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. GLO-30 sampled at 100 m over a 52 km square; it is a surface model, so the modern city of Kasserine and the farms of the Foussana basin show. Roads and the Oued el Hatab from OpenStreetMap; the Tébessa road west of the basin, the track from Haïdra and the Bou Chebka road are drawn from the narrative.",
+  "Clock: the times as recorded, read as a GMT+1 clock; sunrise 7:08 and sunset 18:12 are computed for 19 February on that assumption. Fog and rain covered the field on 20 and 21 February and low cloud and showers on the 22nd.",
+  "What is reconstructed: the named hills (1191, 974, 712, 704, Zebbeus, Point 732, the Thala ridges, the Hamra passes, Bou Chebka pass), fitted to Howe's prose on the Copernicus DEM within a kilometre or two; every Axis tank and infantry count below the figures Howe gives (30 tanks, 20 self-propelled guns and 35 half-tracks for the 10th Panzer at Thala; eleven tanks for Gore; eight for Company I, 13th Armored); the 19th Engineers', 805th and 894th Tank Destroyers' strengths; the routes between recorded places; and the hours of the night movements of 19–20 and 20–21 February, which Howe says cannot be clearly reconstructed."
+ ]
+}
