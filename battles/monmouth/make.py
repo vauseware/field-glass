@@ -163,6 +163,19 @@ def march(t0, t1, pts, state="column", **kw):  # keys along a path, times spread
         out.append(K(fmt(sec(t0) + (sec(t1) - sec(t0)) * d[i] / d[-1]), p, h=h, **(dict(state=state, **kw) if i == 0 else {})))
     return out
 def go(t0, t1, pts, h, state="line", moving="column", **kw): return march(t0, t1, pts, moving)[:-1] + [K(t1, pts[-1], h=h, state=state, **kw)]
+PACE = 4  # km/h, a column of foot on the road in the heat
+def walk(t0, pts, state="column", until=None, kmh=PACE):  # keys along a path at a marching pace; with `until`, stop where it is then
+    pts = [p for i, p in enumerate(pts) if i == 0 or math.dist(p, pts[i - 1]) > 5]
+    t, out = sec(t0), []
+    for i, p in enumerate(pts):
+        if i: t += math.dist(pts[i - 1], p) / (kmh / 3.6)
+        if until and t >= sec(until):
+            a = pts[i - 1]; f = 1 - (t - sec(until)) / (math.dist(a, p) / (kmh / 3.6))
+            out.append(K(until, (a[0] + f * (p[0] - a[0]), a[1] + f * (p[1] - a[1])), h=heading(a, p))); break
+        out.append(K(fmt(t), p, h=heading(p, pts[i + 1]) if i + 1 < len(pts) else heading(pts[i - 1], p), **(dict(state=state) if i == 0 else {})))
+    return out
+def go_at(t0, pts, h, state="line", moving="column", **kw):  # go() at a marching pace, arriving when the distance says
+    ks = walk(t0, pts, moving); ks[-1].update(h=h, state=state, **kw); return ks
 def along(line, a, b):  # the stretch of a road between the points on it nearest a and b
     def proj(p):
         best = None
@@ -193,7 +206,7 @@ keys("dickinson", [K("04:00", (-250, -360), h=100, state="line"), K("08:00", (-2
 # and is over the East Morass by ten, turning north to come at the rear guard on the Middletown road.
 def advance(id, camp, t_leave, t_bridge, halt_at, t_on, t_clash, spot, h):
     keys(id, [K("04:00", camp, h=120, state="line"), K(t_leave, camp, state="column")] + go(plus(t_leave, 1), t_bridge, [camp] + road(ENG, BRG) + [halt_at], h=100, state="line") + [K(t_on, halt_at, state="column")]
-         + march(plus(t_on, 1), plus(t_clash, -15), [halt_at] + road((-100, -430), CSW)[1:] + [(3000, -400)]) + [K(t_clash, spot, h=h, state="line")])
+         + walk(plus(t_on, 1), [halt_at] + road(halt_at, CSW) + [(3000, -400), spot]) + [K(t_clash, spot, h=h, state="line")])
 advance("grayson", (-4150, 2650), "06:00", "07:50", (-150, -400), "08:45", "10:25", (3000, 100), 90)
 advance("oswald", (-4300, 2450), "06:05", "07:55", (-220, -330), "08:46", "10:30", (2950, -20), 90)
 advance("oswald4", (-4350, 2550), "06:08", "07:58", (-300, -300), "08:47", "10:32", (2900, 220), 90)
@@ -215,8 +228,8 @@ keys("maxwell", [K("11:15", (2600, -150), h=240, state="retreat"), K("11:45", (2
 # the retreat to the Craig-Ker line, which is given up as soon as it is reached, then on to the hill east of the bridge
 # and the Point of Woods, where Washington meets Lee and the rearguard turns to fight
 def back(id, t_leave, t_ker, ker, t_on, t_stand, stand, h, **kw):
-    keys(id, go(t_leave, t_ker, [last(id)] + road(last(id), ker)[1:], 90, moving="retreat") + [K(t_on, ker, state="column")]
-         + go(plus(t_on, 1), t_stand, road(ker, stand) + [stand], h, **kw))
+    keys(id, go(t_leave, t_ker, [last(id)] + road(last(id), ker) + [ker], 90, moving="retreat") + [K(t_on, ker, state="column")]
+         + go(plus(t_on, 1), t_stand, [ker] + road(ker, stand) + [stand], h, **kw))
 back("grayson", "11:09", "12:00", (1000, -600), "12:18", "12:40", (-200, -280), 100)
 back("durkee", "11:11", "12:05", (1050, -700), "12:20", "12:42", (-300, -380), 100)
 back("oswald4", "11:06", "11:55", (950, -520), "12:15", "12:35", (-240, -330), 100)
@@ -231,7 +244,7 @@ def stand(id, t_fire, hill, t_hedge, hedge, t_off, n1, n2, rear, t_rear):
     keys(id, [K(t_fire, hill, state="firing"), K(plus(t_fire, 15), hill, strength=n1), K(t_hedge, hedge, h=90, state="firing"), K(plus(t_hedge, 12), hedge, strength=n2),
               K(t_off, hedge, h=300, state="retreat")] + go(plus(t_off, 1), t_rear, [hedge, BRG, (-900, 300), rear], 150, moving="retreat"))
 stand("grayson", "12:45", (-200, -280), "13:05", (-560, -480), "13:28", 580, 570, (-1400, 950), "14:05")
-stand("durkee", "12:47", (-300, -380), "13:06", (-640, -640), "13:29", 285, 275, (-1500, 850), "14:08")
+stand("durkee", "12:47", (-300, -380), "13:08", (-640, -640), "13:29", 285, 275, (-1500, 850), "14:08")
 stand("oswald4", "12:45", (-240, -330), "13:04", (-520, -420), "13:25", 50, 45, (-1050, 420), "13:50")
 keys("wayne", [K("13:00", (-85, -560), state="firing"), K("13:12", (-85, -560), strength=935), K("13:24", (-85, -560), strength=915), K("13:32", (-85, -560), h=300, state="retreat")]
      + go("13:33", "14:10", [(-85, -560), (-250, -300), BRG, (-900, 300), (-1350, 1050)], 150, moving="retreat"))
@@ -245,7 +258,7 @@ for id in ("grayson", "durkee", "jackson", "maxwell", "oswald", "oswald4", "scot
 # ---- Washington's main body: over Englishtown at ten, Tennent by half past eleven, the ridge by one ----
 def main_body(id, t_in, halt, t_on, t_line, spot, h, state="line"):
     keys(id, march(t_in, plus(t_in, 30), [EDGE_NW, ENG]) + march(plus(t_in, 35), plus(t_in, 85), road(ENG, TEN) + [halt]) + [K(t_on, halt, state="column")]
-         + go(plus(t_on, 1), t_line, [halt] + road(halt, (-900, 300))[1:] + [spot], h, state))
+         + go(plus(t_on, 1), t_line, [halt, spot], h, state))  # from the Tennent halt over the back of the ridge to the line
 main_body("learned", "09:30", (-1400, 1150), "11:50", "12:20", slot(RIDGE, RH, 450), RH)
 main_body("glover", "09:34", (-1480, 1230), "11:54", "12:25", slot(RIDGE, RH, 150), RH)
 main_body("knox", "09:38", (-1560, 1310), "11:58", "12:30", slot(RIDGE, RH, 0, -60), RH)
@@ -266,7 +279,7 @@ keys("woodford", [K("24:00", (-1060, -960))])
 # Steuben's four brigades wait at Englishtown and are ordered forward at six; they reach Tennent as the sun sets
 for id, t_in, spot, rear in (("paterson", "10:20", (-4000, 2450), (-1750, 1250)), ("md2", "10:25", (-4050, 2250), (-1900, 1150)),
                              ("muhlenberg", "10:30", (-3850, 2600), (-1650, 1400)), ("weedon", "10:35", (-3800, 2350), (-1850, 1450))):
-    keys(id, march(t_in, plus(t_in, 25), [EDGE_NW, ENG]) + [K(plus(t_in, 30), spot, h=120, state="line"), K("18:00", spot, state="column")]
+    keys(id, march(t_in, plus(t_in, 25), [EDGE_NW, ENG]) + [K(plus(t_in, 35), spot, h=120, state="line"), K("18:00", spot, state="column")]
          + go("18:01", "19:30", [spot] + road(spot, TEN)[1:] + [rear], 150) + [K("24:00", rear)])
 # Knox's duel with the British guns, half past one to half past three
 keys("knox", [K("13:30", slot(RIDGE, RH, 0, -60), state="firing"), K("14:30", slot(RIDGE, RH, 0, -60), strength=145), K("15:30", slot(RIDGE, RH, 0, -60), state="line"), K("17:00", slot(RIDGE, RH, 0, -60), state="firing"),
@@ -305,18 +318,18 @@ keys("rangers", [K("10:40", P['clash_br'], state="firing"), K("11:00", P['clash_
 # Clinton turns Cornwallis back between half past ten and half past eleven: Guards on the right and Grenadiers on the
 # left in two columns down the Middletown road, the 3rd Brigade sent across the creek to cut the vanguard's retreat,
 # the 4th following in line, the 5th in reserve and the Hessian grenadiers left in a line to fall back on
-def back_in(id, t_in, t_dep, spot, h, state="line"):
-    keys(id, [K(plus(t_in, -1), EDGE_NE, state="hidden"), K(t_in, EDGE_NE, state="column")] + go(plus(t_in, 1), t_dep, NJ79(EDGE_NE, (3849, 500)) + [spot], h, state))
-back_in("guards1", "10:40", "11:10", (3500, 500), 250)
-back_in("guards2", "10:44", "11:14", (3450, 300), 250)
-back_in("gren1", "10:48", "11:18", (3400, 50), 250)
-back_in("gren2", "10:52", "11:22", (3350, -150), 250)
-back_in("ra", "10:56", "11:24", (3550, 150), 250)
-back_in("bde3", "11:00", "11:30", (3000, -1100), 250)
-back_in("r42", "11:02", "11:32", (2850, -950), 250)
-back_in("bde4", "11:04", "11:34", (3200, -400), 250)
-back_in("bde5", "11:06", "11:36", (3400, -700), 250)
-back_in("hessians", "11:08", "12:20", (1200, -850), 270)
+def back_in(id, t_in, spot, h, state="line"):
+    keys(id, [K(plus(t_in, -1), EDGE_NE, state="hidden"), K(t_in, EDGE_NE, state="column")] + go_at(plus(t_in, 1), NJ79(EDGE_NE, (3849, 500)) + [spot], h, state))
+back_in("guards1", "10:40", (3500, 500), 250)
+back_in("guards2", "10:44", (3450, 300), 250)
+back_in("gren1", "10:48", (3400, 50), 250)
+back_in("gren2", "10:52", (3350, -150), 250)
+back_in("ra", "10:56", (3550, 150), 250)
+back_in("bde3", "11:00", (3000, -1100), 250)
+back_in("r42", "11:02", (2850, -950), 250)
+back_in("bde4", "11:04", (3200, -400), 250)
+back_in("bde5", "11:06", (3400, -700), 250)
+back_in("hessians", "11:08", (1200, -850), 270)
 # The pursuit west: the Guards and Grenadiers cross the Middle Ravine about half past twelve and come at the Point of
 # Woods and the hill east of the bridge; the grenadiers carry the hedgerow and Monckton falls leading the 2nd battalion
 def pursue(id, t0, t1, pts, h, **kw): keys(id, [K(t0, last(id), state="column")] + go(plus(t0, 1), t1, [last(id)] + pts, h, **kw))
@@ -327,8 +340,8 @@ pursue("gren2", "11:50", "13:03", [(2500, -450), (1700, -550), (950, -480), (0, 
 pursue("ra", "11:50", "13:25", [(2600, -400), (1700, -480), (700, -500), (-380, -470)], 340)
 pursue("bde4", "12:00", "13:30", [(2400, -550), (1500, -650), (350, -450)], 270)
 pursue("bde5", "12:10", "13:45", [(2500, -700), (1600, -800), (900, -350)], 270)
-pursue("bde3", "11:50", "13:30", [(2500, -900), (1800, -800), (600, -400)], 270)
-pursue("r42", "11:55", "13:35", [(2400, -1000), (1700, -900), (500, -550)], 270)
+pursue("bde3", "11:55", "13:30", [(2500, -900), (1800, -800), (600, -400)], 270)
+pursue("r42", "11:58", "13:35", [(2400, -1000), (1700, -900), (500, -550)], 270)
 pursue("li1", "11:15", "13:30", [(3500, -200), (2500, -400), (1600, -500), (300, -300)], 290)
 pursue("rangers", "11:15", "13:35", [(3600, 50), (2600, -200), (1700, -350), (500, -250)], 290)
 pursue("dragoons16", "11:30", "13:40", [(3700, 100), (2700, -250), (1800, -400), (700, -300)], 290)
@@ -358,18 +371,21 @@ dusk("ra", "17:30", "18:00", (1250, -520)); dusk("bde4", "17:50", "18:30", (1350
 # the rear guard at Ker's house; at eleven the division files off through the court house for Middletown
 NIGHT = [("hessians", "23:00"), ("bde5", "23:05"), ("bde4", "23:12"), ("bde3", "23:18"), ("r42", "23:22"), ("ra", "23:26"), ("guards2", "23:30"), ("guards1", "23:34"), ("gren2", "23:38"), ("gren1", "23:42"),
          ("dragoons16", "23:46"), ("rangers", "23:48"), ("li1", "23:50")]
-for id, t in NIGHT:
-    keys(id, [K(t, last(id), state="column")] + march(plus(t, 1), "24:00", [last(id)] + road(last(id), CH)[1:]))
+for id, t in NIGHT:  # at a walk through the court house and up the Middletown road; the head is on that road at midnight
+    keys(id, [K(t, last(id), state="column")] + walk(plus(t, 1), [last(id)] + road(last(id), CH) + MIDDLETOWN_RD, until="24:00"))
 
 # ---- assemble ----
 assert set(KEYS) == {row[0] for row in OOB}, set(KEYS) ^ {row[0] for row in OOB}
 units = []
+TOP = {"infantry": 6, "light_infantry": 6, "militia": 6, "artillery": 6, "cavalry": 15}  # km/h, the fastest any leg may go
 for id, side, short, name, commander, type, strength, extra in OOB:
     ks = KEYS[id]
     for a, b in zip(ks, ks[1:]):
         assert sec(b["t"]) > sec(a["t"]), (id, a["t"], b["t"])
         moved = (a["x"], a["y"]) != (b["x"], b["y"])
         assert not (moved and sec(b["t"]) - sec(a["t"]) > 3 * 3600), (id, a["t"], b["t"], "a march leg over three hours")
+        kmh = math.dist((a["x"], a["y"]), (b["x"], b["y"])) / (sec(b["t"]) - sec(a["t"])) * 3.6
+        assert kmh <= TOP[type], (id, a["t"], b["t"], f"{kmh:.1f} km/h")
     units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength, keys=ks, **extra))
 
 # Chapters: (time, title, text, camera centre, metres across, playback speed, clock time the sources record or None).
@@ -428,7 +444,6 @@ def at(u, t):
     if nxt and (k["x"], k["y"]) != (nxt[0]["x"], nxt[0]["y"]):
         f = (sec(t) - sec(k["t"])) / (sec(nxt[0]["t"]) - sec(k["t"])); return (k["x"] + f * (nxt[0]["x"] - k["x"]), k["y"] + f * (nxt[0]["y"] - k["y"]))
     return (k["x"], k["y"])
-for e in events:
     r = e["view"] / 2; inside = []
     for u in units:
         p = at(u, e["t"])
