@@ -6044,7 +6044,7 @@
   {
    "t": "1943-02-20 08:30",
    "title": "The barrage",
-   "text": "At 8:30 both battalions of the Panzer Grenadier Regiment Afrika attack with all the DAK's artillery, the dual-purpose 88s and 'a battery of new German rocket projectors': the Nebelwerfer's first barrage on American troops. Late in the morning Rommel, with Buelowius and von Broich, raises Menton's infantry to nearly four battalions and commits the 10th Panzer's motorcycle battalion along the Thala road. Dunphie orders Gore forward about ten (Rickard).",
+   "text": "At 8:30 both battalions of the Panzer Grenadier Regiment Afrika attack with all the DAK's artillery, the dual-purpose 88s and 'a battery of new German rocket projectors': the Nebelwerfer's first barrage on American troops. Late in the morning Rommel, with Buelowius and von Broich, raises Menton's infantry to nearly four battalions and commits the 10th Panzer's motorcycle battalion along the Thala road. Dunphie orders Gore forward about ten.",
    "at": [
     9984,
     -13358
@@ -6068,10 +6068,10 @@
    "title": "The breakout",
    "text": "At 4:30 Buelowius' and von Broich's elements attack side by side: the 10th Panzer's armoured infantry on the right over Hill 974 to the valley floor, the DAK along the Tébessa road onto Djebel Zebbeus. The Tébessa road opens first; the Centauro's tanks pursue five miles down it and find no one. Gore Force fights until its last tank is destroyed and its remnant withdraws past Hill 704 at dusk with five of the 805th's destroyers. A platoon of Company I is overrun. The 3rd Battalion, 6th Armored Infantry and parts of the 26th and 39th are cut off on Semmama; through the night their survivors infiltrate west across the Foussana valley or north toward Thala. At seven II Corps counts 99 medium and 47 light tanks running.",
    "at": [
-    9984,
-    -13358
+    8469,
+    -9762
    ],
-   "view": 7000,
+   "view": 12000,
    "speed": 120,
    "when": "4:30 PM"
   },
