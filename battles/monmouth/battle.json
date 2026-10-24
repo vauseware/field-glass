@@ -5372,26 +5372,26 @@
      "state": "line"
     },
     {
-     "t": "14:05",
+     "t": "13:40",
      "x": 500,
      "y": -250,
      "state": "column"
     },
     {
-     "t": "14:06",
+     "t": "13:41",
      "x": 500,
      "y": -250,
      "h": 21,
      "state": "column"
     },
     {
-     "t": "14:11:58",
+     "t": "13:46:58",
      "x": 550,
      "y": -120,
      "h": 356
     },
     {
-     "t": "14:30",
+     "t": "14:05",
      "x": 520,
      "y": 300,
      "h": 300,
@@ -5544,26 +5544,26 @@
      "state": "line"
     },
     {
-     "t": "14:00",
+     "t": "13:38",
      "x": 300,
      "y": -300,
      "state": "column"
     },
     {
-     "t": "14:01",
+     "t": "13:39",
      "x": 300,
      "y": -300,
      "h": 18,
      "state": "column"
     },
     {
-     "t": "14:09:13",
+     "t": "13:47:13",
      "x": 350,
      "y": -150,
      "h": 351
     },
     {
-     "t": "14:25",
+     "t": "14:03",
      "x": 300,
      "y": 150,
      "h": 300,
@@ -8006,21 +8006,21 @@
    "when": "about 8 AM"
   },
   {
-   "t": "09:15",
+   "t": "09:30",
    "title": "Over the East Morass",
-   "text": "The last British troops leave the court house about a quarter past nine, Erskine's rear guard standing on the Middletown road behind them. Lee's column comes on over the East Morass causeway; about half past nine he goes forward with Wayne, who crosses the morass three-quarters of a mile east of the court house to come at the rear guard. Washington's main body reaches Englishtown at ten.",
+   "text": "The last British troops left the court house about a quarter past nine, Erskine's rear guard standing on the Middletown road behind them, and the Queen's Rangers have fallen back over the causeway ahead of Lee. The head of Lee's column comes up to the East Morass causeway about half past nine, and he goes forward with Wayne, who crosses the morass three-quarters of a mile east of the court house to come at the rear guard.",
    "at": [
     2700,
     -800
    ],
    "view": 3600,
    "speed": 120,
-   "when": "about a quarter past 9"
+   "when": "about half past 9"
   },
   {
    "t": "10:30",
    "title": "The first clash",
-   "text": "Over the East Morass and north toward the Middletown road, Lee comes out of the woods about half past ten to find Wayne already engaged with Erskine's rear guard: Simcoe's Rangers, the 16th Light Dragoons and the 1st Light Infantry, about 1,500 men. The dragoons charge and are shot back. Behind them Clinton has turned Cornwallis's whole division round.",
+   "text": "Over the East Morass and north toward the Middletown road, Lee comes out of the woods about half past ten to find Wayne already engaged with Erskine's rear guard: Simcoe's Rangers, the 16th Light Dragoons and the 1st Light Infantry, about 1,500 men. The dragoons charge and are shot back. Up the Middletown road, off the map, Clinton is turning Cornwallis's whole division round.",
    "at": [
     3300,
     250
@@ -8032,13 +8032,14 @@
   {
    "t": "11:35",
    "title": "The retreat over the ravines",
-   "text": "The Guards and Grenadiers come back down the road in two columns, the 3rd Brigade crossing the creek to cut the vanguard off, the 4th behind it, the 5th in reserve, the Hessian grenadiers left as a line to fall back on. Scott pulls back south-west over Spotswood Middle Brook, Maxwell after him, Jackson down from the north brook. Lee, with barely half his vanguard still under his hand, falls back toward a line from Craig's house to Ker's, then gives that up too. By noon he is near Ker's house.",
+   "text": "The Guards and Grenadiers come back down the road in two columns. Behind them the 3rd Brigade marches to cross the creek and cut the vanguard off, the 4th following, the 5th in reserve, and the Hessian grenadiers come on to be left as a line to fall back on. Scott pulls back south-west over Spotswood Middle Brook, Maxwell after him, Jackson down from the north brook. Lee, with barely half his vanguard still under his hand, falls back toward a line from Craig's house to Ker's, then gives that up too. By noon he is near Ker's house.",
    "at": [
     2300,
     -350
    ],
    "view": 3000,
-   "speed": 60
+   "speed": 60,
+   "when": "about half past 11"
   },
   {
    "t": "12:45",
@@ -8077,16 +8078,17 @@
   {
    "t": "14:30",
    "title": "Molly Pitcher",
-   "text": "A surgeon wrote five days later of a patient's story of a woman at a gun; two veterans told of one decades on, one carrying cartridges and one water; Joseph Plumb Martin's memoir of 1830 has her serving a piece. Mary Ludwig Hays is the name most often given. Lender and Stone conclude that very likely several women helped the gun crews that afternoon, and that the legend is an amalgam. The park's marker of 1992 is at a well near Stirling's artillery line, shown here.",
+   "text": "A surgeon wrote five days later of a patient's story of a woman at a gun; two veterans told of one decades on, one carrying cartridges and one water; Joseph Plumb Martin's memoir of 1830 has her serving a piece. Mary Ludwig Hays is the name most often given. Lender and Stone conclude that very likely several women helped the gun crews that afternoon, and that the legend is an amalgam. The park's marker of 1992 stands at a well that late twentieth-century research placed near Stirling's artillery line; shown here, it is 1,100 m south of the ridge guns as this plan draws them.",
    "at": [
     -400,
     100
    ],
    "view": 1900,
-   "speed": 120
+   "speed": 120,
+   "when": "about half past 2"
   },
   {
-   "t": "15:15",
+   "t": "15:30",
    "title": "Combs Hill",
    "text": "Greene, sent right from Tennent, has brought Woodford's brigade and du Plessis's four guns round by the West Ravine onto Combs Hill, about three by Stone and a quarter to four by Lender and Stone. The guns rake the hedgerow from the flank and the British artillery withdraws out of their reach.",
    "at": [
@@ -8094,7 +8096,8 @@
     -650
    ],
    "view": 2300,
-   "speed": 60
+   "speed": 60,
+   "when": "about half past 3"
   },
   {
    "t": "16:45",
@@ -8111,7 +8114,7 @@
   {
    "t": "17:20",
    "title": "The British withdrawal",
-   "text": "Cilley's picked New England battalion works down from the left under cover of the brook bottom onto the 42nd Foot in the Sutfin orchard, and the Highlanders give way. The battle ends shortly after five. Clinton pulls his units back across the Middle Ravine to the Craig and Ker farms.",
+   "text": "Cilley's picked New England battalion works down from the left under cover of the brook bottom onto the 42nd Foot in the Sutfin orchard, and the Highlanders give way. The battle ends shortly after five. Clinton has begun to draw his units back across the Middle Ravine toward the Craig and Ker farms.",
    "at": [
     -50,
     0
@@ -8123,7 +8126,7 @@
   {
    "t": "19:00",
    "title": "Sunset",
-   "text": "Poor's brigade is sent to probe the British right at seven and is halted by sunset, at 7:31, before making contact. Steuben's four brigades, ordered up from Englishtown at six, reach Tennent as the light goes. The armies rest within a mile of each other, the nearest British at Ker's house. Washington's return gives 69 killed, 161 wounded and 140 missing; Clinton's 65 killed, 170 wounded, 64 missing and 59 dead of fatigue. Stone has nearly half the losses on both sides down to the heat, and the Monmouth County historians count 304 British dead buried on the field.",
+   "text": "Poor's brigade is sent to probe the British right at seven and is halted by sunset, at 7:31, before making contact. Steuben's four brigades, ordered up from Englishtown at six, reach Tennent as the light goes. The armies rest within a mile of each other, the nearest British at Ker's house. Washington's return gives 69 killed, 161 wounded and 140 missing; Clinton's 65 killed, 170 wounded, 64 missing and 59 dead of fatigue. Stone has nearly half the losses on both sides down to the heat, and the Monmouth County historians count 304 dead buried after the battle.",
    "at": [
     -200,
     -100
@@ -8166,6 +8169,6 @@
   "Garry Wheeler Stone, <a href='https://continentalline.org/CL/?p=1113' target='_blank'>What really happened at the Battle of Monmouth</a> (1995): the Dividing Brook crossed about half past twelve, ten guns a side, Greene on Combs Hill about three, Cilley against the 42nd, the heat 'would reach 96\u00b0F', the withdrawal about eleven. Jim Piecuch's review of <i>Fatal Sunday</i>, <i>Michigan War Studies Review</i> (2017): the British company strengths are inaccurate, the Washington-Lee meeting less harsh than tradition.",
   "Michael Adelberg, <a href='https://www.monmouthhistory.org/250' target='_blank'>Dead and wounded after the Battle of Monmouth</a>, Monmouth County Historical Association: the burials, the wounded left at the court house, the heat deaths. <i>Journal of the American Revolution</i>, 'Did Charles Lee disobey Washington's attack order at Monmouth?' (2024): the 27 June and pre-dawn times, Grayson's 1,500 at daylight, the court martial. <i>American Heritage</i>, 'Monmouth' (August 1976): Washington's report.",
   "Terrain: USGS 3DEP elevation at 10 m, sampled to 22.5 m; Freehold borough and the modern roads are left as the DEM shows them. Anchors from OpenStreetMap (ODbL) and GNIS: Englishtown, Tennent church, the Perrine, Sutfin and Craig houses, the hill points, the park's Molly Pitcher well and its Washington-meets-Lee trail, Veterans Park, the Hall of Records. Sunrise and sunset from the NOAA solar formulae for Freehold, local apparent time.",
-  "What is reconstructed: the hedgerow, the Parsonage, the Point of Woods, the 1778 bridge, the Rhea farm and Ker's house are placed from the nomination's prose, within 250 to 500 m, and labelled 'about here'. Wemrock Brook and the Middle Ravine, a branch of it, are traced from the DEM, which puts the ravine on a diagonal from the Craig farm toward the brook rather than north-south; OpenStreetMap's Wemrock Brook points did not match the valley and were not used. Of the two 'east ravines' in the sources, this plan takes the driving tour's East Morass on Weamaconk Creek at Veterans Park, since the vanguard's road and Scott's retreat 'south-west across the Spotswood Middle Brook' both cross it; the nomination's McGellaird's Brook reading would put the retreat north of the road where only Jackson's detachment was. Of the two sites for the meeting with Lee, 700 m apart, this plan takes the park's trail on the Rhea farm over the nomination's plaque at the bridge. Every afternoon clock time is Wikipedia's or inferred; the witnesses gave durations. The two-day prelude, Knyphausen's division, Morgan's riflemen at Richmond Mills and the rejoining on 29 June are off the map. Combs Hill's guns stand on the DEM's summit, 230 m north of the GNIS point. Oswald's twelve guns are drawn as eight with the column and the four that stood with the rearguard. Cilley's battalion is drawn apart from the brigades it was picked from."
+  "What is reconstructed: the hedgerow, the Parsonage, the Point of Woods, the 1778 bridge, the Rhea farm and Ker's house are placed from the nomination's prose, within 250 to 500 m, and labelled 'about here'. Wemrock Brook and the Middle Ravine, a branch of it, are traced from the DEM, which puts the ravine on a diagonal from the Craig farm toward the brook rather than north-south; OpenStreetMap's Wemrock Brook points did not match the valley and were not used. Of the two 'east ravines' in the sources, this plan takes the driving tour's East Morass on Weamaconk Creek at Veterans Park, since the vanguard's road and Scott's retreat 'south-west across the Spotswood Middle Brook' both cross it; the nomination's McGellaird's Brook reading would put the retreat north of the road where only Jackson's detachment was. Of the two sites for the meeting with Lee, 700 m apart, this plan takes the park's trail on the Rhea farm over the nomination's plaque at the bridge. Every afternoon clock time is Wikipedia's or inferred; the witnesses gave durations. The two-day prelude, Knyphausen's division, Morgan's riflemen at Richmond Mills and the rejoining on 29 June are off the map. Combs Hill's guns stand on the DEM's summit, 230 m north of the GNIS point. Oswald's twelve guns are drawn as eight with the column and the four that stood with the rearguard. Cilley's battalion is drawn apart from the brigades it was picked from. Scott's detachment is drawn whole in the afternoon's forward screen, where Lender and Stone have about 720 of it."
  ]
 }
