@@ -10325,7 +10325,187 @@
    ]
   }
  ],
- "events": [],
+ "events": [
+  {
+   "t": "1918-05-28 04:45",
+   "title": "The guns register",
+   "text": "The First Division holds the line before Cantigny under the French. By half past three the 28th Infantry, Colonel Hanson Ely, is in place on a jump-off line dug 800 m west of the village, with two companies of the 18th Infantry, three machine-gun companies and a company of engineers: 3,564 men. In the village and north of it are the 271st and 272nd Reserve Infantry of the German 82nd Reserve Division. At 4.45 the batteries begin firing for adjustment, a few shots each. 'Day quite clear. More so than usual.'",
+   "at": [
+    -500,
+    0
+   ],
+   "view": 4500,
+   "speed": 60,
+   "when": "4.45 a.m."
+  },
+  {
+   "t": "1918-05-28 05:45",
+   "title": "Fire for destruction",
+   "text": "At 5.45 every gun turns on its target: 386 guns and trench mortars, 200,000 rounds. The 220, 240 and 280 mm howitzers and the heavy trench mortars turn Cantigny 'into a volcano', and by 5.49 the observers cannot see it for smoke. The twelve French Schneider tanks leave their waiting positions at 5.50. Five German batteries that reply between 6.13 and 6.35 are smothered.",
+   "at": [
+    -800,
+    -300
+   ],
+   "view": 3000,
+   "speed": 60,
+   "when": "5.45 a.m."
+  },
+  {
+   "t": "1918-05-28 06:45",
+   "title": "H hour",
+   "text": "The 75s lift into a rolling barrage that moves forward 100 m every two minutes, and the infantry rise and go forward in three lines behind it. The 3rd Battalion on the left makes for the ground toward St Aignan, the 2nd goes for the village with the tanks, the 1st on the right for the ravines south of it. Lieutenant Colonel Maxey, leading the 2nd, is mortally wounded in the first wave and Major Huebner takes over. 'Very little enemy fire.'",
+   "at": [
+    -850,
+    -250
+   ],
+   "view": 2200,
+   "speed": 20,
+   "when": "6.45 a.m."
+  },
+  {
+   "t": "1918-05-28 06:56",
+   "title": "Into the village",
+   "text": "'Our men have entered CANTIGNY,' the artillery's journal has at 6.56, and 'there is no enemy fire.' The right half of the 2nd Battalion goes through the houses. French flame-throwers, three teams split among three companies, work the cellars, which are dug in the soft stone. The garrison, a battalion of the 271st, is killed or captured; 275 German dead are counted in the village. Prisoners begin coming in at seven, and say the attack was a complete surprise.",
+   "at": [
+    -600,
+    -200
+   ],
+   "view": 1600,
+   "speed": 20,
+   "when": "6.56 a.m."
+  },
+  {
+   "t": "1918-05-28 07:20",
+   "title": "On the objective",
+   "text": "'The entire objective was reached at 7:20 A.M. on schedule time.' The new line runs from the head of the ravine north of the village to the corner of the orchard, east of the houses, and back to the old line at the Bois de Cantigny. The tanks' third battery reached its objective about seven, so the infantry could dig in north of the village. A feeble counter-attack by a small force comes out of the Bois de Fontaine at 7.30. By 7.45 the men are digging in, and the second wave makes the line a trench with wire.",
+   "at": [
+    -450,
+    -250
+   ],
+   "view": 2400,
+   "speed": 30,
+   "when": "7.20 a.m."
+  },
+  {
+   "t": "1918-05-28 08:03",
+   "title": "The tanks go home",
+   "text": "At 8.03 nine tanks are seen going back to Villers-Tournelle. The infantry report 'no American dead in CANTIGNY, but many dead Boche, and that the Tanks were a great help'. By 8.26 there are 140 prisoners and two officers, who say three companies are in reserve in the Bois de Framicourt; the guns turn on it. Machine guns fire on the men digging in from the direction of Fontaine.",
+   "at": [
+    -1100,
+    -350
+   ],
+   "view": 3200,
+   "speed": 60,
+   "when": "8.03 a.m."
+  },
+  {
+   "t": "1918-05-28 12:00",
+   "title": "The German guns",
+   "text": "About noon the French begin to withdraw their counter-battery artillery for the Chemin des Dames. 'By noon, the artillery and machine gun fire upon the salient became intense and continued for forty-eight hours.' At 11.34 a counter-attack forming in the valley between the Framicourt and Lalval woods was fired on. Through the afternoon Germans are seen gathering about Courtemanche, and three companies go into the Bois de Voyeux at 2.57.",
+   "at": [
+    600,
+    -300
+   ],
+   "view": 4800,
+   "speed": 300,
+   "when": "About noon"
+  },
+  {
+   "t": "1918-05-28 17:00",
+   "title": "The first counter-attack",
+   "text": "About five a counter-attack comes on from the north-east, out of the western tip of the Bois de Framicourt. At 5.10 it is caught by the barrage and goes to pieces. 'Counter Attack repulsed,' the artillery's journal has at 5.50.",
+   "at": [
+    100,
+    100
+   ],
+   "view": 2200,
+   "speed": 30,
+   "when": "5.10 p.m."
+  },
+  {
+   "t": "1918-05-28 18:40",
+   "title": "From the Bois de Framicourt",
+   "text": "A rolling barrage, then several waves of infantry from the southern and western edges of the Bois de Framicourt. 'The first wave broke under the infantry and machine gun fire and the succeeding ones were crushed by the artillery.' Much of it falls on Major Theodore Roosevelt Jr.'s battalion of the 26th Infantry, on the right, which suffers heavily. Observers report the infantry falling back; it is not. 'Several times they moved around on account of shell fire.'",
+   "at": [
+    150,
+    -550
+   ],
+   "view": 2400,
+   "speed": 30,
+   "when": "6.40 p.m."
+  },
+  {
+   "t": "1918-05-28 21:15",
+   "title": "At all costs",
+   "text": "At 8.30 the enemy is reported advancing on Cantigny from Framicourt in great numbers, and the barrage comes down again; by 9.10 Framicourt and the ravine south of it are 'full of Boche'. Ely reports 'Our men still in position. Our losses heavy.' The air is in German hands. Bullard tells him 'this line must be held at all costs.' In the night two companies of the 18th Infantry and the engineers go into the line, and two battalions of the 18th come up behind it.",
+   "at": [
+    -300,
+    -300
+   ],
+   "view": 4000,
+   "speed": 300,
+   "when": "9.15 p.m."
+  },
+  {
+   "t": "1918-05-29 06:00",
+   "title": "The morning attacks",
+   "text": "The infantry ran out of rockets before dawn and expected an attack. Two small counter-attacks, at six and at seven, are broken up by artillery and rifle fire. The hospitals report 600 men wounded in the whole division up to six. The German guns keep up their fire all day.",
+   "at": [
+    -450,
+    850
+   ],
+   "view": 2200,
+   "speed": 60,
+   "when": "6 a.m."
+  },
+  {
+   "t": "1918-05-29 17:45",
+   "title": "The left gives a little",
+   "text": "Tanks were reported coming out of the Framicourt wood in the afternoon, and the infantry claimed two hit by the heavy guns. At 5.45 'a strong and determined assault was made against the left of the line'. On the extreme left the advanced elements of the 28th draw back to the old line near St Aignan. At 7.43 the artillery's Colonel Holbrook sees hand-to-hand fighting.",
+   "at": [
+    -700,
+    600
+   ],
+   "view": 2200,
+   "speed": 120,
+   "when": "5.45 p.m."
+  },
+  {
+   "t": "1918-05-29 20:11",
+   "title": "Driven out by the shells",
+   "text": "At 8.11 the 2nd Battalion is reported falling back and asks the heavy guns to fire in front of it; at 8.21 Roosevelt reports a large body of Germans near the ch\u00e2teau in the Bois de Fontaine. An aeroplane sees no counter-attack and light German fire on the village, and Holbrook thinks shellfire drove the infantry out of the line. Bullard orders Ely to send the battalion back in. By ten past nine things are quieter.",
+   "at": [
+    -400,
+    -200
+   ],
+   "view": 2800,
+   "speed": 60,
+   "when": "8.11 p.m."
+  },
+  {
+   "t": "1918-05-30 05:30",
+   "title": "The last attack",
+   "text": "Now 'the enemy made his final effort'. Behind a rolling barrage of 210, 150 and 77 mm guns, two well-formed waves, probably a battalion, come on determinedly from the Bois de Lalval and are swept back before they reach the line. Wise counts it the seventh effort. The artillery's journal puts an attack at about 3.30, its first wave through the barrage, its second destroyed by it.",
+   "at": [
+    -250,
+    750
+   ],
+   "view": 2200,
+   "speed": 30,
+   "when": "5.30 a.m."
+  },
+  {
+   "t": "1918-05-30 22:00",
+   "title": "The relief",
+   "text": "In the night the 16th Infantry comes up and relieves the 28th; the relief is completed the next night. The division's records count 1,067 casualties for the three days: 199 killed, 652 wounded, 16 missing and 200 gassed. Five German officers and 225 men were taken. Pershing wrote on the 28th that the attack 'marks a distinct step forward in American participation in the war'.",
+   "at": [
+    -1300,
+    -500
+   ],
+   "view": 4500,
+   "speed": 300
+  }
+ ],
  "sources": [
   "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 \u00a9 DLR e.V. 2010-2014 and \u00a9 Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m, sampled to 15 m."
  ]
