@@ -4,3 +4,4 @@ docs/plans/
 node_modules/
 dist/
 .wrangler/
+__pycache__/
