@@ -73,51 +73,55 @@ CREEK = NL((-624, -1750), (-348, -1460), (56, -1278), (500, -1200), (960, -1118)
 ROAD_S = [(1400, -1750), (1360, -1500), (1320, -1200), (1290, -950), (1250, -700), (1200, -520)]
 ROAD_N = NL((1121, -391), (1082, -367), (898, -49), (771, 140), (655, 361), (528, 528), (399, 613), (176, 665), (-151, 688), (-551, 759), (-870, 857), (-950, 850))
 BRIDGE_N = (P['kings_bridge'][0] - 10, P['kings_bridge'][1] + 120)  # the north bank, across the 1814 channel
-ROAD = ROAD_S + ROAD_N + [BRIDGE_N, (-1000, 1040)]
-LANE = NL((1040, -240), (200, -240))  # Ussher's farm lane, west from the river road just north of the creek
 BRIDGES = [(ROAD_N[-1], BRIDGE_N)]  # dry over water
-STREETS_BRIDGE = M(*N(1115, -380))
+LANE = NL((1040, -240), (200, -240))  # Ussher's farm lane, west from the river road just north of the creek
 
-# The 1814 wood line: Lossing's three-quarter mile from the river at the creek, narrowing to Scott's third at the north.
-WOOD_LINE = NL((-300, -1300), (-300, 300), (-100, 650))
+# The plain inside the 1814 wood line (Lossing's three-quarter mile from the river at the creek, narrowing to Scott's
+# third at the north) up to the strip of trees that hid Riall's march, y 530 to 590; the road's margin beyond the strip.
 PLAIN = NL((-300, -1300), (-300, 300), (-169, 530), (450, 530), (750, 530), (1350, -300), (1250, -900), (960, -1150), (56, -1300))
 ROADSIDE = NL((-1000, 800), (-1000, 900), (-550, 810), (-150, 740), (500, 700), (500, 590), (-110, 590), (-550, 700), (-950, 770))
 CAMPS = [(-100, -1320), (1000, -1170), (1550, -1100), (1550, -1750), (-100, -1750)]
-STRIP = NL((-100, 530), (450, 530), (450, 590), (-100, 590))  # the strip of trees that hid Riall's march
 
-# ---- terrain: the 1814 plain ----
-# The Copernicus surface model reads today's park woodland on the plain, and the trees along the creek and over the
-# camps, as a plateau up to 12 m high. Inside the plain and the camps any cell above 180 m is set to 176, the plain's
-# own level. The woods west of the 1814 wood line keep their canopy, which reads as wooded ground. Idempotent.
+# ---- terrain: the 1814 ground ----
+# The Copernicus surface model reads today's woods, houses and street trees as hills up to 25 m high: the park woodland
+# on the plain, the suburbs in the old forest, the creek's tree line, Navy Island's canopy. Any land cell above 179 m is
+# set to 176, the plain's own level, and the land is then averaged over 70 m, which keeps the shore and the slope down
+# to the Chippawa and drops the buildings. The woods are drawn as trees. The fit runs once on the fetched grid and marks
+# it `fitted`; to change it, fetch the grid again with the note's command.
+WATER = 170.5  # the Niagara and the Chippawa read 169 to 170 m; the plain 174 to 178
 T = json.load(open(HERE + "terrain.json"))
 COLS, SP = T["cols"], T["spacing"]; HALF = COLS * SP / 2
-def cells(poly):  # the DEM cells whose centres lie inside a polygon, by scanline
-    out = set()
+if not T.get("fitted"):
+    Z0 = [176.0 if v > 179 else v for v in T["z"]]; R = 3  # cells each way: 70 m
+    Z = list(Z0)
     for r in range(COLS):
-        y = HALF - (r + 0.5) * SP
-        xs = sorted(xa + (xb - xa) * (y - ya) / (yb - ya) for (xa, ya), (xb, yb) in zip(poly, poly[1:] + poly[:1]) if (ya > y) != (yb > y))
-        for x0, x1 in zip(xs[::2], xs[1::2]):
-            out.update(range(r * COLS + max(0, math.ceil((x0 + HALF) / SP - 0.5)), r * COLS + min(COLS - 1, math.floor((x1 + HALF) / SP - 0.5)) + 1))
-    return out
-CLAMP = NL((-350, -1300), (-350, 320), (-130, 660), (700, 640), (1350, -300), (1250, -900), (960, -1150), (56, -1300))
-flat = cells(CLAMP) | cells(CAMPS)
-Z = [176.0 if i in flat and v > 180 else v for i, v in enumerate(T["z"])]
-if Z != T["z"]: T["z"] = Z; json.dump(T, open(HERE + "terrain.json", "w"), separators=(",", ":"))
-WATER = 170.5  # the Niagara and the Chippawa read 169 to 170 m; the plain 174 to 178
+        for c in range(COLS):
+            if Z0[r * COLS + c] <= WATER: continue
+            near = [Z0[rr * COLS + cc] for rr in range(max(0, r - R), min(COLS, r + R + 1)) for cc in range(max(0, c - R), min(COLS, c + R + 1)) if Z0[rr * COLS + cc] > WATER]
+            Z[r * COLS + c] = round(sum(near) / len(near), 2)
+    T["z"], T["fitted"] = Z, "land above 179 m set to 176, then averaged over 70 m (battles/chippawa/make.py)"
+    json.dump(T, open(HERE + "terrain.json", "w"), separators=(",", ":"))
 def z(p):
     c, r = int((p[0] + HALF) / SP), int((HALF - p[1]) / SP)
     return T["z"][r * COLS + c] if 0 <= c < COLS and 0 <= r < COLS else 999
 def wet(p): return z(p) <= WATER and not any(seg_dist(p, a, b) < 15 for a, b in BRIDGES)
+def ashore(p): return not any(wet((p[0] + dx, p[1] + dy)) for dx, dy in ((0, 0), (15, 0), (-15, 0), (0, 15), (0, -15)))
+def dry(p, reach=60):  # the nearest ground 15 m clear of the water within reach: the Parkway hugs a shore the 30 m survey blurs
+    if ashore(p): return p
+    return min(((p[0] + dx, p[1] + dy) for dx in range(-reach, reach + 1, 10) for dy in range(-reach, reach + 1, 10) if ashore((p[0] + dx, p[1] + dy))), key=lambda q: math.dist(p, q))
+def densify(pts, step=20): return [point(pts, s) for s in range(0, int(sum(math.dist(a, b) for a, b in zip(pts, pts[1:]))), step)] + [pts[-1]]
+ROAD_N = [ROAD_N[0]] + [dry((round(x), round(y))) for x, y in densify(ROAD_N)[1:-1]] + [ROAD_N[-1]]
+ROAD = ROAD_S + ROAD_N + [BRIDGE_N, (-1000, 1040)]
 
 # ---- ground ----
 FIELDS = [quad(150, -1000, 850, -420), quad(450, -120, 850, 380), quad(-200, -1000, 100, -500), quad(-200, -100, 300, 350)]
 features = [
     dict(type="creek", name="Street's Creek", **label_on((300, -1240), (700, -1170), -40), pts=CREEK),
-    dict(type="road", name="the river road", pts=ROAD, **label_on((-300, 712), (-500, 748), 40)),
+    dict(type="road", name="the river road", pts=ROAD, **label_on((1290, -950), (1250, -700), 45)),
     dict(type="road", pts=[M(*N(1050, -360)), M(*N(1160, -400))]),  # the bridge over Street's Creek
     dict(type="road", name="Ussher's lane (about here)", pts=LANE, **label_on(LANE[1], LANE[0], 30)),
-    dict(type="works", name="Fort Chippawa and Riall's works (about here)", pts=[(-1130, 975), (-880, 990), (-850, 1080)], at=[-1210, 1190]),
-    dict(type="redoubt", name="tête-de-pont (about here)", poly=rect(P['tete_de_pont'], 160, 60, 40), at=[P['tete_de_pont'][0] + 40, P['tete_de_pont'][1] - 70]),
+    dict(type="works", name="Fort Chippawa and Riall's works (about here)", pts=[(-1130, 975), (-880, 990), (-850, 1080)], at=[-1250, 930]),
+    dict(type="redoubt", name="tête-de-pont (about here)", poly=rect(P['tete_de_pont'], 160, 60, 40), at=[P['tete_de_pont'][0] + 150, P['tete_de_pont'][1] - 40]),
     dict(type="camp", poly=quad(-1150, 1000, -900, 1100)),
     dict(type="camp", name="Scott's camp", poly=quad(500, -1600, 1050, -1350), at=[775, -1640]),
     dict(type="camp", name="Ripley's camp", poly=quad(0, -1700, 450, -1450), at=[225, -1730]),
@@ -127,11 +131,11 @@ features = [
     dict(name="Ussher's (about here)", at=[P['ussher'][0] - 90, P['ussher'][1] - 40]),
     dict(name="the plain", at=[300, -650]),
     dict(name="the woods", at=[-900, -400]), dict(name="the woods", at=[-1000, 300]),
-    dict(name="Battlefield monument (2001)", at=[P['monument'][0] - 120, P['monument'][1] - 60]),
+    dict(name="Battlefield monument (2001)", at=[P['monument'][0] - 150, P['monument'][1] - 110]),
     dict(name="Navy Island", at=[1650, 400]),
     dict(name="Niagara River", **label_on((1300, -700), (1500, -100))),
     dict(name="Chippawa (Welland) River", **label_on((-1700, 50), (-1450, 380))),
-    dict(name="to Fort Erie, 16 miles", at=[1250, -1700]),
+    dict(name="to Fort Erie", at=[1250, -1700]),
 ]
 for f in features:
     if "at" in f and f.get("name") and "River" not in f["name"]: assert not wet(f["at"]), (f["name"], "a label in the water")
