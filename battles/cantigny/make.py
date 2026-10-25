@@ -179,9 +179,9 @@ OOB = [
     ("r26_1", "american", "1/26th", "1st Battalion, 26th Infantry, holding the sector south of the 28th", "Maj. Theodore Roosevelt Jr.", "infantry", 900, A1),
     ("r18_a", "american", "18th Inf.", "A battalion of the 18th Infantry, at the south-west corner of the Bois des Glands from the night of the 28th", "", "infantry", 750, {}),
     ("r18_b", "american", "18th Inf.", "A battalion of the 18th Infantry, at Villers-Tournelle from the night of the 28th", "", "infantry", 750, {}),
-    ("r16_1", "american", "16th Inf.", "A battalion of the 16th Infantry, which relieved the 28th on the night of the 30th", "", "infantry", 1000, A1),
-    ("r16_2", "american", "16th Inf.", "A battalion of the 16th Infantry, which relieved the 28th on the night of the 30th", "", "infantry", 1000, A1),
-    ("r16_3", "american", "16th Inf.", "A battalion of the 16th Infantry, which relieved the 28th on the night of the 30th", "", "infantry", 1000, A1),
+    ("r16_1", "american", "16th Inf.", "A battalion of the 16th Infantry, which relieved the 28th and the 18th on the night of the 30th", "", "infantry", 1000, A1),
+    ("r16_2", "american", "16th Inf.", "A battalion of the 16th Infantry, which relieved the 28th and the 18th on the night of the 30th", "", "infantry", 1000, A1),
+    ("r16_3", "american", "16th Inf.", "A battalion of the 16th Infantry, which relieved the 28th and the 18th on the night of the 30th", "", "infantry", 1000, A1),
     ("tank1", "french", "1st battery", "1st battery, French 5th Tank Battalion (the 5th Group, Capt. Noscereau): four Schneider tanks", "", "armor", 4, {}),
     ("tank2", "french", "2nd battery", "2nd battery, French 5th Tank Battalion (the 5th Group, Capt. Noscereau): four Schneider tanks, which crossed the gardens north-east of the village", "", "armor", 4, {}),
     ("tank3", "french", "3rd battery", "3rd battery, French 5th Tank Battalion (the 5th Group, Capt. Noscereau): four Schneider tanks, at their objective north of Cantigny about seven", "", "armor", 4, {}),
@@ -297,9 +297,9 @@ move("g271_r", D(28, "17:50"), [(900, 200)], h=245)
 fire("r28_2", D(28, "17:00"), D(28, "17:15")); fire("r28_3", D(28, "17:02"), D(28, "17:15"))
 # 6.40 p.m.: a rolling barrage, then waves from the southern and western edges of the wood. The first is killed to a man
 # by rifle and machine-gun fire, by the artillery's report, the second crushed by the guns; much of it falls on the 26th's
-# battalion. Which companies made the first wave the note does not say, so the 4th is cut down, not wiped out.
+# battalion. The note gives no loss for the 4th Company, so it breaks and goes back at full strength.
 move("g271_4", D(28, "18:25"), [(700, -20)], h=220)
-run("g271_4", D(28, "18:40"), [(D(28, "18:55"), (100, -550), dict(state="firing", h=225)), (D(28, "19:00"), (100, -550), dict(state="rout", strength=40))], state="charge", h=225)
+run("g271_4", D(28, "18:40"), [(D(28, "18:55"), (100, -550), dict(state="firing", h=225)), (D(28, "19:00"), (100, -550), dict(state="rout"))], state="charge", h=225)
 hide("g271_4", plus(move("g271_4", D(28, "19:01"), [(700, -20)], h=45, moving="rout", kmh=3), 1))
 move("g271_r", D(28, "18:30"), [(900, -30)], h=225)
 run("g271_r", D(28, "18:45"), [(D(28, "19:00"), (400, -500), dict(state="rout", h=225)), (D(28, "19:07"), (450, -440), dict(strength=280))], state="charge", h=225)
