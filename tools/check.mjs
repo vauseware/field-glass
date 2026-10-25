@@ -65,6 +65,7 @@ for (const entry of index) {
   bad += problems.length;
   entry.runtime = playTime(battle); // shown on the start screen; kept here so the page need not load every battle
 }
+index.sort((a, c) => a.date.localeCompare(c.date)); // date order, so battles built in parallel insert at different lines
 writeFileSync('battles/index.json', JSON.stringify(index, null, 1) + '\n');
 console.log('runtimes (s): ' + index.map(e => `${e.id} ${e.runtime}`).join(', '));
 process.exit(bad ? 1 : 0);
