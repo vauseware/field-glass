@@ -273,7 +273,236 @@ OOB = [
 BASE = {row[0]: row for row in OOB}
 SHIPS = {"carolina", "louisiana"}
 
-units, events = [], []
+# ---- movement ----
+KEYS = {}
+def K(t, p, **kw): return dict(t=t, x=round(p[0]), y=round(p[1]), **kw)
+def carried(id, f): return next((k[f] for k in reversed(KEYS.get(id, [])) if f in k), {"state": "line", "strength": BASE[id][6]}.get(f))
+def keys(id, ks):  # every leg starts where the unit stands, unless it is coming out of hiding
+    have = KEYS.setdefault(id, [])
+    if have and ks:
+        a, b = have[-1], ks[0]
+        assert carried(id, "state") == "hidden" or (a["x"], a["y"]) == (b["x"], b["y"]), (id, a["t"], b["t"], "a leg must start where the unit stands")
+        if a["t"] == b["t"]: a.update({k: v for k, v in b.items() if k != "t"}); ks = ks[1:]
+    have += ks
+def last(id): k = KEYS[id][-1]; return (k["x"], k["y"])
+def at(id, t, **kw): keys(id, [K(t, last(id), **kw)])  # a change in place
+def appear(id, t, p, state="line", **kw): keys(id, [K(t, p, state=state, **kw)])
+def regroup(id, t, n):  # a change of strength that is not a loss: hidden for a minute, so no casualty markers are left
+    s = carried(id, "state"); keys(id, [K(t, last(id), state="hidden"), K(plus(t, 1), last(id), state=s, strength=n)])
+PACE = 4  # km/h, a column of foot on the road
+def walk(t0, pts, state="column", kmh=PACE):  # keys along a path at a marching pace
+    pts = [p for i, p in enumerate(pts) if i == 0 or math.dist(p, pts[i - 1]) > 5]
+    t, out = sec(t0), []
+    for i, p in enumerate(pts):
+        if i: t += math.dist(pts[i - 1], p) / (kmh / 3.6)
+        out.append(K(fmt(t), p, h=heading(p, pts[i + 1]) if i + 1 < len(pts) else heading(pts[i - 1], p), **(dict(state=state) if i == 0 else {})))
+    return out
+def move(id, t0, pts, h=None, state="line", moving="column", kmh=PACE):  # from where it stands along pts; returns the arrival time
+    if sec(t0) - sec(KEYS[id][-1]["t"]) > 120: at(id, plus(t0, -1))  # stand until the minute before, then turn and go
+    ks = walk(t0, [last(id)] + pts, moving, kmh)
+    if len(ks) > 1: ks[-1]["state"] = state
+    else: ks[0]["state"] = state
+    if h is not None: ks[-1]["h"] = h
+    keys(id, ks); return ks[-1]["t"]
+def lose(id, t0, t1, n): at(id, t0); at(id, t1, strength=carried(id, "strength") - n)
+def share(total, ids):  # a day's loss shared among units in proportion to their strength, largest remainders first
+    w = {i: carried(i, "strength") for i in ids}; raw = {i: total * w[i] / sum(w.values()) for i in ids}; n = {i: math.floor(raw[i]) for i in ids}
+    for i in sorted(ids, key=lambda i: raw[i] - n[i], reverse=True)[:total - sum(n.values())]: n[i] += 1
+    return n
+LINE_AT = dict(beale=(8, 25), us7=(85, 28), plauche=(175, 28), lacoste=(230, 28), daquin=(290, 28), us44=(378, 28), marines=(520, 28), carroll=(680, 30),
+               adair=(680, 110), coffee=(1150, 25), harrison=(420, 320), hinds=(250, 480), **{f"bat{i + 1}": (d, 6) for i, d in enumerate(BATT_D)})
+POST = {k: line(*v) for k, v in LINE_AT.items()}
+BATTERIES = [f"bat{i}" for i in range(1, 9)]
+ON_LINE = ["beale", "us7", "plauche", "lacoste", "daquin", "us44", "marines", "carroll", "adair", "coffee"]
+
+# ---- 23 December: the landing and the night battle ----
+# Keane's advance comes down Villeré's canal from the swamp and takes the house about half past eleven, then camps on
+# the river road. Jackson comes down the river road from the city; Coffee's mounted men reach de la Ronde's at
+# nightfall, the main column the British camp about seven. The Carolina opens at half past seven, the land attack
+# goes in half an hour later, and both sides draw off about half past nine.
+CAMP23 = {"r85": (2300, -1150), "r95": (2050, -900), "r4": (2750, -1150), "r93": (2950, -1000)}
+for id, p0, n in (("r85", (3460, 900), 0), ("r95", (3470, 1150), 1), ("r4", (3480, 1400), 2)):
+    appear(id, START, p0, "column", h=190)
+    move(id, START, [(3420 - 60 * n, -350 - 60 * n)], h=270, kmh=3)
+    at(id, D(23, "11:40"), state="column"); move(id, D(23, "11:41"), [CAMP23[id]], h=270)
+appear("carolina", D(23, "17:20"), CENTRE[1], "column")
+move("carolina", D(23, "17:20"), [p for p in CENTRE[2:] if p[0] < 2100] + [CAROLINA], h=90, kmh=4)
+keys("carolina", [K(D(23, "19:30"), CAROLINA, state="firing"), K(D(23, "21:00"), CAROLINA, state="line")])
+# Coffee, with Beale's rifles, up the de la Ronde avenue to the house at nightfall, then round against the British right
+for id, t, dx in (("coffee", "16:00", 0), ("beale", "16:06", 80)):
+    appear(id, D(23, t), ENTRY_E, "column")
+    move(id, D(23, t), road(ENTRY_E, on_road(DLR[0])) + [(DLR[0] + dx, DLR[1])], h=60, kmh=5.8)
+    move(id, D(23, "18:50"), [(1500 + dx, 50)], h=150)
+    move(id, D(23, "20:00"), [(2100 + dx, -450)], h=150, state="firing", moving="charge")
+JACKSON = [("marines", "17:15", on_road(2050), on_road(1300), on_road(1200)), ("bat7", "17:18", on_road(1980), on_road(1220), on_road(1150)),
+           ("us7", "17:21", (2000, -1200), on_road(1120), (1100, -1050)), ("us44", "17:26", (1950, -1060), on_road(1020), (1000, -1000)),
+           ("plauche", "17:31", (1900, -900), (1150, -950), (1050, -850)), ("daquin", "17:36", (1850, -760), (1100, -800), (1000, -700))]
+for id, t, fight, wait, rally in JACKSON:
+    appear(id, D(23, t), ENTRY_E, "column")
+    move(id, D(23, t), road(ENTRY_E, on_road(wait[0])) + [wait], h=90, kmh=4.5)
+    move(id, D(23, "20:00"), [fight], h=80, state="firing")
+# the British stand to; the 21st comes up from the canal against Coffee, the 93rd later in the night
+keys("r85", [K(D(23, "20:00"), CAMP23["r85"], state="firing", h=260)]); keys("r4", [K(D(23, "20:00"), CAMP23["r4"], state="column")])
+move("r4", D(23, "20:00"), [(2300, -950)], h=250, state="firing")
+keys("r95", [K(D(23, "20:00"), CAMP23["r95"], state="firing", h=320)])
+appear("r21", D(23, "20:15"), VILLERE, "column"); move("r21", D(23, "20:15"), [(2350, -600)], h=300, state="firing")
+appear("r93", D(23, "22:30"), VILLERE, "column"); move("r93", D(23, "22:30"), [CAMP23["r93"]], h=270)
+# the losses: 213 American (24 killed, 115 wounded, 74 missing) and 277 British, shared by strength
+for id, n in share(213, ["coffee", "beale", "us7", "us44", "marines", "plauche", "daquin", "bat7"]).items(): lose(id, D(23, "20:15"), D(23, "20:49" if id in ("coffee", "beale") else "21:30"), n)
+for id, dx in (("coffee", 0), ("beale", 80)): move(id, D(23, "20:50"), [(1450 + dx, -200)], h=150, state="firing", moving="retreat")
+for id, n in share(277, ["r85", "r95", "r4", "r21"]).items(): lose(id, D(23, "20:45"), D(23, "21:30"), n)
+for id in ("r85", "r95", "r4", "r21"): at(id, D(23, "21:31"), state="line")
+for id, t, fight, wait, rally in JACKSON: move(id, D(23, "21:31"), [rally], h=90, moving="retreat")
+for id, dx in (("coffee", 0), ("beale", 80)): move(id, D(23, "21:31"), [(DLR[0] + dx, DLR[1] - 100)], h=90, moving="retreat")
+# 24 December, four in the morning: back two miles to the Rodriguez Canal
+for n, id in enumerate(["marines", "bat7", "us7", "us44", "plauche", "daquin", "coffee", "beale"]):
+    move(id, D(24, f"04:{n * 2:02d}"), ([on_road(-800)] if id in ("marines", "bat7", "us7", "us44") else []) + [POST[id]], h=HUS)
+for id, n in (("us7", 430), ("us44", 240), ("coffee", 500), ("plauche", 289), ("daquin", 150), ("beale", 30), ("marines", 50), ("bat7", 24)): regroup(id, D(24, "06:00"), n)
+
+# ---- 24 December to 7 January: the line, the camp, the two probes ----
+for id, t in (("carroll", "08:00"), ("lacoste", "08:10"), ("hinds", "08:16")):
+    appear(id, D(24, t), ENTRY_E, "column"); move(id, D(24, t), road(ENTRY_E, on_road(-2300)) + [POST[id]], h=HUS, kmh=6 if id == "hinds" else PACE)
+for id in BATTERIES:
+    if id != "bat7": appear(id, D(24, "10:00"), POST[id], h=HUS)
+# the British move up to de la Ronde's and Bienvenu's by the river; the rest of the army joins them on the 25th
+CAMP_A = {"r85": (-150, -520), "r95": (200, -650), "r4": (550, -800), "r21": (900, -900), "r93": (1250, -980), "wi5": (350, -420), "r44": (750, -600), "wi1": (1150, -700), "ld14": (1550, -900)}
+CAMP_B = {k: (x, y + 700) for k, (x, y) in CAMP_A.items()}
+for n, id in enumerate(["r85", "r95", "r4", "r21", "r93"]): move(id, D(24, f"08:{n * 4:02d}"), [CAMP_A[id]], h=HBR)
+for n, id in enumerate(["wi5", "r44", "wi1", "ld14"]):
+    appear(id, D(25, f"12:{n * 5:02d}"), VILLERE, "column"); move(id, D(25, f"12:{n * 5:02d}"), [CAMP_A[id]], h=HBR)
+# 27 December: a British battery burns the Carolina with hot shot
+at("carolina", D(27, "07:00"), state="retreat"); at("carolina", D(27, "08:30"), state="hidden")
+# 28 December: the reconnaissance in force, in two columns by the river and the swamp, skirmishers between
+appear("louisiana", D(28, "06:00"), LOUISIANA_AT, h=120)
+keys("louisiana", [K(D(28, "09:00"), LOUISIANA_AT, state="firing"), K(D(28, "11:30"), LOUISIANA_AT, state="line"), K(D(28, "18:00"), LOUISIANA_AT, state="hidden")])
+RIVER_COL = {"r93": front(60, 760), "r85": front(90, 900), "wi1": front(110, 1050)}
+SWAMP_COL = {"r21": front(780, 700), "r4": front(760, 830), "r44": front(740, 960), "wi5": front(720, 1090)}
+for n, (id, p) in enumerate([*RIVER_COL.items(), *SWAMP_COL.items(), ("r95", front(420, 620))]):
+    move(id, D(28, f"08:{30 + n * 2:02d}"), [p], h=HBR, state="firing", kmh=3)
+for id in [*BATTERIES]: keys(id, [K(D(28, "09:20"), POST[id], state="firing"), K(D(28, "11:30"), POST[id], state="line")])
+lose("carroll", D(28, "09:40"), D(28, "10:40"), 15)  # Hutchinson's detachment, driven in on the swamp flank
+for id, n in share(56, list(RIVER_COL)).items(): lose(id, D(28, "09:50"), D(28, "10:30"), n)
+for n, id in enumerate([*RIVER_COL, "r95", *SWAMP_COL]):
+    move(id, D(28, f"{10 if id in RIVER_COL else 11}:{30 + n:02d}"), [CAMP_A[id]], h=HBR, moving="retreat" if id in RIVER_COL else "column")
+# 29 December: Patterson's first guns ashore on the west bank; Morgan's militia drawn from 1 January
+appear("patterson", D(29, "18:00"), PATTERSON, h=heading(PATTERSON, front(300, 500)))
+appear("morgan", D(1, "00:00"), mline(110, -25), h=HUS); appear("morgan_guns", D(1, "00:00"), mline(50, -12), h=HUS)
+# 1 January: batteries built overnight 600 yards out; the duel from breakfast to one; a probe on the swamp flank; the
+# infantry formed for an assault that Pakenham calls off at three
+for id, p in BR_BATT.items(): appear(id, D(1, "02:00"), p, h=HBR)
+ASSAULT1 = {"r85": front(150, 900), "r93": front(250, 900), "wi1": front(200, 1050), "r21": front(650, 900), "r4": front(750, 900), "r44": front(600, 1050), "wi5": front(700, 1050), "r95": front(500, 950)}
+for n, (id, p) in enumerate(ASSAULT1.items()): move(id, D(1, f"06:{30 + n * 2:02d}"), [p], h=HBR, kmh=3)
+for id in [*BR_BATT, *BATTERIES, "patterson"]: at(id, D(1, "08:00"), state="firing")
+for id, n in [*share(34, BATTERIES).items(), *share(78, list(BR_BATT)).items()]: lose(id, D(1, "08:10"), D(1, "12:50"), n)
+for id in [*BR_BATT, *BATTERIES, "patterson"]: at(id, D(1, "13:00"), state="line")
+move("r95", D(1, "09:00"), [front(1050, 300)], h=HBR, state="firing")
+keys("coffee", [K(D(1, "09:20"), POST["coffee"], state="firing"), K(D(1, "11:00"), POST["coffee"], state="line")])
+move("r95", D(1, "11:00"), [ASSAULT1["r95"]], h=HBR, moving="retreat")
+for n, id in enumerate(ASSAULT1): move(id, D(1, f"15:{n * 2:02d}"), [CAMP_A[id]], h=HBR)
+for id in BR_BATT: at(id, D(1, "22:00"), state="hidden")
+# after the duel the camp moves back from the river to the back grounds of de la Ronde's and Bienvenu's
+for n, id in enumerate(CAMP_A): move(id, D(2, f"10:{n * 3:02d}"), [CAMP_B[id]], h=HBR)
+# 4 January: the Kentuckians; 6 January: Lambert with the 7th and 43rd
+for id, t in (("adair", "12:00"), ("harrison", "12:10")):
+    appear(id, D(4, t), ENTRY_E, "column"); move(id, D(4, t), road(ENTRY_E, on_road(-2300)) + [POST[id]], h=HUS)
+for id, t, p in (("r7", "12:00", (1550, 100)), ("r43", "12:06", (1850, -50))):
+    appear(id, D(6, t), VILLERE, "column"); move(id, D(6, t), [p], h=HBR); CAMP_B[id] = p
+# 7 January: the strengths of 8 January, Pringle's other ranks; Rennie's light companies come out of the 4th and 21st
+for id, n in (("r85", 298), ("r4", 672), ("r21", 725), ("r93", 775), ("r44", 427), ("wi1", 755), ("wi5", 570)): regroup(id, D(7, "18:00"), n)
+move("r85", D(7, "19:00"), [MOUTH], h=200)
+for id in ("seamen", "rmar"): appear(id, D(7, "22:00"), (MOUTH[0] + (60 if id == "seamen" else 120), MOUTH[1] + 40), h=200)
+appear("arnaud", D(7, "18:00"), PICKET, h=heading(PICKET, (500, -1700)))
+appear("ross", D(7, "18:00"), REDOUBT, h=HUS)
+
+# ---- 8 January ----
+# The boats take the night to reach the river and the crossing is hours late; the first 500 are over by half past five,
+# a thousand yards below the mouth. Davis's Kentuckians reach Morgan's line at four.
+for id in ("r85", "seamen", "rmar"): at(id, D(8, "03:00"), state="hidden")
+appear("davis", D(8, "03:00"), ENTRY_W, "column"); move("davis", D(8, "03:00"), road(ENTRY_W, on_road(R0[0] - 60, ROAD_W), ROAD_W) + [mline(450, -20)], h=HUS)
+appear("r85", D(8, "05:30"), LANDING, "column", h=290); appear("seamen", D(8, "05:30"), (LANDING[0] + 80, LANDING[1] - 30), "column", h=290)
+appear("rmar", D(8, "06:00"), (LANDING[0] + 40, LANDING[1] - 80), "column", h=290)
+# Pakenham's columns form in the dark, Gibbs's toward Battery 7 and Keane's by the river, Lambert's reserve behind
+FORM = {"r21": front(560, 560), "r4": front(520, 650), "wi5": front(480, 760), "r44": front(380, 920), "r93": front(150, 600), "wi1": front(120, 760),
+        "rennie": front(30, 520), "r95": front(450, 450), "r7": front(250, 950), "r43": front(600, 950), "ld14": front(420, 1060)}
+appear("rennie", D(8, "03:00"), CAMP_B["r4"], "column")
+for n, (id, p) in enumerate(FORM.items()): move(id, D(8, f"03:{10 + n * 3:02d}"), [p], h=HBR, state="column", kmh=3)
+appear("brC", D(8, "03:00"), front(400, 731), h=HBR)
+keys("brC", [K(D(8, "06:20"), front(400, 731), state="firing"), K(D(8, "09:00"), front(400, 731), state="line")])
+for id in [*BATTERIES, "patterson"]: at(id, D(8, "06:20"), state="firing")
+# the rocket at twenty past six; Rennie on the redoubt, Gibbs on Battery 7, the 93rd across the field; broken in
+# about twenty-five minutes, the columns rally four hundred yards out. Losses are the regimental returns.
+LOSS = {"r4": 301, "r21": 411, "rennie": 100, "r44": 278, "wi5": 1, "r93": 164, "wi1": 29, "r95": 112, "r7": 102, "r43": 218}
+move("rennie", D(8, "06:20"), [(REDOUBT[0] + 10 * V[0], REDOUBT[1] + 10 * V[1])], h=HBR, state="firing", moving="charge", kmh=5)
+keys("ross", [K(D(8, "06:22"), REDOUBT, state="firing")]); move("ross", D(8, "06:29"), [line(30, 40)], h=HUS, state="firing", moving="retreat")
+lose("rennie", D(8, "06:31"), D(8, "06:38"), 70); move("rennie", D(8, "06:39"), [front(40, 380)], h=HBR, state="line", moving="rout", kmh=5)
+lose("rennie", plus(KEYS["rennie"][-1]["t"], 1), D(8, "07:10"), 30)
+move("ross", D(8, "06:50"), [REDOUBT], h=HUS, state="firing")
+move("r95", D(8, "06:20"), [front(450, 160)], h=HBR, state="firing", moving="charge", kmh=2.5)
+for id, d, f in (("r21", 560, 25), ("r4", 520, 70)): move(id, D(8, "06:20"), [front(d, f)], h=HBR, state="charge", moving="charge", kmh=2.2)
+move("r44", D(8, "06:20"), [front(540, 300)], h=HBR, moving="column", state="charge", kmh=3.5)
+move("r44", D(8, "06:33"), [front(540, 110)], h=HBR, state="firing", moving="charge", kmh=2.5)
+move("wi5", D(8, "06:22"), [front(500, 460)], h=HBR, kmh=2.5)
+move("r93", D(8, "06:22"), [front(470, 220)], h=HBR, state="firing", moving="charge", kmh=2.5)
+move("wi1", D(8, "06:24"), [front(150, 520)], h=HBR, kmh=2.5)
+for id in ("r21", "r4", "r44", "r93", "r95", "wi5", "wi1"): lose(id, max(KEYS[id][-1]["t"], D(8, "06:36")), D(8, "06:44"), round(LOSS[id] * 0.7))
+for id in ON_LINE: keys(id, [K(D(8, "06:25"), POST[id], state="firing")])
+RALLY = {"r21": front(560, 366), "r4": front(520, 420), "r44": front(480, 480), "r93": front(380, 420), "r95": front(450, 400), "wi5": front(480, 600), "wi1": front(150, 600)}
+for id, p in RALLY.items(): move(id, D(8, "06:45"), [p], h=HBR, moving="retreat", kmh=5)
+for id in RALLY: lose(id, plus(KEYS[id][-1]["t"], 1), D(8, "08:25"), LOSS[id] - round(LOSS[id] * 0.7))
+# Lambert sends part of the reserve forward, then halts it; it lies down in the stubble about 650 yards out
+for id, d in (("r7", 250), ("r43", 600), ("ld14", 420)): move(id, D(8, "07:00"), [front(d, 594 if id != "ld14" else 700)], h=HBR)
+for id in ("r7", "r43"): lose(id, plus(KEYS[id][-1]["t"], 1), D(8, "14:00"), LOSS[id])
+for id, n in share(34, ON_LINE).items(): lose(id, D(8, "06:30"), D(8, "08:25"), n)
+for id in ON_LINE: at(id, D(8, "08:30"), state="line")
+at("ross", D(8, "08:30"), state="line")
+for id in RALLY: move(id, D(8, "09:00"), [(RALLY[id][0] + 250 * V[0], RALLY[id][1] + 250 * V[1])], h=HBR)
+for id in BATTERIES: at(id, D(8, "14:00"), state="line")
+# the west bank: Thornton up the bank, Arnaud's picket turned, then Davis, and Morgan's line breaks; Patterson spikes his
+# guns. About ten Lambert orders Gubbins back.
+t_pk = move("r85", D(8, "06:00"), road(on_road(LANDING[0], ROAD_W), on_road(PICKET[0] + 250, ROAD_W), ROAD_W), h=290, state="firing", kmh=3.5)
+move("seamen", D(8, "06:03"), road(on_road(LANDING[0] + 80, ROAD_W), on_road(PICKET[0] + 380, ROAD_W), ROAD_W), h=290, kmh=3.5)
+move("rmar", D(8, "06:10"), road(on_road(LANDING[0] + 40, ROAD_W), on_road(PICKET[0] + 500, ROAD_W), ROAD_W), h=290, kmh=3.5)
+keys("arnaud", [K(plus(t_pk, 2), PICKET, state="firing")]); move("arnaud", plus(t_pk, 10), [mline(250, -40)], h=HUS, moving="retreat", kmh=5)
+ATTACK_W = {"r85": mline(150, 140), "seamen": mline(40, 170), "rmar": mline(560, 120)}
+for id, p in ATTACK_W.items(): move(id, plus(t_pk, 14), [p], h=HBR, state="firing", kmh=3.5)
+t_hit = max(KEYS[id][-1]["t"] for id in ATTACK_W)
+for id in ("morgan", "morgan_guns", "davis", "arnaud", "patterson"): at(id, plus(t_hit, -10) if id != "patterson" else t_hit, state="firing")
+for id, n in share(32, ["morgan", "davis", "arnaud"]).items(): lose(id, plus(t_hit, -5), plus(t_hit, 8), n)
+for id, n in (("r85", 44), ("seamen", 20), ("rmar", 18)): lose(id, plus(t_hit, 1), plus(t_hit, 20), n)
+FLIGHT = road(on_road(R0[0] - 150, ROAD_W), ENTRY_W, ROAD_W)
+move("davis", plus(t_hit, 10), [mline(450, -300)] + FLIGHT, h=300, state="line", moving="rout", kmh=5.5)
+for id, dt_ in (("morgan", 20), ("arnaud", 21), ("morgan_guns", 22)): move(id, plus(t_hit, dt_), FLIGHT, h=300, state="line", moving="rout" if id != "morgan_guns" else "retreat", kmh=5 if id != "morgan_guns" else 4)
+move("patterson", plus(t_hit, 25), FLIGHT[1:], h=300, state="line", moving="retreat")
+for id in ("davis", "morgan", "arnaud", "morgan_guns", "patterson"): at(id, plus(KEYS[id][-1]["t"], 2), state="hidden")
+for id, p in (("r85", mline(120, -30)), ("seamen", mline(30, -30)), ("rmar", mline(300, -30))): move(id, plus(t_hit, 25), [p], h=HBR)
+for n, id in enumerate(("r85", "seamen", "rmar")): move(id, D(8, f"10:{30 + n * 3}"), road(on_road(last(id)[0], ROAD_W), on_road(LANDING[0] - 100 * n, ROAD_W), ROAD_W), h=110)
+assert set(KEYS) == set(BASE), set(KEYS) ^ set(BASE)
+for id in KEYS:
+    if carried(id, "state") != "hidden" and sec(KEYS[id][-1]["t"]) < sec(END): at(id, END)
+
+# ---- assemble and check ----
+units = []
+TOP = {"infantry": 6, "light_infantry": 6, "militia": 6, "riflemen": 6, "artillery": 6, "cavalry": 15}  # km/h, the fastest any leg may go
+for id, side, short, name, commander, type, strength, extra in OOB:
+    ks, state = KEYS[id], None
+    for a, b in zip(ks, ks[1:]):
+        state = a.get("state", state)
+        assert sec(b["t"]) > sec(a["t"]), (id, a["t"], b["t"])
+        if state == "hidden": continue
+        moved = (a["x"], a["y"]) != (b["x"], b["y"])
+        assert not (moved and sec(b["t"]) - sec(a["t"]) > 3 * 3600), (id, a["t"], b["t"], "a march leg over three hours")
+        kmh = math.dist((a["x"], a["y"]), (b["x"], b["y"])) / (sec(b["t"]) - sec(a["t"])) * 3.6
+        assert kmh <= TOP[type], (id, a["t"], b["t"], f"{kmh:.1f} km/h")
+        for f in (i / 20 for i in range(1, 20)):
+            q = (a["x"] + f * (b["x"] - a["x"]), a["y"] + f * (b["y"] - a["y"]))
+            assert wet(q) == (id in SHIPS), (id, a["t"], b["t"], q, "a leg through the river" if id not in SHIPS else "a leg over land")
+    state = None
+    for k in ks:
+        state = k.get("state", state)
+        assert state == "hidden" or wet((k["x"], k["y"])) == (id in SHIPS), (id, k["t"], (k["x"], k["y"]), "afloat" if id not in SHIPS else "aground")
+    units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength, keys=ks, **extra))
+
+events = []
 
 battle = dict(
     id="new-orleans", name="Battle of New Orleans", date="1814-12-23", dateText="23 December 1814 to 8 January 1815", place="Chalmette, below New Orleans, Louisiana",
