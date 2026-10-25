@@ -224,6 +224,7 @@ def keys(id, ks):  # every leg starts where the unit stands, unless it is coming
     have = KEYS.setdefault(id, [])
     if have and ks:
         a, b = have[-1], ks[0]
+        assert sec(b["t"]) >= sec(a["t"]), (id, a["t"], b["t"], "a key before the last one: the unit is still on its way")
         assert carried(id, "state") == "hidden" or (a["x"], a["y"]) == (b["x"], b["y"]), (id, a["t"], b["t"], "a leg must start where the unit stands")
         if a["t"] == b["t"]: a.update({k: v for k, v in b.items() if k != "t"}); ks = ks[1:]
     have += ks
@@ -248,7 +249,8 @@ def move(id, t0, pts, h=None, state="line", moving="column", kmh=PACE):  # from 
     keys(id, ks); return ks[-1]["t"]
 def go(id, t0, t1, pts, h=None, state="line", moving="column"):  # from where it stands along pts, arriving at t1
     hold_until(id, t0)
-    pts = [last(id)] + [p for p in pts if math.dist(p, last(id)) > 5]; d = [0]
+    pts = [last(id)] + pts; pts = [p for i, p in enumerate(pts) if i == 0 or math.dist(p, pts[i - 1]) > 5]; d = [0]
+    if len(pts) == 1: return at(id, t1, state=state, **({"h": h} if h is not None else {}))  # already there
     for a, b in zip(pts, pts[1:]): d.append(d[-1] + math.dist(a, b))
     ks = [K(fmt(sec(t0) + (sec(t1) - sec(t0)) * d[i] / d[-1]), p, h=heading(p, pts[i + 1]) if i + 1 < len(pts) else heading(pts[i - 1], p)) for i, p in enumerate(pts)]
     ks[0]["state"] = moving; ks[-1]["state"] = state
@@ -270,7 +272,160 @@ HILL = dict(
 for n, id in enumerate(("glengarry", "incmil", "k8lc", "tomkins", "parry", "norton")): appear(id, START, (NORTH[0], NORTH[1] - 60 * n), 180, "column")
 appear("ld19", START, rd(-20), 200, "line"); appear("pld", START, rd(-800), 140, "line")
 
-assert set(KEYS) <= set(BASE), set(KEYS) - set(BASE)
+AMERICANS = [row[0] for row in OOB if row[1] == "american"]
+for id in AMERICANS + ["royals", "r103", "k8", "r104", "hamilton", "r89", "royalsdet", "lc41", "ra24"]: appear(id, START, EAST if BASE[id][1] == "american" else NORTH, 0, "hidden")
+def to_hill(id):  # down the Queenston road to the junction, then along the lane for the right of the line
+    p, _ = HILL[id]; pts = road(last(id), J)
+    return pts + ([P['lane_drummond'], (p[0], 1800)] if p[0] < -1950 else []) + [p]
+
+# ---- the morning: Pearson's light brigade down the Queenston road; by seven it holds the high ground at the lane.
+# The dragoons are out ahead at Bridgewater, and toward the Chippawa camp. At eight they fall back on the lane and
+# leave a picket at Mrs. Wilson's tavern ----
+for n, id in enumerate(("glengarry", "incmil", "k8lc", "tomkins", "parry", "norton")):
+    go(id, plus(A("06:10"), 3 * n), plus(A("06:45"), 3 * n), to_hill(id), HILL[id][1])
+WILSON = rd(760)
+move("ld19", A("08:00"), road(last("ld19"), J) + [HILL["ld19"][0]], HILL["ld19"][1], kmh=8)
+move("pld", A("08:00"), road(last("pld"), WILSON), 150, kmh=8)
+
+# ---- four o'clock: Scott's brigade from the camp over the King's Bridge up the Portage road for Queenston, Harris's
+# dragoons ahead. At five they drive in the picket at Mrs. Wilson's. The column halts short of the wood while Scott
+# reports the enemy in force (the halt is inferred), and Riall orders the light brigade back ----
+COL = dict(harris=("16:00", -720), towson=("16:03", -640), r9=("16:05", -560), r11=("16:09", -440), r25=("16:12", -340))
+for id, (t, y) in COL.items():
+    appear(id, A(t), EAST, 270, "column"); move(id, A(t), road(EAST, rd(y)) if id != "harris" else road(EAST, rd(870)), state="column", kmh=4.5 if id != "harris" else 5)
+move("pld", A("17:02"), road(WILSON, J) + [(-1450, 2200)], 180, kmh=10)
+for id in ("glengarry", "incmil", "k8lc", "parry", "norton", "tomkins"):  # a few hundred metres up the road and the lane
+    p = HILL[id][0]; go(id, A("17:15"), A("17:40"), [(p[0], p[1] + 380)], 180, "retreat", "retreat")
+    at(id, A("17:41"), state="line")
+
+# ---- towards six: Drummond meets Morrison's column on the Queenston road and brings it on. He countermands the retreat
+# and forms the line: the guns on the summit, the 89th, the Royals detachment and the 41st light company in the rear of
+# the hill, the Glengarry on the right, the Incorporated Militia and the King's on the left of the road ----
+BEHIND = dict(r89=(-1600, 1910), royalsdet=(-1780, 1905), lc41=(-1960, 1915), ra24=(-1700, 1748))
+for n, id in enumerate(("ra24", "r89", "royalsdet", "lc41")):
+    t = plus(A("17:40"), 3 * n); appear(id, t, NORTH, 180, "column")
+    move(id, t, road(NORTH, J) + [BEHIND[id]], 180, kmh=5)
+for id in ("glengarry", "incmil", "k8lc", "parry", "norton", "tomkins"):
+    go(id, A("17:55"), A("18:15"), [HILL[id][0]], HILL[id][1])
+at("tomkins", A("18:45"), state="firing"); at("ra24", A("18:45"), state="firing")
+
+# ---- between six and seven: Scott clears the wood. The 9th, 11th and 22nd deploy in the fields on the left of the
+# road, the 25th on the right; Towson unlimbers on the highway ----
+DEPLOY = dict(r9=((-1680, 1330), 15), r11=((-1420, 1320), 5), towson=(rd(1330), 315), r25=((-1140, 1370), 345), harris=(rd(1080), 330))
+for n, id in enumerate(("harris", "towson", "r9", "r11", "r25")):
+    p, h = DEPLOY[id]; t = plus(A("18:20"), 2 * n)
+    move(id, t, road(last(id), rd(min(p[1], 1250))) + [p], h, "line", kmh=5)
+for id in ("r9", "r11", "towson"): at(id, A("19:00"), state="firing")
+for id in ("glengarry", "incmil", "k8lc"): at(id, A("19:00"), state="firing")
+
+# ---- the attack on the hill: the 11th and 22nd straight at it, the 9th round the left. A shell blows up one of
+# Towson's ammunition wagons ----
+go("r11", A("19:15"), A("19:30"), [(-1440, 1540)], 345, "firing", "line")
+go("r9", A("19:15"), A("19:35"), [(-1900, 1520)], 20, "firing", "line")
+lose("towson", A("19:17"), 12)
+for id, n in (("r9", 90), ("r11", 45), ("glengarry", 20), ("incmil", 25), ("k8lc", 5)): lose(id, A("19:40"), n)
+
+# ---- Jesup's 25th through the thickets to the interval by the bank, into the Incorporated Militia's flank and onto
+# the Queenston road behind the British left. Riall is taken on the road; Lisle's dragoons run to Muddy Run ----
+move("r25", A("19:30"), [JESUP[1], (-900, 1720)], 270, "firing", kmh=3)
+lose("r25", A("20:00"), 30); lose("incmil", A("20:00"), 50); lose("k8lc", A("20:00"), 10)
+for id, p in (("incmil", (-1480, 2140)), ("k8lc", (-1380, 2160))): go(id, A("20:01"), A("20:15"), [p], 180, "line", "retreat")
+go("r25", A("20:05"), A("20:20"), [(-1000, 1950), (-1420, 2050)], 270, "firing", "line")
+move("ld19", A("20:08"), road(last("ld19"), NORTH), kmh=12, moving="rout", state="rout"); hide("ld19", plus(KEYS["ld19"][-1]["t"], 1))
+go("pld", A("20:08"), A("20:20"), [(-1720, 2230)], 140, "line", "retreat"); lose("pld", A("20:21"), 3)
+go("r89", A("20:12"), A("20:20"), [(-1570, 1960)], 95, "firing", "line")  # its left thrown back to face the road
+lose("r25", A("20:30"), 40); lose("r89", A("20:30"), 20); lose("incmil", A("20:30"), 50)
+go("r25", A("20:35"), A("20:55"), [(-1000, 1950), (-1000, 1720)], 270, "line", "column")
+go("r89", A("20:45"), A("20:50"), [BEHIND["r89"]], 180)
+
+# ---- half past eight: the 11th and 22nd go to pieces; the 9th alone keeps its formation ----
+lose("r9", A("20:25"), 110); lose("r11", A("20:25"), 65)
+go("r11", A("20:31"), A("20:48"), [(-1350, 1220)], 200, "line", "rout"); at("r11", A("20:55"), h=345)
+for id in ("r9", "towson", "glengarry", "k8lc"): at(id, A("20:35"), state="line")
+lose("towson", A("20:36"), 8); lose("glengarry", A("20:36"), 15)
+
+# ---- nine o'clock: Ripley's and Porter's brigades and Hindman's guns come up the road, Brown last with the reserve;
+# Colonel Scott's column comes in along the lane from the west and forms a second line in rear of Lundy's Lane ----
+HOLLOW = dict(r23=(-1290, 1460), r21=(-1420, 1420), r1=(-1560, 1390), ritchie=rd(1300), porter=(-1720, 1340))
+for n, id in enumerate(("r23", "r1", "r21", "ritchie", "porter")):
+    t = plus(A("19:00"), 4 * n); appear(id, t, EAST, 270, "column")
+    go(id, t, plus(A("20:58"), 3 * n), road(EAST, rd(1250)) + [HOLLOW[id]], 330, "column")
+LINE2 = dict(r103=(-1880, 2030), k8=(-2070, 2010), r104=(-1970, 2100), royals=(-2260, 1990), hamilton=(-2180, 2130))
+for n, id in enumerate(("r103", "k8", "r104", "royals", "hamilton")):
+    t = plus(A("20:44"), 4 * n); appear(id, t, WEST, 90, "column")
+    move(id, t, [(-2450, 1802), (LINE2[id][0], 1950), LINE2[id]], 180, kmh=4.5)
+for id, p in (("glengarry", (-2460, 1960)), ("parry", (-2660, 1950)), ("norton", (-2860, 1890))): go(id, A("21:10"), A("21:25"), [p], 180, "line", "retreat")
+
+# ---- Miller's 21st up through the dark from the hollow to the log fence; one volley, then the battery. The 1st gives
+# way, the 23rd lost heavily, Porter on their left, the 25th in the thickets on the right ----
+go("r21", A("21:15"), A("21:27"), [(FENCE[0][0] + 80, FENCE[0][1] - 10)], 320, "firing", "line")
+go("r21", A("21:28"), A("21:30"), [(-1745, 1830)], 0, "firing", "charge")
+for id, n in (("tomkins", 12), ("ra24", 10)): at(id, A("21:30"), state="surrender", strength=carried(id, "strength") - n)
+lose("r21", A("21:31"), 25)
+go("r23", A("21:18"), A("21:33"), [(-1590, 1800)], 0, "firing", "line")
+go("r1", A("21:18"), A("21:33"), [(-1950, 1770)], 355, "firing", "line")
+lose("r1", A("21:35"), 20); go("r1", A("21:36"), A("21:45"), [(-1920, 1560)], 180, "line", "retreat"); at("r1", A("21:47"), h=355)
+go("r1", A("21:50"), A("21:58"), [(-1960, 1770)], 355, "line", "line")
+go("porter", A("21:20"), A("21:40"), [(-2180, 1730)], 345, "firing", "line")
+go("ritchie", A("21:35"), A("21:50"), [(-1660, 1700)], 0, "line", "column")
+for id, p in (("r89", (-1560, 2010)), ("royalsdet", (-1720, 2040)), ("lc41", (-1720, 2120))): go(id, A("21:31"), A("21:40"), [p], 180, "line", "retreat")
+lose("r23", A("21:40"), 45); lose("r89", A("21:40"), 40); lose("royalsdet", A("21:40"), 15)
+for id, p in (("r9", (-1840, 1590)), ("r11", (-1600, 1620)), ("towson", (-1480, 1650))): go(id, A("21:40"), A("21:55"), [p], 0, "line", "column")
+
+# ---- about ten, by moonlight: the first counterattack, in the darkness straight at the centre; the lines twenty
+# yards apart; repelled ----
+FRONT = ("r103", "r89", "k8", "royalsdet", "royals")
+REFORM = dict(LINE2, r89=(-1560, 2010), royalsdet=(-1720, 2040))
+for id in FRONT: go(id, A("22:00"), A("22:06"), [(last(id)[0], 1895 if id != "royals" else 1880)], 180, "firing", "charge")
+for id in ("r21", "r23", "r1", "porter", "ritchie"): at(id, A("22:00"), state="firing")
+for id, n in (("r103", 25), ("r89", 60), ("k8", 30), ("royalsdet", 20), ("royals", 35), ("r21", 25), ("r23", 30), ("r1", 13), ("porter", 25), ("ritchie", 10)): lose(id, A("22:12"), n)
+for id in FRONT: go(id, A("22:14"), A("22:24"), [REFORM[id]], 180, "line", "retreat")
+
+# ---- after half past ten: the second attack. Scott leads about 250 men past the guns; the 89th is repulsed at
+# about twenty paces, Ripley's men fire into Scott's column from behind, and it breaks. Scott and Brown are wounded ----
+for id in FRONT: go(id, A("22:45"), A("22:51"), [(last(id)[0], 1935)], 180, "firing", "charge")
+go("r9", A("22:44"), A("22:52"), [(-1680, 1880)], 10, "charge", "charge"); go("r11", A("22:44"), A("22:52"), [(-1580, 1880)], 10, "charge", "charge")
+for id, n in (("r9", 40), ("r11", 20), ("r89", 70), ("r103", 20), ("k8", 25), ("royals", 40), ("r21", 25), ("r23", 14), ("porter", 15), ("ritchie", 8)): lose(id, A("22:56"), n)
+go("r9", A("22:57"), A("23:10"), [(-1850, 1580)], 180, "line", "rout"); go("r11", A("22:57"), A("23:10"), [(-1600, 1600)], 180, "line", "rout")
+go("r89", A("22:57"), A("23:07"), [REFORM["r89"]], 180, "line", "retreat")
+go("r103", A("22:57"), A("23:05"), [(-1830, 2160)], 180, "line", "rout"); go("r103", A("23:15"), A("23:25"), [LINE2["r103"]], 180)
+for id in ("k8", "royalsdet", "royals"): go(id, A("22:57"), A("23:07"), [REFORM[id]], 180, "line", "retreat")
+for id in ("r21", "r23", "r1", "porter"): at(id, A("23:10"), state="line")
+
+# ---- almost midnight: the last attack, headed by Glew's light company of the 41st, reaches the summit and recovers
+# the guns ----
+go("lc41", A("23:45"), A("23:52"), [(-1720, 1850)], 180, "firing", "charge")
+for id in FRONT: go(id, A("23:45"), A("23:52"), [(last(id)[0], 1900)], 180, "firing", "charge")
+for id in ("r21", "r23", "r1", "porter", "ritchie"): at(id, A("23:45"), state="firing")
+for id, n in (("lc41", 37), ("r89", 64), ("r103", 15), ("k8", 15), ("royalsdet", 25), ("royals", 37), ("r21", 29), ("r23", 0), ("porter", 26), ("ritchie", 8)):
+    if n: lose(id, A("23:52"), n)
+for id, p in (("r21", (-1745, 1700)), ("r23", (-1580, 1700)), ("r1", (-1950, 1650)), ("porter", (-2150, 1630)), ("ritchie", (-1650, 1620))):
+    go(id, A("23:53"), B("00:02"), [p], carried(id, "h"), "firing", "line")
+for id in ("tomkins", "ra24"): at(id, B("00:00"), state="line")
+go("lc41", B("00:00"), B("00:05"), [(-1740, 1805)], 180, "line", "charge")
+
+# ---- twelve o'clock: Brown, exhausted by loss of blood, hands over to Ripley, who withdraws to the camp beyond the
+# Chippawa under desultory firing. The captured 24-pounders are left on the hill for want of horses ----
+HOME = ("r21", "r23", "r1", "porter", "ritchie", "r25", "r9", "r11", "towson", "harris")
+for n, id in enumerate(HOME):
+    t = move(id, plus(B("00:05"), 3 * n), [rd(1500 - 60 * n)], 150, "column", "retreat" if n < 5 else "column", kmh=4)
+    move(id, plus(t, 1), road(last(id), EAST), state="column", kmh=4.5); hide(id, plus(KEYS[id][-1]["t"], 1))
+for id in ("r103", "r89", "k8", "royalsdet", "royals"): at(id, B("00:03"), state="line")
+for id, p in (("r89", (-1560, 1880)), ("r103", (-1880, 1890)), ("royalsdet", (-1720, 1900)), ("k8", (-2070, 1880)), ("royals", (-2260, 1870)), ("lc41", (-1720, 1830))):
+    go(id, B("00:20"), B("00:30"), [p], 180)
+
+# ---- 26 July, nearly nine in the morning: Ripley comes back over the Chippawa with about 1,200 men, finds the hill held
+# in force, and retires, destroying the bridge behind him ----
+BACK = dict(r21=-30, r23=60, r1=150, r25=230, r9=310, r11=390)
+for n, id in enumerate(BACK):
+    t = plus(B("07:10"), 4 * n); appear(id, t, EAST, 270, "column")
+    move(id, t, road(EAST, rd(BACK[id] + 300)) + [rd(BACK[id] + 450)], state="column", kmh=4.5)
+for n, id in enumerate(BACK):  # in line across the fields short of the wood, facing the hill
+    go(id, plus(B("08:52"), n), B("09:05"), [(-650 - 110 * n, 620 + 15 * n)], 330)
+for n, id in enumerate(BACK):
+    t = plus(B("09:30"), 3 * n); move(id, t, road(last(id), EAST), state="column", kmh=4.5); hide(id, plus(KEYS[id][-1]["t"], 1))
+
+assert set(KEYS) == set(BASE), set(KEYS) ^ set(BASE)
 for id in KEYS:
     if carried(id, "state") != "hidden" and sec(KEYS[id][-1]["t"]) < sec(END): at(id, END)
 
