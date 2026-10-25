@@ -50,6 +50,17 @@ Static files only. `index.html` is the shell, `app.js` runs the camera, the cloc
 seconds of frames, which is how headless screenshots see smoke and the camera; `,select=howard` opens a unit's card;
 `,legend` opens the legend.
 
+A battle started from its beginning opens like a television programme: the whole map with every unit in place and
+no panels, the battle's name over its date fading in and out, then a four-second ease in to the frame Follow the
+action gives the first chapter. The panels fade back as the camera settles, and only then does the clock start.
+It runs once per load, from the start screen or on the first Play of a bare link such as `#cowpens`. A link with a
+time or a flag, Play after a seek, and a replay go straight to the battle, and any click, key, scroll or drag cuts to
+the landing. A battle that opens before sunrise keeps its night wash at dawn under the title. Under reduced motion
+the title holds still and the camera cuts. Each skin dresses the title. `,opening` on a link holds the opening at
+its title, for screenshots. See [ADR-0009](docs/adr/0009-opening-shot.md).
+
+![Cowpens, the opening shot's title](docs/screenshots/cowpens-opening.jpg)
+
 The chapters sit above the scrubber as ticks, their titles slanting up over the map on leader lines
 so crowded chapters can be spread apart: click one to jump there (the camera follows again). **Legend** in the
 top panel lists only the symbols the current battle uses. The story panel opens at each new chapter with the chapter's approximate hour; **Hide** folds it to the title. **Outcome** in the top panel opens to the result and each side's losses (`outcome` in `make.py`).
