@@ -196,6 +196,13 @@
    ]
   ]
  ],
+ "tints": [
+  {
+   "color": "rgba(96,102,110,0.3)",
+   "from": "17:50",
+   "until": "18:30"
+  }
+ ],
  "wind": {
   "x": 0.5,
   "y": 0.4
@@ -1499,61 +1506,61 @@
      "h": 0
     },
     {
-     "t": "16:49",
+     "t": "16:43",
      "x": 620,
      "y": -1450
     },
     {
-     "t": "16:50",
+     "t": "16:44",
      "x": 620,
      "y": -1450,
      "h": 70,
      "state": "column"
     },
     {
-     "t": "16:58:07",
+     "t": "16:51:34",
      "x": 1320,
      "y": -1200,
      "h": 353
     },
     {
-     "t": "17:00:51",
+     "t": "16:54:07",
      "x": 1290,
      "y": -950,
      "h": 351
     },
     {
-     "t": "17:03:37",
+     "t": "16:56:42",
      "x": 1250,
      "y": -700,
      "h": 344
     },
     {
-     "t": "17:05:39",
+     "t": "16:58:36",
      "x": 1200,
      "y": -520,
      "h": 329
     },
     {
-     "t": "17:07:18",
+     "t": "17:00:08",
      "x": 1122,
      "y": -391,
      "h": 319
     },
     {
-     "t": "17:09:20",
+     "t": "17:02:01",
      "x": 1001,
      "y": -250,
      "h": 271
     },
     {
-     "t": "17:18:04",
+     "t": "17:10:10",
      "x": 200,
      "y": -240,
      "h": 285
     },
     {
-     "t": "17:22:35",
+     "t": "17:14:23",
      "x": -200,
      "y": -130,
      "h": 50,
@@ -5642,19 +5649,19 @@
      "t": "18:02:10",
      "x": -961,
      "y": 971,
-     "h": 148
+     "h": 302
     },
     {
-     "t": "18:28:03",
-     "x": 300,
-     "y": -1040,
+     "t": "18:05:52",
+     "x": -1250,
+     "y": 1150,
      "h": 150,
      "state": "line"
     },
     {
      "t": "19:45",
-     "x": 300,
-     "y": -1040
+     "x": -1250,
+     "y": 1150
     }
    ],
    "loose": true
@@ -6009,19 +6016,19 @@
      "t": "17:58:34",
      "x": -961,
      "y": 971,
-     "h": 140
+     "h": 303
     },
     {
-     "t": "18:26:41",
-     "x": 700,
-     "y": -1000,
+     "t": "18:06:12",
+     "x": -1550,
+     "y": 1350,
      "h": 150,
      "state": "line"
     },
     {
      "t": "19:45",
-     "x": 700,
-     "y": -1000
+     "x": -1550,
+     "y": 1350
     }
    ],
    "loose": true
@@ -8750,7 +8757,161 @@
    ]
   }
  ],
- "events": [],
+ "events": [
+  {
+   "t": "05:00",
+   "title": "Chippawa, July 1814",
+   "text": "Brown's division crossed the Niagara on 3 July and took Fort Erie at five that afternoon, with 137 prisoners. On the 4th Scott's brigade marched north in a running fight of some sixteen miles, found the bridge over the Chippawa taken up and Riall behind a strong t\u00eate-de-pont, and fell back a little more than a mile to camp behind Street's Creek. Brown came up at eleven that night with the reserve. At dawn on the 5th Canadian militia and warriors are sniping at the pickets from the bushes north of the creek.",
+   "at": [
+    500,
+    -1250
+   ],
+   "view": 1800,
+   "speed": 300,
+   "when": "at dawn"
+  },
+  {
+   "t": "12:00",
+   "title": "Noon",
+   "text": "By noon the British attack one of the pickets, forty men under Treat, as it returns to camp on the American left. About noon Porter arrives from Buffalo with three hundred Pennsylvania volunteers and about four hundred Indians. Scott's brigade eats its late Fourth of July dinner.",
+   "at": [
+    700,
+    -1400
+   ],
+   "view": 1600,
+   "speed": 300,
+   "when": "about noon"
+  },
+  {
+   "t": "15:30",
+   "title": "Riall marches",
+   "text": "Riall marches out to give battle, at three by Merritt's journal and four by his own report, over the King's Bridge in three columns with the King's Regiment in advance; it reached him only this morning, about 400 strong by Drummond. Brown sees a cloud of dust rise toward Chippawa. Riall puts his regulars at about fifteen hundred, and the militia and Indians at not above three hundred.",
+   "at": [
+    -350,
+    750
+   ],
+   "view": 2200,
+   "speed": 60,
+   "when": "around 3:30 PM"
+  },
+  {
+   "t": "16:15",
+   "title": "Into the woods",
+   "text": "At four, by Brown's plan, Porter leads the Pennsylvania volunteers and the Indians from the rear of the camp into the woods on the left. The British light companies and the 2nd Lincoln go into the same woods from the north, with Norton's Grand River warriors thrown out far on their right.",
+   "at": [
+    -450,
+    -950
+   ],
+   "view": 1300,
+   "speed": 60,
+   "when": "4 o'clock"
+  },
+  {
+   "t": "16:30",
+   "title": "The woods fight",
+   "text": "About half past four Porter's advance meets the British light parties in the woods and drives them. The Western Indians break at the first volleys. The 2nd Lincoln stands for fifteen minutes, against at least 800 men by Merritt's count; it loses 43 men today, the heaviest loss of any Canadian militia unit in one action of the war. The Pennsylvanians drive them three-quarters of a mile.",
+   "at": [
+    -400,
+    -50
+   ],
+   "view": 1800,
+   "speed": 20,
+   "when": "about half-past four"
+  },
+  {
+   "t": "16:45",
+   "title": "Porter routed",
+   "text": "Near Chippawa Porter's men come within a few yards of the whole British line drawn up in order of battle, and they flee in every direction. From the cloud of dust and the heavy firing, Brown orders Scott forward and sends Gardner to bring up Ripley. Harris's dragoons stop the fugitives behind the creek.",
+   "at": [
+    -250,
+    200
+   ],
+   "view": 1300,
+   "speed": 20
+  },
+  {
+   "t": "17:00",
+   "title": "Over the bridge",
+   "text": "Riall comes out in order of battle about five, by Brown's report. Scott's brigade reaches the bridge over Street's Creek and is met by fire from nine field guns, by Scott's count. Towson's three guns open before the infantry is formed and take post by the river on the right. The battalions cross and form line to the left and front along Ussher's farm lane, while the 25th goes into the woods on the left. Seeing grey jackets, Riall takes them for 'a body of Buffalo militia'.",
+   "at": [
+    900,
+    -550
+   ],
+   "view": 900,
+   "speed": 20,
+   "when": "about five o'clock"
+  },
+  {
+   "t": "17:15",
+   "title": "Why, these are regulars!",
+   "text": "The Americans advance about 50 metres from the lane. Both lines halt to fire more than once, and close to within sixty or seventy paces by Scott's memoir, 75 metres by the park's panels. Scott throws the 11th's left wing and the 9th's right forward into an obtuse angle, with Towson on the extreme right, while the 25th in the woods checks the British right. The musketry lasts about 25 minutes.",
+   "at": [
+    450,
+    -100
+   ],
+   "view": 900,
+   "speed": 10
+  },
+  {
+   "t": "17:30",
+   "title": "The charge",
+   "text": "Towson silences the most effective British battery by blowing up an ammunition wagon, then turns canister on the infantry, now nearly in contact. Riall orders the Royal Scots and the 100th to charge, under a most destructive fire, and withdraws them; the King's moves up on the right.",
+   "at": [
+    450,
+    -30
+   ],
+   "view": 900,
+   "speed": 10,
+   "when": "after about twenty-five minutes"
+  },
+  {
+   "t": "17:45",
+   "title": "The break",
+   "text": "The whole British line falls back. Where the ground slopes down toward the Chippawa, a quarter of a mile on, it breaks and runs for its works. The 8th and the 6-pounders cover the retreat, and the 19th Light Dragoons save a 24-pounder whose limber was blown up. The Americans pursue to within half gunshot of the batteries, and Hall's 12-pounder is dismounted in sight of the Chippawa.",
+   "at": [
+    -150,
+    550
+   ],
+   "view": 1800,
+   "speed": 20,
+   "when": "before six o'clock"
+  },
+  {
+   "t": "18:00",
+   "title": "The thunder-gust",
+   "text": "Over the river the British take up the planks of the bridge, and a building near it is set alight. A thunder-gust and then gentle rain sweep up the river, filling the air with blinding dust. Ripley's 21st comes out of the woods too late. Brown considers forcing the works; the lateness of the hour decides him against it.",
+   "at": [
+    -450,
+    650
+   ],
+   "view": 2000,
+   "speed": 60
+  },
+  {
+   "t": "18:30",
+   "title": "Ordered back",
+   "text": "Around half past six the troops are ordered back to camp. Merritt writes that the men had to lie out all night, every house being filled with the wounded; out of fourteen officers the 100th has only three unhurt.",
+   "at": [
+    100,
+    250
+   ],
+   "view": 1200,
+   "speed": 60,
+   "when": "around 6:30 PM"
+  },
+  {
+   "t": "19:00",
+   "title": "Back behind the creek",
+   "text": "The army marches back over the creek bridge and reaches its camp at sunset. Gardner's return gives the American loss as 328: 60 killed, 249 wounded and 19 missing. The Montreal return gives the British 515: 148 killed, 321 wounded and 46 missing, of whom the Royal Scots lost 213 and the 100th 204. On the evening of the 7th Riall withdraws to Fort George. On 25 July the armies meet again at Lundy's Lane, 4 km north.",
+   "at": [
+    900,
+    -1100
+   ],
+   "view": 1300,
+   "speed": 60,
+   "when": "toward sunset"
+  }
+ ],
  "outcome": {
   "result": "American victory: Riall's line beaten on the plain and driven back over the Chippawa",
   "losses": [

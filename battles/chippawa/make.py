@@ -231,7 +231,8 @@ KB, CB = ROAD_N[-1], ROAD_N[0]  # the King's Bridge's south end; the bridge over
 CAMP_RD = (1320, -1200)          # where the camps' track meets the river road
 def to_bridge(p): return [CAMP_RD] + road(CAMP_RD, CB)                             # from the camps up the road to the creek bridge
 def from_bridge(p): return road(CB, CAMP_RD) + [p]                                 # and back down to a place in camp
-def home(id): return road(last(id), KB) + [BRIDGE_N, DAWN[id][0]]                  # up the river road, over the King's Bridge, into the works
+WORKS = dict(lincoln=(-1250, 1150), western=(-1550, 1350))  # the militia and warriors' dawn posts were by the creek
+def home(id): return road(last(id), KB) + [BRIDGE_N, WORKS.get(id, DAWN[id][0])]  # up the river road, over the King's Bridge, into the works
 def out_of_works(id): return [BRIDGE_N, KB] + road(KB, (-151, 688))                # out of the works and east along the river road
 
 # ---- dawn: the Lincoln militia and the Western Indians snipe at the pickets from the bushes north of the creek ----
@@ -273,7 +274,7 @@ USSHER = M(*N(1000, -250)); LANE_E, LANE_W = LANE
 move("towson", "16:42", to_bridge(None) + [(980, -190)], 330, "firing", kmh=5.9)
 move("r9", "16:43", to_bridge(None) + [USSHER, (800, -240), (700, -200)], 345, kmh=5.5)
 move("r11", "16:45", to_bridge(None) + [USSHER, (500, -240), (420, -200)], 15, kmh=5.5)
-move("r25", "16:50", to_bridge(None) + [USSHER, LANE_W, (-200, -130)], 50, "firing", kmh=5.5)
+move("r25", "16:44", to_bridge(None) + [USSHER, LANE_W, (-200, -130)], 50, "firing", kmh=5.9)
 move("ritchie", "16:52", to_bridge(None) + [USSHER, (515, -240), (515, -160)], 0, "firing", kmh=4.5)
 move("hall", "16:53", to_bridge(None) + [USSHER, (560, -240), (560, -160)], 0, "firing", kmh=4.5)
 # the 21st round the woods against the British right rear, wading the creek; it comes out of the woods too late
@@ -345,12 +346,35 @@ for id, side, short, name, commander, type, strength, extra in OOB:
         assert state == "hidden" or not wet((k["x"], k["y"])), (id, k["t"], (k["x"], k["y"]), "afloat")
     units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength, keys=ks, **extra))
 
-events = []
+# ---- chapters: (time, title, text, camera centre, metres across, playback speed, when) ----
+# `when` holds a clock time the sources record, or a phrase; without one the card gives the nearest hour.
+CHAPTERS = [
+    (START, "Chippawa, July 1814", "Brown's division crossed the Niagara on 3 July and took Fort Erie at five that afternoon, with 137 prisoners. On the 4th Scott's brigade marched north in a running fight of some sixteen miles, found the bridge over the Chippawa taken up and Riall behind a strong tête-de-pont, and fell back a little more than a mile to camp behind Street's Creek. Brown came up at eleven that night with the reserve. At dawn on the 5th Canadian militia and warriors are sniping at the pickets from the bushes north of the creek.", [500, -1250], 1800, 300, "at dawn"),
+    ("12:00", "Noon", "By noon the British attack one of the pickets, forty men under Treat, as it returns to camp on the American left. About noon Porter arrives from Buffalo with three hundred Pennsylvania volunteers and about four hundred Indians. Scott's brigade eats its late Fourth of July dinner.", [700, -1400], 1600, 300, "about noon"),
+    ("15:30", "Riall marches", "Riall marches out to give battle, at three by Merritt's journal and four by his own report, over the King's Bridge in three columns with the King's Regiment in advance; it reached him only this morning, about 400 strong by Drummond. Brown sees a cloud of dust rise toward Chippawa. Riall puts his regulars at about fifteen hundred, and the militia and Indians at not above three hundred.", [-350, 750], 2200, 60, "around 3:30 PM"),
+    ("16:15", "Into the woods", "At four, by Brown's plan, Porter leads the Pennsylvania volunteers and the Indians from the rear of the camp into the woods on the left. The British light companies and the 2nd Lincoln go into the same woods from the north, with Norton's Grand River warriors thrown out far on their right.", [-450, -950], 1300, 60, "4 o'clock"),
+    ("16:30", "The woods fight", "About half past four Porter's advance meets the British light parties in the woods and drives them. The Western Indians break at the first volleys. The 2nd Lincoln stands for fifteen minutes, against at least 800 men by Merritt's count; it loses 43 men today, the heaviest loss of any Canadian militia unit in one action of the war. The Pennsylvanians drive them three-quarters of a mile.", [-400, -50], 1800, 20, "about half-past four"),
+    ("16:45", "Porter routed", "Near Chippawa Porter's men come within a few yards of the whole British line drawn up in order of battle, and they flee in every direction. From the cloud of dust and the heavy firing, Brown orders Scott forward and sends Gardner to bring up Ripley. Harris's dragoons stop the fugitives behind the creek.", [-250, 200], 1300, 20, None),
+    ("17:00", "Over the bridge", "Riall comes out in order of battle about five, by Brown's report. Scott's brigade reaches the bridge over Street's Creek and is met by fire from nine field guns, by Scott's count. Towson's three guns open before the infantry is formed and take post by the river on the right. The battalions cross and form line to the left and front along Ussher's farm lane, while the 25th goes into the woods on the left. Seeing grey jackets, Riall takes them for 'a body of Buffalo militia'.", [900, -550], 900, 20, "about five o'clock"),
+    ("17:15", "Why, these are regulars!", "The Americans advance about 50 metres from the lane. Both lines halt to fire more than once, and close to within sixty or seventy paces by Scott's memoir, 75 metres by the park's panels. Scott throws the 11th's left wing and the 9th's right forward into an obtuse angle, with Towson on the extreme right, while the 25th in the woods checks the British right. The musketry lasts about 25 minutes.", [450, -100], 900, 10, None),
+    ("17:30", "The charge", "Towson silences the most effective British battery by blowing up an ammunition wagon, then turns canister on the infantry, now nearly in contact. Riall orders the Royal Scots and the 100th to charge, under a most destructive fire, and withdraws them; the King's moves up on the right.", [450, -30], 900, 10, "after about twenty-five minutes"),
+    ("17:45", "The break", "The whole British line falls back. Where the ground slopes down toward the Chippawa, a quarter of a mile on, it breaks and runs for its works. The 8th and the 6-pounders cover the retreat, and the 19th Light Dragoons save a 24-pounder whose limber was blown up. The Americans pursue to within half gunshot of the batteries, and Hall's 12-pounder is dismounted in sight of the Chippawa.", [-150, 550], 1800, 20, "before six o'clock"),
+    ("18:00", "The thunder-gust", "Over the river the British take up the planks of the bridge, and a building near it is set alight. A thunder-gust and then gentle rain sweep up the river, filling the air with blinding dust. Ripley's 21st comes out of the woods too late. Brown considers forcing the works; the lateness of the hour decides him against it.", [-450, 650], 2000, 60, None),
+    ("18:30", "Ordered back", "Around half past six the troops are ordered back to camp. Merritt writes that the men had to lie out all night, every house being filled with the wounded; out of fourteen officers the 100th has only three unhurt.", [100, 250], 1200, 60, "around 6:30 PM"),
+    ("19:00", "Back behind the creek", "The army marches back over the creek bridge and reaches its camp at sunset. Gardner's return gives the American loss as 328: 60 killed, 249 wounded and 19 missing. The Montreal return gives the British 515: 148 killed, 321 wounded and 46 missing, of whom the Royal Scots lost 213 and the 100th 204. On the evening of the 7th Riall withdraws to Fort George. On 25 July the armies meet again at Lundy's Lane, 4 km north.", [900, -1100], 1300, 60, "toward sunset"),
+]
+events = [dict(t=t, title=a, text=b, at=at_, view=v, speed=s, **({"when": w} if w else {})) for t, a, b, at_, v, s, w in CHAPTERS]
+for e in events:  # without `when` the card speaks the nearest hour (app.js chapterWhen), so it must be near the frame's clock
+    s = sec(e["t"]) % 86400; hh = [n % 12 or 12 for n in (int(s // 3600), int(s // 3600) + 1)]; num = re.search(r"\d+", e.get("when", ""))
+    assert not num or int(num[0]) in hh, (e["t"], e["when"], "the card's hour is not the frame's")
+    assert e["speed"] in (1, 2, 5, 10, 20, 30, 60, 120, 300, 600, 1800, 3600, 7200), (e["t"], e["speed"], "not on the speed menu (sim.js SPEEDS)")
+    assert "when" in e or abs(s - math.floor(s / 3600 + 0.5) * 3600) <= 15 * 60, (e["t"], e["title"], "give it a when")
 
 battle = dict(
     id="chippawa", name="Battle of Chippawa", date="1814-07-05", dateText="5 July 1814", place="Chippawa, on the Niagara River, Upper Canada (Ontario)",
     origin=dict(lat=LAT0, lon=LON0), extent=3500, start=START, end=END, sunrise="04:26", sunset="19:42", speed=30, lapse=1800, menPerDot=5,
     water=WATER, terrainExaggeration=3, contourInterval=1, trees=dict(density=0.003, clear=[PLAIN, ROADSIDE, CAMPS]), fields=FIELDS,
+    tints=[dict(color="rgba(96,102,110,0.3)", **{"from": "17:50", "until": "18:30"})],  # the thunder-gust and rain
     wind=dict(x=0.5, y=0.4), view=dict(x=0, y=0, width=3500),
     sides=dict(american=dict(name="Americans (Brown, Scott)", color="#27497f", light="#6f8fc4", dark="#12254a"),
                british=dict(name="British, Canadians and allies (Riall)", color="#b3331f", light="#d87a68", dark="#5a150c")),
@@ -372,3 +396,16 @@ battle = dict(
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1)
 print(len(units), "units,", len(events), "events,", len(features), "features,", sum(u["strength"] for u in units if u["side"] == "american"), "Americans,", sum(u["strength"] for u in units if u["side"] == "british"), "British")
+# Which units each chapter's frame holds at its moment, so a caption never names a unit the camera leaves out.
+def where(u, t):
+    ks = [k for k in u["keys"] if sec(k["t"]) <= sec(t)]
+    if not ks: return None
+    state = next((k["state"] for k in reversed(ks) if "state" in k), "line")
+    if state == "hidden": return None
+    k = ks[-1]; nxt = [k2 for k2 in u["keys"] if sec(k2["t"]) > sec(t)]
+    if nxt and (k["x"], k["y"]) != (nxt[0]["x"], nxt[0]["y"]):
+        f = (sec(t) - sec(k["t"])) / (sec(nxt[0]["t"]) - sec(k["t"])); return (k["x"] + f * (nxt[0]["x"] - k["x"]), k["y"] + f * (nxt[0]["y"] - k["y"]))
+    return (k["x"], k["y"])
+for e in events:
+    r = e["view"] / 2; inside_ = [u["id"] for u in units if (p := where(u, e["t"])) and abs(p[0] - e["at"][0]) <= r and abs(p[1] - e["at"][1]) <= r]
+    print(f"{e['t']} {e['title']}: {' '.join(inside_)}")
