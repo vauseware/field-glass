@@ -195,12 +195,129 @@ def appear(id, t, p, state="line", **kw): keys(id, [K(t, p, state=state, **kw)])
 DAWN = dict(
     r9=((900, -1450), 0), r11=((760, -1450), 0), r25=((620, -1450), 0), towson=((1000, -1400), 0), harris=((850, -1560), 0),
     r21=((300, -1560), 0), r23=((130, -1600), 0), ritchie=((400, -1660), 0), hall=((330, -1660), 0),
-    royals=((-1250, 1150), 150), r100=((-1350, 1030), 150), r8=((-1050, 1060), 150), lights=((-1320, 1120), 150),
-    norton=((-1400, 1200), 150), ra24=((-960, 1010), 160), ra6=((-1100, 1000), 160), ld19=((-1250, 1000), 150),
+    royals=((-1450, 1150), 150), r100=((-1420, 1000), 150), r8=((-1150, 1060), 150), lights=((-1600, 1300), 150),
+    norton=((-1650, 1450), 150), ra24=((-960, 1010), 160), ra6=((-1080, 960), 160), ld19=((-1350, 1220), 150),
     lincoln=((300, -1040), 180), western=((700, -1000), 200),
 )
 for id, (p, h) in DAWN.items(): appear(id, START, p, h=h)
 appear("fenton", "12:00", ROAD_S[0], "column", h=0); appear("sixnations", "12:04", ROAD_S[0], "column", h=0)
+
+PACE = 4  # km/h, a column of foot on the road
+def walk(t0, pts, state="column", kmh=PACE):  # keys along a path at a marching pace
+    pts = [p for i, p in enumerate(pts) if i == 0 or math.dist(p, pts[i - 1]) > 5]
+    t, out = sec(t0), []
+    for i, p in enumerate(pts):
+        if i: t += math.dist(pts[i - 1], p) / (kmh / 3.6)
+        out.append(K(fmt(t), p, h=heading(p, pts[i + 1]) if i + 1 < len(pts) else heading(pts[i - 1], p), **(dict(state=state) if i == 0 else {})))
+    return out
+def hold_until(id, t0):  # stand until the minute before t0, then turn and go
+    if sec(t0) - sec(KEYS[id][-1]["t"]) > 120: at(id, plus(t0, -1))
+def move(id, t0, pts, h=None, state="line", moving="column", kmh=PACE):  # from where it stands along pts at a pace; returns the arrival time
+    hold_until(id, t0)
+    ks = walk(t0, [last(id)] + pts, moving, kmh); ks[-1]["state"] = state
+    if h is not None: ks[-1]["h"] = h
+    keys(id, ks); return ks[-1]["t"]
+def go(id, t0, t1, pts, h=None, state="line", moving="column"):  # from where it stands along pts, arriving at t1
+    hold_until(id, t0)
+    pts = [last(id)] + [p for p in pts if math.dist(p, last(id)) > 5]; d = [0]
+    for a, b in zip(pts, pts[1:]): d.append(d[-1] + math.dist(a, b))
+    ks = [K(fmt(sec(t0) + (sec(t1) - sec(t0)) * d[i] / d[-1]), p, h=heading(p, pts[i + 1]) if i + 1 < len(pts) else heading(pts[i - 1], p)) for i, p in enumerate(pts)]
+    ks[0]["state"] = moving; ks[-1]["state"] = state
+    if h is not None: ks[-1]["h"] = h
+    keys(id, ks)
+def lose(id, t, n): at(id, t, strength=carried(id, "strength") - n)
+def road(a, b): return stretch(ROAD, a, b)
+KB, CB = ROAD_N[-1], ROAD_N[0]  # the King's Bridge's south end; the bridge over Street's Creek
+CAMP_RD = (1320, -1200)          # where the camps' track meets the river road
+def to_bridge(p): return [CAMP_RD] + road(CAMP_RD, CB)                             # from the camps up the road to the creek bridge
+def from_bridge(p): return road(CB, CAMP_RD) + [p]                                 # and back down to a place in camp
+def home(id): return road(last(id), KB) + [BRIDGE_N, DAWN[id][0]]                  # up the river road, over the King's Bridge, into the works
+def out_of_works(id): return [BRIDGE_N, KB] + road(KB, (-151, 688))                # out of the works and east along the river road
+
+# ---- dawn: the Lincoln militia and the Western Indians snipe at the pickets from the bushes north of the creek ----
+for id in ("lincoln", "western"): at(id, START, state="firing"); at(id, "05:40", state="line")
+# ---- noon: they attack Treat's picket on the American left, then go back through the woods toward Chippawa ----
+move("lincoln", "11:50", [(-100, -1090)], 200, "firing"); at("lincoln", "12:12", state="line")
+move("lincoln", "12:15", [(-400, -400), (-500, 450)], 180); move("western", "12:15", [(300, -500), (-200, 200), (-700, 470)], 180)
+# ---- Porter's brigade comes up the road from Buffalo and camps in the rear ----
+move("fenton", "12:00", [(1380, -1700), (750, -1680)], 0); move("sixnations", "12:04", [(1390, -1720), (1000, -1705)], 0)
+
+# ---- half past three: Riall over the King's Bridge in three columns, the King's in advance; the line forms south of
+# the strip of trees by a quarter past four. The light troops go into the woods on the right, Norton far out beyond them.
+for id, t, spot, h in (("r8", "15:28", (320, 500), 180), ("ra6", "15:34", (80, 440), 180), ("royals", "15:36", (200, 440), 180),
+                       ("r100", "15:44", (440, 440), 180), ("ra24", "15:50", (600, 430), 160), ("ld19", "15:54", (540, 490), 180)):
+    move(id, t, out_of_works(id) + [(min(spot[0], 300), 620), spot], h)
+move("lights", "15:30", [BRIDGE_N, KB, (-600, 620), (-850, -560)], 180, moving="line", kmh=2.5)
+go("lincoln", "15:50", "16:30", [(-350, -580)], 180, moving="line"); go("western", "15:50", "16:28", [(-600, -620)], 180, moving="line")
+go("norton", "15:50", "17:15", out_of_works("norton")[:2] + [(-900, 600), (-1150, 0), (-1000, -800), (-750, -1450)], 60, moving="line")
+
+# ---- four o'clock: Porter takes the volunteers and warriors from the rear of the camp into the woods ----
+go("fenton", "16:00", "16:15", [(-150, -1560), (-450, -1250)]); go("fenton", "16:15", "16:30", [(-450, -720)], 0, "firing", "line")
+go("sixnations", "16:00", "16:20", [(-150, -1640), (-850, -1250)]); go("sixnations", "16:20", "16:30", [(-850, -720)], 0, "firing", "line")
+# ---- half past four: the woods fight. The Western Indians break at the first volleys; the 2nd Lincoln stands about
+# fifteen minutes and is driven; Porter drives them three-quarters of a mile, to the edge of the woods opposite Chippawa ----
+for id in ("lincoln", "lights"): at(id, "16:30", state="firing")
+at("western", "16:30", state="firing"); lose("western", "16:32", 16); go("western", "16:33", "16:47", [(-700, 480)], 180, moving="rout")
+lose("lincoln", "16:34", 14); go("lincoln", "16:35", "16:49", [(-100, 500)], 180, moving="retreat"); lose("lincoln", "16:50", 14)
+go("lights", "16:35", "16:50", [(-480, 480)], 180, moving="retreat")
+go("fenton", "16:31", "16:45", [(-250, 300)], 0, "firing", "firing"); go("sixnations", "16:31", "16:45", [(-700, 250)], 0, "firing", "firing")
+# ---- a quarter to five: Porter meets the whole British line in order of battle, and his men break ----
+for id in ("royals", "ra6"): at(id, "16:44", state="firing"); at(id, "16:50", state="line")
+lose("fenton", "16:47", 5); lose("sixnations", "16:47", 13)
+go("fenton", "16:48", "17:12", [(-200, -1300), (100, -1500)], 0, moving="rout"); go("sixnations", "16:48", "17:15", [(-350, -1600)], 0, moving="rout")
+move("harris", "16:50", [(0, -1480)], 0)  # Harris's dragoons stop the fugitives behind the creek
+
+# ---- Brown sends Scott forward. Towson first, then the brigade up the river road and over the creek bridge under the
+# British guns; it forms line to the left and front along Ussher's lane, the 25th detached into the woods on the left ----
+USSHER = M(*N(1000, -250)); LANE_E, LANE_W = LANE
+move("towson", "16:42", to_bridge(None) + [(980, -190)], 330, "firing", kmh=5.9)
+move("r9", "16:43", to_bridge(None) + [USSHER, (800, -240), (700, -200)], 345, kmh=5.5)
+move("r11", "16:45", to_bridge(None) + [USSHER, (500, -240), (420, -200)], 15, kmh=5.5)
+move("r25", "16:50", to_bridge(None) + [USSHER, LANE_W, (-200, -130)], 50, "firing", kmh=5.5)
+move("ritchie", "16:52", to_bridge(None) + [USSHER, (515, -240), (515, -160)], 0, "firing", kmh=4.5)
+move("hall", "16:53", to_bridge(None) + [USSHER, (560, -240), (560, -160)], 0, "firing", kmh=4.5)
+# the 21st round the woods against the British right rear, wading the creek; it comes out of the woods too late
+go("r21", "16:50", "18:00", [(-250, -1560), (-350, -1300), (-500, -500), (-500, 200), (-380, 380)], 45)
+
+# ---- the British line comes on, halting to fire; its guns on the river road open on the bridge ----
+move("ra24", "16:48", [(771, 140)], 160, "firing")
+for id, mid, spot in (("royals", (310, 150), (400, -60)), ("r100", (550, 150), (650, -60)), ("ra6", (190, 150), (280, -60))):
+    go(id, "16:52", "17:05", [mid], 180, "firing", "line"); go(id, "17:08", "17:15", [spot], 180, "firing", "line")
+go("r8", "16:55", "17:10", [(300, 200)], 180); go("r8", "17:10", "17:22", [(160, -10)], 225, "firing")
+go("ra24", "17:08", "17:12", [(865, 0)], 160, "firing"); go("ld19", "17:20", "17:30", [(780, 150)], 180)
+go("lincoln", "16:52", "17:12", [(-150, 80)], 200); go("lights", "16:52", "17:12", [(-330, 20)], 180)
+for id in ("lincoln", "lights"): at(id, "17:22", state="firing")
+# ---- the firefight, about twenty-five minutes at seventy paces: the 11th's left wing and the 9th's right thrown
+# forward into an obtuse angle, Towson on the extreme right; he blows up a 24-pounder's limber ----
+for id, y in (("r9", -150), ("r11", -150)): go(id, "17:12", "17:15", [(last(id)[0], y)], carried(id, "h"), "firing", "line")
+lose("r9", "17:22", 55); lose("r11", "17:22", 38); lose("royals", "17:22", 80); lose("r100", "17:22", 80)
+lose("towson", "17:25", 10); lose("ra24", "17:25", 3); lose("r25", "17:30", 76); lose("r8", "17:32", 27)
+# Riall orders the Royals and the 100th to charge, and withdraws them under a most destructive fire
+for id in ("royals", "r100"): go(id, "17:25", "17:30", [(last(id)[0], last(id)[1] - 25)], 180, "charge", "charge")
+lose("royals", "17:31", 103); lose("r100", "17:31", 123); lose("r9", "17:31", 54); lose("r11", "17:31", 37); lose("ritchie", "17:32", 8); lose("ra6", "17:32", 2)
+go("r11", "17:33", "17:37", [(430, -90)], 15, "charge", "charge")
+# ---- the British fall back a quarter of a mile; at the slope down to the Chippawa they break and run for the bridge.
+# The 8th and the 6-pounders cover; the 19th Dragoons save the disabled 24-pounder ----
+go("royals", "17:32", "17:45", [(230, 450)], 180, "retreat", "retreat"); go("r100", "17:33", "17:46", [(470, 460)], 180, "retreat", "retreat")
+go("ra24", "17:33", "17:45", road((865, 0), (655, 361)), 180, "retreat", "retreat"); go("ld19", "17:32", "17:45", [(600, 420)], 180)
+go("ra6", "17:36", "17:48", [(150, 400)], 180, "firing", "retreat"); go("r8", "17:36", "17:50", [(60, 420)], 180, "line", "retreat")
+for id in ("lincoln", "lights"): go(id, "17:36", "17:50", [(-300, 560)] if id == "lincoln" else [(-480, 560)], 180, "retreat", "retreat")
+for id, t in (("royals", "17:46"), ("r100", "17:48"), ("ra24", "17:47"), ("ld19", "17:52"), ("lincoln", "17:52"), ("lights", "17:54"), ("western", "17:50")):
+    move(id, t, home(id), 150, "line", "rout" if id in ("royals", "r100", "lincoln", "lights", "western") else "column", kmh=5.5 if id != "ld19" else 8)
+move("ra6", "17:56", road((150, 400), KB)[:-1] + [P['tete_de_pont']], 200, "firing")  # into the tête-de-pont, whose guns fire on the pursuit
+move("r8", "18:00", home("r8"), 150)  # the last over
+move("ra6", "18:25", [KB, BRIDGE_N, DAWN["ra6"][0]], 160)
+go("norton", "17:45", "19:00", [(-1000, -800), (-1150, 0), (-900, 600), KB, BRIDGE_N, DAWN["norton"][0]], 150, moving="line")
+# ---- the pursuit to within half gunshot of the batteries; Hall's 12-pounder is dismounted in sight of the Chippawa ----
+go("r9", "17:36", "18:00", [(330, 430)], 315); go("r11", "17:38", "18:00", [(40, 440)], 315); go("r25", "17:36", "18:00", [(-180, 520)], 300)
+go("hall", "17:40", "17:56", [(130, 400)], 300, "firing"); lose("hall", "17:58", 2); at("hall", "18:00", state="line"); at("ritchie", "17:40", state="line")
+at("towson", "17:38", state="line")
+
+# ---- about half past six the troops are ordered back; at sunset they reach their camp behind Street's Creek ----
+for id, t in (("r9", "18:38"), ("r11", "18:42"), ("r25", "18:46"), ("hall", "18:50"), ("ritchie", "18:52"), ("towson", "18:54")):
+    move(id, t, ([] if id in ("ritchie", "towson") else [LANE_W]) + [LANE_E, CB] + from_bridge(DAWN[id][0]), 0)
+go("r21", "18:40", "19:40", [(-500, -500), (-350, -1300), (-250, -1560), DAWN["r21"][0]], 0)
+for id, p in (("fenton", (750, -1680)), ("sixnations", (1000, -1705)), ("harris", DAWN["harris"][0])): move(id, "18:45", [p], 0)
 
 assert set(KEYS) == set(BASE), set(KEYS) ^ set(BASE)
 for id in KEYS:
