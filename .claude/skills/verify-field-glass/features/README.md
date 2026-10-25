@@ -1,6 +1,6 @@
 # Field Glass verification map
 
-This folder is the maintained source for verifying what a Field Glass viewer can see and do. Read this index before you drive the page, then use the matching feature file as the recipe.
+This folder is the maintained source for verifying what a Field Glass viewer can see and do. Read this index before you drive the page, then use the matching feature file as the recipe. Canonical skill path for Cursor and Claude Code is `.claude/skills/verify-field-glass/` (not `.cursor/skills/`).
 
 ## Baseline preconditions
 

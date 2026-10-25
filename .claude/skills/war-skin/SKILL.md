@@ -16,7 +16,7 @@ Dave judges a look only by seeing it rendered. Never ask him to pick from a desc
 3. Write each as `themes/<war>-<option>.js`, register it in `THEMES`, and add a `body.theme-<war>-<option>` CSS block. Speed over polish. Copy the structure of the newest complete skin. If you spread another skin (`...revolution`), override its `legend.swatch` entries too: Revolution's woods swatch reads `sheet.stamps` and crashes any skin without them.
 4. `surround` paints only the four margins outside the map rect. Filling the whole window covers the map.
 5. Shoot them: `bash .claude/skills/verify-field-glass/fg.sh drive <dir> .claude/skills/war-skin/shoot-skins.cjs <id> <id> <id>`. It previews each on Guilford (hills and woods), Fort Fisher (flat coast, works, ships) and Yorktown at night, at the laptop size, and fails on any page error. A shot stuck on "Loading…" is a page error. Look at every PNG: marks that are faint on Guilford's slopes or vanish on Fort Fisher's flat ground need retuning before Dave sees them.
-6. Send the nine shots with `SendUserFile`, captioned in option order. Describe each in a few lines, give the tradeoffs, and recommend one.
+6. Show the nine shots in chat, captioned in option order (Cursor: attach or Read the PNG paths; Claude Code: SendUserFile). Describe each in a few lines, give the tradeoffs, and recommend one.
 
 ## 2. Build the chosen one
 

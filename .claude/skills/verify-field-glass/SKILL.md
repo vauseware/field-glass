@@ -9,7 +9,7 @@ Field Glass is a static web page: `index.html` loads `app.js`, `splash.js` and t
 
 All commands below run from the repo root. The harness is `.claude/skills/verify-field-glass/fg.sh`; call it with `bash`. Every command takes a run folder `<dir>`: make it a new folder in your session scratchpad, one per run. It holds the server's pid, port and log, and all evidence.
 
-This machine is headless. Never use `file://` (blocked), the Claude for Chrome tools (need a display) or bare `node` (use `fg.sh drive`, which runs node through `npx`).
+This machine is headless. Never use `file://` (blocked), interactive browser tools (Claude for Chrome, Cursor IDE browser, computer-use — they need a display or drive the wrong surface), or bare `node` (use `fg.sh drive`, which runs node through `npx`). `fg.sh` is the only allowed driver.
 
 ## Launch
 
@@ -59,7 +59,7 @@ Everything goes in `<dir>`: the journey logs, `start-screen-*.png`, `playback-<b
 - for a battle data change, show the moment it affects, with a `shot` link at that time, and run `npm run check`, which validates every battle and rewrites the running times in `battles/index.json`.
 - look at the screenshots. A `PASS` from a blank canvas is not proof.
 
-To show the user, send the PNGs with SendUserFile. For a PR, use `bash ~/bin/pr-shot.sh <pr#> <png>...` with a desktop shot and a phone shot (390x844).
+To show the user, put the PNG paths in chat (Cursor: attach or Read the files; Claude Code: SendUserFile). For a PR, use `bash ~/bin/pr-shot.sh <pr#> <png>...` with a desktop shot and a phone shot (390x844).
 
 ## Cleanup
 
@@ -71,4 +71,4 @@ Stops only the server whose pid is in `<dir>`, and only if it is still our `http
 
 ## Feature map
 
-`features/README.md` indexes the user-facing features with their entry points and proof. Read it before driving, and keep it current with `/pstack:maintain-verification-skill` when the page changes.
+`features/README.md` indexes the user-facing features with their entry points and proof. Read it before driving, and keep it current with `/maintain-verification-skill` (Claude Code: `/pstack:maintain-verification-skill`) when the page changes. This skill lives at `.claude/skills/verify-field-glass/` for both Cursor and Claude Code; pstack's maintain step that looks under `.cursor/skills/verify-*` should accept this path too.
