@@ -1,5 +1,33 @@
 [
  {
+  "id": "bunker-hill",
+  "name": "Bunker Hill, 17 Jun 1775",
+  "date": "1775-06-17",
+  "war": "American Revolutionary War",
+  "runtime": 984
+ },
+ {
+  "id": "trenton-princeton",
+  "name": "Trenton and Princeton, 25 Dec 1776 – 3 Jan 1777",
+  "date": "1776-12-25",
+  "war": "American Revolutionary War",
+  "runtime": 1418
+ },
+ {
+  "id": "saratoga",
+  "name": "Saratoga, 19 Sep – 8 Oct 1777",
+  "date": "1777-09-19",
+  "war": "American Revolutionary War",
+  "runtime": 846
+ },
+ {
+  "id": "monmouth",
+  "name": "Monmouth, 28 Jun 1778",
+  "date": "1778-06-28",
+  "war": "American Revolutionary War",
+  "runtime": 870
+ },
+ {
   "id": "waxhaws",
   "name": "The Waxhaws, 29 May 1780",
   "date": "1780-05-29",
@@ -35,27 +63,6 @@
   "runtime": 1086
  },
  {
-  "id": "bunker-hill",
-  "name": "Bunker Hill, 17 Jun 1775",
-  "date": "1775-06-17",
-  "war": "American Revolutionary War",
-  "runtime": 984
- },
- {
-  "id": "trenton-princeton",
-  "name": "Trenton and Princeton, 25 Dec 1776 – 3 Jan 1777",
-  "date": "1776-12-25",
-  "war": "American Revolutionary War",
-  "runtime": 1418
- },
- {
-  "id": "saratoga",
-  "name": "Saratoga, 19 Sep – 8 Oct 1777",
-  "date": "1777-09-19",
-  "war": "American Revolutionary War",
-  "runtime": 846
- },
- {
   "id": "first-manassas",
   "name": "First Manassas, 21 Jul 1861",
   "date": "1861-07-21",
@@ -82,12 +89,5 @@
   "date": "1943-02-19",
   "war": "World War II",
   "runtime": 1794
- },
- {
-  "id": "monmouth",
-  "name": "Monmouth, 28 Jun 1778",
-  "date": "1778-06-28",
-  "war": "American Revolutionary War",
-  "runtime": 870
  }
 ]
