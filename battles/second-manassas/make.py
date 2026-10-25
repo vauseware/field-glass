@@ -205,12 +205,12 @@ features = [
     dict(type="road", name="Pageland Lane", pts=L['pageland'], **label_on(L['pageland'][11], L['pageland'][12], -50)),
     dict(type="road", name="Lewis Lane (about here)", pts=LEWIS_LANE, **label_on(LEWIS_LANE[0], LEWIS_LANE[1], -45)),
     dict(type="works", name="the unfinished railroad", pts=RR_IN, **label_on(gp(1300), gp(1500), -80)),
-    lab("Brawner farm", 'brawner', 0, -90), lab("Dogan house", 'dogan', -60, -80), lab("Groveton", 'groveton', 120, -90),
+    lab("Brawner farm", 'brawner', 0, -90), lab("Dogan house", 'dogan', -90, 80), lab("Groveton", 'groveton', 170, -190),
     dict(name="the Deep Cut", at=[DEEP_CUT[0] + 140, DEEP_CUT[1] - 60]), dict(name="the Dump", at=[DUMP[0] + 120, DUMP[1] - 40]),
     lab("Stony Ridge", 'stony_guns', -150, 200), lab("Battery Heights", 'battery_heights', 0, -70),
     lab("Chinn Ridge", 'chinn_ridge', 160, 0), lab("Chinn house (ruins)", 'chinn_house', 0, -80), lab("Bald Hill", 'bald_hill', 120, -60),
     lab("Henry house (ruins)", 'henry_house', 60, 70), lab("Henry Hill", 'henry_hill', 150, -40), lab("Robinson house (ruins)", 'robinson', 60, 70),
-    lab("Stone House", 'stone_house', 130, -50), lab("Buck Hill", 'buck_hill', 140, 60), lab("Matthews Hill", 'matthews_hill', -150, 90),
+    lab("Stone House", 'stone_house', 130, -50), lab("Buck Hill", 'buck_hill', 230, 60), lab("Matthews Hill", 'matthews_hill', -330, 90),
     lab("Sudley Church", 'sudley_church', -170, 40), lab("Sudley Springs Ford", 'sudley_ford', 60, 100),
     dict(name="Stone Bridge", at=[P['stone_bridge'][0] + 180, P['stone_bridge'][1] - 40]),
     dict(name="Lewis Ford (about here)", at=[LEWIS_FORD[0] - 230, LEWIS_FORD[1] + 60]), lab("Portici (about here)", 'portici', 0, -80),
@@ -457,7 +457,8 @@ for n, (id, end) in enumerate((("schimmelfennig", (0, 650)), ("krzyzanowski", (1
     show(id, plus(B("02:00"), n * 10), SOUTH_IN, 0)
     walk(id, plus(B("02:00"), n * 10), *sudley(SOUTH_IN, (400, -300)), end, h=290, kmh=3)
 for id, s in (("schimmelfennig", 1150), ("krzyzanowski", 650)):
-    walk(id, B("06:00"), *sudley(last(id), (-470, 1400)), gp(s, 320), h=NW(s), state="skirmish", kmh=3)
+    walk(id, B("06:00"), *sudley(last(id), (-470, 1400)), gp(s, 320), h=NW(s), kmh=3)
+    stand(id, B("07:00"), state="firing")
     stand(id, B("09:40"), state="line")
     mv(id, B("10:00"), B("10:10"), gp(s, 80), h=NW(s), state="firing", moving="charge")
     fight(id, B("10:10"), B("10:35"), lose(id, 250))
@@ -475,7 +476,7 @@ fight("milroy", B("10:12"), B("10:25"), lose("milroy", 300)); fight("lawton", B(
 mv("milroy", B("10:25"), B("10:50"), gp(2120, 650), (-1500, -250), h=60, moving="retreat")
 
 # Longstreet in on the turnpike from Gainesville and deployed across the Union left, unseen by Pope
-LONG = [("hood", (-2650, -1120), 70), ("law", (-2700, -770), 70), ("frobel", P['battery_heights'], 80), ("evans", (-2950, -1200), 70),
+LONG = [("hood", (-2950, -1180), 70), ("law", (-3000, -850), 70), ("frobel", P['battery_heights'], 80), ("evans", (-3200, -1300), 70),
         ("wilcox", (-3150, -850), 70), ("pryor", (-3350, -950), 70), ("featherston", (-3200, -650), 70),
         ("corse", (-2850, -1500), 70), ("jenkins", (-3000, -1800), 70), ("hunton", (-3150, -2100), 70), ("sdlee", (-3350, -1150), 70),
         ("benning", (-3350, -2450), 60), ("drayton", (-3550, -2800), 60), ("gtanderson", (-3750, -3150), 60),
@@ -488,7 +489,7 @@ for n, (id, end, h) in enumerate(LONG):
 # Hooker, Kearny and Reno from Centreville, over the Stone Bridge
 for n, (id, end, h) in enumerate((("robinson", gp(560, 300), NW(560)), ("birney", (-520, 2120), 250), ("poe", (-450, 1600), 290),
                                   ("grover", gp(820, 420), NW(820)), ("taylor", (-500, 1150), 300), ("carr", (-380, 950), 300),
-                                  ("stevens", (100, 800), 290), ("nagle", (-200, 1000), 300), ("ferrero", (-100, 650), 300))):
+                                  ("stevens", (-150, 350), 290), ("nagle", (-200, 1000), 300), ("ferrero", (-100, 650), 300))):
     t0 = plus(B("10:00"), n * 12)
     show(id, t0, EAST_IN, 270)
     walk(id, t0, *pike(EAST_IN, P['stone_house']), *sudley(P['stone_house'], (-470, 1450) if end[1] > 1300 else (-265, 700)), end, h=h, kmh=3.5)
@@ -498,7 +499,7 @@ mv("grover", B("15:00"), B("15:10"), gp(820, 20), h=NW(820), state="charge", mov
 mv("grover", B("15:10"), B("15:15"), gp(820, -80), h=NW(820), state="firing", moving="charge")
 fight("grover", B("15:15"), B("15:30"), 1013)
 mv("grover", B("15:30"), B("15:50"), gp(820, 450), h=NW(820), moving="retreat")
-fight("gregg", B("15:10"), B("15:35"), lose("gregg", 150), h=SE(820) + 60)
+fight("gregg", B("15:10"), B("15:35"), lose("gregg", 150), h=SE(820) + 60); stand("gregg", B("15:45"), h=SE(450))
 mv("pender", B("15:12"), B("15:22"), gp(850, -180), h=SE(850), state="firing", moving="charge")
 fight("pender", B("15:22"), B("15:40"), lose("pender", 150)); fight("thomas", B("15:10"), B("15:35"), lose("thomas", 150))
 mv("pender", B("15:45"), B("16:05"), gp(950, -380), h=SE(950))
@@ -521,7 +522,7 @@ mv("early", B("18:10"), B("18:30"), gp(250, -100), h=SE(250)); mv("branch", B("1
 # Schenck and Reynolds draw back from the Groveton woods in the afternoon; King's division comes back up the Sudley road
 for id, end in (("stahel", (-650, -450)), ("mclean", (-450, -700)), ("meade", (-950, -700)), ("seymour", (-750, -900)), ("hardin", (-1050, -500))):
     walk(id, B("16:00"), end, h=270, kmh=3)
-for n, (id, end) in enumerate((("hatch", (150, 200)), ("patrick", (50, 330)), ("doubleday", (300, 330)), ("gibbon", (480, 260)), ("b4us", (380, 160)))):
+for n, (id, end) in enumerate((("hatch", (600, 350)), ("patrick", (750, 520)), ("doubleday", (900, 300)), ("gibbon", (1050, 470)), ("b4us", (800, 180)))):
     show(id, plus(B("14:00"), n * 10), SOUTH_IN, 0)
     walk(id, plus(B("14:00"), n * 10), *sudley(SOUTH_IN, (330, 0)), end, h=280, kmh=3)
 # Sunset: Hood's reconnaissance east along the pike meets Hatch's division coming west near Groveton about seven
@@ -534,11 +535,11 @@ fight("hatch", B("19:00"), B("19:35"), lose("hatch", 250), h=250); fight("double
 fight("hood", B("19:00"), B("19:35"), lose("hood", 150)); fight("law", B("19:00"), B("19:35"), lose("law", 120))
 for id, end in (("hatch", (-150, -100)), ("doubleday", (50, -50)), ("patrick", (-100, 100))):
     mv(id, B("19:35"), B("20:05"), *pike(last(id), PIKE_AT(end[0])), h=280, moving="retreat")
-for id, (end, h) in (("hood", ((-2650, -1120), 70)), ("law", ((-2700, -770), 70)), ("evans", ((-2950, -1200), 70))):
+for id, (end, h) in (("hood", ((-2950, -1180), 70)), ("law", ((-3000, -850), 70)), ("evans", ((-3200, -1300), 70))):
     walk(id, B("22:30"), end, h=h, kmh=2)
 
 # The night of the 29th: Ricketts up the Sudley road; R. H. Anderson's division in by the pike at three, alone east of Groveton
-for n, (id, end) in enumerate((("duryee", (-320, 700)), ("tower", (-160, 580)), ("stiles", (-60, 430)), ("thoburn", (-380, 480)), ("leppien", (-220, 380)))):
+for n, (id, end) in enumerate((("duryee", (250, 950)), ("tower", (400, 800)), ("stiles", (550, 650)), ("thoburn", (150, 1100)), ("leppien", (350, 600)))):
     show(id, plus(B("21:00"), n * 10), SOUTH_IN, 0)
     walk(id, plus(B("21:00"), n * 10), *sudley(SOUTH_IN, (289, 36)), (0, 200), end, h=290, kmh=3)
 for n, (id, x) in enumerate((("armistead", -1450), ("mahone", -1330), ("wright", -1210))):
@@ -547,20 +548,21 @@ for n, (id, end) in enumerate((("armistead", (-3250, -1350)), ("mahone", (-3400,
     walk(id, plus(C("05:00"), n * 6), *pike(last(id), PIKE_AT(-3100)), end, h=70, kmh=3)
 show("walton", C("04:00"), WEST_IN, 70); walk("walton", C("04:00"), *pike(WEST_IN, PIKE_AT(-3000)), (-3000, -1300), h=70, kmh=3)
 # Porter's corps from Manassas at dawn, to the ground behind Henry Hill
-for n, (id, end) in enumerate((("roberts", (480, -300)), ("weeks", (650, -450)), ("berdan", (400, -120)), ("hazlett", (300, -250)),
-                               ("buchanan", (820, -700)), ("chapman", (900, -880)), ("warren", (700, -950)))):
+for n, (id, end) in enumerate((("roberts", (950, -350)), ("weeks", (1150, -550)), ("berdan", (1250, -200)), ("hazlett", (1050, -100)),
+                               ("buchanan", (950, -800)), ("chapman", (1150, -950)), ("warren", (1350, -700)))):
     show(id, plus(C("05:30"), n * 10), SOUTH_IN, 0)
     walk(id, plus(C("05:30"), n * 10), *sudley(SOUTH_IN, (700, -1200)), end, h=290, kmh=3)
 show("piatt", C("07:00"), EAST_IN, 270); walk("piatt", C("07:00"), *pike(EAST_IN, (1000, 300)), (950, -150), h=270, kmh=3)
 
 # ---- 30 August: the morning probes; Porter's attack at three ----
-mv("stevens", C("10:00"), C("10:40"), (-700, 1050), h=300); mv("stevens", C("11:30"), C("12:10"), (100, 800), h=290)
+walk("milroy", C("06:00"), (-700, 150), h=290, kmh=3)
+mv("stevens", C("10:00"), C("10:40"), (-700, 1050), h=300); mv("stevens", C("11:30"), C("12:10"), (-150, 350), h=290)
 for id, s in (("duryee", 1500), ("thoburn", 1300)):
     walk(id, C("10:00"), gp(s, 420), h=NW(s), kmh=3)
     mv(id, C("11:00"), C("11:10"), gp(s, 40), h=NW(s), state="firing", moving="charge")
     fight(id, C("11:10"), C("11:25"), lose(id, 150))
     mv(id, C("11:25"), C("11:45"), gp(s, 500), h=NW(s), moving="retreat")
-    walk(id, C("12:00"), (-320, 700) if id == "duryee" else (-380, 480), h=290, kmh=3)
+    walk(id, C("12:00"), (250, 950) if id == "duryee" else (150, 1100), h=290, kmh=3)
 fight("trimble", C("11:05"), C("11:25"), lose("trimble", 60)); fight("field", C("11:05"), C("11:25"), lose("field", 40), h=SE(1300))
 # Reynolds to Chinn Ridge with McLean; then McDowell takes him across the pike, leaving McLean and Warren south of it
 for id, end in (("meade", (-350, -800)), ("seymour", (-250, -1050)), ("hardin", (150, -1150))): walk(id, C("12:20"), end, h=270, kmh=3)
@@ -570,8 +572,8 @@ walk("sdlee", C("11:30"), (-2800, -320), h=75, kmh=3)
 # Porter forms in the Groveton woods and north of the pike: Weeks and Roberts left and centre, Hatch's division right
 FORM = (("weeks", 2750, 560), ("roberts", 2480, 560), ("hatch", 2150, 280), ("patrick", 1900, 300), ("doubleday", 2050, 620), ("gibbon", 1800, 650))
 for id, s, off in FORM: walk(id, C("13:00"), *pike(PIKE_AT(last(id)[0]), PIKE_AT(gp(s, off)[0])), gp(s, off), h=NW(s), kmh=2.5)
-walk("berdan", C("13:10"), *pike(PIKE_AT(last("berdan")[0]), PIKE_AT(-1700)), gp(2600, 300), h=NW(2600), state="skirmish", kmh=3)
-for id, end in (("buchanan", (-1150, -260)), ("chapman", (-950, -200))): walk(id, C("13:00"), *pike(PIKE_AT(last(id)[0]), PIKE_AT(end[0])), end, h=300, kmh=3)
+walk("berdan", C("12:40"), *pike(PIKE_AT(last("berdan")[0]), PIKE_AT(-1700)), gp(2600, 300), h=NW(2600), state="skirmish", kmh=3)
+for id, end in (("buchanan", (-900, 250)), ("chapman", (-700, 350))): walk(id, C("13:00"), *pike(PIKE_AT(last(id)[0]), PIKE_AT(end[0])), end, h=300, kmh=3)
 walk("warren", C("13:20"), *pike(PIKE_AT(last("warren")[0]), LEWIS_LANE[0]), P['ny5'], h=250, kmh=3)
 walk("hazlett", C("13:20"), *pike(PIKE_AT(last("hazlett")[0]), LEWIS_LANE[0]), (LEWIS_LANE[0][0], LEWIS_LANE[0][1] - 90), h=260, kmh=3)
 walk("b4us", C("13:00"), (-1250, -250), h=300, kmh=3)
@@ -582,21 +584,23 @@ for id, s, off in FORM[:4]:
     fight(id, C("15:12"), C("15:35"), lose(id, 450 if id in ("weeks", "roberts") else 350))
     mv(id, C("15:35"), C("15:55"), gp(s, 750), h=NW(s), moving="retreat"); stand(id, C("16:00"), state="line")
 mv("berdan", C("15:00"), C("15:15"), gp(2600, 650), h=NW(2600), moving="retreat")
+for id, end in (("roberts", (-1000, 500)), ("weeks", (-800, 650)), ("hatch", (-1200, 300)), ("patrick", (-1000, 800)), ("berdan", (-1250, 100))):
+    walk(id, C("16:05"), end, h=290, kmh=3)
 for id in ("stafford", "jones_bj", "stonewall", "taliaferro_ag"): fight(id, C("15:05"), C("15:40"), lose(id, 250))
 fight("sdlee", C("15:00"), C("15:50"), lose("sdlee", 20), h=60); fight("jguns", C("15:00"), C("15:50"), lose("jguns", 20), h=120)
 mv("lawton", C("15:10"), C("15:30"), gp(2200, -160), h=SE(2200), state="firing"); fight("lawton", C("15:30"), C("15:45"), lose("lawton", 60))
 mv("field", C("15:05"), C("15:35"), gp(2000, -200), h=SE(2000), state="firing"); fight("field", C("15:35"), C("15:50"), lose("field", 40))
 
 # ---- Longstreet's counterattack: Hood overruns Warren at four ----
-mv("hood", C("15:20"), C("15:50"), (-1950, -880), h=90, moving="line"); mv("law", C("15:20"), C("15:50"), (-1950, -620), h=80, moving="line")
+mv("hood", C("15:20"), C("15:50"), (-1950, -880), h=90, moving="line"); mv("law", C("15:20"), C("15:50"), (-1950, -720), h=80, moving="line")
 mv("evans", C("15:25"), C("15:55"), (-2150, -1000), h=90, moving="line")
 mv("hood", C("16:00"), C("16:08"), (P['ny5'][0] - 90, P['ny5'][1]), h=90, state="firing", moving="charge")
 fight("warren", C("16:00"), C("16:10"), 588, h=250)
-mv("warren", C("16:10"), C("16:35"), (350, -700), h=90, state="line", moving="rout")
-mv("hazlett", C("16:08"), C("16:25"), (300, -300), h=90, moving="retreat")
-mv("law", C("16:00"), C("16:12"), (LEWIS_LANE[0][0] - 100, LEWIS_LANE[0][1] - 40), h=80, state="firing", moving="charge")
+mv("warren", C("16:10"), C("16:45"), (1000, -900), h=90, state="line", moving="rout")
+mv("hazlett", C("16:08"), C("16:40"), (1050, -150), h=90, moving="retreat")
+mv("law", C("16:00"), C("16:12"), (LEWIS_LANE[0][0] - 100, LEWIS_LANE[0][1] - 120), h=80, state="firing", moving="charge")
 fight("hood", C("16:08"), C("16:15"), lose("hood", 150)); fight("law", C("16:12"), C("16:20"), lose("law", 80))
-mv("hood", C("16:15"), C("16:45"), (P['texas_mon'][0] - 120, P['texas_mon'][1] + 30), h=95, state="firing", moving="charge")
+mv("hood", C("16:15"), C("16:45"), (-480, -870), h=95, state="firing", moving="charge")
 mv("law", C("16:20"), C("16:55"), (-450, -520), h=110, state="firing", moving="line")
 mv("evans", C("16:00"), C("16:35"), (-700, -720), h=100, moving="line")
 # McLean's Ohioans at the fence line on Chinn Ridge; Corse's Virginians and Evans's charge on his flank; Hardin shattered
@@ -607,18 +611,18 @@ fight("corse", C("16:30"), C("17:10"), lose("corse", 300)); fight("jenkins", C("
 mv("evans", C("16:40"), C("16:50"), (-350, -800), h=150, state="firing", moving="charge")
 mv("evans", C("16:50"), C("17:10"), (-750, -700), h=150, moving="retreat", strength=lose("evans", 200))
 walk("hardin", C("16:00"), (150, -1150), h=260, kmh=4)
-fight("hardin", C("16:30"), C("16:55"), 900); mv("hardin", C("16:55"), C("17:20"), (850, -950), h=80, moving="rout")
-fight("hood", C("16:45"), C("17:40"), lose("hood", 330))
-mv("mclean", C("17:00"), C("17:25"), (750, -650), h=90, moving="retreat")
+fight("hardin", C("16:30"), C("16:55"), 900); mv("hardin", C("16:55"), C("17:25"), (1150, -1050), h=80, moving="rout")
+fight("hood", C("16:45"), C("17:40"), lose("hood", 330)); mv("hood", C("17:42"), C("17:58"), (P['texas_mon'][0] - 40, P['texas_mon'][1]), h=95)
+mv("mclean", C("17:00"), C("17:30"), (1300, -700), h=90, moving="retreat")
 # Ricketts and Sigel's men south over Young's Branch and up the ridge: Tower, Stiles, Koltes, Stahel; the 5th Maine
-for id, end, t0 in (("tower", (-120, -820), "16:30"), ("stiles", (-60, -700), "16:35"), ("leppien", (-150, -930), "16:30"),
-                    ("koltes", (-300, -760), "16:20"), ("stahel", (-200, -620), "16:25")):
+for id, end, t0 in (("tower", (-30, -850), "16:30"), ("stiles", (80, -700), "16:35"), ("leppien", (-80, -1000), "16:30"),
+                    ("koltes", (-60, -600), "16:20"), ("stahel", (150, -560), "16:25")):
     walk(id, C(t0), end, h=260, state="firing", kmh=4.5)
 for id, n in (("tower", 400), ("stiles", 350), ("koltes", 400), ("stahel", 350)): fight(id, KEYS[id][-1]["t"], C("17:50"), lose(id, n))
 fight("leppien", C("17:30"), C("18:00"), 20)
-for id, end in (("tower", (700, -450)), ("stiles", (650, -250)), ("koltes", (900, -350)), ("stahel", (950, -200))):
-    mv(id, C("17:50"), C("18:15"), end, h=80, moving="retreat")
-mv("leppien", C("18:00"), C("18:20"), (750, -150), h=80, moving="retreat")
+for id, end in (("tower", (1100, -300)), ("stiles", (1200, -100)), ("koltes", (1300, -450)), ("stahel", (1400, -250))):
+    mv(id, C("17:50"), C("18:25"), end, h=80, moving="retreat")
+mv("leppien", C("18:00"), C("18:30"), (1250, -600), h=80, moving="retreat")
 # About five Lee sends Dick Anderson's three brigades and part of Wilcox's division from the Brawner farm to Chinn Ridge
 for id, end, t0 in (("armistead", (-350, -1000), "17:00"), ("mahone", (-250, -1250), "17:05"), ("wright", (-150, -1450), "17:10"), ("wilcox", (-650, -780), "17:00")):
     walk(id, C(t0), end, h=90, kmh=3.6)
@@ -706,13 +710,13 @@ for f in features:
 # Times are Greene's and the Park Service panels', with Jackson's report, the 13th Massachusetts and Wikipedia where
 # they are silent. Porter's attack is 2:30 to 4 in the sources; this replay takes Greene's three.
 CHAPTERS = [
-    (A("05:30"), "Jackson behind the railroad", "On the 27th Hill's and Taliaferro's divisions moved to Manassas Junction, south of this map, and routed Taylor's New Jersey brigade there; Taylor was mortally wounded. At nine that night Taliaferro's division marched up the Manassas-Sudley road, reached the turnpike near the Stone House at midnight, crossed it near Groveton and halted near the battlefield of July 1861, in the woods of Stony Ridge, 1,000 yards north of the turnpike. Ewell's and Hill's divisions, misdirected across Bull Run, Hill all the way to Centreville, join Jackson today.", [300, 400], 7000, 300, "sunrise"),
+    (A("05:30"), "Jackson behind the railroad", "On the 27th Hill's and Taliaferro's divisions moved to Manassas Junction, south of this map, and routed Taylor's New Jersey brigade there; Taylor was mortally wounded. At nine that night Taliaferro's division marched up the Manassas-Sudley road, reached the turnpike near the Stone House at midnight, crossed it near Groveton and halted near the battlefield of July 1861, in the woods of Stony Ridge, 1,000 yards north of the turnpike. Ewell's and Hill's divisions, misdirected across Bull Run, Hill all the way to Centreville, join Jackson today.", [-1200, 500], 5000, 300, "sunrise"),
     (A("14:00"), "McDowell on the turnpike", "About ten this morning McDowell's corps pushed east on the turnpike, Reynolds's division leading, then King's four brigades, Ricketts's division in the rear. Ricketts turned off to Thoroughfare Gap, 16 km west, where Wyndham's troopers met Longstreet's vanguard at half past nine; by two he had only reached Haymarket. Jackson's divisions lie in the woods of Stony Ridge, unseen.", [-2700, -700], 3500, 300, None),
-    (A("18:30"), "Brawner farm", "About five McDowell had Pope's order to march to Centreville, King's division leading. About half past six Jackson's guns on Stony Ridge open on Gibbon's brigade on the turnpike. 'By this time it was sunset,' Jackson reported. 'I determined to attack at once, which was vigorously done by the divisions of Taliaferro and Ewell.' Gibbon turns north into the Brawner farm to meet them.", [-2750, -600], 1800, 60, "about 6:30 PM"),
-    (A("20:00"), "Seventy-five yards apart", "The two lines trade volleys 75 yards apart. Trimble's and Lawton's brigades attack without coordination; A. G. Taliaferro's three regiments go against the 19th Indiana, and Pelham's guns fire at the Hoosiers from less than 100 yards. After dark Doubleday's 56th Pennsylvania and 76th New York go into the gap between the 6th and 7th Wisconsin, and fire at the muzzle flashes.", [-2750, -380], 1500, 60, None),
-    (A("21:00"), "Back to the turnpike", "Both lines stood 'exposed to the discharges of musketry and artillery until about 9 o'clock,' Jackson reported. At nine Gibbon and Doubleday withdraw to the turnpike in good order. Of about 7,000 men engaged, nearly a third have fallen: about 1,150 Federals and 1,250 Confederates. Ewell and W. B. Taliaferro are wounded.", [-2700, -600], 1800, 300, "9 PM"),
-    (B("00:00"), "King's division marches off", "At midnight King's division leaves the turnpike for Manassas. At daybreak Pope learns that Ricketts and King have gone south.", [-1000, -1800], 5000, 600, "midnight"),
-    (B("07:00"), "Schurz finds Jackson", "Jackson's line runs about 3,000 yards along the unfinished railroad, from near the turnpike toward Sudley Church: his own division under Starke on the right, Ewell's under Lawton in the centre, A. P. Hill's on the left by the church, Gregg's and Thomas's brigades in front. About 20,000 men. Sigel's corps, fewer than 12,000, comes on. Schurz's division, north on the Sudley road, finds Jackson about seven and skirmishes with Gregg and Thomas in the woods south of the railroad; Milroy moves on the centre, Schenck and Reynolds west on the turnpike toward Groveton.", [-900, 1300], 3500, 120, "about 7 AM"),
+    (A("18:30"), "Brawner farm", "About five McDowell had Pope's order to march to Centreville, King's division leading. About half past six Jackson's guns on Stony Ridge open on Gibbon's brigade on the turnpike. 'By this time it was sunset,' Jackson reported. 'I determined to attack at once, which was vigorously done by the divisions of Taliaferro and Ewell.' Gibbon turns north into the Brawner farm to meet them.", [-2450, -600], 1800, 60, "about 6:30 PM"),
+    (A("20:00"), "Seventy-five yards apart", "The two lines trade volleys 75 yards apart. Trimble's and Lawton's brigades attack without coordination; A. G. Taliaferro's three regiments go against the 19th Indiana, and Pelham's guns fire at the Hoosiers from less than 100 yards. After dark Doubleday's 56th Pennsylvania and 76th New York go into the gap between the 6th and 7th Wisconsin, and fire at the muzzle flashes.", [-2500, -400], 1500, 60, None),
+    (A("21:00"), "Back to the turnpike", "Both lines stood 'exposed to the discharges of musketry and artillery until about 9 o'clock,' Jackson reported. At nine Gibbon and Doubleday withdraw to the turnpike in good order. Of about 7,000 men engaged, nearly a third have fallen: about 1,150 Federals and 1,250 Confederates. Ewell and W. B. Taliaferro are wounded.", [-2400, -600], 1800, 300, "9 PM"),
+    (B("00:00"), "King's division marches off", "At midnight King's division leaves the turnpike for Manassas. At daybreak Pope learns that Ricketts and King have gone south.", [-1900, -1400], 3500, 600, "midnight"),
+    (B("07:00"), "Schurz finds Jackson", "Jackson's line runs about 3,000 yards along the unfinished railroad, from near the turnpike toward Sudley Church: his own division under Starke on the right, Ewell's under Lawton in the centre, A. P. Hill's on the left by the church, Gregg's and Thomas's brigades in front. About 20,000 men. Sigel's corps, fewer than 12,000, comes on. Schurz's division, north on the Sudley road, finds Jackson about seven and skirmishes with Gregg and Thomas in the woods south of the railroad; Milroy moves on the centre, Schenck and Reynolds west on the turnpike toward Groveton.", [-600, 1300], 3500, 120, "about 7 AM"),
     (B("10:00"), "The 82nd Ohio at the Dump", "'About 10 o'clock the Federal artillery opened with spirit and animation upon our right,' Jackson reported. Sigel's offensive runs until ten, Schurz making a second assault on Hill's division. Milroy's two regiments are repulsed along the Groveton-Sudley road by Lawton, and part of the 82nd Ohio breaks briefly into the line near the Dump, a 75-yard low point in the grade. Schenck and Reynolds come under heavy artillery fire in the woods around Groveton.", [-1500, 500], 2800, 60, "about 10 AM"),
     (B("11:00"), "Longstreet from Gainesville", "Late in the morning Lee arrives with Longstreet's wing, 25,000 men in five divisions, on the march from Thoroughfare Gap since six. Hood's division forms astride the turnpike at the Brawner farm, Kemper's on its right, D. R. Jones's out toward the Manassas Gap Railroad, Wilcox's behind Hood. Lee makes his headquarters on Stuart's Hill.", [-3200, -1700], 3600, 120, "late in the morning"),
     (B("13:00"), "Pope on the field", "Pope reaches the field at one. Hooker's division and Stevens's come up to reinforce Sigel, and Kearny's and Reno's divisions come up as well. About two, by Jackson's report, 'the Federal infantry in large force advanced to the attack of our left.'", [-300, 900], 3500, 120, "1 PM"),
@@ -731,7 +735,7 @@ CHAPTERS = [
     (C("18:00"), "Jackson off the railroad", "At six Jackson's divisions attack north of the turnpike. They come down off the grade across the Dogan farm and overrun Union artillery and infantry, and the Union right falls back east.", [-500, 500], 3500, 30, "6 PM"),
     (C("18:30"), "Henry Hill", "Pope has formed a four-brigade line along the western slope of Henry Hill, nearly half a mile from the ruins of the Henry house to the south end of the plateau, with two more brigades in reserve. About five Lee sent Dick Anderson's three brigades, with part of Wilcox's division, from the Brawner farm toward Chinn Ridge, and Benning's and G. T. Anderson's Georgians, about 3,000 men, against Henry Hill. Milroy's brigade holds the washed-out bed of the Sudley road; the Georgians charge again and again and fall back to Chinn Branch, until the 15th Georgia breaks the Union line. Mahone's and Wright's brigades come up on the Confederate right and push the Union reserves back toward the Henry house.", [450, -850], 1800, 30, "6:30 PM"),
     (C("19:00"), "Lewis Ford", "About seven Pope has an unbroken line north of the turnpike, aligned with Henry Hill. Stuart's cavalry tries to get round the Union left at Lewis Ford, Robertson's brigade with the 2nd Virginia under Munford charging, and Buford's cavalry blocks it in a fight of about ten minutes. Buford is wounded. Darkness has come on, and a drizzling rain.", [1700, -1300], 3500, 60, "about 7 PM"),
-    (C("20:00"), "Pope orders the retreat", "At eight Pope orders a general withdrawal to Centreville, and it is orderly. The stone bridge over Bull Run lets most of the army go back by the turnpike. The Cub Run bridge, beyond the map, jams in the night.", [1400, 300], 4500, 120, "8 PM"),
+    (C("20:00"), "Pope orders the retreat", "At eight Pope orders a general withdrawal to Centreville, and it is orderly. The stone bridge over Bull Run lets most of the army go back by the turnpike. The Cub Run bridge, beyond the map, jams in the night.", [800, 300], 4500, 120, "8 PM"),
     (C("22:50"), "The field at night", "About eleven Pope's troops have left the field and begin entering the Centreville defenses. In the morning Jackson found 'that the Federal Army had retreated in the direction of Centreville.' On 1 September the armies meet again at Chantilly, in a thunderstorm; Kearny and Stevens are killed there.", [-500, -200], 8000, 120, "about 11 PM"),
 ]
 events = [dict(t=t, title=a, text=b, at=at_, view=v, speed=s, **({"when": w} if w else {})) for t, a, b, at_, v, s, w in CHAPTERS]
