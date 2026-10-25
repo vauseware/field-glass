@@ -1,9 +1,25 @@
 ---
 name: battle-pipeline
-description: Research a Field Glass battle into its GitHub issue, build it from that issue into a PR, and review the PR. The contract the battle-loop workflow's agents follow. Use when researching, building or reviewing a battle from a queued issue.
+description: Research a Field Glass battle into its GitHub issue, build it from that issue into a PR, and review the PR. Prefer /poteto-mode on Cursor (playbook map below). Use when researching, building or reviewing a battle from a queued issue. Claude Code may still run .claude/workflows/battle-loop.js.
 ---
 
 # Battle pipeline
+
+## Run under poteto (Cursor)
+
+This file is the **contract** (facts, fences, verify steps). On Cursor, drive it with **`/poteto-mode`**, not Claude agent fleets or `.claude/workflows/battle-loop.js` (that path burns tokens on parallel Fable/Opus swarms).
+
+| Phase | Poteto playbook | pstack skills poteto would pull |
+| --- | --- | --- |
+| Research one issue | Investigation shape for sources, then write the note (not a code Feature) | `how` if the engine fit is unclear; `technical-writing` for the note and verdict; `unslop` on the reply |
+| Build one fitting battle | **Feature** | `how` → `architect` when `make.py` shape forks; code via `poteto-agent`; verify with **verify-field-glass**; contested caption/engine calls → `interrogate`; end with **Opening a PR** |
+| Review a PR against the note | Investigation (read-only) | judgment model; cite caption vs note; no product edits |
+| Fix review findings | **Bug fix** | reproduce via `fg.sh` / `make.py`; `prove-it-works` on the real shots; push same branch |
+| Whole queue / many issues | **Orchestrate** or **Autopilot-stack** | one coordinator; each issue is a Feature (or Research then Feature); not a nested Claude fleet |
+
+Parent chat runs poteto and may spawn `poteto-agent` per playbook. Role agents must not start their own fleets. Fences below still hold.
+
+## Contract
 
 One GitHub issue per battle. The issue carries the battle from queued to built:
 
@@ -18,7 +34,7 @@ The builder's PR says `Closes #<issue>`, so the issue closes when Dave merges. E
 
 `note.py` (beside this file) moves a note between a local file and the issue: `post <issue> <file>` and `pull <issue> <file>`. Always use it. Never paste a note by hand.
 
-Fences for every role: never edit this skill, `.claude/workflows/`, another battle's folder, or the engine (`app.js`, `sim.js`, `splash.js`, `themes.js`, `themes/`, `index.html`, `tools/`). If a battle needs engine work, stop, say what is needed, and set `question`. Never merge, tag or deploy. Never spawn subagents.
+Fences for every role: never edit this skill, `.claude/workflows/`, another battle's folder, or the engine (`app.js`, `sim.js`, `splash.js`, `themes.js`, `themes/`, `index.html`, `tools/`). If a battle needs engine work, stop, say what is needed, and set `question`. Never merge, tag or deploy. Do not nest Claude fleets or extra orchestrators inside a role; poteto's parent owns any `poteto-agent` fan-out.
 
 ## Research
 

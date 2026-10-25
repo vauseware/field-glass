@@ -1,9 +1,15 @@
 ---
 name: verify-field-glass
-description: Drive the real Field Glass web page (the start screen's war timeline, battle playback, screenshot links) in headless Chrome on this headless Mac mini and capture proof. Use before claiming a UI or battle change works, for PR screenshots, or when a change touches app.js, splash.js, index.html, themes/ or a battle's data.
+description: Drive the real Field Glass web page in headless Chrome on this Mac mini and capture proof. Poteto Feature/Bug-fix step "verify on the matching surface" means this skill (fg.sh), not IDE browser tools. Use before claiming a UI or battle change works, for PR screenshots, or when a change touches app.js, splash.js, index.html, themes/ or a battle's data.
 ---
 
 # Verify Field Glass
+
+## Under poteto
+
+When `/poteto-mode` reaches "Verify on the matching surface" for Field Glass UI, run **this skill** (`fg.sh` journeys and shots). That is poteto's **Prove It Works** on the real page. Do not substitute Cursor IDE browser, computer-use, or Claude for Chrome. For the ADR-0009 opening-landing property (not a journey), also run **formal-verify-opening-landing** (`node tools/formal/opening-landing.mjs`).
+
+## Contract
 
 Field Glass is a static web page: `index.html` loads `app.js`, `splash.js` and the skins in `themes/`, and fetches `battles/index.json` plus each battle's `battle.json` and `terrain.json`. There is no backend, database or login. The only surface is the browser page, drawn on a canvas with HTML panels over it.
 

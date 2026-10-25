@@ -1,7 +1,9 @@
+// Cursor: prefer /poteto-mode with .claude/skills/battle-pipeline/SKILL.md (Orchestrate or Feature per issue).
+// This workflow is the Claude Code fleet path and is expensive; keep it off Cursor.
 export const meta = {
   name: 'battle-loop',
-  description: 'Research and build Field Glass battles from their GitHub issues: Fable researches, Opus builds a PR, Fable reviews, Opus fixes',
-  whenToUse: 'Run the next loop from the pinned Battle queue issue. args: { issues: [<issue numbers>] }, one battle per war per loop.',
+  description: 'Claude Code fleet: research and build Field Glass battles from GitHub issues (Fable research/review, Opus build/fix). Prefer poteto-mode on Cursor.',
+  whenToUse: 'Claude Code only. Run the next loop from the pinned Battle queue issue. args: { issues: [<issue numbers>] }, one battle per war per loop. On Cursor use /poteto-mode + battle-pipeline instead.',
   phases: [
     { title: 'Research', detail: 'one Fable agent per issue posts the note and verdict', model: 'fable' },
     { title: 'Build', detail: 'one Opus agent per fitting battle opens a PR', model: 'opus' },

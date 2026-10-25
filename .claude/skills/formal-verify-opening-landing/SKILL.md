@@ -1,9 +1,13 @@
 ---
 name: formal-verify-opening-landing
-description: Formally check that Field Glass's opening shot lands on the frame the first playing Follow step will use (ADR-0009). Use when a change touches startOpening, updateCamera, step, advance, activity, actionBox, lapse defaults, battle start times/chapters, or when claiming the opening no longer jumps after the title.
+description: Formally check that Field Glass's opening shot lands on the frame the first playing Follow step will use (ADR-0009). Under /poteto-mode, run this when Prove It Works or a Feature/Bug-fix touches the opening/Follow/lapse path. Use when a change touches startOpening, updateCamera, step, advance, activity, actionBox, lapse defaults, battle start times/chapters, or when claiming the opening no longer jumps after the title.
 ---
 
 # Formal verify: opening lands where play Follows
+
+## Under poteto
+
+Poteto does not replace this check with a journey. If the change can move the opening target or first-play `lapsing`, `/poteto-mode` should run `node tools/formal/opening-landing.mjs` as part of verify (alongside **verify-field-glass** journeys when the UI also changed). Findings stay findings until product code is fixed on purpose.
 
 ## Property
 

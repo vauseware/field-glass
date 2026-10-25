@@ -1,9 +1,22 @@
 ---
 name: war-skin
-description: Design and build a Field Glass skin for a war, the way the War of 1812 and First World War skins were made: three rendered options, Dave picks one, then the full skin, its start-screen entry and its ADR. Use when a war needs its own look, or a skin needs redesigning.
+description: Design and build a Field Glass skin for a war (three rendered options, Dave picks one, then full skin, start-screen entry, ADR). Prefer /poteto-mode on Cursor. Use when a war needs its own look, or a skin needs redesigning.
 ---
 
 # War skin
+
+## Run under poteto (Cursor)
+
+Drive this skill with **`/poteto-mode`**. Do not spin a Claude agent fleet for the three options.
+
+| Phase | Poteto playbook | pstack skills poteto would pull |
+| --- | --- | --- |
+| Three options | **Prototype** (or Feature with **Exhaust the Design Space**); bakeoff → **arena** | `how` on `themes.js` / newest skin; three thin skins via `poteto-agent` or arena runners; shoot with **verify-field-glass** / `shoot-skins.cjs` |
+| Dave picks | pause (preference only he can make) | show the nine PNGs in chat; recommend one; wait for his choice |
+| Build the chosen skin | **Feature** | `architect` if layout/`WARS`/`YEARS` wiring forks; `poteto-agent` for the module + CSS + ADR; verify with **verify-field-glass**; **Opening a PR** |
+| After merge babysit | **Babysit** then **Shipping** if asked to land | as poteto names |
+
+## Contract
 
 A skin is one module in `themes/` plus CSS in `index.html`. Its contract is the comment at the top of `themes.js`. Read that, `docs/adr/0002-per-war-skins.md` (the rules: each war wears the dress of its own maps; static drawing is baked into the layer; ambient motion is CSS page layers, never canvas), and the newest skin ADR (`docs/adr/0008-first-world-war-skin.md`).
 
