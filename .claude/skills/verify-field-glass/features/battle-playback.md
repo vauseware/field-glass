@@ -1,6 +1,6 @@
 # Battle playback
 
-A battle opens paused at its first moment with its map, the top panel (title, sides, outcome, All battles, Legend, Sources) and the story caption. The bar at the foot plays and pauses, sets the speed, scrubs time across chapter marks, and toggles Follow the action and Time-lapse. The clock and the caption follow the battle's time.
+A battle link opens paused at its first moment with its map, the top panel (title, sides, outcome, All battles, Legend, Sources) and the story caption. The bar at the foot plays and pauses, sets the speed, scrubs time across chapter marks, and toggles Follow the action and Time-lapse. The clock and the caption follow the battle's time.
 
 ## Sub-features
 
@@ -26,7 +26,7 @@ Preconditions:
 
 - **Whole journey.** Run `bash .claude/skills/verify-field-glass/fg.sh drive <dir> .claude/skills/verify-field-glass/journeys/playback.cjs cowpens`. Every line is `PASS`, and `<dir>/playback-cowpens-*.png` show the opening, the midway seek, the Legend and the Sources.
 - **Opens paused.** Load `#cowpens`. `#play` has `aria-label="Play"`, and `#scrub` is at its `min`.
-- **Play and pause.** Click `#play` and wait 3 s. The label is `Pause` and `#scrub`'s value has grown. Click again, and the value holds still.
+- **Play and pause.** Click `#play`. The first Play from the start runs the opening shot (`opening-shot.md`): wait for `#opening` to be hidden, then wait 3 s. The label is `Pause` and `#scrub`'s value has grown. Click again, and the value holds still.
 - **Space.** Blur the focused element, then press Space. Play toggles, and the value grows while playing.
 - **Scrub.** Set `#scrub` halfway and fire `input`. `#clock` and `#cap-title` change to the chapter at that time.
 - **Arrow keys.** Blur, then press ArrowRight. `#scrub` moves forward by at least 30 s.

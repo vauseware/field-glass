@@ -1,6 +1,6 @@
 # Screenshot links
 
-A battle link can open a battle at a set moment and state, which is how README images, PR screenshots and data checks are made. The hash is `#<battle>[@<time>][,play][,select=<unit id>][,warp][,legend][,outcome][,bench]`, with the flags in that order. Once the battle loads, the hash settles to `#<battle>` without a reload.
+A battle link can open a battle at a set moment and state, which is how README images, PR screenshots and data checks are made. The hash is `#<battle>[@<time>][,play][,select=<unit id>][,warp][,legend][,outcome][,opening][,bench]`, with the flags in that order. Once the battle loads, the hash settles to `#<battle>` without a reload.
 
 ## Sub-features
 
@@ -9,6 +9,7 @@ A battle link can open a battle at a set moment and state, which is how README i
 - `sl-select` opens the unit card on one unit.
 - `sl-warp` runs 300 frames at load so the camera, smoke and caption have settled for a still frame, and turns off the caption fades.
 - `sl-legend` and `sl-outcome` open the Legend dialog or the Outcome details.
+- `sl-opening` runs the opening shot and holds it at the title: the whole map, no panels, the battle's name over its date.
 - `sl-war` opens a war's start screen with `#revolution`, `#civil-war` or `#ww2`, with an optional `?plan=<battle id>` to fix the Revolution backdrop.
 
 ## How to get to it (user POV)
