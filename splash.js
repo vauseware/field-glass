@@ -6,6 +6,7 @@ import * as P from './themes/paint.js';
 import ww2, { counter, looks, arrowPath } from './themes/ww2.js';
 import { ground, INK, SHEET } from './themes/civil-war.js';
 import { ground as chart, rose, INK as NAVY, PAPER as CREAM, BACK } from './themes/war-of-1812.js';
+import { ground as trenchMap, feature as trenchFeature, INK as TINK, PAPER as TPAPER } from './themes/ww1.js';
 
 // In date order. `war` is the index.json "war" string; ids match the skins in themes.js where a war has one.
 // `sample` is the battle a war with no battles yet draws its backdrop from.
@@ -16,6 +17,7 @@ export const WARS = [
   { id: 'revolution', name: 'American Revolution', years: '1775–1783', from: 1775, to: 1783, war: 'American Revolutionary War', draw: drawPlan },
   { id: 'war-of-1812', name: 'War of 1812', years: '1812–1815', from: 1812, to: 1815, war: 'War of 1812', draw: drawChart, sample: 'fort-fisher', note: 'The first battle will be New Orleans, 8 January 1815.' },
   { id: 'civil-war', name: 'Civil War', years: '1861–1865', from: 1861, to: 1865, war: 'Civil War', draw: drawSurvey },
+  { id: 'ww1', name: 'First World War', years: '1914–1918', from: 1914, to: 1918, war: 'World War I', draw: drawTrench, sample: 'yorktown' },
   { id: 'ww2', name: 'Second World War', years: '1939–1945', from: 1939, to: 1945, war: 'World War II', draw: drawTable },
 ];
 
@@ -267,6 +269,42 @@ async function drawChart(g, CW, CH, o) {
     g.strokeStyle = NAVY; g.lineWidth = 1; g.strokeRect(x0, y0, w, 4);
     g.fillStyle = NAVY; g.textAlign = 'center'; g.font = 'italic 15px Cardo'; g.fillText('Scale of Yards', x0 + w / 2, y0 - 12);
     g.font = 'italic 12px Cardo'; g.fillText('0', x0, y0 + 18); g.fillText(String(len), x0 + w, y0 + 18);
+  }
+}
+
+// First World War: one battle's ground as the skin's trench map, with its siegeworks as they stood at the end, ground
+// only, on the sheet's mount.
+const trenchMaps = new Map(), MOUNT = '#c9c0a4'; // id -> the ground, built once; the board the sheet is mounted on
+async function drawTrench(g, CW, CH, o) {
+  const [{ b, T }] = await Promise.all([load(o.id), faces(['13px "Archivo Narrow"', '700 33px "Archivo Narrow"', 'italic 13px "Crimson Pro"', 'italic 15px "Crimson Pro"'])]);
+  if (!trenchMaps.has(b.id)) trenchMaps.set(b.id, trenchMap(b, T));
+  const { layer } = trenchMaps.get(b.id);
+  const dug = (b.features ?? []).filter(f => f.type === 'trench' && f.pts).flatMap(f => f.pts); // centred on the trenches, else the fight
+  const at = dug.length ? [0, 1].map(i => dug.reduce((s, p) => s + p[i], 0) / dug.length) : busiest(b).at ?? [0, 0], E = b.extent, k = o.refW / Math.max(2400, E / 2);
+  const X = x => CW * o.fx + (x - at[0]) * k, Y = y => CH * o.fy - (y - at[1]) * k;
+  g.fillStyle = MOUNT; g.fillRect(0, 0, CW, CH);
+  const l = Math.max(24, X(-E / 2)), t = Math.max(24, Y(E / 2)), r = Math.min(CW - 24, X(E / 2)), bt = Math.min(CH - 24, Y(-E / 2));
+  g.fillStyle = TPAPER; g.fillRect(l - 20, t - 20, r - l + 40, bt - t + 40);
+  g.save(); g.beginPath(); g.rect(l, t, r - l, bt - t); g.clip();
+  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  g.drawImage(layer, X(-E / 2), Y(E / 2), E * k, E * k);
+  const kf = Math.max(0.7, (k * E) / layer.width); // the works dug during the battle, which the layer leaves out
+  for (const f of b.features ?? []) if (!P.isStatic(f) && f.until == null && (f.pts || f.poly)) trenchFeature(g, f.type, (f.pts ?? f.poly).map(([x, y]) => [X(x), Y(y)]), kf, !!f.poly);
+  g.restore();
+  g.strokeStyle = TINK; g.lineWidth = 2; g.strokeRect(l - 4, t - 4, r - l + 8, bt - t + 8); g.lineWidth = 0.8; g.strokeRect(l - 9, t - 9, r - l + 18, bt - t + 18);
+  g.globalCompositeOperation = 'multiply'; // paper grain and a vignette, as on the battle screen
+  g.globalAlpha = 0.3; g.drawImage(P.grainCanvas(CW, CH, 19, 225, 255), 0, 0); g.globalAlpha = 1;
+  const vg = g.createRadialGradient(CW / 2, CH / 2, Math.min(CW, CH) * 0.4, CW / 2, CH / 2, Math.hypot(CW, CH) * 0.6);
+  vg.addColorStop(0, 'rgba(255,255,255,1)'); vg.addColorStop(1, 'rgba(175,170,160,1)');
+  g.fillStyle = vg; g.fillRect(0, 0, CW, CH); g.globalCompositeOperation = 'source-over';
+  if (o.cartouche) { // the scale in yards on a patch of paper, above the timeline, with the key to the squares
+    const fb = CH - o.bottom, yd = 0.9144 * k, len = [500, 1000, 2000].find(n => n * yd >= 200) ?? 2000, w = len * yd, x0 = CW - 80 - w, y0 = fb - 112;
+    g.fillStyle = 'rgba(242,238,226,0.92)'; g.fillRect(x0 - 24, y0 - 46, w + 48, 92);
+    for (let i = 0; i < 10; i++) { g.fillStyle = i % 2 ? TPAPER : TINK; g.fillRect(x0 + (i * w) / 10, y0 - 4, w / 10, 4); }
+    g.strokeStyle = TINK; g.lineWidth = 1; g.strokeRect(x0, y0 - 4, w, 4);
+    g.fillStyle = TINK; g.textAlign = 'center'; g.font = '13px "Archivo Narrow"'; g.letterSpacing = '2px'; g.fillText('SCALE 1:10,000', x0 + w / 2, y0 - 26); g.letterSpacing = '0px';
+    g.font = 'italic 13px "Crimson Pro"'; g.fillText(`${len} Yards`, x0 + w / 2, y0 + 16);
+    g.font = 'italic 15px "Crimson Pro"'; g.fillText('The squares are of 1,000 yards.', x0 + w / 2, y0 + 36);
   }
 }
 

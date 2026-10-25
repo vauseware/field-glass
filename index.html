@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Playfair+Display+SC:wght@400;700;900&family=Cardo:ital,wght@0,400;0,700;1,400&family=Stardos+Stencil:wght@400;700&family=Courier+Prime:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Playfair+Display+SC:wght@400;700;900&family=Cardo:ital,wght@0,400;0,700;1,400&family=Stardos+Stencil:wght@400;700&family=Courier+Prime:wght@400;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Archivo+Narrow:wght@400;700&display=swap">
 <link id="theme-fonts" rel="stylesheet">
 <style>
   /* The battle screen wears the start screen's dress: parchment panels, ink double rules, Fell type for names, Georgia for reading. */
@@ -166,6 +166,23 @@
   .war-war-of-1812 .timeline { color: #eee9d8; background: #4e6676; border: 1px solid #1e2a38; box-shadow: inset 0 0 0 3px #4e6676, inset 0 0 0 4px #eee9d8, 0 10px 26px rgba(20,28,38,0.5); }
   .war-war-of-1812 .tl-war b { font-weight: 700; }
   #splash.war-war-of-1812 .tl-war[aria-pressed="true"] { background: #eee9d8; color: #1e2a38; border-color: #eee9d8; box-shadow: 0 0 0 3px #eee9d8; }
+  /* First World War: the trench map's cream sheet under an ink rule, its title in spaced capitals over a red trench
+     trace, on a timeline of the map's paper. */
+  #splash.war-ww1 { color: #1f1d1a; font: 17px/1.5 "Crimson Pro", Georgia, serif; background: #c9c0a4; }
+  .war-ww1 .card { text-align: center; background: #f2eee2; border: 1px solid #1f1d1a; box-shadow: inset 0 0 0 4px #f2eee2, inset 0 0 0 5px #1f1d1a, 0 14px 40px rgba(30,28,20,0.4); }
+  .war-ww1 h1 { margin: 2px 0 0; font: 700 56px/1 "Archivo Narrow", "Arial Narrow", sans-serif; letter-spacing: 0.12em; text-transform: uppercase; }
+  .war-ww1 .tag { font: italic 20px/1.35 "Crimson Pro", Georgia, serif; margin: 8px 0 0; }
+  .war-ww1 .rule2 { height: 10px; margin: 16px 40px 18px; background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='10'><path d='M0 1.5 H8 V8.5 H16' fill='none' stroke='%23c3162b' stroke-width='2'/></svg>") 0 0 / 16px 10px repeat-x; }
+  .war-ww1 .empty p { margin: 0 0 12px; font-size: 18px; } .war-ww1 .empty .lead { font: 600 24px/1.3 "Crimson Pro", Georgia, serif; margin: 0 0 6px; }
+  .war-ww1 .go { display: flex; flex-direction: column; gap: 8px; align-items: stretch; margin: 16px 0 4px; }
+  #splash.war-ww1 .go button { font-size: 18px; border: 1px solid #1f1d1a; border-radius: 2px; padding: 10px 14px; min-height: 48px; }
+  #splash.war-ww1 .go button:hover { background: rgba(195,22,43,0.08); }
+  #splash.war-ww1 .row { font-size: 20px; } #splash.war-ww1 .row:is(:hover, :focus-visible) { background: rgba(195,22,43,0.08); }
+  .war-ww1 .foot { font: italic 16px/1.45 "Crimson Pro", Georgia, serif; margin: 18px 0 0; color: #55524a; }
+  .war-ww1 .timeline { color: #1f1d1a; background: #f2eee2; border: 1px solid #1f1d1a; box-shadow: inset 0 0 0 3px #f2eee2, inset 0 0 0 4px #1f1d1a, 0 10px 26px rgba(30,28,20,0.4); }
+  .war-ww1 .tl-war b { font: 700 18px "Archivo Narrow", "Arial Narrow", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
+  #splash.war-ww1 .tl-war[aria-pressed="true"] { background: #c3162b; color: #f2eee2; border-color: #c3162b; box-shadow: 0 0 0 3px #c3162b; }
+  .war-ww1 .tl-span { background: #c3162b; }
   /* Second World War: a typed manila file card with a stencilled label, on the operations table's dark board. */
   #splash.war-ww2 { color: #1f1c14; font-family: "Courier Prime", "Courier New", monospace; background: #141310; }
   .war-ww2 .card { border-radius: 3px; box-shadow: 0 2px 0 #b89c5f, 0 28px 60px rgba(0,0,0,0.75);
@@ -188,6 +205,7 @@
     .war-civil-war h1 { font-size: 42px; } .war-civil-war .tag { font-size: 17px; } .war-civil-war .rule2 { margin: 12px 20px 14px; }
     .war-ww2 h1 { font-size: 38px; } #splash.war-ww2 .row { font-size: 16px; } .war-ww2 .tag { font-size: 15px; }
     .war-war-of-1812 h1 { font-size: 42px; } .war-war-of-1812 .tag { font-size: 17px; } .war-war-of-1812 .rule2 { margin: 12px 20px 14px; }
+    .war-ww1 h1 { font-size: 38px; } .war-ww1 .tag { font-size: 17px; } .war-ww1 .rule2 { margin: 12px 20px 14px; }
     #splash .timeline { left: 8px; right: 8px; bottom: 8px; padding: 8px; flex-direction: column; gap: 6px; }
     #splash .ask { font-size: 16px; text-align: center; }
     .tl-axis { height: auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
@@ -242,6 +260,16 @@
   .theme-war-of-1812 #clock { font: 400 27px/1 var(--fell); } .theme-war-of-1812 #clock small, .theme-war-of-1812 #hours { color: #2c3a4a; }
   .theme-war-of-1812 #fx .binnacle { mix-blend-mode: screen; opacity: var(--dark); background: radial-gradient(circle at 50% 50%, rgba(200,225,235,0.4), rgba(170,200,220,0.12) 45%, transparent 75%); }
   .theme-war-of-1812 #loading { color: var(--ink); font: italic 28px var(--fell); background: #9fb3bd; }
+  /* First World War: a 1:10,000 trench map. Cream panels with an ink rule inside the border, the kicker in spaced
+     capitals; a star shell over the field at night (#fx), drifting down as it burns. */
+  body.theme-ww1 { --paper: rgba(242,238,226,0.97); --paper-solid: #f2eee2; --ink: #1f1d1a; --muted: #55524a; --rule: #1f1d1a; --accent: #c3162b; --fell: "Crimson Pro", Georgia, serif; --sc: "Archivo Narrow", sans-serif; --text: "Crimson Pro", Georgia, serif; --read: "Crimson Pro", Georgia, serif; --panel-bg: #f2eee2; background: #f2eee2; }
+  .theme-ww1 .panel::before { content: ""; position: absolute; inset: 4px; border: 1px solid var(--ink); pointer-events: none; }
+  .theme-ww1 #kicker { letter-spacing: 0.3em; text-transform: uppercase; }
+  .theme-ww1 #cap-text, .theme-ww1 #hover, .theme-ww1 #card, .theme-ww1 #out-body, .theme-ww1 dialog { font-size: 18px; }
+  .theme-ww1 #clock { font: 600 27px/1 var(--fell); }
+  .theme-ww1 #loading { color: var(--ink); font: italic 28px var(--fell); background: #f2eee2; }
+  .theme-ww1 #fx .flare { mix-blend-mode: screen; opacity: var(--dark); background: radial-gradient(circle at 62% 30%, rgba(255,250,220,0.55), rgba(255,240,200,0.15) 30%, transparent 60%); animation: flare 7s ease-in-out infinite; }
+  @keyframes flare { 0%, 100% { transform: translate(0, 0); filter: brightness(1); } 40% { filter: brightness(1.3); } 70% { transform: translate(-4vw, 12vh); filter: brightness(0.7); } }
   /* Civil War: an engineer's survey sheet. Panels of ruled linen with a rule inside the border and titles in small
      capitals; the bar in blue cloth with a gilt rule, as on the start screen; a lantern over the sheet at night (#fx). */
   body.theme-civil-war { --paper: rgba(241,236,224,0.96); --paper-solid: #f1ece0; --ink: #1d2230; --muted: #4c5160; --rule: #1d2230; --accent: #8c2a1c;
