@@ -22,9 +22,11 @@ them gone. A viewer who hides them still needs to see when a new chapter begins.
 
 ### The switch
 
-- It starts on, so nothing changes for a viewer who never touches it.
-- The page remembers it per browser (`localStorage`, key `fieldglass.chapters`), across battles and
-  reloads. Read and write it inside `try`. When storage fails, the switch starts on and still works.
+- It starts on for a battle with 15 chapters or fewer, and off for one with more, where the labels take a
+  large share of the map (Sidi Bou Zid has 18, New Orleans 28).
+- Once the viewer uses the switch, the page remembers that choice per browser (`localStorage`, key
+  `fieldglass.chapters`) and applies it to every battle and reload, whatever its chapter count. Read and
+  write it inside `try`. When storage fails, the switch starts by the chapter count and still works.
 - On a phone (640 px wide or less) the labels are hidden already, so the switch is not shown.
 - Hiding the labels runs the same layout as today with every label hidden, so the ticks come from the
   existing code path in `layoutMarks()`.
@@ -87,11 +89,12 @@ title at full opacity, held, to prove its place and dress. The hash pattern in `
 A new journey, `.claude/skills/verify-field-glass/journeys/chapters.cjs`, drives the page as a viewer
 does and prints PASS or FAIL for each of these:
 
-1. The Chapters checkbox shows and is checked on first load; visible labels > 0.
+1. With no stored choice, the Chapters checkbox is checked on Cowpens (14 chapters) with visible labels
+   > 0, and unchecked on Sidi Bou Zid (18) with visible labels = 0.
 2. A click on it hides every label; the ticks remain; visible labels = 0.
 3. `c` turns the labels back on.
-4. A reload keeps the setting off; a different battle opens with it off.
-5. With storage blocked, the page loads, the switch starts on and still toggles.
+4. Turned off on Cowpens, a reload keeps it off; turned on on Sidi Bou Zid, Cowpens then opens with it on.
+5. With storage blocked, the page loads, the switch starts by the chapter count and still toggles.
 6. Playing across a chapter boundary at 20×, the title's opacity rises above 0.9 within 1 s and falls to
    0 by 4 s, and its text is the new chapter's title.
 7. A scrubber drag across three chapters shows no title.
@@ -108,8 +111,3 @@ and the bar with Chapters off on a battle with many chapters.
 - A switch for the title itself. Add one only if the title proves distracting in use.
 - Changing what the story panel shows.
 - Hiding the chapter ticks.
-
-## Open decisions
-
-- Whether the switch should start off on battles with more than 15 chapters, where the labels crowd the
-  map most. Default: starts on everywhere, as written above.
