@@ -1,0 +1,1122 @@
+{
+ "id": "chippawa",
+ "name": "Battle of Chippawa",
+ "date": "1814-07-05",
+ "dateText": "5 July 1814",
+ "place": "Chippawa, on the Niagara River, Upper Canada (Ontario)",
+ "origin": {
+  "lat": 43.0545,
+  "lon": -79.036
+ },
+ "extent": 3500,
+ "start": "05:00",
+ "end": "19:45",
+ "sunrise": "04:26",
+ "sunset": "19:42",
+ "speed": 30,
+ "lapse": 1800,
+ "menPerDot": 5,
+ "water": 170.5,
+ "terrainExaggeration": 3,
+ "contourInterval": 1,
+ "trees": {
+  "density": 0.003,
+  "clear": [
+   [
+    [
+     -300,
+     -1301
+    ],
+    [
+     -300,
+     300
+    ],
+    [
+     -169,
+     531
+    ],
+    [
+     451,
+     531
+    ],
+    [
+     751,
+     531
+    ],
+    [
+     1352,
+     -300
+    ],
+    [
+     1251,
+     -901
+    ],
+    [
+     961,
+     -1151
+    ],
+    [
+     56,
+     -1301
+    ]
+   ],
+   [
+    [
+     -1001,
+     801
+    ],
+    [
+     -1001,
+     901
+    ],
+    [
+     -551,
+     811
+    ],
+    [
+     -150,
+     741
+    ],
+    [
+     501,
+     701
+    ],
+    [
+     501,
+     591
+    ],
+    [
+     -110,
+     591
+    ],
+    [
+     -551,
+     701
+    ],
+    [
+     -951,
+     771
+    ]
+   ],
+   [
+    [
+     -100,
+     -1320
+    ],
+    [
+     1000,
+     -1170
+    ],
+    [
+     1550,
+     -1100
+    ],
+    [
+     1550,
+     -1750
+    ],
+    [
+     -100,
+     -1750
+    ]
+   ]
+  ]
+ },
+ "fields": [
+  [
+   [
+    150,
+    -1000
+   ],
+   [
+    850,
+    -1000
+   ],
+   [
+    850,
+    -420
+   ],
+   [
+    150,
+    -420
+   ]
+  ],
+  [
+   [
+    450,
+    -120
+   ],
+   [
+    850,
+    -120
+   ],
+   [
+    850,
+    380
+   ],
+   [
+    450,
+    380
+   ]
+  ],
+  [
+   [
+    -200,
+    -1000
+   ],
+   [
+    100,
+    -1000
+   ],
+   [
+    100,
+    -500
+   ],
+   [
+    -200,
+    -500
+   ]
+  ],
+  [
+   [
+    -200,
+    -100
+   ],
+   [
+    300,
+    -100
+   ],
+   [
+    300,
+    350
+   ],
+   [
+    -200,
+    350
+   ]
+  ]
+ ],
+ "wind": {
+  "x": 0.5,
+  "y": 0.4
+ },
+ "view": {
+  "x": 0,
+  "y": 0,
+  "width": 3500
+ },
+ "sides": {
+  "american": {
+   "name": "Americans (Brown, Scott)",
+   "color": "#27497f",
+   "light": "#6f8fc4",
+   "dark": "#12254a"
+  },
+  "british": {
+   "name": "British, Canadians and allies (Riall)",
+   "color": "#b3331f",
+   "light": "#d87a68",
+   "dark": "#5a150c"
+  }
+ },
+ "features": [
+  {
+   "type": "creek",
+   "name": "Street's Creek",
+   "at": [
+    307,
+    -1279
+   ],
+   "rot": 10,
+   "pts": [
+    [
+     -625,
+     -1752
+    ],
+    [
+     -348,
+     -1462
+    ],
+    [
+     56,
+     -1279
+    ],
+    [
+     501,
+     -1201
+    ],
+    [
+     961,
+     -1119
+    ],
+    [
+     1066,
+     -872
+    ],
+    [
+     1153,
+     -653
+    ],
+    [
+     1116,
+     -331
+    ],
+    [
+     1095,
+     -298
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "the river road",
+   "pts": [
+    [
+     1400,
+     -1750
+    ],
+    [
+     1360,
+     -1500
+    ],
+    [
+     1320,
+     -1200
+    ],
+    [
+     1290,
+     -950
+    ],
+    [
+     1250,
+     -700
+    ],
+    [
+     1200,
+     -520
+    ],
+    [
+     1122,
+     -391
+    ],
+    [
+     1083,
+     -367
+    ],
+    [
+     899,
+     -49
+    ],
+    [
+     772,
+     140
+    ],
+    [
+     656,
+     361
+    ],
+    [
+     529,
+     529
+    ],
+    [
+     399,
+     614
+    ],
+    [
+     176,
+     666
+    ],
+    [
+     -151,
+     689
+    ],
+    [
+     -552,
+     760
+    ],
+    [
+     -871,
+     858
+    ],
+    [
+     -951,
+     851
+    ],
+    [
+     -961,
+     971
+    ],
+    [
+     -1000,
+     1040
+    ]
+   ],
+   "at": [
+    -307,
+    673
+   ],
+   "rot": 170
+  },
+  {
+   "type": "road",
+   "pts": [
+    [
+     1051,
+     -360
+    ],
+    [
+     1161,
+     -400
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "Ussher's lane (about here)",
+   "pts": [
+    [
+     1041,
+     -240
+    ],
+    [
+     200,
+     -240
+    ]
+   ],
+   "at": [
+    200,
+    -210
+   ],
+   "rot": 0
+  },
+  {
+   "type": "works",
+   "name": "Fort Chippawa and Riall's works (about here)",
+   "pts": [
+    [
+     -1130,
+     975
+    ],
+    [
+     -880,
+     990
+    ],
+    [
+     -850,
+     1080
+    ]
+   ],
+   "at": [
+    -1210,
+    1190
+   ]
+  },
+  {
+   "type": "redoubt",
+   "name": "t\u00eate-de-pont (about here)",
+   "poly": [
+    [
+     -780,
+     830
+    ],
+    [
+     -836,
+     810
+    ],
+    [
+     -822,
+     772
+    ],
+    [
+     -766,
+     792
+    ]
+   ],
+   "at": [
+    -761,
+    731
+   ]
+  },
+  {
+   "type": "camp",
+   "poly": [
+    [
+     -1150,
+     1000
+    ],
+    [
+     -900,
+     1000
+    ],
+    [
+     -900,
+     1100
+    ],
+    [
+     -1150,
+     1100
+    ]
+   ]
+  },
+  {
+   "type": "camp",
+   "name": "Scott's camp",
+   "poly": [
+    [
+     500,
+     -1600
+    ],
+    [
+     1050,
+     -1600
+    ],
+    [
+     1050,
+     -1350
+    ],
+    [
+     500,
+     -1350
+    ]
+   ],
+   "at": [
+    775,
+    -1640
+   ]
+  },
+  {
+   "type": "camp",
+   "name": "Ripley's camp",
+   "poly": [
+    [
+     0,
+     -1700
+    ],
+    [
+     450,
+     -1700
+    ],
+    [
+     450,
+     -1450
+    ],
+    [
+     0,
+     -1450
+    ]
+   ],
+   "at": [
+    225,
+    -1730
+   ]
+  },
+  {
+   "name": "King's Bridge (about here)",
+   "at": [
+    -1011,
+    791
+   ]
+  },
+  {
+   "name": "Chippawa",
+   "at": [
+    -1217,
+    467
+   ]
+  },
+  {
+   "name": "Street's house (about here)",
+   "at": [
+    991,
+    -511
+   ]
+  },
+  {
+   "name": "Ussher's (about here)",
+   "at": [
+    911,
+    -290
+   ]
+  },
+  {
+   "name": "the plain",
+   "at": [
+    300,
+    -650
+   ]
+  },
+  {
+   "name": "the woods",
+   "at": [
+    -900,
+    -400
+   ]
+  },
+  {
+   "name": "the woods",
+   "at": [
+    -1000,
+    300
+   ]
+  },
+  {
+   "name": "Battlefield monument (2001)",
+   "at": [
+    797,
+    -324
+   ]
+  },
+  {
+   "name": "Navy Island",
+   "at": [
+    1650,
+    400
+   ]
+  },
+  {
+   "name": "Niagara River",
+   "at": [
+    1300,
+    -700
+   ],
+   "rot": 72
+  },
+  {
+   "name": "Chippawa (Welland) River",
+   "at": [
+    -1700,
+    50
+   ],
+   "rot": 53
+  },
+  {
+   "name": "to Fort Erie, 16 miles",
+   "at": [
+    1250,
+    -1700
+   ]
+  }
+ ],
+ "units": [
+  {
+   "id": "r9",
+   "side": "american",
+   "name": "1st battalion, 9th US Infantry, with a detachment of the 22nd",
+   "short": "9th and 22nd",
+   "commander": "Maj. Henry Leavenworth",
+   "type": "infantry",
+   "strength": 577,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 900,
+     "y": -1450,
+     "state": "line",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 900,
+     "y": -1450
+    }
+   ]
+  },
+  {
+   "id": "r11",
+   "side": "american",
+   "name": "2nd battalion, 11th US Infantry",
+   "short": "11th",
+   "commander": "Col. John Campbell, then Maj. John McNeil",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 760,
+     "y": -1450,
+     "state": "line",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 760,
+     "y": -1450
+    }
+   ]
+  },
+  {
+   "id": "r25",
+   "side": "american",
+   "name": "3rd battalion, 25th US Infantry",
+   "short": "25th",
+   "commander": "Maj. Thomas Jesup",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 620,
+     "y": -1450,
+     "state": "line",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 620,
+     "y": -1450
+    }
+   ]
+  },
+  {
+   "id": "towson",
+   "side": "american",
+   "name": "Towson's company, US Artillery: three guns",
+   "short": "Towson",
+   "commander": "Capt. Nathan Towson",
+   "type": "artillery",
+   "strength": 90,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 1000,
+     "y": -1400,
+     "state": "line",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 1000,
+     "y": -1400
+    }
+   ],
+   "guns": 3
+  },
+  {
+   "id": "ritchie",
+   "side": "american",
+   "name": "Ritchie's company, US Artillery",
+   "short": "Ritchie",
+   "commander": "Capt. John Ritchie",
+   "type": "artillery",
+   "strength": 75,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 400,
+     "y": -1660,
+     "state": "line",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 400,
+     "y": -1660
+    }
+   ],
+   "guns": 3
+  },
+  {
+   "id": "hall",
+   "side": "american",
+   "name": "Hall's 12-pounder of Biddle's company",
+   "short": "Hall",
+   "commander": "Lt. Hall",
+   "type": "artillery",
+   "strength": 25,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 330,
+     "y": -1660,
+     "state": "line",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 330,
+     "y": -1660
+    }
+   ],
+   "guns": 1
+  },
+  {
+   "id": "harris",
+   "side": "american",
+   "name": "Harris's troop, US Light Dragoons",
+   "short": "Harris",
+   "commander": "Capt. Samuel Harris",
+   "type": "cavalry",
+   "strength": 70,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 850,
+     "y": -1560,
+     "state": "line",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 850,
+     "y": -1560
+    }
+   ]
+  },
+  {
+   "id": "r21",
+   "side": "american",
+   "name": "21st US Infantry, with the 19th's detachment (Ripley's brigade)",
+   "short": "21st",
+   "commander": "Brig. Gen. Eleazer Ripley; Maj. Vose",
+   "type": "infantry",
+   "strength": 680,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 300,
+     "y": -1560,
+     "state": "line",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 300,
+     "y": -1560
+    }
+   ]
+  },
+  {
+   "id": "r23",
+   "side": "american",
+   "name": "23rd US Infantry (Ripley's brigade)",
+   "short": "23rd",
+   "commander": "Maj. Daniel McFarland",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 130,
+     "y": -1600,
+     "state": "line",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 130,
+     "y": -1600
+    }
+   ]
+  },
+  {
+   "id": "fenton",
+   "side": "american",
+   "name": "Fenton's 5th Pennsylvania Volunteers (Porter's brigade)",
+   "short": "Pennsylvanians",
+   "commander": "Lt. Col. James Fenton; Brig. Gen. Peter B. Porter",
+   "type": "militia",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "12:00",
+     "x": 1400,
+     "y": -1750,
+     "state": "column",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 1400,
+     "y": -1750
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "sixnations",
+   "side": "american",
+   "name": "Six Nations and allied warriors (Porter's brigade)",
+   "short": "Six Nations",
+   "commander": "Capt. Pollard; Red Jacket",
+   "type": "riflemen",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "12:04",
+     "x": 1400,
+     "y": -1750,
+     "state": "column",
+     "h": 0
+    },
+    {
+     "t": "19:45",
+     "x": 1400,
+     "y": -1750
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "royals",
+   "side": "british",
+   "name": "1st battalion, 1st (Royal Scots) Foot",
+   "short": "Royal Scots",
+   "commander": "Lt. Col. John Gordon",
+   "type": "infantry",
+   "strength": 500,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": -1250,
+     "y": 1150,
+     "state": "line",
+     "h": 150
+    },
+    {
+     "t": "19:45",
+     "x": -1250,
+     "y": 1150
+    }
+   ]
+  },
+  {
+   "id": "r100",
+   "side": "british",
+   "name": "100th (Prince Regent's) Foot",
+   "short": "100th",
+   "commander": "Lt. Col. the Marquis of Tweeddale",
+   "type": "infantry",
+   "strength": 460,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": -1350,
+     "y": 1030,
+     "state": "line",
+     "h": 150
+    },
+    {
+     "t": "19:45",
+     "x": -1350,
+     "y": 1030
+    }
+   ]
+  },
+  {
+   "id": "r8",
+   "side": "british",
+   "name": "1st battalion, 8th (King's) Foot",
+   "short": "8th (King's)",
+   "commander": "Maj. Thomas Evans",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": -1050,
+     "y": 1060,
+     "state": "line",
+     "h": 150
+    },
+    {
+     "t": "19:45",
+     "x": -1050,
+     "y": 1060
+    }
+   ]
+  },
+  {
+   "id": "lights",
+   "side": "british",
+   "name": "Light companies of the Royal Scots and the 100th",
+   "short": "Light companies",
+   "commander": "Lt. Col. Thomas Pearson",
+   "type": "light_infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": -1320,
+     "y": 1120,
+     "state": "line",
+     "h": 150
+    },
+    {
+     "t": "19:45",
+     "x": -1320,
+     "y": 1120
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "lincoln",
+   "side": "british",
+   "name": "2nd Lincoln Militia",
+   "short": "2nd Lincoln",
+   "commander": "Lt. Col. Thomas Dickson",
+   "type": "militia",
+   "strength": 200,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 300,
+     "y": -1040,
+     "state": "line",
+     "h": 180
+    },
+    {
+     "t": "19:45",
+     "x": 300,
+     "y": -1040
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "norton",
+   "side": "british",
+   "name": "Grand River Six Nations",
+   "short": "Grand River",
+   "commander": "Capt. John Norton",
+   "type": "riflemen",
+   "strength": 200,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": -1400,
+     "y": 1200,
+     "state": "line",
+     "h": 150
+    },
+    {
+     "t": "19:45",
+     "x": -1400,
+     "y": 1200
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "western",
+   "side": "british",
+   "name": "Western Indians",
+   "short": "Western Indians",
+   "commander": "Capt. Colvin",
+   "type": "riflemen",
+   "strength": 100,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": 700,
+     "y": -1000,
+     "state": "line",
+     "h": 200
+    },
+    {
+     "t": "19:45",
+     "x": 700,
+     "y": -1000
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "ra24",
+   "side": "british",
+   "name": "Royal Artillery: two light 24-pounders and a 5.5-inch howitzer",
+   "short": "Royal Artillery",
+   "commander": "Capt. James Mackonochie",
+   "type": "artillery",
+   "strength": 40,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": -960,
+     "y": 1010,
+     "state": "line",
+     "h": 160
+    },
+    {
+     "t": "19:45",
+     "x": -960,
+     "y": 1010
+    }
+   ],
+   "guns": 3
+  },
+  {
+   "id": "ra6",
+   "side": "british",
+   "name": "Royal Artillery: three 6-pounders",
+   "short": "6-pounders",
+   "commander": "Capt. James Mackonochie",
+   "type": "artillery",
+   "strength": 30,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": -1100,
+     "y": 1000,
+     "state": "line",
+     "h": 160
+    },
+    {
+     "t": "19:45",
+     "x": -1100,
+     "y": 1000
+    }
+   ],
+   "guns": 3
+  },
+  {
+   "id": "ld19",
+   "side": "british",
+   "name": "19th Light Dragoons",
+   "short": "19th Dragoons",
+   "commander": "Maj. Robert Lisle",
+   "type": "cavalry",
+   "strength": 70,
+   "keys": [
+    {
+     "t": "05:00",
+     "x": -1250,
+     "y": 1000,
+     "state": "line",
+     "h": 150
+    },
+    {
+     "t": "19:45",
+     "x": -1250,
+     "y": 1000
+    }
+   ]
+  }
+ ],
+ "events": [],
+ "outcome": {
+  "result": "American victory: Riall's line beaten on the plain and driven back over the Chippawa",
+  "losses": [
+   [
+    "american",
+    "328 by Gardner's return: 60 killed, 249 wounded and 19 missing. Scott's three battalions lost 260 of them and the artillery 20; Porter's Pennsylvanians 12 and the warriors 23. The 19th's 7 and the 23rd's 1 are not drawn; nor are the missing."
+   ],
+   [
+    "british",
+    "515 by the Montreal return of 13 July: 148 killed, 321 wounded and 46 missing. The Royal Scots lost 213 and the 100th 204; the 2nd Lincoln 43, the heaviest loss of any Canadian militia unit in one action of the war. Later counts give 108 dead. The missing are not drawn."
+   ]
+  ],
+  "note": "Brown's first report counted four hundred British killed and wounded left on the field; Drummond wrote of about 500, a third of the men. The clock times are officers' watches, good to about a quarter of an hour."
+ },
+ "sources": [
+  "E. A. Cruikshank, ed., <a href='https://archive.org/details/cihm_05281' target='_blank'><i>The Documentary History of the Campaign upon the Niagara Frontier in 1814</i></a>, Part I (Lundy's Lane Historical Society, 1896), pp. 31-52: Riall's report of 6 July and his abstract of casualties; Drummond's letters of 9 and 10 July with the regimental strengths; Brown's reports of 6 and 7 July; Scott's and Hindman's reports; Gardner's return of the American loss; the Montreal General Order of 13 July; and eyewitness letters from the Ontario Messenger, a captain of Fenton's Pennsylvanians and a US artillery officer.",
+  "William Hamilton Merritt's journal, in William Wood, ed., <a href='https://archive.org/details/selectbritishdoc0003will' target='_blank'><i>Select British Documents of the Canadian War of 1812</i></a>, vol. III (Champlain Society, 1926-28), pp. 613-616: Riall's march at three, the King's arriving that morning, the Western Indians and the 2nd Lincoln in the woods.",
+  "Winfield Scott, <a href='https://archive.org/details/memoirsoflieutge01scotrich' target='_blank'><i>Memoirs of Lieut.-General Scott</i></a>, vol. I (1864), ch. X: the bridge, the nine guns, 'Buffalo militia', the obtuse angle and the final charge at sixty or seventy paces. Written fifty years after.",
+  "Benson J. Lossing, <a href='https://archive.org/details/pictorialfieldbo00lossuoft' target='_blank'><i>The Pictorial Field-Book of the War of 1812</i></a> (1868), pp. 805-812: the plain three-quarters of a mile wide, Street's and Ussher's houses, the t\u00eate-de-pont, Porter's force and the thunder-gust.",
+  "Niagara Parks Commission, the six interpretive panels and the monument at Chippawa Battlefield Park (2001), after Donald Graves, <i>Red Coats and Grey Jackets</i> (1994), as transcribed at the <a href='https://www.hmdb.org/m.asp?m=49399' target='_blank'>Historical Marker Database</a>: the dawn sniping, Ussher's lane, the 50 m advance and the 75 m range.",
+  "Wikipedia, <a href='https://en.wikipedia.org/wiki/Battle_of_Chippawa' target='_blank'>Battle of Chippawa</a> (read 24 October 2026), for Graves's brigade strengths of 3 July and Hendry's revised British losses; The Canadian Encyclopedia; warhistory.org.",
+  "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 \u00a9 DLR e.V. 2010-2014 and \u00a9 Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved. Resampled to 10 m. The surface model's modern woodland over the 1814 plain and the camps is flattened to the plain's level. The Chippawa's mouth is today's widened hydro channel, not the 1814 river. Places from OpenStreetMap contributors (ODbL): Street's Creek, the Niagara Parkway, the battlefield park and monument, Kingsbridge Park on the site of Fort Chippawa.",
+  "What is reconstructed: the King's Bridge and the t\u00eate-de-pont from Lossing and the modern street plan, within 250 m; Street's and Ussher's houses and Ussher's lane from Lossing's sketches and the park's panels, within 100 m; the 1814 wood line from Lossing's three-quarter mile and Scott's 'third narrower'; the camps; the river road south of the creek. American battalion strengths are Scott's 1,377 split by each battalion's casualties; Graves's returns would settle them. Clock times between the recorded ones are placed from the sources' durations."
+ ]
+}
