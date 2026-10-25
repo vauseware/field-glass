@@ -63,6 +63,13 @@
   "runtime": 1086
  },
  {
+  "id": "chippawa",
+  "name": "Chippawa, 5 Jul 1814",
+  "date": "1814-07-05",
+  "war": "War of 1812",
+  "runtime": 562
+ },
+ {
   "id": "new-orleans",
   "name": "New Orleans, 23 Dec 1814 – 8 Jan 1815",
   "date": "1814-12-23",
