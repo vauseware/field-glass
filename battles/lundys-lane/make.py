@@ -142,9 +142,9 @@ features = [
     dict(type="road", name="the ferry road", pts=FERRY, **label_on((-900, 1829), FERRY[2], 30)),
     dict(type="road", name="Skinner's lane (about here)", pts=SKINNER, **label_on(SKINNER[1], SKINNER[0], 30)),
     dict(type="road", name="Jesup's track (about here)", pts=JESUP, **label_on(JESUP[1], JESUP[2], -35)),
-    dict(type="fence", name="log fence (about here)", pts=FENCE, at=[FENCE[1][0] + 80, FENCE[1][1] - 20]),
+    dict(type="fence", name="log fence (about here)", pts=FENCE, at=[FENCE[1][0] + 130, FENCE[1][1]]),
     dict(name="the church", at=[P['church'][0] - 60, P['church'][1] + 40]),
-    dict(name="the graveyard", at=[P['graveyard'][0] + 20, P['graveyard'][1] - 60]),
+    dict(name="the graveyard", at=[P['graveyard'][0] - 60, P['graveyard'][1] - 90]),
     dict(name="the orchard", at=[-1700, 1500]),
     dict(name="the hollow (about here)", at=list(P['hollow'])),
     dict(name="Mrs. Wilson's tavern (about here)", at=[P['wilson'][0] + 60, P['wilson'][1] - 40]),
@@ -290,9 +290,9 @@ move("pld", A("08:00"), road(last("pld"), WILSON), 150, kmh=8)
 # ---- four o'clock: Scott's brigade from the camp over the King's Bridge up the Portage road for Queenston, Harris's
 # dragoons ahead. At five they drive in the picket at Mrs. Wilson's. The column halts short of the wood while Scott
 # reports the enemy in force (the halt is inferred), and Riall orders the light brigade back ----
-COL = dict(harris=("16:00", -720), towson=("16:03", -640), r9=("16:05", -560), r11=("16:09", -440), r25=("16:12", -340))
+COL = dict(harris=("16:00", 870), towson=("16:03", 720), r9=("16:05", 600), r11=("16:09", 450), r25=("16:12", 300))
 for id, (t, y) in COL.items():
-    appear(id, A(t), EAST, 270, "column"); move(id, A(t), road(EAST, rd(y)) if id != "harris" else road(EAST, rd(870)), state="column", kmh=4.5 if id != "harris" else 5)
+    appear(id, A(t), EAST, 270, "column"); move(id, A(t), road(EAST, rd(y)), state="column", kmh=4.5 if id != "harris" else 5)
 move("pld", A("17:02"), road(WILSON, J) + [(-1450, 2200)], 180, kmh=10)
 for id in ("glengarry", "incmil", "k8lc", "parry", "norton", "tomkins"):  # a few hundred metres up the road and the lane
     p = HILL[id][0]; go(id, A("17:15"), A("17:40"), [(p[0], p[1] + 380)], 180, "retreat", "retreat")
@@ -313,7 +313,7 @@ at("tomkins", A("18:45"), state="firing"); at("ra24", A("18:45"), state="firing"
 # road, the 25th on the right; Towson unlimbers on the highway ----
 DEPLOY = dict(r9=((-1680, 1330), 15), r11=((-1420, 1320), 5), towson=(rd(1330), 315), r25=((-1140, 1370), 345), harris=(rd(1080), 330))
 for n, id in enumerate(("harris", "towson", "r9", "r11", "r25")):
-    p, h = DEPLOY[id]; t = plus(A("18:20"), 2 * n)
+    p, h = DEPLOY[id]; t = plus(A("18:33"), 2 * n)
     move(id, t, road(last(id), rd(min(p[1], 1250))) + [p], h, "line", kmh=5)
 for id in ("r9", "r11", "towson"): at(id, A("19:00"), state="firing")
 for id in ("glengarry", "incmil", "k8lc"): at(id, A("19:00"), state="firing")
@@ -354,7 +354,7 @@ LINE2 = dict(r103=(-1880, 2030), k8=(-2070, 2010), r104=(-1970, 2100), royals=(-
 for n, id in enumerate(("r103", "k8", "r104", "royals", "hamilton")):
     t = plus(A("20:44"), 4 * n); appear(id, t, WEST, 90, "column")
     move(id, t, [(-2450, 1802), (LINE2[id][0], 1950), LINE2[id]], 180, kmh=4.5)
-for id, p in (("glengarry", (-2460, 1960)), ("parry", (-2660, 1950)), ("norton", (-2860, 1890))): go(id, A("21:10"), A("21:25"), [p], 180, "line", "retreat")
+for id, p in (("glengarry", (-2450, 1960)), ("parry", (-2760, 1960)), ("norton", (-2700, 2110))): go(id, A("21:10"), A("21:25"), [p], 180, "line", "retreat")
 
 # ---- Miller's 21st up through the dark from the hollow to the log fence; one volley, then the battery. The 1st gives
 # way, the 23rd lost heavily, Porter on their left, the 25th in the thickets on the right ----
@@ -454,12 +454,12 @@ for id, side, short, name, commander, type, strength, extra in OOB:
     units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength, keys=ks, **extra))
 MILLS_SMOKE = dry(P['mills'], 300)
 assert not wet(MILLS_SMOKE)
-features.append(dict(type="smoke", name="Bridgewater mills burning", at=list(MILLS_SMOKE), rate=5, spread=350, **{"from": B("10:00")}))
+features.append(dict(type="smoke", at=list(MILLS_SMOKE), rate=5, spread=350, **{"from": B("10:00")}))
 
 # ---- chapters: (time, title, text, camera centre, metres across, playback speed, when) ----
 # `when` holds a clock time the sources record, or a phrase; without one the card gives the nearest hour.
 CHAPTERS = [
-    (START, "The Niagara, July 1814", "Brown's army crossed the Niagara on 3 July and took Fort Erie. On the 5th it beat Riall at Chippawa, about 6 km south of here, then moved up to Fort George, and by the 24th it was back in camp on the plain between Street's Creek and the Chippawa. At midnight Pearson got orders to advance with the light brigade. Merritt reached Lundy's Lane with part of his troop at three in the morning and went on as far as Bridgewater; a few dragoons rode on to the Falls to look at the camp at Chippawa.", [-900, 1100], 4200, 60, None),
+    (START, "The Niagara, July 1814", "Brown's army crossed the Niagara on 3 July and took Fort Erie. On the 5th it beat Riall at Chippawa, about 6 km south of here, then moved up to Fort George, and by the 24th it was back in camp on the plain between Street's Creek and the Chippawa. At midnight Pearson got orders to advance with the light brigade. Merritt reached Lundy's Lane with part of his troop at three in the morning and went on as far as Bridgewater; a few dragoons rode on to the Falls to look at the camp at Chippawa.", [-1100, 1400], 4400, 60, None),
     (A("07:00"), "The high ground", "By seven Pearson's light brigade, about 800 of all ranks, has taken the high ground at Lundy's Lane. The lane leaves the Queenston road almost at a right angle and runs west past a meeting-house on the highest point of the rise, with the graveyard beside it. A young orchard covers the slope below the graveyard to the Portage road. Two six-pounders stand near the church.", [-1750, 1750], 1400, 30, "by seven o'clock"),
     (A("08:00"), "A picket at Mrs. Wilson's", "At eight, Merritt writes, they fall back on Lundy's Lane, leaving an advanced picket at Mrs. Wilson's, a small tavern near Table Rock. Drummond, who sailed from York in the schooner Netley on the evening of the 24th, reached the mouth of the river at daybreak and sent Tucker along the other bank toward Lewiston.", [-1150, 1250], 2800, 60, "at 8 o'clock"),
     (A("12:00"), "Lewiston", "About noon Tucker's column takes Lewiston, on the American bank, and drives out the garrison. Swift sends Brown an express: the enemy holds Lewiston and is thought to be advancing on Schlosser. In the course of the morning Riall rode forward to join Pearson, and directed the advance of Colonel Hercules Scott's brigade and part of the reserve.", [0, 0], 6000, 600, "about noon"),
