@@ -31,11 +31,11 @@ You get one issue. Read it, then README "Add a battle" and the battle.json field
    3. **Timeline.** Each unit's movements with clock times, each marked **recorded** (a time in a source, quoted) or **inferred** (your placement, with the reasoning). State the clock convention (local mean time before standard time).
    4. **Casualties.** Per side and per unit where known, with variant figures.
    5. **Sun and weather.** Sunrise and sunset computed for the place and date, moon if a night action matters, fog, rain, snow.
-   6. **Fit for Field Glass.** What the DEM will show and what `make.py` must draw; proposed chapters with times; `menPerDot`; the skin (by date: 1812 to 1815 War of 1812, 1861 to 1865 Civil War, 1914 to 1918 First World War, 1939 to 1945 Second World War, else Revolution); any engine gap.
+   6. **Fit for Field Glass.** Whether it is worth watching: what moves on the map, how often and how far, and where formations meet. A battle that is mostly bombardment, siege digging or ships at sea is dull to watch; propose a narrower frame or days where the armies manoeuvre, or give the verdict **does not fit**. Then what the DEM will show and what `make.py` must draw; proposed chapters with times; `menPerDot`; the skin (by date: 1812 to 1815 War of 1812, 1861 to 1865 Civil War, 1914 to 1918 First World War, 1939 to 1945 Second World War, else Revolution); any engine gap.
    7. **Gaps and uncertainties.** What you could not settle, and which source would settle it.
    8. **Sources.** Each with its tag, full citation and URL, and how you read it.
 3. `python3 .claude/skills/battle-pipeline/note.py post <issue> docs/plans/research/<id>-research.md`.
-4. Comment the verdict, headed `<!-- verdict -->`: **fits**, **fits with engine work**, or **does not fit**; origin and extent; time span; unit count; `menPerDot`; chapters; engine gaps; the five best sources.
+4. Comment the verdict, headed `<!-- verdict -->`: **fits**, **fits with engine work**, or **does not fit**; why it is worth watching; origin and extent; time span; unit count; `menPerDot`; chapters; engine gaps; the five best sources.
 5. Swap `research` for `researched` if it fits, else for `question`.
 
 ## Build
