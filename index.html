@@ -242,6 +242,16 @@
   .theme-war-of-1812 #clock { font: 400 27px/1 var(--fell); } .theme-war-of-1812 #clock small, .theme-war-of-1812 #hours { color: #2c3a4a; }
   .theme-war-of-1812 #fx .binnacle { mix-blend-mode: screen; opacity: var(--dark); background: radial-gradient(circle at 50% 50%, rgba(200,225,235,0.4), rgba(170,200,220,0.12) 45%, transparent 75%); }
   .theme-war-of-1812 #loading { color: var(--ink); font: italic 28px var(--fell); background: #9fb3bd; }
+  /* First World War: a 1:10,000 trench map. Cream panels with an ink rule inside the border, the kicker in spaced
+     capitals; a star shell over the field at night (#fx), drifting down as it burns. */
+  body.theme-ww1 { --paper: rgba(242,238,226,0.97); --paper-solid: #f2eee2; --ink: #1f1d1a; --muted: #55524a; --rule: #1f1d1a; --accent: #c3162b; --fell: "Crimson Pro", Georgia, serif; --sc: "Archivo Narrow", sans-serif; --text: "Crimson Pro", Georgia, serif; --read: "Crimson Pro", Georgia, serif; --panel-bg: #f2eee2; background: #f2eee2; }
+  .theme-ww1 .panel::before { content: ""; position: absolute; inset: 4px; border: 1px solid var(--ink); pointer-events: none; }
+  .theme-ww1 #kicker { letter-spacing: 0.3em; text-transform: uppercase; }
+  .theme-ww1 #cap-text, .theme-ww1 #hover, .theme-ww1 #card, .theme-ww1 #out-body, .theme-ww1 dialog { font-size: 18px; }
+  .theme-ww1 #clock { font: 600 27px/1 var(--fell); }
+  .theme-ww1 #loading { color: var(--ink); font: italic 28px var(--fell); background: #f2eee2; }
+  .theme-ww1 #fx .flare { mix-blend-mode: screen; opacity: var(--dark); background: radial-gradient(circle at 62% 30%, rgba(255,250,220,0.55), rgba(255,240,200,0.15) 30%, transparent 60%); animation: flare 7s ease-in-out infinite; }
+  @keyframes flare { 0%, 100% { transform: translate(0, 0); filter: brightness(1); } 40% { filter: brightness(1.3); } 70% { transform: translate(-4vw, 12vh); filter: brightness(0.7); } }
   /* Civil War: an engineer's survey sheet. Panels of ruled linen with a rule inside the border and titles in small
      capitals; the bar in blue cloth with a gilt rule, as on the start screen; a lantern over the sheet at night (#fx). */
   body.theme-civil-war { --paper: rgba(241,236,224,0.96); --paper-solid: #f1ece0; --ink: #1d2230; --muted: #4c5160; --rule: #1d2230; --accent: #8c2a1c;
