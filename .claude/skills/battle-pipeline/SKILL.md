@@ -7,7 +7,7 @@ description: Research a Field Glass battle into its GitHub issue, build it from 
 
 ## Run under poteto (Cursor)
 
-This file is the **contract** (facts, fences, verify steps). On Cursor, drive it with **`/poteto-mode`**, not Claude agent fleets or `.claude/workflows/battle-loop.js` (that path burns tokens on parallel Fable/Opus swarms).
+This file is the **contract** (facts, fences, verify steps). On Cursor, drive it with **`/poteto-mode`**, not Claude agent fleets or `.claude/workflows/battle-loop.js` (that path burns tokens on parallel Fable/Opus swarms). Paste-ready starters live in **battle-start** (`.claude/skills/battle-start/SKILL.md`).
 
 | Phase | Poteto playbook | pstack skills poteto would pull |
 | --- | --- | --- |
