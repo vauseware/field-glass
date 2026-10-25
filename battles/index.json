@@ -84,6 +84,13 @@
   "runtime": 1160
  },
  {
+  "id": "second-manassas",
+  "name": "Second Manassas, 28–30 Aug 1862",
+  "date": "1862-08-28",
+  "war": "Civil War",
+  "runtime": 1712
+ },
+ {
   "id": "antietam",
   "name": "Antietam, 16–19 Sep 1862",
   "date": "1862-09-16",

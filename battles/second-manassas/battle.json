@@ -14740,6 +14740,13 @@
    "dark": "#5c1a14"
   }
  },
+ "tints": [
+  {
+   "color": "rgba(150,156,164,0.35)",
+   "from": "1862-08-30 19:00",
+   "until": "1862-08-30 23:00"
+  }
+ ],
  "features": [
   {
    "type": "creek",
@@ -18042,98 +18049,98 @@
      "state": "column"
     },
     {
-     "t": "1862-08-29 00:49",
+     "t": "1862-08-28 23:59",
      "x": -900,
      "y": -339
     },
     {
-     "t": "1862-08-29 00:50",
+     "t": "1862-08-29 00:00",
      "x": -900,
      "y": -339,
      "h": 253,
      "state": "column"
     },
     {
-     "t": "1862-08-29 00:50:54",
+     "t": "1862-08-29 00:00:54",
      "x": -946,
      "y": -353,
      "h": 252
     },
     {
-     "t": "1862-08-29 01:04:39",
+     "t": "1862-08-29 00:14:39",
      "x": -1642,
      "y": -584,
      "h": 171
     },
     {
-     "t": "1862-08-29 01:06:42",
+     "t": "1862-08-29 00:16:42",
      "x": -1625,
      "y": -692,
      "h": 187
     },
     {
-     "t": "1862-08-29 01:11:47",
+     "t": "1862-08-29 00:21:47",
      "x": -1657,
      "y": -961,
      "h": 179
     },
     {
-     "t": "1862-08-29 01:24:42",
+     "t": "1862-08-29 00:34:42",
      "x": -1643,
      "y": -1650,
      "h": 183
     },
     {
-     "t": "1862-08-29 01:29:43",
+     "t": "1862-08-29 00:39:43",
      "x": -1659,
      "y": -1917,
      "h": 176
     },
     {
-     "t": "1862-08-29 01:34:07",
+     "t": "1862-08-29 00:44:07",
      "x": -1644,
      "y": -2151,
      "h": 202
     },
     {
-     "t": "1862-08-29 01:35:56",
+     "t": "1862-08-29 00:45:56",
      "x": -1681,
      "y": -2241,
      "h": 228
     },
     {
-     "t": "1862-08-29 01:39:38",
+     "t": "1862-08-29 00:49:38",
      "x": -1827,
      "y": -2373,
      "h": 215
     },
     {
-     "t": "1862-08-29 01:40:37",
+     "t": "1862-08-29 00:50:37",
      "x": -1857,
      "y": -2416,
      "h": 189
     },
     {
-     "t": "1862-08-29 01:42:32",
+     "t": "1862-08-29 00:52:32",
      "x": -1873,
      "y": -2517,
      "h": 177
     },
     {
-     "t": "1862-08-29 01:44:49",
+     "t": "1862-08-29 00:54:49",
      "x": -1867,
      "y": -2639,
      "h": 180
     },
     {
-     "t": "1862-08-29 02:18:47",
+     "t": "1862-08-29 01:28:47",
      "x": -1867,
      "y": -4450,
      "h": 180,
      "state": "line"
     },
     {
-     "t": "1862-08-29 02:19:47",
+     "t": "1862-08-29 01:29:47",
      "x": -1867,
      "y": -4450,
      "state": "hidden"
@@ -18474,98 +18481,98 @@
      "state": "line"
     },
     {
-     "t": "1862-08-29 01:14",
+     "t": "1862-08-29 00:24",
      "x": -2450,
      "y": -853
     },
     {
-     "t": "1862-08-29 01:15",
+     "t": "1862-08-29 00:25",
      "x": -2450,
      "y": -853,
      "h": 71,
      "state": "column"
     },
     {
-     "t": "1862-08-29 01:16:45",
+     "t": "1862-08-29 00:26:45",
      "x": -2362,
      "y": -823,
      "h": 72
     },
     {
-     "t": "1862-08-29 01:30:58",
+     "t": "1862-08-29 00:40:58",
      "x": -1642,
      "y": -584,
      "h": 171
     },
     {
-     "t": "1862-08-29 01:33:01",
+     "t": "1862-08-29 00:43:01",
      "x": -1625,
      "y": -692,
      "h": 187
     },
     {
-     "t": "1862-08-29 01:38:06",
+     "t": "1862-08-29 00:48:06",
      "x": -1657,
      "y": -961,
      "h": 179
     },
     {
-     "t": "1862-08-29 01:51:01",
+     "t": "1862-08-29 01:01:01",
      "x": -1643,
      "y": -1650,
      "h": 183
     },
     {
-     "t": "1862-08-29 01:56:02",
+     "t": "1862-08-29 01:06:02",
      "x": -1659,
      "y": -1917,
      "h": 176
     },
     {
-     "t": "1862-08-29 02:00:26",
+     "t": "1862-08-29 01:10:26",
      "x": -1644,
      "y": -2151,
      "h": 202
     },
     {
-     "t": "1862-08-29 02:02:15",
+     "t": "1862-08-29 01:12:15",
      "x": -1681,
      "y": -2241,
      "h": 228
     },
     {
-     "t": "1862-08-29 02:05:57",
+     "t": "1862-08-29 01:15:57",
      "x": -1827,
      "y": -2373,
      "h": 215
     },
     {
-     "t": "1862-08-29 02:06:56",
+     "t": "1862-08-29 01:16:56",
      "x": -1857,
      "y": -2416,
      "h": 189
     },
     {
-     "t": "1862-08-29 02:08:51",
+     "t": "1862-08-29 01:18:51",
      "x": -1873,
      "y": -2517,
      "h": 177
     },
     {
-     "t": "1862-08-29 02:11:08",
+     "t": "1862-08-29 01:21:08",
      "x": -1867,
      "y": -2639,
      "h": 180
     },
     {
-     "t": "1862-08-29 02:45:06",
+     "t": "1862-08-29 01:55:06",
      "x": -1867,
      "y": -4450,
      "h": 180,
      "state": "line"
     },
     {
-     "t": "1862-08-29 02:46:06",
+     "t": "1862-08-29 01:56:06",
      "x": -1867,
      "y": -4450,
      "state": "hidden"
@@ -18849,105 +18856,105 @@
      "state": "column"
     },
     {
-     "t": "1862-08-29 01:25",
+     "t": "1862-08-29 00:35",
      "x": -3650,
      "y": -1302,
      "h": 70,
      "state": "column"
     },
     {
-     "t": "1862-08-29 01:43:57",
+     "t": "1862-08-29 00:53:57",
      "x": -2698,
      "y": -962,
      "h": 64
     },
     {
-     "t": "1862-08-29 01:47:40",
+     "t": "1862-08-29 00:57:40",
      "x": -2520,
      "y": -876,
      "h": 71
     },
     {
-     "t": "1862-08-29 01:50:47",
+     "t": "1862-08-29 01:00:47",
      "x": -2362,
      "y": -823,
      "h": 72
     },
     {
-     "t": "1862-08-29 02:05:01",
+     "t": "1862-08-29 01:15:01",
      "x": -1642,
      "y": -584,
      "h": 171
     },
     {
-     "t": "1862-08-29 02:07:04",
+     "t": "1862-08-29 01:17:04",
      "x": -1625,
      "y": -692,
      "h": 187
     },
     {
-     "t": "1862-08-29 02:12:08",
+     "t": "1862-08-29 01:22:08",
      "x": -1657,
      "y": -961,
      "h": 179
     },
     {
-     "t": "1862-08-29 02:25:04",
+     "t": "1862-08-29 01:35:04",
      "x": -1643,
      "y": -1650,
      "h": 183
     },
     {
-     "t": "1862-08-29 02:30:05",
+     "t": "1862-08-29 01:40:05",
      "x": -1659,
      "y": -1917,
      "h": 176
     },
     {
-     "t": "1862-08-29 02:34:28",
+     "t": "1862-08-29 01:44:28",
      "x": -1644,
      "y": -2151,
      "h": 202
     },
     {
-     "t": "1862-08-29 02:36:18",
+     "t": "1862-08-29 01:46:18",
      "x": -1681,
      "y": -2241,
      "h": 228
     },
     {
-     "t": "1862-08-29 02:39:59",
+     "t": "1862-08-29 01:49:59",
      "x": -1827,
      "y": -2373,
      "h": 215
     },
     {
-     "t": "1862-08-29 02:40:58",
+     "t": "1862-08-29 01:50:58",
      "x": -1857,
      "y": -2416,
      "h": 189
     },
     {
-     "t": "1862-08-29 02:42:53",
+     "t": "1862-08-29 01:52:53",
      "x": -1873,
      "y": -2517,
      "h": 177
     },
     {
-     "t": "1862-08-29 02:45:11",
+     "t": "1862-08-29 01:55:11",
      "x": -1867,
      "y": -2639,
      "h": 180
     },
     {
-     "t": "1862-08-29 03:19:08",
+     "t": "1862-08-29 02:29:08",
      "x": -1867,
      "y": -4450,
      "h": 180,
      "state": "line"
     },
     {
-     "t": "1862-08-29 03:20:08",
+     "t": "1862-08-29 02:30:08",
      "x": -1867,
      "y": -4450,
      "state": "hidden"
@@ -19274,104 +19281,104 @@
      "state": "line"
     },
     {
-     "t": "1862-08-29 00:59",
+     "t": "1862-08-29 00:09",
      "x": -2700,
      "y": -963
     },
     {
-     "t": "1862-08-29 01:00",
+     "t": "1862-08-29 00:10",
      "x": -2700,
      "y": -963,
      "h": 64,
      "state": "column"
     },
     {
-     "t": "1862-08-29 01:03:45",
+     "t": "1862-08-29 00:13:45",
      "x": -2520,
      "y": -876,
      "h": 71
     },
     {
-     "t": "1862-08-29 01:06:52",
+     "t": "1862-08-29 00:16:52",
      "x": -2362,
      "y": -823,
      "h": 72
     },
     {
-     "t": "1862-08-29 01:21:06",
+     "t": "1862-08-29 00:31:06",
      "x": -1642,
      "y": -584,
      "h": 171
     },
     {
-     "t": "1862-08-29 01:23:09",
+     "t": "1862-08-29 00:33:09",
      "x": -1625,
      "y": -692,
      "h": 187
     },
     {
-     "t": "1862-08-29 01:28:14",
+     "t": "1862-08-29 00:38:14",
      "x": -1657,
      "y": -961,
      "h": 179
     },
     {
-     "t": "1862-08-29 01:41:09",
+     "t": "1862-08-29 00:51:09",
      "x": -1643,
      "y": -1650,
      "h": 183
     },
     {
-     "t": "1862-08-29 01:46:10",
+     "t": "1862-08-29 00:56:10",
      "x": -1659,
      "y": -1917,
      "h": 176
     },
     {
-     "t": "1862-08-29 01:50:34",
+     "t": "1862-08-29 01:00:34",
      "x": -1644,
      "y": -2151,
      "h": 202
     },
     {
-     "t": "1862-08-29 01:52:23",
+     "t": "1862-08-29 01:02:23",
      "x": -1681,
      "y": -2241,
      "h": 228
     },
     {
-     "t": "1862-08-29 01:56:05",
+     "t": "1862-08-29 01:06:05",
      "x": -1827,
      "y": -2373,
      "h": 215
     },
     {
-     "t": "1862-08-29 01:57:03",
+     "t": "1862-08-29 01:07:03",
      "x": -1857,
      "y": -2416,
      "h": 189
     },
     {
-     "t": "1862-08-29 01:58:59",
+     "t": "1862-08-29 01:08:59",
      "x": -1873,
      "y": -2517,
      "h": 177
     },
     {
-     "t": "1862-08-29 02:01:16",
+     "t": "1862-08-29 01:11:16",
      "x": -1867,
      "y": -2639,
      "h": 180
     },
     {
-     "t": "1862-08-29 02:35:13",
+     "t": "1862-08-29 01:45:13",
      "x": -1867,
      "y": -4450,
      "h": 180,
      "state": "line"
     },
     {
-     "t": "1862-08-29 02:36:13",
+     "t": "1862-08-29 01:46:13",
      "x": -1867,
      "y": -4450,
      "state": "hidden"
@@ -19619,105 +19626,105 @@
      "state": "line"
     },
     {
-     "t": "1862-08-29 01:10",
+     "t": "1862-08-29 00:20",
      "x": -2850,
      "y": -1016,
      "h": 70,
      "state": "column"
     },
     {
-     "t": "1862-08-29 01:13:01",
+     "t": "1862-08-29 00:23:01",
      "x": -2698,
      "y": -962,
      "h": 64
     },
     {
-     "t": "1862-08-29 01:16:44",
+     "t": "1862-08-29 00:26:44",
      "x": -2520,
      "y": -876,
      "h": 71
     },
     {
-     "t": "1862-08-29 01:19:51",
+     "t": "1862-08-29 00:29:51",
      "x": -2362,
      "y": -823,
      "h": 72
     },
     {
-     "t": "1862-08-29 01:34:05",
+     "t": "1862-08-29 00:44:05",
      "x": -1642,
      "y": -584,
      "h": 171
     },
     {
-     "t": "1862-08-29 01:36:08",
+     "t": "1862-08-29 00:46:08",
      "x": -1625,
      "y": -692,
      "h": 187
     },
     {
-     "t": "1862-08-29 01:41:13",
+     "t": "1862-08-29 00:51:13",
      "x": -1657,
      "y": -961,
      "h": 179
     },
     {
-     "t": "1862-08-29 01:54:08",
+     "t": "1862-08-29 01:04:08",
      "x": -1643,
      "y": -1650,
      "h": 183
     },
     {
-     "t": "1862-08-29 01:59:09",
+     "t": "1862-08-29 01:09:09",
      "x": -1659,
      "y": -1917,
      "h": 176
     },
     {
-     "t": "1862-08-29 02:03:33",
+     "t": "1862-08-29 01:13:33",
      "x": -1644,
      "y": -2151,
      "h": 202
     },
     {
-     "t": "1862-08-29 02:05:22",
+     "t": "1862-08-29 01:15:22",
      "x": -1681,
      "y": -2241,
      "h": 228
     },
     {
-     "t": "1862-08-29 02:09:03",
+     "t": "1862-08-29 01:19:03",
      "x": -1827,
      "y": -2373,
      "h": 215
     },
     {
-     "t": "1862-08-29 02:10:02",
+     "t": "1862-08-29 01:20:02",
      "x": -1857,
      "y": -2416,
      "h": 189
     },
     {
-     "t": "1862-08-29 02:11:57",
+     "t": "1862-08-29 01:21:57",
      "x": -1873,
      "y": -2517,
      "h": 177
     },
     {
-     "t": "1862-08-29 02:14:15",
+     "t": "1862-08-29 01:24:15",
      "x": -1867,
      "y": -2639,
      "h": 180
     },
     {
-     "t": "1862-08-29 02:48:12",
+     "t": "1862-08-29 01:58:12",
      "x": -1867,
      "y": -4450,
      "h": 180,
      "state": "line"
     },
     {
-     "t": "1862-08-29 02:49:12",
+     "t": "1862-08-29 01:59:12",
      "x": -1867,
      "y": -4450,
      "state": "hidden"
@@ -29792,5 +29799,350 @@
    "guns": 1
   }
  ],
- "events": []
+ "events": [
+  {
+   "t": "1862-08-28 05:30",
+   "title": "Jackson behind the railroad",
+   "text": "On the 27th Hill's and Taliaferro's divisions moved to Manassas Junction, south of this map, and routed Taylor's New Jersey brigade there; Taylor was mortally wounded. At nine that night Taliaferro's division marched up the Manassas-Sudley road, reached the turnpike near the Stone House at midnight, crossed it near Groveton and halted near the battlefield of July 1861, in the woods of Stony Ridge, 1,000 yards north of the turnpike. Ewell's and Hill's divisions, misdirected across Bull Run, Hill all the way to Centreville, join Jackson today.",
+   "at": [
+    300,
+    400
+   ],
+   "view": 7000,
+   "speed": 300,
+   "when": "sunrise"
+  },
+  {
+   "t": "1862-08-28 14:00",
+   "title": "McDowell on the turnpike",
+   "text": "About ten this morning McDowell's corps pushed east on the turnpike, Reynolds's division leading, then King's four brigades, Ricketts's division in the rear. Ricketts turned off to Thoroughfare Gap, 16 km west, where Wyndham's troopers met Longstreet's vanguard at half past nine; by two he had only reached Haymarket. Jackson's divisions lie in the woods of Stony Ridge, unseen.",
+   "at": [
+    -2700,
+    -700
+   ],
+   "view": 3500,
+   "speed": 300
+  },
+  {
+   "t": "1862-08-28 18:30",
+   "title": "Brawner farm",
+   "text": "About five McDowell had Pope's order to march to Centreville, King's division leading. About half past six Jackson's guns on Stony Ridge open on Gibbon's brigade on the turnpike. 'By this time it was sunset,' Jackson reported. 'I determined to attack at once, which was vigorously done by the divisions of Taliaferro and Ewell.' Gibbon turns north into the Brawner farm to meet them.",
+   "at": [
+    -2750,
+    -600
+   ],
+   "view": 1800,
+   "speed": 60,
+   "when": "about 6:30 PM"
+  },
+  {
+   "t": "1862-08-28 20:00",
+   "title": "Seventy-five yards apart",
+   "text": "The two lines trade volleys 75 yards apart. Trimble's and Lawton's brigades attack without coordination; A. G. Taliaferro's three regiments go against the 19th Indiana, and Pelham's guns fire at the Hoosiers from less than 100 yards. After dark Doubleday's 56th Pennsylvania and 76th New York go into the gap between the 6th and 7th Wisconsin, and fire at the muzzle flashes.",
+   "at": [
+    -2750,
+    -380
+   ],
+   "view": 1500,
+   "speed": 60
+  },
+  {
+   "t": "1862-08-28 21:00",
+   "title": "Back to the turnpike",
+   "text": "Both lines stood 'exposed to the discharges of musketry and artillery until about 9 o'clock,' Jackson reported. At nine Gibbon and Doubleday withdraw to the turnpike in good order. Of about 7,000 men engaged, nearly a third have fallen: about 1,150 Federals and 1,250 Confederates. Ewell and W. B. Taliaferro are wounded.",
+   "at": [
+    -2700,
+    -600
+   ],
+   "view": 1800,
+   "speed": 300,
+   "when": "9 PM"
+  },
+  {
+   "t": "1862-08-29 00:00",
+   "title": "King's division marches off",
+   "text": "At midnight King's division leaves the turnpike for Manassas. At daybreak Pope learns that Ricketts and King have gone south.",
+   "at": [
+    -1000,
+    -1800
+   ],
+   "view": 5000,
+   "speed": 600,
+   "when": "midnight"
+  },
+  {
+   "t": "1862-08-29 07:00",
+   "title": "Schurz finds Jackson",
+   "text": "Jackson's line runs about 3,000 yards along the unfinished railroad, from near the turnpike toward Sudley Church: his own division under Starke on the right, Ewell's under Lawton in the centre, A. P. Hill's on the left by the church, Gregg's and Thomas's brigades in front. About 20,000 men. Sigel's corps, fewer than 12,000, comes on. Schurz's division, north on the Sudley road, finds Jackson about seven and skirmishes with Gregg and Thomas in the woods south of the railroad; Milroy moves on the centre, Schenck and Reynolds west on the turnpike toward Groveton.",
+   "at": [
+    -900,
+    1300
+   ],
+   "view": 3500,
+   "speed": 120,
+   "when": "about 7 AM"
+  },
+  {
+   "t": "1862-08-29 10:00",
+   "title": "The 82nd Ohio at the Dump",
+   "text": "'About 10 o'clock the Federal artillery opened with spirit and animation upon our right,' Jackson reported. Sigel's offensive runs until ten, Schurz making a second assault on Hill's division. Milroy's two regiments are repulsed along the Groveton-Sudley road by Lawton, and part of the 82nd Ohio breaks briefly into the line near the Dump, a 75-yard low point in the grade. Schenck and Reynolds come under heavy artillery fire in the woods around Groveton.",
+   "at": [
+    -1500,
+    500
+   ],
+   "view": 2800,
+   "speed": 60,
+   "when": "about 10 AM"
+  },
+  {
+   "t": "1862-08-29 11:00",
+   "title": "Longstreet from Gainesville",
+   "text": "Late in the morning Lee arrives with Longstreet's wing, 25,000 men in five divisions, on the march from Thoroughfare Gap since six. Hood's division forms astride the turnpike at the Brawner farm, Kemper's on its right, D. R. Jones's out toward the Manassas Gap Railroad, Wilcox's behind Hood. Lee makes his headquarters on Stuart's Hill.",
+   "at": [
+    -3200,
+    -1700
+   ],
+   "view": 3600,
+   "speed": 120,
+   "when": "late in the morning"
+  },
+  {
+   "t": "1862-08-29 13:00",
+   "title": "Pope on the field",
+   "text": "Pope reaches the field at one. Hooker's division and Stevens's come up to reinforce Sigel, and Kearny's and Reno's divisions come up as well. About two, by Jackson's report, 'the Federal infantry in large force advanced to the attack of our left.'",
+   "at": [
+    -300,
+    900
+   ],
+   "view": 3500,
+   "speed": 120,
+   "when": "1 PM"
+  },
+  {
+   "t": "1862-08-29 15:00",
+   "title": "Grover's bayonet charge",
+   "text": "About three Cuvier Grover's brigade, five regiments and about 1,500 men, attacks with bayonets fixed along a front about a quarter mile wide, into the 125-yard gap between Thomas's and Gregg's brigades. Gregg's regiments strike its flank and Pender's brigade its front, and within 30 minutes Grover's men fall back. The brigade loses 487.",
+   "at": [
+    -778,
+    1616
+   ],
+   "view": 1400,
+   "speed": 60,
+   "when": "about 3 PM"
+  },
+  {
+   "t": "1862-08-29 17:00",
+   "title": "Kearny at Sudley",
+   "text": "About four Hays's brigade, under Forno, came to help Gregg, and Early's came up to relieve him. At five Phil Kearny attacks Hill's Light Division with nearly 3,000 men and breaks through the unfinished railroad. Gregg's brigade is badly hit, and Branch's North Carolinians and Jubal Early's troops stop and push back the attack; Early 'drove them from the wood and railroad cut.' Hill reports six separate and distinct assaults met and repulsed today.",
+   "at": [
+    -724,
+    2081
+   ],
+   "view": 1500,
+   "speed": 60,
+   "when": "5 PM"
+  },
+  {
+   "t": "1862-08-29 19:00",
+   "title": "Hood and Hatch at dusk",
+   "text": "At sunset Hood's brigades, parts of Wilcox's and Kemper's divisions behind them, go forward south of the turnpike in a reconnaissance in force. About seven they meet Hatch's division, King's under Hatch, near Groveton, in a brief, violent clash in the dark, and the Union troops fall back. At half past four Pope sent Porter an explicit order; it was delivered at half past six. Porter's corps stands at Dawkins Branch, off this map to the south-west.",
+   "at": [
+    -1500,
+    -550
+   ],
+   "view": 2000,
+   "speed": 60,
+   "when": "7 PM"
+  },
+  {
+   "t": "1862-08-29 20:50",
+   "title": "The night of the 29th",
+   "text": "At ten to nine Pope orders Fitz John Porter to join the army by morning. In the dark Hood draws back to the Brawner farm.",
+   "at": [
+    -1500,
+    -400
+   ],
+   "view": 5000,
+   "speed": 600,
+   "when": "8:50 PM"
+  },
+  {
+   "t": "1862-08-30 03:00",
+   "title": "Anderson's division in the dark",
+   "text": "At three in the morning Richard H. Anderson's division arrives after a seventeen-mile march and halts east of Groveton. At dawn, finding itself alone, it falls back. Longstreet's last divisions and his reserve artillery come up before dawn.",
+   "at": [
+    -2400,
+    -950
+   ],
+   "view": 3500,
+   "speed": 300,
+   "when": "3 AM"
+  },
+  {
+   "t": "1862-08-30 08:00",
+   "title": "Pope's council on Buck Hill",
+   "text": "At eight Pope holds a council of war at his headquarters above the Stone House on Buck Hill. About 70,000 Northerners face 55,000 Southerners; about 25,000 men of the Army of the Potomac are held back, Franklin's corps at Annandale and Sumner's.",
+   "at": [
+    0,
+    300
+   ],
+   "view": 3500,
+   "speed": 300,
+   "when": "8 AM"
+  },
+  {
+   "t": "1862-08-30 11:00",
+   "title": "Ricketts is repulsed",
+   "text": "At ten Ricketts, Stevens and Reynolds reconnoitre and find Jackson's men still firmly in position. Late in the morning Ricketts attacks and is repulsed by Jackson's line.",
+   "at": [
+    -1058,
+    1025
+   ],
+   "view": 2400,
+   "speed": 120,
+   "when": "late in the morning"
+  },
+  {
+   "t": "1862-08-30 13:00",
+   "title": "Pope orders the attack",
+   "text": "Shortly after noon Pope orders Porter's corps, with Hatch and Reynolds in support, west along the turnpike; at one he orders Porter's two divisions and Hatch's to assault. Porter's corps, about 10,000 men, takes nearly two hours to form. Reynolds goes back to Chinn Ridge, where McLean's Ohio brigade reinforces him: about 8,000 Federals south of the turnpike against Longstreet's roughly 30,000. Eighteen guns, S. D. Lee's, are placed north-east of the Brawner farm to support Jackson's right.",
+   "at": [
+    -1300,
+    -350
+   ],
+   "view": 4000,
+   "speed": 120,
+   "when": "1 PM"
+  },
+  {
+   "t": "1862-08-30 15:00",
+   "title": "Porter at the Deep Cut",
+   "text": "Berdan's sharpshooters opened the fight at half past two and skirmished for nearly 30 minutes. At three Porter attacks: Weeks's and Roberts's brigades on the left and centre, Hatch's division on the right, Sykes's two regular brigades in reserve. Porter's men cross 600 yards of pasture, the last 150 rising sharply uphill; Hatch's, 300 yards. Starke's division holds the railroad: Stafford's Louisianians near the Dump, Bradley Johnson's Virginians at the Deep Cut, the Stonewall Brigade and Taliaferro's men on the right. S. D. Lee's guns fire into the Union ranks from the heights north of the Brawner farm, and Lawton's division and Field's Virginia brigade come up to finish the repulse. Baylor of the Stonewall Brigade is killed.",
+   "at": [
+    -1950,
+    250
+   ],
+   "view": 1800,
+   "speed": 30,
+   "when": "3 PM"
+  },
+  {
+   "t": "1862-08-30 16:00",
+   "title": "Hood overruns Warren",
+   "text": "McDowell has sent Reynolds across the turnpike, leaving about 2,200 men south of it, McLean's brigade and Warren's. At four Longstreet attacks. Hood's division, with the Texas Brigade and Evans's South Carolinians, leads on the left near the turnpike, Kemper's division on its right, D. R. Jones's brigades in support. Warren's two New York regiments, roughly 1,000 men beside Hazlett's six-gun battery on a knoll above Groveton, are overrun along Lewis Lane. The 5th New York loses almost 300 of its roughly 500 men in the first ten minutes.",
+   "at": [
+    -1500,
+    -900
+   ],
+   "view": 2400,
+   "speed": 30,
+   "when": "4 PM"
+  },
+  {
+   "t": "1862-08-30 16:30",
+   "title": "McLean on Chinn Ridge",
+   "text": "McLean's Ohio brigade, about 1,200 men, holds Chinn Ridge, 800 yards east of Warren's ground, until Corse's Virginia brigade attacks; heavy firing at the fence line lasts about ten minutes. Evans's charge on McLean's flank is repulsed. The Ohioans lose about a third and buy Pope roughly 30 minutes. McDowell orders Ricketts to disengage and reinforce the left on Chinn Ridge, and Hardin's brigade is shattered there.",
+   "at": [
+    -250,
+    -1000
+   ],
+   "view": 1800,
+   "speed": 30,
+   "when": "4:30 PM"
+  },
+  {
+   "t": "1862-08-30 17:30",
+   "title": "The 5th Maine's guns",
+   "text": "Ricketts's brigades come from north of the turnpike by the Stone House, over Young's Branch and up the ridge, Tower's leading, Stiles's behind, Koltes's and Stahel's with them. Tower's brigade covers Leppien's 5th Maine Battery, five guns; after a fight of about 30 minutes the Confederates take four. Tower is badly wounded, Koltes is killed, and Fletcher Webster of the 12th Massachusetts falls, mortally wounded. Hunton's and Jenkins's brigades fire into the Union line from the Chinn Branch swale. By about six Longstreet holds Chinn Ridge.",
+   "at": [
+    -200,
+    -950
+   ],
+   "view": 1600,
+   "speed": 30,
+   "when": "5:30 PM"
+  },
+  {
+   "t": "1862-08-30 18:00",
+   "title": "Jackson off the railroad",
+   "text": "At six Jackson's divisions attack north of the turnpike. They come down off the grade across the Dogan farm and overrun Union artillery and infantry, and the Union right falls back east.",
+   "at": [
+    -500,
+    500
+   ],
+   "view": 3500,
+   "speed": 30,
+   "when": "6 PM"
+  },
+  {
+   "t": "1862-08-30 18:30",
+   "title": "Henry Hill",
+   "text": "Pope has formed a four-brigade line along the western slope of Henry Hill, nearly half a mile from the ruins of the Henry house to the south end of the plateau, with two more brigades in reserve. About five Lee sent Dick Anderson's three brigades, with part of Wilcox's division, from the Brawner farm toward Chinn Ridge, and Benning's and G. T. Anderson's Georgians, about 3,000 men, against Henry Hill. Milroy's brigade holds the washed-out bed of the Sudley road; the Georgians charge again and again and fall back to Chinn Branch, until the 15th Georgia breaks the Union line. Mahone's and Wright's brigades come up on the Confederate right and push the Union reserves back toward the Henry house.",
+   "at": [
+    450,
+    -850
+   ],
+   "view": 1800,
+   "speed": 30,
+   "when": "6:30 PM"
+  },
+  {
+   "t": "1862-08-30 19:00",
+   "title": "Lewis Ford",
+   "text": "About seven Pope has an unbroken line north of the turnpike, aligned with Henry Hill. Stuart's cavalry tries to get round the Union left at Lewis Ford, Robertson's brigade with the 2nd Virginia under Munford charging, and Buford's cavalry blocks it in a fight of about ten minutes. Buford is wounded. Darkness has come on, and a drizzling rain.",
+   "at": [
+    1700,
+    -1300
+   ],
+   "view": 3500,
+   "speed": 60,
+   "when": "about 7 PM"
+  },
+  {
+   "t": "1862-08-30 20:00",
+   "title": "Pope orders the retreat",
+   "text": "At eight Pope orders a general withdrawal to Centreville, and it is orderly. The stone bridge over Bull Run lets most of the army go back by the turnpike. The Cub Run bridge, beyond the map, jams in the night.",
+   "at": [
+    1400,
+    300
+   ],
+   "view": 4500,
+   "speed": 120,
+   "when": "8 PM"
+  },
+  {
+   "t": "1862-08-30 22:50",
+   "title": "The field at night",
+   "text": "About eleven Pope's troops have left the field and begin entering the Centreville defenses. In the morning Jackson found 'that the Federal Army had retreated in the direction of Centreville.' On 1 September the armies meet again at Chantilly, in a thunderstorm; Kearny and Stevens are killed there.",
+   "at": [
+    -500,
+    -200
+   ],
+   "view": 8000,
+   "speed": 120,
+   "when": "about 11 PM"
+  }
+ ],
+ "outcome": {
+  "result": "Confederate victory: Pope's army falls back to Centreville",
+  "losses": [
+   [
+    "union",
+    "14,462: 1,747 killed, 8,452 wounded, 4,263 captured or missing. Greene counts nearly 10,000 killed and wounded. Koltes killed and Fletcher Webster mortally wounded; Hatch, Tower, Schenck, Buford and Sigel among the wounded."
+   ],
+   [
+    "confederate",
+    "7,298: 1,096 killed, 6,202 wounded; another count gives 7,387 with 89 missing, and Greene about 1,300 killed and more than 7,000 wounded. Baylor killed; Ewell and W. B. Taliaferro wounded on the 28th, Trimble, Field and Forno on the 29th, Mahone, Jenkins and Corse on the 30th."
+   ]
+  ],
+  "note": "About 62,000 Union and 50,000 Confederate troops were engaged. At the Brawner farm on the 28th about 1,150 Federals and 1,250 Confederates fell; Grover's brigade lost 487 on the 29th; on the 30th the 5th New York lost 297 of about 500, McLean's brigade about a third, the Texas Brigade 628."
+ },
+ "sources": [
+  "A. Wilson Greene, <i>The Second Battle of Manassas</i>, National Park Service Civil War Series (Eastern National, 2006), read at <a href='https://npshistory.com/publications/civil_war_series/18/' target='_blank'>npshistory.com</a>: the clock times and the order of the attacks, from Taliaferro's night march to the retreat, and the strengths of Grover's, McLean's and Warren's brigades.",
+  "T. J. Jackson's report of the operations of 15 August to 5 September 1862, <i>Official Records</i> Series I, vol. 12, part 2, as transcribed by the <a href='https://www.battlefields.org/learn/primary-sources/battle-second-manassas-official-report-lieut-general-thomas-j-jackson' target='_blank'>American Battlefield Trust</a>, with the Trust's maps of the 29th and 30th.",
+  "National Park Service, Manassas National Battlefield Park: 'Battle of Second Manassas' and the tour stops and panels at the Brawner farm, the unfinished railroad, Sudley, Chinn Ridge, the 5th Maine's guns and Henry Hill, each dated to the hour.",
+  "Wikipedia, 'Second Battle of Bull Run', its Union and Confederate orders of battle, 'Battle of Thoroughfare Gap' and 'Texas Brigade' (read 25 October 2026), for the organisation, the army totals, the losses and the times the Park Service does not give. The 13th Massachusetts' letters and timeline at <a href='https://13thmass.org/1862/second_bull_run.html' target='_blank'>13thmass.org</a>, and Warren's brigade from his report and the regimental returns at ironbrigader.com.",
+  "Terrain: USGS 3DEP elevation at 10 m, sampled to 22.5 m, with three modern quarries filled. Farms, ruins, monuments, hills, the railroad grade, the roads and the streams from OpenStreetMap (ODbL). Sunrise and sunset from the NOAA solar formulae for Groveton, local mean time.",
+  "What is reconstructed: John Hennessy's <i>Return to Bull Run</i> and his troop-movement maps for the Park Service were not consulted, so most brigade strengths are estimates (1,500 to a brigade of the Army of Virginia, 1,800 to one of the Army of the Potomac, 1,400 to one of Jackson's and 1,700 to one of Longstreet's), and the positions between the recorded times are inferred, as are the losses of every brigade the sources do not count. The woods are drawn from the sources' descriptions, not from an 1862 map. Lewis Lane, Lewis Ford and Portici are placed within 200 to 500 m. Reynolds's and King's routes on the 28th and 29th, Ricketts's and Porter's approaches, and the routes of the retreat are inferred from the roads. Grover's attack is set where Thomas's brigade met Gregg's, 600 m north-east of the Dump. Longstreet's line of the 29th is taken from his order of the 30th, and Hood's twilight clash is set by Groveton, as Greene has it."
+ ]
 }
