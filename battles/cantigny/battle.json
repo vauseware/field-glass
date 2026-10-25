@@ -8935,7 +8935,7 @@
   {
    "id": "r16_1",
    "side": "american",
-   "name": "A battalion of the 16th Infantry, which relieved the 28th on the night of the 30th",
+   "name": "A battalion of the 16th Infantry, which relieved the 28th and the 18th on the night of the 30th",
    "short": "16th Inf.",
    "commander": "",
    "type": "infantry",
@@ -9022,7 +9022,7 @@
   {
    "id": "r16_2",
    "side": "american",
-   "name": "A battalion of the 16th Infantry, which relieved the 28th on the night of the 30th",
+   "name": "A battalion of the 16th Infantry, which relieved the 28th and the 18th on the night of the 30th",
    "short": "16th Inf.",
    "commander": "",
    "type": "infantry",
@@ -9121,7 +9121,7 @@
   {
    "id": "r16_3",
    "side": "american",
-   "name": "A battalion of the 16th Infantry, which relieved the 28th on the night of the 30th",
+   "name": "A battalion of the 16th Infantry, which relieved the 28th and the 18th on the night of the 30th",
    "short": "16th Inf.",
    "commander": "",
    "type": "infantry",
@@ -9580,8 +9580,7 @@
      "t": "1918-05-28 19:00",
      "x": 100,
      "y": -550,
-     "state": "rout",
-     "strength": 40
+     "state": "rout"
     },
     {
      "t": "1918-05-28 19:01",
