@@ -8,8 +8,8 @@ that would change the outcome. Built for a laptop with integrated graphics.
 
 The start screen shows one war at a time, chosen on a timeline of the years along its foot. Each war's card
 lists its battles with their running times over a backdrop in the dress of its maps: a Revolution battle, picked
-at random, as a sepia plan; Sidi Bou Zid's recon mosaic under the operations-room lamp; and First Manassas's
-ground as an engineer's survey.
+at random, as a sepia plan; Sidi Bou Zid's recon mosaic under the operations-room lamp; New Orleans as a coastal
+chart; and First Manassas's ground as an engineer's survey.
 `npm run check` measures each running time by playing the battle through at the default settings (Follow and
 Time-lapse on, chapter speeds honoured), writes it to `battles/index.json`, and fails if a battle's `war` has
 no entry in `WARS` (`splash.js`). `#ww2` opens the start screen on a war (`revolution`, `war-of-1812`, `civil-war`, `ww1`, `ww2`); a
@@ -26,7 +26,8 @@ returns to that battle's war. `?plan=yorktown` picks the Revolution's backdrop. 
 ![Princeton, the orchard](docs/screenshots/princeton-orchard.jpg)
 
 Battles so far: Bunker Hill (17 June 1775), Trenton and Princeton (25 December 1776 to 3 January 1777), Saratoga (19 September to 8 October 1777), the Waxhaws (29 May 1780), Kings Mountain (7 October 1780), Cowpens (17 January 1781),
-Guilford Courthouse (15 March 1781) and the siege of Yorktown (28 September to 19 October 1781); for the Civil War,
+Guilford Courthouse (15 March 1781) and the siege of Yorktown (28 September to 19 October 1781); for the War of 1812,
+New Orleans (23 December 1814 to 8 January 1815); for the Civil War,
 First Manassas (21 July 1861); and for the Second World War, Sidi Bou Zid (14 to 17 February 1943).
 
 ## Run locally

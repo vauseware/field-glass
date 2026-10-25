@@ -15,7 +15,7 @@ import { ground as trenchMap, feature as trenchFeature, INK as TINK, PAPER as TP
 // cartouche: bool }.
 export const WARS = [
   { id: 'revolution', name: 'American Revolution', years: '1775–1783', from: 1775, to: 1783, war: 'American Revolutionary War', draw: drawPlan },
-  { id: 'war-of-1812', name: 'War of 1812', years: '1812–1815', from: 1812, to: 1815, war: 'War of 1812', draw: drawChart, sample: 'fort-fisher', note: 'The first battle will be New Orleans, 8 January 1815.' },
+  { id: 'war-of-1812', name: 'War of 1812', years: '1812–1815', from: 1812, to: 1815, war: 'War of 1812', draw: drawChart },
   { id: 'civil-war', name: 'Civil War', years: '1861–1865', from: 1861, to: 1865, war: 'Civil War', draw: drawSurvey },
   { id: 'ww1', name: 'First World War', years: '1914–1918', from: 1914, to: 1918, war: 'World War I', draw: drawTrench, sample: 'yorktown' },
   { id: 'ww2', name: 'Second World War', years: '1939–1945', from: 1939, to: 1945, war: 'World War II', draw: drawTable },
