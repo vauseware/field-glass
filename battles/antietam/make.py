@@ -214,7 +214,7 @@ features = [
     dict(name="Boteler's Ford (about here)", at=[P['boteler_ford'][0] + 250, P['boteler_ford'][1] + 260]),
     dict(name="Sharpsburg", at=[P['sharpsburg'][0] - 260, P['sharpsburg'][1] + 40]),
     dict(name="Cemetery Hill", at=[P['cemetery_hill'][0] + 60, P['cemetery_hill'][1] + 80]),
-    dict(name="Nicodemus Heights", at=[NICODEMUS[0], NICODEMUS[1] + 90]), dict(name="Hauser Ridge", at=[HAUSER[0], HAUSER[1] - 90]),
+    dict(name="Nicodemus Heights", at=[NICODEMUS[0] - 250, NICODEMUS[1] - 60]), dict(name="Hauser Ridge", at=[HAUSER[0], HAUSER[1] - 90]),
     dict(name="Red Hill", at=[RED_HILL[0], RED_HILL[1] + 90]),
     dict(name="Keedysville", at=[P['keedysville'][0], P['keedysville'][1] + 80]), dict(name="Porterstown", at=[P['porterstown'][0] + 60, P['porterstown'][1] + 70]),
 ]
@@ -365,6 +365,8 @@ def keys(id, ks):  # every leg starts where the unit stands, unless it is coming
         a, b = have[-1], ks[0]
         assert carried(id, "state") == "hidden" or (a["x"], a["y"]) == (b["x"], b["y"]), (id, a["t"], b["t"], "a leg must start where the unit stands")
         if a["t"] == b["t"]: a.update({k: v for k, v in b.items() if k != "t"}); ks = ks[1:]
+        elif "h" in b and b["h"] != carried(id, "h") and sec(b["t"]) - sec(a["t"]) > 120:  # wheel in the last minute, so a long halt stays quiet
+            have.append(K(fmt(sec(b["t"]) - 60), (a["x"], a["y"])))
     have += ks
 def last(id): k = KEYS[id][-1]; return (k["x"], k["y"])
 def appear(id, t, p, h, state="line", **kw): keys(id, [K(t, p, h=h, state=state, **kw)])
@@ -551,18 +553,19 @@ mv("jfirst", B("07:45"), B("08:05"), (-560, 1700), h=40); mv("early", B("07:45")
 mv("hofmann", B("07:40"), B("08:00"), (-450, 3100), h=190)
 # Hood checked at the edge of the Cornfield and the East Woods, and back to the West Woods with 60 percent lost
 fight("wofford", B("07:25"), B("07:45"), 511); fight("law", B("07:35"), B("07:45"), 409)
-mv("wofford", B("07:45"), B("08:10"), (-160, 1950), (-300, 1500), h=40, state="line", moving="retreat")
-mv("law", B("07:45"), B("08:15"), (100, 1700), (-200, 1450), h=40, state="line", moving="retreat")
+mv("wofford", B("07:45"), B("08:15"), (-160, 1950), (-200, 1450), (-480, 1250), h=40, state="line", moving="retreat")
+mv("law", B("07:45"), B("08:15"), (100, 1700), (-150, 1400), (-330, 1180), h=40, state="line", moving="retreat")
 
 # ---- 17 September, 7 to 9: Mansfield's XII Corps and Greene to the Dunker Church ----
-mv("crawford", B("06:00"), B("07:00"), (560, 2790), h=200)
-mv("gordon", B("06:00"), B("07:00"), (-140, 2800), h=190)
+mv("crawford", B("06:00"), B("07:00"), (750, 2900), h=200)
+mv("gordon", B("06:00"), B("07:00"), (0, 2860), h=190)
 mv("crawford", B("07:30"), B("07:50"), (260, 2250), h=200, state="firing")
 mv("gordon", B("07:30"), B("07:50"), (0, 2200), h=180, state="firing")
 fight("crawford", B("07:50"), B("08:40"), 1500); fight("gordon", B("07:50"), B("08:40"), 1300)
 fight("ripley", B("07:15"), B("08:00"), 520); fight("colquitt", B("07:45"), B("08:00"), 800); fight("garland", B("07:45"), B("08:00"), 800)
-for id, t0, end in (("tyndale", "06:30", (170, 2450)), ("stainrook", "06:35", (340, 2420)), ("goodrich", "06:40", (420, 2620)), ("xii_guns", "06:45", (520, 2560))):
-    walk(id, B(t0), (500, 3000), end, h=200, kmh=2.5)
+for id, t0, wait, end in (("tyndale", "06:30", (350, 3100), (170, 2450)), ("stainrook", "06:35", (650, 3150), (340, 2420)),
+                          ("goodrich", "06:40", (950, 3250), (420, 2620)), ("xii_guns", "06:45", (1150, 3100), (520, 2560))):
+    walk(id, B(t0), wait, h=200, kmh=2.5); mv(id, B("07:35"), B("08:00"), end, h=200)
 # Greene turns the Confederate right in the East Woods, crosses the Smoketown Road and makes the Mumma ridge by the church
 mv("tyndale", B("08:00"), B("08:20"), (330, 2050), h=210, state="firing")
 mv("stainrook", B("08:00"), B("08:20"), (480, 2000), h=210, state="firing")
@@ -637,7 +640,7 @@ mv("stainrook", B("10:30"), B("10:50"), (-200, 1300), h=240, state="firing")
 fight("tyndale", B("10:50"), B("12:00"), 600); fight("stainrook", B("10:50"), B("12:00"), 600)
 
 # ---- 17 September, 8 to 1: French and Richardson against the Sunken Road ----
-for id, t0, t1, end in (("weber", "08:15", "09:30", (430, 1050)), ("morris", "08:25", "09:45", (220, 1090)), ("kimball", "08:35", "10:00", (630, 1010))):
+for id, t0, t1, end in (("weber", "08:15", "09:30", (430, 1050)), ("morris", "08:25", "09:45", (420, 1150)), ("kimball", "08:35", "10:00", (440, 1260))):  # in three lines
     mv(id, B(t0), B(t1), (PRYS[0] + 60, PRYS[1]), (PRYS[0] - 60, PRYS[1] + 20), (1500, 1700), (900, 1650), (P['roulette'][0] + 50, P['roulette'][1] + 30), end, h=195, state="firing")
 mv("rodes", B("08:30"), B("09:00"), (330, 925), h=10)
 mv("gb_anderson", B("09:00"), B("09:40"), (600, 650), (580, 830), h=30)
@@ -670,7 +673,7 @@ fight("caldwell", B("12:05"), B("12:30"), 1100)
 for id, t0, end in (("rodes", "11:50", (150, 330)), ("colquitt", "11:55", (-60, 440)), ("garland", "11:55", (40, 520)), ("gb_anderson", "11:55", (450, 330)),
                     ("featherston", "12:00", (-20, 240)), ("pryor", "12:00", (160, 170)), ("wright", "12:00", (350, 120)), ("wilcox", "12:00", (560, 160))):
     mv(id, B(t0), plus(B(t0), 30), end, h=20, state="line", moving="retreat")
-for id, end in (("weber", (430, 900)), ("morris", (220, 950)), ("kimball", (620, 860))): mv(id, B("12:05"), B("12:30"), end, h=190, state="firing")
+for id, end in (("weber", (420, 960)), ("morris", (420, 1060)), ("kimball", (450, 1160))): mv(id, B("12:05"), B("12:30"), end, h=190, state="firing")
 mv("brooke", B("12:10"), B("12:40"), (650, 700), h=200, state="firing")
 for id in ("weber", "morris", "kimball", "brooke", "caldwell"): stand(id, B("13:00"), state="line")
 for id in ("rodes", "colquitt", "garland", "gb_anderson", "featherston", "pryor", "wright", "wilcox"): fight(id, B("12:30"), B("13:00"), carried(id, "strength") - 40)
@@ -690,7 +693,7 @@ fight("ix_guns_e", B("10:00"), B("13:00"), 280, h=280)
 fight("cemetery_guns", B("10:00"), B("15:20"), 330, h=80)
 # Pleasonton's cavalry and horse batteries over the Middle Bridge, the guns 880 yards south-east of the tower
 MID = P['middle_bridge']
-mv("pleasonton", B("10:00"), B("10:30"), (MID[0] + 60, MID[1] + 10), (MID[0] - 60, MID[1] - 10), (1380, 360), h=250)
+mv("pleasonton", B("10:00"), B("10:30"), (MID[0] + 60, MID[1] + 10), (MID[0] - 60, MID[1] - 10), (1150, 420), h=250)
 mv("horse_guns", B("10:00"), B("10:25"), (MID[0] + 60, MID[1] + 10), (MID[0] - 60, MID[1] - 10), (1330, 160), h=250, state="firing")
 fight("horse_guns", B("10:25"), B("12:30"), 560)
 mv("horse_guns", B("12:30"), B("13:00"), (MID[0] - 60, MID[1] - 10), (MID[0] + 60, MID[1] + 10), (2150, 380), h=250)
@@ -699,7 +702,7 @@ mv("sykes", B("12:20"), B("13:10"), (MID[0] + 60, MID[1] + 10), (MID[0] - 60, MI
 mv("evans", B("12:40"), B("13:00"), (660, -90), h=80, state="firing")
 fight("sykes", B("13:10"), B("16:20"), 4500); fight("evans", B("13:00"), B("16:00"), 220)
 # The 11th Connecticut and Crook about ten; Crook over the ford a few hundred yards above the bridge a little before eleven
-mv("harland", B("09:40"), B("10:00"), (1300, -1450), h=260, state="firing")
+mv("harland", B("09:40"), B("10:00"), (1330, -1360), h=225, state="firing")
 fight("harland", B("10:00"), B("10:30"), 1330)
 mv("harland", B("10:30"), B("10:55"), (1750, -1820), h=200)
 mv("crook", B("09:40"), B("10:00"), (1300, -1100), h=260, state="firing")
@@ -808,7 +811,7 @@ GO = ["cobb", "kershaw", "barksdale", "semmes", "armistead", "wilcox", "feathers
 for n, id in enumerate(GO):
     src = last(id)
     pts = HF_TO_FORD if src[1] < -1000 else ([(-350, 500)] if src[1] > 600 else []) + TOWN_TO_FORD
-    hide(id, plus(walk(id, plus(C("21:00"), n * 12), *pts, h=240, kmh=4), 5))
+    hide(id, plus(walk(id, plus(C("23:00"), n * 8), *pts, h=240, kmh=4), 5))
 for n, id in enumerate(["archer", "gregg", "branch", "rlwalker", "pender", "field"]):
     walk(id, plus(C("23:59"), n * 10), *HF_TO_FORD[:-1], (-2500 - n * 60, -2620), h=60, kmh=3.5)
     stand(id, E("08:30"), state="line"); hide(id, plus(walk(id, plus(E("08:30"), n * 8), FORD, h=240, kmh=3), 3))
@@ -842,7 +845,41 @@ for id, side, short, name, commander, type, strength, extra in OOB:
         state = k.get("state", state)
         assert state == "hidden" or not wet((k["x"], k["y"])), (id, k["t"], (k["x"], k["y"]), "in the river")
     units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength, keys=ks, **extra))
-events = []
+# Chapters: (time, title, text, camera centre, metres across, playback speed, clock time the sources record or None).
+# Times are the War Department tablets' (after Carman), with the Historical Handbook, the Park Service and Wikipedia
+# where the tablets are silent; they agree within half an hour except on A. P. Hill's arrival.
+CHAPTERS = [
+    (A("14:00"), "Hooker crosses the Antietam", "Lee's army stands before Sharpsburg. Longstreet's command crossed the Middle Bridge at noon on the 15th and formed outside the town, its left at Cemetery Hill on the Boonsboro Pike, D. H. Hill on its left. Jackson's and Ewell's divisions came up from Harpers Ferry this morning and form on the left again, from the Hagerstown Pike 250 yards north of the Dunker Church west through the West Woods. At two Hooker's I Corps leaves Keedysville: Doubleday's division by Pry's Ford, Ricketts's and Meade's by the Upper Bridge.", [2300, 2500], 4000, 120, "2 PM"),
+    (A("18:00"), "The East Woods at dusk", "About six Meade's division meets Hood's near the East Woods. The I Corps forms facing south and south-west, Meade in the centre, Doubleday on the right, Ricketts on the left. The firing stops about half past six.", [350, 2450], 1600, 60, "about 6 PM"),
+    (A("22:00"), "A wet night", "Drizzling rain. Lawton's and Trimble's brigades cross the Pike and relieve Hood's division near the south edge of Miller's Cornfield and in Mumma's field south of the Smoketown Road; Hays bivouacs north-west of the church, Early in the farm lane on Jackson's left. Sedgwick's and French's divisions lie near the army's headquarters at the Pry House, Richardson's behind the bluff over the Antietam. About midnight Greene's division of the XII Corps crosses the Upper Bridge.", [900, 2300], 5500, 300, "about 10 PM"),
+    (B("05:30"), "Hooker attacks", "The morning breaks gray and misty. Doubleday's division moves to the attack at half past five, Gibbon's Iron Brigade leading down the Pike, Phelps and Patrick behind it, Hofmann in reserve; Seymour's brigade of Meade's division opens on Lawton's. Hooker's guns are on the ridge by Joseph Poffenberger's, and the heavy rifles east of the creek fire into Jackson's line from the flank. Some 8,600 Union men against about 7,700. The sun rises at 5:43.", [-100, 2450], 1700, 60, "5:30 AM"),
+    (B("06:00"), "The Cornfield", "Ricketts forms at six, Hartsuff leading, and goes in to the west edge of the East Woods and the south edge of the Cornfield. Doubleday's brigades strike Lawton's left. Jackson's skirmishers behind a ledge west of the Pike fire into Gibbon's flank, and Gibbon and Patrick deploy west of the road with Campbell's battery. Hays crosses the Pike north of the church with 550 men, fills the gap between Lawton and Trimble, pushes into the Cornfield and loses more than half. Grigsby's first line fights over half an hour and falls back 380 yards to the edge of the woods.", [-50, 2150], 1400, 30, "6 AM"),
+    (B("06:30"), "Starke at the Pike fence", "Meade forms about half past six, Seymour's brigade on the left and forward, Magilton's and Anderson's filling the gap between Doubleday and Ricketts. Starke's second line goes forward to the Pike fence and is shot down from the flank; Starke is killed, and Jackson's Division falls back into the West Woods. Ripley's brigade fires the Mumma buildings and crosses the Smoketown Road toward the Cornfield, Colquitt's and Garland's behind it.", [-150, 1950], 1400, 30, "about 6:30 AM"),
+    (B("07:00"), "Hood's counterattack", "About seven Hood's division crosses the Pike north of the church and relieves Lawton, Hays and Trimble: Wofford's Texas Brigade along the Pike, Law's into the East Woods. It reaches the north edge of the Cornfield and the east edge of the woods, is checked and goes back, having lost 60 percent. Lawton's and Hays's remnants withdraw south-west of the church. Early, back from supporting Stuart's guns, turns Gibbon's and Patrick's flank with Grigsby's 200 and drives them back to Miller's barn.", [0, 2050], 1400, 30, "about 7 AM"),
+    (B("07:30"), "Mansfield's corps", "Williams's division of the XII Corps formed near the North Woods at seven, Gordon on the right, Crawford across the Smoketown Road. Mansfield is mortally wounded at the edge of the East Woods while deploying them, and Hooker is wounded. Doubleday's brigades withdraw to the fields north of Miller's after more than an hour; Hooker's corps has lost about 2,500 in two hours. Lee sends G. T. Anderson's brigade from Evans to the left, and Sedgwick's division starts from the Pry House for Pry's Ford.", [150, 2350], 1600, 60, "7:30 AM"),
+    (B("08:00"), "Greene to the Dunker Church", "About eight Greene's two small brigades, about 1,700 men, form north-west of the Smoketown Road, Tyndale's on the right and Stainrook's on the left. They turn the Confederate right in the East Woods, cross the road and press on to the Mumma ridge opposite the church. Ripley goes back to the West Woods, Colquitt and Garland toward the Sunken Road. S. D. Lee's batteries, on the ridge east of the church since daybreak, leave it about a quarter past eight, and Walker's division sets out from the bridge sector for the church.", [150, 1800], 1500, 60, "about 8 AM"),
+    (B("09:00"), "Sedgwick in the West Woods", "Sedgwick's division, Gorman's, Dana's and Howard's brigades in three lines, crosses the Pike about a third of a mile north of the church into the West Woods. McLaws, over Boteler's Ford at daybreak, deploys about nine from the Pike opposite the Sunken Road to north-west of the Hauser house. With Walker's division, G. T. Anderson and Stuart he strikes Sedgwick's left and front and drives the division north beyond Miller's. In less than twenty minutes nearly half of Sedgwick's 5,000 are struck down.", [-450, 1950], 1000, 20, "about 9 AM"),
+    (B("09:30"), "French at the Sunken Road", "French's division, over Pry's Ford about half past eight, wheels left at the East Woods, drives the outposts from the Roulette buildings and about half past nine engages Rodes, Colquitt and Garland in the west end of the Sunken Road, a farm lane worn into a trench, its bank piled with fence rails. G. B. Anderson's brigade comes up a ravine from the Boonsboro Pike onto Rodes's right. Richardson's division crosses Pry's Ford. North of the church, McLaws's push over the Pike is checked by Greene and the guns from Mumma's cemetery north.", [400, 1100], 1400, 30, "about 9:30 AM"),
+    (B("10:00"), "The first try at the bridge", "Burnside has the order to attack. A little before ten the 11th Connecticut and Crook's brigade try the Lower Bridge, twelve feet wide, under Toombs's Georgians in rifle pits on the bluff 80 feet above the west bank, and fail. Toombs has the 2nd and 20th Georgia, about 400 muskets each, and fewer than 120 of the 50th. Near the church Manning's brigade attacks Greene.", [1150, -1250], 1300, 30, "about 10 AM"),
+    (B("10:30"), "Anderson's division and the Irish Brigade", "French's brigades go at the lane 'with parade-like precision'. Lee sends R. H. Anderson's division, 3,400 men, to D. H. Hill; it forms behind the lane, its left at the Pike and its right in the ravine 300 yards east of Piper's stone barn, and attacks into Piper's cornfield. Richardson forms in the ravine east of Roulette's, Meagher's Irish Brigade on the right, Caldwell's on the left, Brooke's in reserve, and goes in on French's left. The Irish Brigade loses 540 men.", [450, 950], 1300, 30, "about 10:30 AM"),
+    (B("11:00"), "Downstream to Snavely's Ford", "Rodman's division and Ewing's brigade are sent down the creek toward Snavely's Ford, nearly a mile below the bridge past a sharp bend. A little before eleven Crook gets over at a ford a few hundred yards above the bridge.", [1400, -1850], 1800, 60, "about 11 AM"),
+    (B("12:00"), "Bloody Lane", "At the lane Caldwell's brigade goes in, Rodes's brigade leaves the lane on a mistaken order, and Barlow's men fire down its length. About noon French and Richardson carry the Bloody Lane, and its defenders go back to and beyond Piper's. Some 5,600 men have fallen there, 3,000 Union and 2,600 Confederate. Franklin's VI Corps comes up about noon, Smith's division first; Irwin's brigade charges toward the church and fails, and Greene is driven out of the woods by the church.", [450, 850], 1100, 30, "about noon"),
+    (B("12:30"), "Ferrero's charge", "Nagle's brigade, the 2nd Maryland and 6th New Hampshire leading, was thrown back from the bridge at noon. At half past twelve Ferrero's brigade, the 51st New York and the 51st Pennsylvania, begins its assault.", [1150, -1330], 1100, 30, "12:30 PM"),
+    (B("13:00"), "Over the bridge", "At one Ferrero's brigade carries the bridge, and Sturgis's division and Crook's brigade cross and take the high ground beyond; the fight there costs some 600 men. Rodman crosses at Snavely's Ford about one and drives Toombs's right from it. Toombs, out of ammunition, falls back to the edge of the town. Evans deploys across the Boonsboro Pike against Sykes's regulars, over the Middle Bridge. At the lane, both sides halt, exhausted.", [950, -1450], 1700, 60, "1 PM"),
+    (B("14:30"), "A. P. Hill comes up", "A. P. Hill's division left Harpers Ferry at half past seven and has marched 17 miles in seven hours; hundreds fell out on the way. It is at Boteler's Ford about two, and by the tablet on the Harpers Ferry Road at half past two. Pender's and Field's brigades are sent to cover the lower Antietam; Branch's, Gregg's and Archer's form along the road on D. R. Jones's right. The IX Corps has taken nearly two hours to cross, re-form and draw ammunition. Willcox's division crossed the bridge at two and relieves Sturgis, and four batteries cross.", [-500, -2150], 3500, 60, "2:30 PM"),
+    (B("15:00"), "The advance on Sharpsburg", "At three Willcox's, Rodman's and the Kanawha divisions go forward on Sharpsburg in a line a mile wide, over 8,000 men and 22 guns: Willcox up the road, Rodman over the hill on his left, Fairchild's brigade on the right and Harland's in echelon on the left, Ewing's in support. Willcox's skirmishers reach the town and the Confederate guns leave Cemetery Hill. Fairchild drives D. R. Jones's right back through the streets; his 9th New York loses 63 percent. About 2,500 Confederates hold the ridge; Evans, with the remnants of Colquitt's and Garland's brigades, joins Jones.", [250, -1050], 1800, 30, "3 PM"),
+    (B("15:40"), "Hill strikes the flank", "The sources put it from half past three to four. Hill's three brigades, Toombs on their left, cross the fields from the Harpers Ferry Road and strike Harland's two regiments in the 40-acre cornfield and the Kanawha line; Gregg's brigade falls on the 16th Connecticut. Rodman is mortally wounded and Branch is killed. Nagle's brigade, sent to Rodman's left, checks Hill's right, and Ferrero's goes to Willcox's right at Otto's lane.", [400, -1500], 1400, 30, "between 3:30 and 4 PM"),
+    (B("17:00"), "Back to the creek", "The IX Corps is drawn back to the high ground over the Antietam, and Pleasonton's cavalry, his horse batteries and the regulars on the Boonsboro Pike go back over the creek. About five the 7th Maine charges across the Bloody Lane 450 yards west of the tower, reaches Piper's barn and is driven back. By half past five the battle is over, and with sunset, at 6:06, the firing dies away.", [600, -300], 3000, 60, "about 5 PM"),
+    (C("09:00"), "The next day", "The armies lay on their arms through the night, and Lee held a council at his headquarters west of the town. Today he gives up a plan against the Union right after seeing the guns on the Poffenberger ridge. McClellan does not attack. Morell's division relieves Willcox's over the bridge.", [700, 300], 6000, 300, "the next morning"),
+    (D(19, "00:00"), "Over the Potomac", "At midnight Longstreet leads the way across Boteler's Ford, Fitz Lee's cavalry covering the withdrawal. McLaws's division, on the field until now, recrosses tonight, and A. P. Hill's brigades fall back at midnight as the rear guard.", [-1500, -1500], 6500, 300, "midnight"),
+    (E("09:00"), "The last brigade over", "Hill's rear guard recrosses about half past nine. Smith's division of the VI Corps goes forward and finds the field empty.", [-1700, -1500], 6500, 120, "about 9:30 AM"),
+]
+events = [dict(t=t, title=a, text=b, at=at_, view=v, speed=s, **({"when": w} if w else {})) for t, a, b, at_, v, s, w in CHAPTERS]
+for e in events:  # without `when` the card speaks the nearest hour (app.js chapterWhen), so it must be near the frame's clock
+    s = sec(e["t"]) % 86400; hh = [n % 12 or 12 for n in (int(s // 3600), int(s // 3600) + 1)]; num = re.search(r"\d+", e.get("when", ""))
+    assert not num or int(num[0]) in hh, (e["t"], e["when"], "the card's hour is not the frame's")
+    assert "when" in e or abs(s - math.floor(s / 3600 + 0.5) * 3600) <= 15 * 60, (e["t"], e["title"], "give it a when")
+    assert e["speed"] in (1, 2, 5, 10, 20, 30, 60, 120, 300, 600, 1800, 3600, 7200), (e["title"], e["speed"], "not a speed the menu offers (sim.js SPEEDS)")
 
 battle = dict(
     id="antietam", name="Antietam", date="1862-09-17", dateText="16 to 19 September 1862", place="Sharpsburg, Maryland",
@@ -851,9 +888,33 @@ battle = dict(
     # Bachelder's convention, Union blue and Confederate red
     sides=dict(union=dict(name="Union (McClellan)", color="#2c4f96", light="#6f8fca", dark="#16294f"),
                confederate=dict(name="Confederate (Lee)", color="#b23a2e", light="#d77a6c", dark="#5c1a14")),
+    tints=[dict(color="rgba(150,156,164,0.35)", **{"from": A("19:30"), "until": B("05:00")}),   # the drizzle of the night of the 16th
+           dict(color="rgba(214,218,222,0.4)", **{"from": B("05:00"), "until": B("06:30")})],  # the gray, misty morning, clearing early
     features=features, units=units, events=events,
-    sources=[],
+    outcome={"result": "Lee held his ground on the 17th and recrossed the Potomac on the night of the 18th", "losses": [
+        ["union", "12,410 by Sears: 2,108 killed, 9,549 wounded, 753 missing, a quarter of the force. McClellan's return of 29 September gives 12,469. Mansfield, Richardson and Rodman killed or mortally wounded; Hooker, Sedgwick and Ricketts among the wounded."],
+        ["confederate", "10,316 by Sears's estimate: 1,546 killed, 7,752 wounded, 1,018 missing, 31 percent. Starke, Branch and G. B. Anderson killed or mortally wounded; Lawton, J. R. Jones, Ripley, Rodes, R. H. Anderson and Toombs among the wounded."]],
+        "note": "About 72,000 Union troops were available on the 17th, by Hartwig's count, against about 37,600 Confederates. Close to 13,000 men fell in the morning alone, and about 5,600 at the Sunken Road."},
+    sources=[
+        "Antietam Battlefield Board, the War Department tablets (1890s), written from Ezra Carman's reconstruction, read as transcribed at <a href='https://antietam.stonesentinels.com/' target='_blank'>antietam.stonesentinels.com</a>: the clock times, the order of the brigades and the yardages, from Hooker's crossing on the 16th to A. P. Hill's rear guard on the 19th.",
+        "<i>The War of the Rebellion: Official Records</i>, Series I, vol. 19, part 1 (1887), in the Internet Archive scan: McClellan's strengths and returns, the Confederate return, and the reports of Early, D. H. Hill, Toombs and Williams for the strengths of Lawton's, Hays's and Trimble's brigades, Toombs's muskets at the bridge and Greene's 1,700.",
+        "Frederick Tilberg, <i>Antietam National Battlefield Site</i>, National Park Service Historical Handbook 31 (1960, rev. 1961): the weather, the Cornfield, Sedgwick's losses, the Sunken Road, the Lower Bridge and Snavely's Ford, Hill's march and the withdrawal. National Park Service, Antietam: the Final Attack Trail timeline, 'Burnside Bridge' and 'The Final Attack'. American Battlefield Trust, 'Antietam, Final Assault'.",
+        "Wikipedia, <a href='https://en.wikipedia.org/wiki/Battle_of_Antietam' target='_blank'>Battle of Antietam</a> and the Union and Confederate orders of battle (read 24 October 2026), for D. Scott Hartwig's strengths (<i>I Dread the Thought of the Place</i>, 2023) and Stephen Sears's losses (<i>Landscape Turned Red</i>, 1983). Neither book, nor Carman's manuscript, nor the Carman-Cope atlas of 1904 and 1908 was consulted.",
+        "Terrain: USGS 3DEP elevation at 10 m, sampled to 22.5 m. Farms, the church, the bridges, monuments and the places where generals fell, the roads, Antietam Creek and the Sunken Road from OpenStreetMap (ODbL); the park avenues, the National Cemetery and the railway are later and not drawn. Sunrise and sunset from the NOAA solar formulae for Sharpsburg, local mean time.",
+        "What is reconstructed: the three woods are boxes drawn from the tablets' landmarks, not the 1862 outlines, which are on the Carman-Cope base sheet; the fences and stone walls along the Pike and the Harpers Ferry Road follow the road, not the sheet. Pry's and Snavely's fords are placed from distances and the creek's bends, within 200 to 300 m. Boteler's Ford keeps the note's longitude on the Potomac as the elevation model draws it; the note's latitude put it 800 m south of the river. The roads between the ford and the town are inferred. Positions between the tablets' times are inferred, as is every brigade strength the sources do not give: those are a division's or corps's total shared by regiments. A. P. Hill's arrival runs from 2:30 to 4 in the sources; this replay has him on the Harpers Ferry Road at 2:30 and attacking about 3:40. The 7th Maine's strength is a guess. Humphreys's division, which came up on the 18th, and Couch's, which never reached the field, are left out.",
+    ],
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1)
 print(len(units), "units,", len(events), "events,", len(features), "features,", len(FIELDS), "fields,",
       sum(u["strength"] for u in units if u["side"] == "union"), "Union,", sum(u["strength"] for u in units if u["side"] == "confederate"), "Confederate")
+# Which units each chapter's frame holds at its moment, so a caption never names a unit the camera leaves out.
+def where(u, t):
+    ks = [k for k in u["keys"] if sec(k["t"]) <= sec(t)]
+    if not ks or next((k["state"] for k in reversed(ks) if "state" in k), None) == "hidden": return None
+    k = ks[-1]; nxt = [k2 for k2 in u["keys"] if sec(k2["t"]) > sec(t)]
+    if nxt and (k["x"], k["y"]) != (nxt[0]["x"], nxt[0]["y"]):
+        f = (sec(t) - sec(k["t"])) / (sec(nxt[0]["t"]) - sec(k["t"])); return (k["x"] + f * (nxt[0]["x"] - k["x"]), k["y"] + f * (nxt[0]["y"] - k["y"]))
+    return (k["x"], k["y"])
+for e in events:
+    r = e["view"] / 2; inside = [u["id"] for u in units if (p := where(u, e["t"])) and abs(p[0] - e["at"][0]) <= r and abs(p[1] - e["at"][1]) <= r]
+    print(f"{e['t']} {e['title']}: {' '.join(inside)}")
