@@ -44,6 +44,9 @@ SUISSE, CARRE = (-700, -1400), (-600, -1700)   # the Bois Suisse and Bois Carré
 JUMP_OFF = [(-1250, 815), (-1100, 5), (-1350, -185), (-1350, -405), (-1270, -595), (-1170, -805), (-1020, -1125), (-930, -1265), (-110, -1265), (400, -1265)]
 OBJECTIVE = [G("19.25"), G("21.21"), G("24.19"), G("26.13"), G("25.09"), (-250, -1265)]
 GERMAN_LINE = [(-700, 900), (-750, 0), (-500, -900), (300, -1050), FONTAINE_CH]
+def mid(a, b): return (round((a[0] + b[0]) / 2), round((a[1] + b[1]) / 2))
+J1, J2, J3 = (-1080, -950), (-1330, -250), (-1190, 470)                  # each battalion's place on the jump-off line
+O1, O2, O3 = (-215, -900), mid(G("24.19"), G("26.13")), mid(G("19.25"), G("21.21"))  # and on the objective
 
 WOODS_LL = {  # OpenStreetMap ways (ODbL), simplified to 12 m
     'st_eloi': [(49.66212, 2.48125), (49.663, 2.47978), (49.66405, 2.47855), (49.66481, 2.47598), (49.6652, 2.4732), (49.6655, 2.47258), (49.66882, 2.47093), (49.6691, 2.47107), (49.66947, 2.47248), (49.66877, 2.47342), (49.66882, 2.47366), (49.66816, 2.4739), (49.66628, 2.47762), (49.66598, 2.47744), (49.66613, 2.47381), (49.66546, 2.47301), (49.66499, 2.47774), (49.66552, 2.47813), (49.66536, 2.47861), (49.66486, 2.47835), (49.66486, 2.4778), (49.66448, 2.47763), (49.66307, 2.48164), (49.66261, 2.48139), (49.66244, 2.48176)],  # way 235282875
@@ -150,6 +153,17 @@ features = [
     label("Bois Suisse (about here)", SUISSE, dx=-150), label("Bois Carré (about here)", CARRE, dy=-150),
     *[label(n, centre(WOODS[k]), dx=dx, dy=dy) for k, (n, dx, dy) in NAMES.items()],
 ]
+# The barrage: the preparation on the village from 5.45, then the 75s' rolling barrage ahead of each battalion from H hour,
+# 100 m every two minutes, standing 200 m beyond the objective until a quarter to eight. From noon the German guns.
+H = D(28, "06:45")
+features += [dict(type="smoke", at=[CHURCH[0], CHURCH[1]], rate=30, spread=700, **{"from": D(28, "05:45"), "until": H}),
+             dict(type="smoke", at=[CHURCH[0], CHURCH[1] + 100], rate=3, spread=900, **{"from": D(28, "12:00"), "until": D(30, "12:00")})]
+for J, O in ((J1, O1), (J2, O2), (J3, O3)):
+    L = math.dist(J, O); u = ((O[0] - J[0]) / L, (O[1] - J[1]) / L); d, t = 150, H
+    while d < L + 200:
+        features.append(dict(type="smoke", at=[round(J[0] + d * u[0]), round(J[1] + d * u[1])], rate=14, spread=450, **{"from": t, "until": plus(t, 2)}))
+        d, t = d + 100, plus(t, 2)
+    features.append(dict(type="smoke", at=[round(O[0] + 200 * u[0]), round(O[1] + 200 * u[1])], rate=10, spread=450, **{"from": t, "until": D(28, "07:45")}))
 for f in features:
     if "at" in f: assert on_land(f["at"]) and max(map(abs, f["at"])) < HALF_EXTENT - 100, (f.get("name"), f["at"], "a label off the map")
 
@@ -215,7 +229,6 @@ def move(id, t0, pts, h=None, state="line", moving="column", kmh=PACE):  # from 
 def lose(id, t0, t1, n): at(id, t0); at(id, t1, strength=carried(id, "strength") - n)
 
 # 04:30 on 28 May: the 28th on the jump-off line, the Germans in and about the village; the rest come up later
-J1, J2, J3 = (-1080, -950), (-1330, -250), (-1190, 470)
 for id, p, h, kw in [("r28_1", J1, 63, {}), ("r28_2", J2, 90, {}), ("r28_3", J3, 70, {}), ("r18co_a", (-2500, -900), 90, {}), ("r18co_b", (-1150, -1450), 60, {}),
                      ("eng", (-1480, -300), 90, {}), ("r26_1", (150, -1300), 20, {}),
                      ("g271_1", (-430, -300), 270, {}), ("g271_4", (650, 250), 250, {}), ("g271_3", (-720, 520), 265, {}), ("g272_1", (-350, 780), 250, {}),
@@ -225,7 +238,166 @@ for id, p in [("r18_a", (-2990, -650)), ("r18_b", (-2990, -1350)), ("r16_1", (-2
               ("tank1", (-2300, -1100)), ("tank2", (-2300, -1150)), ("tank3", (-2300, -1200)), ("g25r", (2850, -600))]:
     appear(id, START, p, state="hidden", h=90)
 
-#@MOVES@
+def run(id, t0, legs, **kw0):  # from where it stands at t0 through timed legs: (time, place, fields)
+    if sec(t0) - sec(KEYS[id][-1]["t"]) > 120: at(id, plus(t0, -1))
+    keys(id, [K(t0, last(id), **kw0)] + [K(t, p, **kw) for t, p, kw in legs])
+def timed(id, t0, t1, pts, h, **kw0):  # from where it stands at t0 along pts, arriving at t1, times spread by distance
+    pts = [last(id)] + pts; d = [0]
+    for a, b in zip(pts, pts[1:]): d.append(d[-1] + math.dist(a, b))
+    run(id, t0, [(fmt(sec(t0) + (sec(t1) - sec(t0)) * d[i] / d[-1]), p, dict(h=heading(pts[i - 1], p))) for i, p in enumerate(pts) if i][:-1] + [(t1, pts[-1], dict(h=h))], h=heading(pts[0], pts[1]), **kw0)
+def hide(id, t): at(id, t, state="hidden")
+def fire(id, t0, t1, state="line"): at(id, t0, state="firing"); at(id, t1, state=state)
+VILLERS_RD = ROADS['villers_rd']
+def by_road(a, b):  # along the Villers-Tournelle road from the vertex nearest a to the one nearest b
+    i, j = (min(range(len(VILLERS_RD)), key=lambda n: math.dist(VILLERS_RD[n], p)) for p in (a, b))
+    return VILLERS_RD[i:j + 1] if i <= j else VILLERS_RD[j:i + 1][::-1]
+WEST = (-2990, -1330)  # where the road to Coullemelle and the rear leaves the map
+
+# ---- 28 May: the attack ----
+# The engineers lose two officers and 30 men before H hour; they follow the centre battalion into the village.
+move("eng", D(28, "06:55"), [(-1330, -260), (-870, -250), (-520, -260)], h=90)
+# The three battalions go over at H hour behind the barrage; the centre is in the village at 6.56, all on the objective at 7.20.
+run("r28_3", H, [(D(28, "06:58"), (-790, 470), dict(state="firing")), (D(28, "07:10"), O3, {}), (D(28, "07:20"), O3, dict(state="line", h=63))], state="charge", h=70)
+run("r28_2", H, [(D(28, "06:56"), (-870, -240), dict(state="firing")), (D(28, "07:15"), (-420, -225), {}), (D(28, "07:20"), O2, dict(state="line", h=72))], state="charge", h=90)
+run("r28_1", H, [(D(28, "07:05"), (-520, -920), dict(state="firing", h=90)), (D(28, "07:20"), O1, dict(state="line", h=100))], state="charge", h=75)
+# The tanks: out of their waiting positions at 5.50, at their point of departure behind the Bois Suisse at 6.30, moving
+# east at 6.42 with the centre battalion and round north of the village, their third battery at its objective about seven.
+DEP = {"tank1": (-1250, -1000), "tank2": (-1200, -1080), "tank3": (-1150, -1160)}
+GOAL = {"tank1": (-560, 330), "tank2": (-330, 150), "tank3": (-650, 480)}
+for id in DEP:
+    appear(id, D(28, "05:50"), last(id), state="column", h=100)
+    run(id, D(28, "05:50"), [(D(28, "06:30"), DEP[id], dict(state="line", h=70))], state="column")
+    timed(id, D(28, "06:42"), D(28, "07:00"), [(-850, 100), GOAL[id]], h=60, state="line")
+for id, back in (("tank3", (-2350, -1150)), ("tank1", (-2350, -1200)), ("tank2", (-2350, -1250))):
+    move(id, D(28, "07:40"), [(-850, 100), (-1300, -500), back], h=270, state="column", moving="column", kmh=6)
+    hide(id, D(28, "08:30"))
+# The garrison is killed or captured, 275 dead counted in the village; the troops north of it fall back on the woods.
+fire("g271_1", D(28, "06:50"), D(28, "07:15"), state="firing")
+at("g271_1", D(28, "07:15"), strength=100, state="surrender"); hide("g271_1", D(28, "07:55"))
+at("g271_3", D(28, "06:50"), state="firing"); at("g271_3", D(28, "07:00"), strength=300, state="retreat")
+move("g271_3", D(28, "07:01"), [(-200, 700), (350, 880)], h=240, moving="retreat", kmh=3)
+at("g272_1", D(28, "06:55"), state="firing"); at("g272_1", D(28, "07:05"), strength=380, state="retreat")
+move("g272_1", D(28, "07:06"), [(0, 1350)], h=220, moving="retreat", kmh=3)
+# A feeble counter-attack by a small force out of the Bois de Fontaine at 7.30; then the company holds the château.
+run("g83", D(28, "07:20"), [(D(28, "07:30"), (500, -1080), dict(state="firing", h=250)), (D(28, "07:40"), (500, -1080), dict(state="retreat", strength=100))], state="charge", h=260)
+move("g83", D(28, "07:41"), [FONTAINE_CH], h=260, moving="retreat", kmh=3)
+fire("r26_1", D(28, "07:28"), D(28, "07:40"))
+# 11.34: a counter-attack forming in the valley between the Framicourt and Lalval woods is shelled and goes back.
+move("g271_r", D(28, "11:10"), [(1300, 450), (850, 560)], h=230)
+lose("g271_r", D(28, "11:34"), D(28, "11:50"), 40)
+move("g271_r", D(28, "11:55"), [(1000, 250)], h=240)
+# Courtemanche: Germans massing in the open fields in the early afternoon; three companies into the Bois de Voyeux at 2.57.
+appear("g25r", D(28, "13:30"), last("g25r"), h=250)
+run("g25r", D(28, "14:30"), [(D(28, "14:57"), (1800, -1250), dict(state="line", h=270))], state="column", h=250)
+# 5 p.m.: from the western tip of the Bois de Framicourt, caught by the barrage at 5.10; repulsed by 5.50.
+move("g271_r", D(28, "16:40"), [(380, 250)], h=240)
+run("g271_r", D(28, "17:00"), [(D(28, "17:10"), (50, 80), dict(state="rout", strength=410))], state="charge", h=245)
+move("g271_r", D(28, "17:11"), [(450, 250)], h=245, moving="rout", kmh=3)
+move("g271_r", D(28, "17:50"), [(900, 200)], h=245)
+fire("r28_2", D(28, "17:00"), D(28, "17:15")); fire("r28_3", D(28, "17:02"), D(28, "17:15"))
+# 6.40 p.m.: a rolling barrage, then waves from the southern and western edges of the wood. The first is killed to a man
+# by rifle and machine-gun fire, the second crushed by the guns; much of it falls on the 26th's battalion.
+move("g271_4", D(28, "18:25"), [(700, -20)], h=220)
+run("g271_4", D(28, "18:40"), [(D(28, "18:55"), (100, -550), dict(state="firing", h=225)), (D(28, "19:00"), (100, -550), dict(strength=0))], state="charge", h=225)
+hide("g271_4", D(28, "19:01"))
+move("g271_r", D(28, "18:30"), [(900, -30)], h=225)
+run("g271_r", D(28, "18:45"), [(D(28, "19:00"), (400, -500), dict(state="rout", h=225)), (D(28, "19:07"), (450, -440), dict(strength=280))], state="charge", h=225)
+move("g271_r", D(28, "19:08"), [(900, 150)], h=225, moving="rout", kmh=3)
+fire("r28_1", D(28, "18:40"), D(28, "19:10")); fire("r26_1", D(28, "18:40"), D(28, "19:10")); fire("r28_2", D(28, "18:45"), D(28, "19:05"))
+# 7.36: about 200 lying down in front of the Bois de Voyeux.
+move("g25r", D(28, "19:20"), [(1150, -1050)], h=270)
+move("g25r", D(28, "20:45"), [(1800, -1250)], h=270)
+# 8.30 p.m.: advancing from Framicourt in great numbers; barrage; by 9.10 Framicourt and the ravine south of it are full of Germans.
+move("g271_r", D(28, "20:20"), [(400, 200)], h=240)
+run("g271_r", D(28, "20:32"), [(D(28, "20:40"), (150, 70), dict(state="rout", strength=250))], state="charge", h=245)
+move("g271_r", D(28, "20:41"), [(900, 150), (1700, 150)], h=245, moving="rout", kmh=3)
+fire("r28_2", D(28, "20:32"), D(28, "20:45"))
+# The night of the 28th: two companies of the 18th and the engineers into the line, two battalions of the 18th behind it.
+move("r18co_a", D(28, "22:30"), [(-1600, -600), (-900, -300), (-420, 0)], h=72, state="line")
+move("r18co_b", D(28, "22:30"), [(-350, -1050)], h=95, state="line")
+move("eng", D(28, "22:30"), [(-400, -650)], h=90, state="line")
+appear("r18_a", D(28, "22:00"), last("r18_a"), state="column", h=90); move("r18_a", D(28, "22:01"), [(-2140, -580)], h=80)
+appear("r18_b", D(28, "22:00"), last("r18_b"), state="column", h=90); move("r18_b", D(28, "22:01"), [(-2450, -1300)], h=80)
+
+# ---- 29 May: holding ----
+# Two small counter-attacks at six and seven, broken up by artillery and rifle fire.
+for t0, t1, n in (("05:45", "06:00", 330), ("06:45", "06:55", 290)):
+    move("g272_1", D(29, t0), [(-100, 1050)], h=225)
+    run("g272_1", D(29, t1), [(plus(D(29, t1), 8), (-500, 700), dict(state="firing")), (plus(D(29, t1), 12), (-500, 700), dict(state="retreat", strength=n))], state="charge", h=225)
+    move("g272_1", plus(D(29, t1), 13), [(-100, 1050)], h=225, moving="retreat", kmh=3)
+    fire("r28_3", plus(D(29, t1), 2), plus(D(29, t1), 14))
+move("g272_1", D(29, "07:30"), [(0, 1350)], h=225)
+# 5.45 p.m.: a strong and determined assault against the left. The advanced elements on the extreme left draw back to the
+# old line; hand-to-hand fighting at 7.43; the 2nd Battalion falls back under the shells at 8.11 and is sent back in.
+move("g272_2", D(29, "17:20"), [(250, 720)], h=250)
+move("g271_3", D(29, "17:25"), [(150, 800)], h=255)
+run("g272_2", D(29, "17:45"), [(D(29, "18:00"), (-560, 600), dict(state="firing", h=255))], state="charge", h=255)
+run("g271_3", D(29, "17:50"), [(D(29, "18:05"), (-600, 780), dict(state="firing", h=250))], state="charge", h=250)
+run("r28_3", D(29, "17:45"), [(D(29, "18:05"), (-1000, 520), dict(state="firing", h=70))], state="retreat", h=250)
+run("g272_2", D(29, "19:38"), [(D(29, "19:45"), (-800, 560), dict(state="firing")), (D(29, "19:55"), (-800, 560), {}), (D(29, "20:05"), (-560, 600), {})], state="charge")
+at("g272_2", D(29, "20:50"), strength=340, state="retreat"); at("g271_3", D(29, "20:50"), strength=220, state="retreat")
+move("g272_2", D(29, "20:51"), [(650, 1000)], h=60, moving="retreat", kmh=3)
+move("g271_3", D(29, "20:51"), [(350, 880)], h=60, moving="retreat", kmh=3)
+move("r28_3", D(29, "21:00"), [O3], h=63, moving="line")
+run("r28_2", D(29, "20:11"), [(D(29, "20:25"), (-560, -250), dict(state="line", h=72))], state="retreat", h=270)
+move("r28_2", D(29, "20:55"), [O2], h=72, moving="line")
+# 8.21 p.m.: a large body of Germans near the château in the Bois de Fontaine, Roosevelt reports.
+move("g118", D(29, "19:50"), [(950, -1000)], h=260)
+fire("r26_1", D(29, "20:20"), D(29, "20:40"))
+move("g118", D(29, "21:10"), [(1850, -1000)], h=80)
+
+# ---- 30 May: the last attack, two waves out of the Bois de Lalval, swept back before they reach the line ----
+move("g272_2", D(30, "05:10"), [(300, 750)], h=240)
+move("g271_3", D(30, "05:15"), [(400, 900)], h=240)
+run("g272_2", D(30, "05:30"), [(D(30, "05:43"), (-350, 620), dict(state="rout", strength=230))], state="charge", h=250)
+run("g271_3", D(30, "05:35"), [(D(30, "05:47"), (-200, 780), dict(state="rout", strength=150))], state="charge", h=250)
+move("g272_2", D(30, "05:44"), [(650, 1000)], h=60, moving="rout", kmh=3)
+move("g271_3", D(30, "05:48"), [(350, 880)], h=60, moving="rout", kmh=3)
+fire("r28_3", D(30, "05:32"), D(30, "05:50")); fire("r28_2", D(30, "05:34"), D(30, "05:48"))
+
+# ---- the night of the 30th: the 16th Infantry relieves the 28th ----
+for new, old, t0, via in (("r16_3", "r28_3", "21:45", [(-1300, -500), (-1150, 100)]), ("r16_2", "r28_2", "21:55", []), ("r16_1", "r28_1", "22:05", [(-900, -1000)])):
+    post, h = last(old), next(k["h"] for k in reversed(KEYS[old]) if "h" in k)
+    road = by_road(WEST, via[0] if via else post)
+    appear(new, D(30, t0), WEST, state="column", h=90)
+    arrive = move(new, plus(D(30, t0), 1), road + via + [post], h=h)
+    back = move(old, plus(arrive, 10), [*reversed(via), *by_road(via[0] if via else post, WEST), WEST], h=270)
+    hide(old, plus(back, 1))
+
+# ---- American losses: the First Division's 1,067 for 28 to 30 May, shared among the units engaged by inference: a few in
+# the assault, the engineers' 32 before it, the rest under the shelling from noon on the 28th and in the counter-attacks ----
+LOSS = {
+    "r28_1": [(H, D(28, "07:20"), 10), (D(28, "12:00"), D(28, "21:30"), 120), (D(28, "21:30"), D(29, "05:00"), 30), (D(29, "12:00"), D(29, "21:30"), 100), (D(30, "05:30"), D(30, "06:00"), 10)],
+    "r28_2": [(H, D(28, "07:20"), 10), (D(28, "12:00"), D(28, "21:30"), 110), (D(28, "21:30"), D(29, "05:00"), 30), (D(29, "12:00"), D(29, "21:30"), 70)],
+    "r28_3": [(H, D(28, "07:20"), 5), (D(28, "12:00"), D(28, "21:30"), 90), (D(28, "21:30"), D(29, "05:00"), 30), (D(29, "12:00"), D(29, "21:30"), 75), (D(30, "05:30"), D(30, "06:00"), 10)],
+    "r26_1": [(D(28, "18:40"), D(28, "19:10"), 70), (D(28, "19:10"), D(28, "21:30"), 20), (D(28, "21:30"), D(29, "05:00"), 20), (D(29, "12:00"), D(29, "21:30"), 50)],
+    "eng": [(D(28, "05:45"), D(28, "06:40"), 32), (D(28, "23:00"), D(29, "05:00"), 10)],
+    "r18co_a": [(D(29, "00:00"), D(29, "05:00"), 15), (D(29, "12:00"), D(29, "21:30"), 25)],
+    "r18co_b": [(D(29, "00:00"), D(29, "05:00"), 20), (D(29, "12:00"), D(29, "21:30"), 25)],
+    "r18_a": [(D(29, "12:00"), D(29, "21:30"), 40)], "r18_b": [(D(29, "12:00"), D(29, "21:30"), 40)],
+}
+assert sum(n for v in LOSS.values() for *_, n in v) == 1067, "the division's 1,067"
+def pose(id, t):  # where a unit is at time t between its keys
+    ks = KEYS[id]; a = max((k for k in ks if sec(k["t"]) <= sec(t)), key=lambda k: sec(k["t"])); b = next((k for k in ks if sec(k["t"]) > sec(t)), None)
+    if b is None: return (a["x"], a["y"])
+    f = (sec(t) - sec(a["t"])) / (sec(b["t"]) - sec(a["t"])); return (a["x"] + f * (b["x"] - a["x"]), a["y"] + f * (b["y"] - a["y"]))
+def curve(pts, base):  # strength at a time, falling linearly through each span of losses
+    def f(s):
+        if s <= pts[0][0]: return base
+        for (s0, v0), (s1, v1) in zip(pts, pts[1:]):
+            if s0 <= s <= s1: return v1 if s1 == s0 else round(v0 + (s - s0) / (s1 - s0) * (v1 - v0))
+        return pts[-1][1]
+    return f
+for id, spans in LOSS.items():
+    cur, pts = BASE[id][6], []
+    for t0, t1, n in spans: pts += [(sec(t0), cur), (sec(t1), cur - n)]; cur -= n
+    s_at = curve(pts, BASE[id][6])
+    have = {k["t"] for k in KEYS[id]}
+    for s, _ in pts:
+        t = fmt(s)
+        if t not in have: KEYS[id].append(K(t, pose(id, t))); have.add(t)
+    KEYS[id].sort(key=lambda k: sec(k["t"]))
+    for k in KEYS[id]: k["strength"] = s_at(sec(k["t"]))
 
 assert set(KEYS) == set(BASE), set(KEYS) ^ set(BASE)
 for id in KEYS:
