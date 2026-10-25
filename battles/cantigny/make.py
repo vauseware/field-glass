@@ -453,7 +453,16 @@ battle = dict(
                french=dict(name="French tanks", color="#6d8fb5", light="#a9c0dc", dark="#36506e"),
                german=dict(name="Germans (82nd Reserve Division, von Lorne de St. Ange)", color="#4a4a42", light="#8c8c80", dark="#22221e")),
     features=features, units=units, events=events,
-    sources=["Terrain: " + T["source"] + ", 30 m, sampled to 15 m."],
+    sources=[
+        "Society of the First Division, <i>History of the First Division during the World War, 1917-1919</i> (Philadelphia, 1922), chapter IV and Field Orders No. 18: the plan, the assault, the counter-attacks and the casualty table.",
+        "Headquarters First Field Artillery Brigade, Operations Section, \"Journal of Cantigny Operations\", 28 to 30 May 1918 (Brock University Archives, Arthur A. Schmon fonds): the clock of the three days, as the observers reported it.",
+        "Jennings C. Wise, <i>The Turn of the Tide</i> (New York, 1920), chapter III \"The Taking of Cantigny\": the German regiments, the garrison's fate and the seven counter-attacks.",
+        "Field Orders No. 18, Annex 7 \"Employment of Tanks\", First Division, 25 May 1918, and the First Division G-2's \"Probable Order of Battle, May 28, 1918\" (NARA 6997158): the tanks' routes and the German line.",
+        "U.S. Air Service, A.E.F., <i>Oblique and Vertical Aerial Photographs: The Taking of Cantigny</i> (1919, NARA 36213493), and S.T.C.A. Vandenberg's sketch of the village, 12 May 1918 (NARA 6997160): the objective, the trenches and the village.",
+        "War Department, <i>Histories of Two Hundred and Fifty-One Divisions of the German Army</i> (Washington, 1920): the 82nd and 25th Reserve Divisions.",
+        "Woods, roads and places from OpenStreetMap (ODbL).",
+        "Terrain: " + T["source"] + ", 30 m, sampled to 15 m.",
+    ],
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1)
 print(len(units), "units,", len(events), "events,", len(features), "features,", len(FIELDS), "fields")
