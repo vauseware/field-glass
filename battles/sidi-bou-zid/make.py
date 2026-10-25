@@ -269,14 +269,16 @@ events = [
     (D(17, "11:00"), "After", "The 14th and 15th cost the 1st Armored Division 98 tanks, 57 half-tracks and 29 guns, and the 168th Infantry lost about 2,200 men of its 2nd and 3rd Battalions. The 21st Panzer Division claimed 2,546 Allied prisoners for 14–17 February: a German count of men taken, not of the dead. That day the 21st Panzer takes Sbeïtla and the 1st Armored falls back through Kasserine. Drake's men are marched back toward Lessouda, then trucked to Sfax and sent on by Tunis to Italy and the camps in Germany and Poland.", [1000, 0], 34000),
 ]
 # Hold in place through long gaps: without this a unit creeps toward a key hours away and the time-lapse never engages.
-# A turn in place takes its last two minutes; a move of more than three hours takes its last fifteen.
+# A turn in place takes its last two minutes; a move of more than three hours takes its last fifteen. A unit already on the
+# move (column, charge, retreat, rout) is marching, and each leg of a march takes its real hours.
+MOVING = {"column", "charge", "retreat", "rout"}
 def add_holds(units):
     ts = lambda s: dt.datetime.strptime(s.replace("T", " ")[:16], "%Y-%m-%d %H:%M").timestamp()
     for u in units:
-        ks, out = u["keys"], []
+        ks, out, state = u["keys"], [], "line"
         for a, c in zip(ks, ks[1:] + [None]):
-            out.append(a)
-            if c is None or a.get("state") == "hidden": continue
+            out.append(a); state = a.get("state", state)
+            if c is None or state == "hidden" or state in MOVING: continue
             moved = (a["x"], a["y"]) != (c["x"], c["y"]); turned = "h" in c and c["h"] != next((k["h"] for k in reversed(out) if "h" in k), c["h"])
             gap = ts(c["t"]) - ts(a["t"]); lead = 900 if moved else 120
             if (moved and gap > 3 * 3600) or (turned and not moved and gap > 600):
