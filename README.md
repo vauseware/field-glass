@@ -12,7 +12,7 @@ at random, as a sepia plan; Sidi Bou Zid's recon mosaic under the operations-roo
 ground as an engineer's survey.
 `npm run check` measures each running time by playing the battle through at the default settings (Follow and
 Time-lapse on, chapter speeds honoured), writes it to `battles/index.json`, and fails if a battle's `war` has
-no entry in `WARS` (`splash.js`). `#ww2` opens the start screen on a war (`revolution`, `war-of-1812`, `civil-war`, `ww2`); a
+no entry in `WARS` (`splash.js`). `#ww2` opens the start screen on a war (`revolution`, `war-of-1812`, `civil-war`, `ww1`, `ww2`); a
 bare URL opens the Revolution. A link with a battle in it (`#cowpens`) skips the start screen, and All battles
 returns to that battle's war. `?plan=yorktown` picks the Revolution's backdrop. See
 [ADR-0005](docs/adr/0005-start-screen-per-war-timeline.md).
@@ -64,7 +64,8 @@ Each war gets its own look, a skin (`themes.js`, with the drawing in `themes/`).
 the map layer, how units, fire, the fallen and the night are drawn, what shows beyond the map edge, the ambient layers
 over the map, the clock, the legend's swatches and the panels' dress (`body.theme-<id>` in `index.html`). A battle
 wears the skin its `theme` field names; with none, a battle dated 1812 to 1815 wears the War of 1812 skin, 1861 to
-1865 the Civil War skin, 1939 to 1945 the Second World War skin, and any other the Revolution skin. `?theme=ww2` in a link
+1865 the Civil War skin, 1914 to 1918 the First World War skin, 1939 to 1945 the Second World War skin, and any other
+the Revolution skin. `?theme=ww2` in a link
 (`index.html?theme=ww2#guilford@14:03`) shows a battle in another skin; the skin may recolour the sides for it. The
 Second World War skin paints them olive drab against field grey, and the Civil War skin Union blue against Confederate
 red.
@@ -114,6 +115,17 @@ and the last red. The start screen draws the war's backdrop from the same ground
 
 ![The War of 1812 skin previewed on Fort Fisher](docs/screenshots/war-of-1812-fort-fisher.jpg)
 
+The First World War skin (`ww1`) is a 1:10,000 trench map, as the Ordnance Survey and the AEF printed them: cream
+paper, brown contours with every fourth heavier, woods as ring-on-stalk tree signs, and a squared grid of 1000-yard
+squares numbered 1 to 36 inside lettered 6000-yard squares. Every trench and work is red, stepped into fire bays and
+traverses, with wire as crosses before it. A unit is a block in its side's colour under an ink rule; a dashed line
+marks where it has been. A "SCALE 1:10,000" bar in yards sits in a free corner, the clock reads as the war diaries
+wrote it (2.15 p.m.), and at night a star shell drifts over the field. Under a `?theme=` preview the first side is
+blue and the last red. The start screen draws the war's backdrop from the same ground, on Yorktown's siege works. See
+`docs/adr/0008-first-world-war-skin.md`.
+
+![The First World War skin previewed on Fort Fisher](docs/screenshots/ww1-fort-fisher.jpg)
+
 `,bench` on a link measures the cost of a frame; `bash tools/bench.sh 'guilford@14:02,play,warp'` runs it in headless
 Chrome and prints milliseconds per frame and the time the layer took to build.
 
@@ -141,7 +153,7 @@ than a day; one battle uses one form throughout.
 | field | meaning |
 |---|---|
 | `extent` | map width and height in metres, centred on `origin` |
-| `theme` | the skin (`themes.js`): `revolution`, `war-of-1812`, `civil-war` or `ww2`; by default the skin of the war the battle's date falls in, and `revolution` outside every war |
+| `theme` | the skin (`themes.js`): `revolution`, `war-of-1812`, `civil-war`, `ww1` or `ww2`; by default the skin of the war the battle's date falls in, and `revolution` outside every war |
 | `start`, `end`, `sunrise`, `sunset` | battle clock; the map is tinted before sunrise and, if `sunset` is given, every night |
 | `speed`, `lapse` | default playback multiplier, and the multiplier for quiet stretches under time-lapse (default `speed × 6`) |
 | `water` | elevation in metres at or below which the DEM is drawn as water (rivers are flattened to about 0) |
