@@ -6,8 +6,8 @@
 # came ashore, are off the north edge. Anchors are OpenStreetMap points and the de la Ronde ruins' historical marker.
 # The batteries are placed by Latour's distances along the canal from the 1815 bank; Villeré's and Macarty's houses,
 # the redoubt, Morgan's line, Patterson's battery and Thornton's landing from the sources' prose, within 200 to 600 m,
-# and labelled "about here". Strengths are Latour's for Jackson's line and Pringle's 8 January figures for the British,
-# as tabulated in Wikipedia's orders of battle.
+# and labelled "about here". Strengths are Latour's for Jackson's line where he gives them, else Wikipedia's aggregates,
+# and Pringle's 8 January figures for the British, as tabulated in Wikipedia's orders of battle.
 import json, math, re, datetime as dt
 HERE = "battles/new-orleans/"
 LAT0, LON0 = 29.94, -89.978
@@ -146,7 +146,7 @@ REDOUBT = (A[0] + 45 * V[0] + 18 * U[0], A[1] + 45 * V[1] + 18 * U[1])  # on the
 BATT_D = [21, 103, 149, 167, 341, 374, 548, 603]  # Latour's distances from the bank, metres
 R0 = (-1790, -728)                       # Morgan's line meets the river, by the Jourdan plaque, 200 m in
 def mline(s, f=0): return (R0[0] - s * U[0] + f * V[0], R0[1] - s * U[1] + f * V[1])  # s m back from the river along Raguet's canal
-PATTERSON = (-2010, -640)                # "behind the levee in front of Jourdan's plantation", behind Morgan's line; within 400 m
+PATTERSON = (-1930, -680)                # "behind the levee in front of Jourdan's plantation", behind Morgan's line; within 400 m
 PICKET = (-380, -1540)                   # Arnaud's picket, "about a mile below Morgan's line"; within 500 m
 ROAD_E, ROAD_W, LEVEE = offset(BANK, 50), offset(SBANK, -50), offset(BANK, 20)
 def road(a, b, R=ROAD_E): return stretch(R, a, b)
@@ -180,7 +180,7 @@ def D(day, hm): return f"{'1814-12' if day >= 20 else '1815-01'}-{day:02d} {hm}"
 def sec(t): return (dt.datetime.strptime(t, "%Y-%m-%d %H:%M:%S" if t.count(":") == 2 else "%Y-%m-%d %H:%M").replace(tzinfo=UTC) - T0).total_seconds()
 def fmt(s): s = round(s); return (T0 + dt.timedelta(seconds=s)).strftime("%Y-%m-%d %H:%M" + (":%S" if s % 60 else ""))
 def plus(t, mins): return fmt(sec(t) + mins * 60)
-START, END = D(23, "11:00"), D(8, "16:30")
+START, END = D(23, "11:00"), D(8, "18:45")
 
 # ---- ground ----
 WORKS = D(24, "08:00")  # the works are drawn whole from the morning after the night battle; they grew until 8 January
@@ -198,7 +198,7 @@ features = [
     dict(type="battery", name="Patterson's battery (about here)", poly=rect(PATTERSON, heading(PATTERSON, front(300, 500)), 40, 16), at=[PATTERSON[0] - 330, PATTERSON[1] - 40], **{"from": D(29, "18:00")}),
     *[dict(type="battery", poly=rect(p, HBR, 50 if id != "brL" else 24, 14), **{"from": D(1, "02:00"), "until": D(1, "22:00")}) for id, p in BR_BATT.items()],
     dict(type="battery", poly=rect(front(400, 731), HBR, 50, 14), **{"from": D(8, "03:00")}),
-    dict(type="ship", poly=hull(CAROLINA, 60, 13, 90), **{"from": D(23, "19:00"), "until": D(27, "08:30")}),
+    CAROLINA_HULL := dict(type="ship", poly=hull(CAROLINA, 60, 13, 90), **{"until": D(27, "08:30")}),
     dict(type="smoke", at=list(CAROLINA), rate=10, spread=50, **{"from": D(27, "07:20"), "until": D(27, "11:00")}),
     dict(type="ship", poly=hull(LOUISIANA_AT, 60, 13, 120), **{"from": D(28, "06:00"), "until": D(28, "18:00")}),
     dict(name="Mississippi River", **label_on((-2300, -120), (-2000, -310))),
@@ -209,7 +209,7 @@ features = [
     dict(name="de la Ronde house (ruins)", at=[DLR[0], DLR[1] + 80]),
     dict(name="Lacoste's", at=[2150, -800]),
     dict(name="Villeré house, British headquarters (about here)", at=[VILLERE[0] - 150, VILLERE[1] - 110]),
-    dict(name="Chalmette Monument (1840 to 1908)", at=[P['monument'][0] - 400, P['monument'][1] + 400]),
+    dict(name="Chalmette Monument (begun 1840, finished 1908)", at=[P['monument'][0] - 400, P['monument'][1] + 400]),
     dict(name="National Cemetery (1864)", at=[round((P['cemetery_river'][0] + P['cemetery_rear'][0]) / 2) + 150, round((P['cemetery_river'][1] + P['cemetery_rear'][1]) / 2)]),
     dict(name="Jourdan's plantation", at=[P['jourdan'][0] - 300, P['jourdan'][1] - 220]),
     dict(name="Thornton's landing (about here)", at=[LANDING[0] - 380, LANDING[1] - 120], **{"from": D(8, "05:30")}),
@@ -245,7 +245,9 @@ OOB = [
     ("bat8", "american", "Battery 8", "Battery No. 8: a small brass carronade by Latour's list, a 12-pounder by his account of Pakenham's death", "a corporal of artillery", "artillery", 12, dict(guns=1)),
     ("carolina", "american", "Carolina", "The schooner Carolina: three 9-pounders and twelve 12-pounder carronades", "Capt. Henly, with Patterson aboard", "artillery", 100, dict(guns=5)),
     ("louisiana", "american", "Louisiana", "The Louisiana, which fired 'upwards of eight hundred shot' on 28 December", "", "artillery", 60, dict(guns=4)),
-    ("patterson", "american", "Patterson", "Patterson's marine battery on the west bank: two 12-pounders landed on 29 December, then a 24-pounder, four more 12-pounders and two more 24-pounders, with a hot-shot furnace", "Patterson", "artillery", 30, dict(guns=9)),
+    ("patterson2", "american", "Patterson", "Patterson's marine battery on the west bank: two 12-pounders, landed on 29 December", "Patterson", "artillery", 30, dict(guns=2)),
+    ("patterson3", "american", "Patterson", "Patterson's marine battery on the west bank: two 12-pounders landed on 29 December and a 24-pounder the next night", "Patterson", "artillery", 30, dict(guns=3)),
+    ("patterson", "american", "Patterson", "Patterson's marine battery on the west bank: two 12-pounders landed on 29 December, then a 24-pounder, and by January four more 12-pounders and two more 24-pounders, with a hot-shot furnace", "Patterson", "artillery", 30, dict(guns=9)),
     ("morgan", "american", "Morgan", "Louisiana militia on Morgan's line, the 2nd militia brigade", "Brig. Gen. David B. Morgan", "militia", 540, {}),
     ("morgan_guns", "american", "Morgan's guns", "One 12-pounder and two 6-pounders, the only cannon on Morgan's line", "", "artillery", 30, dict(guns=3)),
     ("arnaud", "american", "Arnaud's picket", "Arnaud's advanced picket of 100 men, fifteen of them without arms", "Maj. Paul Arnaud", "militia", 100, {}),
@@ -309,8 +311,8 @@ def share(total, ids):  # a day's loss shared among units in proportion to their
     w = {i: carried(i, "strength") for i in ids}; raw = {i: total * w[i] / sum(w.values()) for i in ids}; n = {i: math.floor(raw[i]) for i in ids}
     for i in sorted(ids, key=lambda i: raw[i] - n[i], reverse=True)[:total - sum(n.values())]: n[i] += 1
     return n
-LINE_AT = dict(beale=(8, 25), us7=(85, 28), plauche=(175, 28), lacoste=(230, 28), daquin=(290, 28), us44=(378, 28), marines=(520, 28), carroll=(680, 30),
-               adair=(680, 110), coffee=(1150, 25), harrison=(420, 320), hinds=(250, 480), **{f"bat{i + 1}": (d, 6) for i, d in enumerate(BATT_D)})
+LINE_AT = dict(beale=(8, 25), us7=(85, 28), plauche=(175, 28), lacoste=(230, 28), daquin=(290, 28), us44=(378, 28), marines=(520, 28), carroll=(730, 30),
+               adair=(730, 110), coffee=(1150, 25), harrison=(420, 320), hinds=(250, 480), **{f"bat{i + 1}": (d, 6) for i, d in enumerate(BATT_D)})
 POST = {k: line(*v) for k, v in LINE_AT.items()}
 BATTERIES = [f"bat{i}" for i in range(1, 9)]
 ON_LINE = ["beale", "us7", "plauche", "lacoste", "daquin", "us44", "marines", "carroll", "adair", "coffee"]
@@ -326,7 +328,7 @@ for id, p0, n in (("r85", (3460, 900), 0), ("r95", (3470, 1150), 1), ("r4", (348
     move(id, START, [(3420 - 60 * n, -350 - 60 * n)], h=270, kmh=3)
     at(id, D(23, "11:40"), state="column"); move(id, D(23, "11:41"), [CAMP23[id]], h=270)
 appear("carolina", D(23, "17:20"), CENTRE[1], "column")
-move("carolina", D(23, "17:20"), [p for p in CENTRE[2:] if p[0] < 2100] + [CAROLINA], h=90, kmh=4)
+CAROLINA_HULL["from"] = move("carolina", D(23, "17:20"), [p for p in CENTRE[2:] if p[0] < 2100] + [CAROLINA], h=90, kmh=4)
 keys("carolina", [K(D(23, "19:30"), CAROLINA, state="firing"), K(D(23, "21:00"), CAROLINA, state="line")])
 # Coffee, with Beale's rifles, up the de la Ronde avenue to the house at nightfall, then round against the British right
 for id, t, dx in (("coffee", "16:00", 0), ("beale", "16:06", 80)):
@@ -334,14 +336,15 @@ for id, t, dx in (("coffee", "16:00", 0), ("beale", "16:06", 80)):
     move(id, D(23, t), road(ENTRY_E, on_road(DLR[0])) + [(DLR[0] + dx, DLR[1])], h=60, kmh=5.8)
     move(id, D(23, "18:50"), [(1500 + dx, 50)], h=150)
     move(id, D(23, "20:00"), [(2100 + dx, -450)], h=150, state="firing", moving="charge")
-JACKSON = [("marines", "17:15", on_road(2050), on_road(1300), on_road(1200)), ("bat7", "17:18", on_road(1980), on_road(1220), on_road(1150)),
-           ("us7", "17:21", (2000, -1200), on_road(1120), (1100, -1050)), ("us44", "17:26", (1950, -1060), on_road(1020), (1000, -1000)),
-           ("plauche", "17:31", (1900, -900), (1150, -950), (1050, -850)), ("daquin", "17:36", (1850, -760), (1100, -800), (1000, -700))]
+JACKSON = [("marines", "17:15", on_road(2050), on_road(1800), on_road(1200)), ("bat7", "17:18", on_road(1980), on_road(1720), on_road(1150)),
+           ("us7", "17:21", (2000, -1200), on_road(1640), (1100, -1050)), ("us44", "17:26", (1950, -1060), on_road(1560), (1000, -1000)),
+           ("plauche", "17:31", (1900, -900), (1550, -950), (1050, -850)), ("daquin", "17:36", (1850, -760), (1500, -800), (1000, -700))]
 for id, t, fight, wait, rally in JACKSON:
     appear(id, D(23, t), ENTRY_E, "column")
     move(id, D(23, t), road(ENTRY_E, on_road(wait[0])) + [wait], h=90, kmh=4.5)
-    move(id, D(23, "20:00"), [fight], h=80, state="firing")
+    move(id, D(23, "19:40"), [fight], h=80, state="firing", kmh=1.5)  # feeling forward in the dark, at the camp by eight
 # the British stand to; the 21st comes up from the canal against Coffee, the 93rd later in the night
+for id in ("r85", "r95", "r4"): at(id, D(23, "19:59"))
 keys("r85", [K(D(23, "20:00"), CAMP23["r85"], state="firing", h=260)]); keys("r4", [K(D(23, "20:00"), CAMP23["r4"], state="column")])
 move("r4", D(23, "20:00"), [(2300, -950)], h=250, state="firing")
 keys("r95", [K(D(23, "20:00"), CAMP23["r95"], state="firing", h=320)])
@@ -351,7 +354,8 @@ appear("r93", D(23, "22:30"), VILLERE, "column"); move("r93", D(23, "22:30"), [C
 for id, n in share(213, ["coffee", "beale", "us7", "us44", "marines", "plauche", "daquin", "bat7"]).items(): lose(id, D(23, "20:15"), D(23, "20:49" if id in ("coffee", "beale") else "21:30"), n)
 for id, dx in (("coffee", 0), ("beale", 80)): move(id, D(23, "20:50"), [(1450 + dx, -200)], h=150, state="firing", moving="retreat")
 for id, n in share(277, ["r85", "r95", "r4", "r21"]).items(): lose(id, D(23, "20:45"), D(23, "21:30"), n)
-for id in ("r85", "r95", "r4", "r21"): at(id, D(23, "21:31"), state="line")
+FALLBACK = {"r85": (2650, -1100), "r95": (2400, -850), "r4": (2650, -900), "r21": (2700, -600)}
+for id, p in FALLBACK.items(): move(id, D(23, "21:31"), [p], h=270, moving="retreat")
 for id, t, fight, wait, rally in JACKSON: move(id, D(23, "21:31"), [rally], h=90, moving="retreat")
 for id, dx in (("coffee", 0), ("beale", 80)): move(id, D(23, "21:31"), [(DLR[0] + dx, DLR[1] - 100)], h=90, moving="retreat")
 # 24 December, four in the morning: back two miles to the Rodriguez Canal
@@ -380,21 +384,23 @@ SWAMP_COL = {"r21": front(780, 700), "r4": front(760, 830), "r44": front(740, 96
 for n, (id, p) in enumerate([*RIVER_COL.items(), *SWAMP_COL.items(), ("r95", front(420, 620))]):
     move(id, D(28, f"08:{30 + n * 2:02d}"), [p], h=HBR, state="firing", kmh=3)
 for id in [*BATTERIES]: keys(id, [K(D(28, "09:20"), POST[id], state="firing"), K(D(28, "11:30"), POST[id], state="line")])
-lose("carroll", D(28, "09:40"), D(28, "10:40"), 15)  # Hutchinson's detachment, driven in on the swamp flank
-for id, n in share(56, list(RIVER_COL)).items(): lose(id, D(28, "09:50"), D(28, "10:30"), n)
+for id, n in share(15, ["carroll", "coffee"]).items(): lose(id, D(28, "09:40"), D(28, "10:40"), n)  # the Tennesseans on the swamp flank, where Hutchinson was driven in
+for id, n in share(56, [*RIVER_COL, *SWAMP_COL, "r95"]).items(): lose(id, D(28, "09:50"), D(28, "10:30"), n)
 for n, id in enumerate([*RIVER_COL, "r95", *SWAMP_COL]):
     move(id, D(28, f"{10 if id in RIVER_COL else 11}:{30 + n:02d}"), [CAMP_A[id]], h=HBR, moving="retreat" if id in RIVER_COL else "column")
 # 29 December: Patterson's first guns ashore on the west bank; Morgan's militia drawn from 1 January
-appear("patterson", D(29, "18:00"), PATTERSON, h=heading(PATTERSON, front(300, 500)))
+PATTERSON_H = heading(PATTERSON, front(300, 500))
+appear("patterson2", D(29, "18:00"), PATTERSON, h=PATTERSON_H)
+at("patterson2", D(30, "20:00"), state="hidden"); appear("patterson3", D(30, "20:00"), PATTERSON, h=PATTERSON_H)
 appear("morgan", D(1, "00:00"), mline(110, -25), h=HUS); appear("morgan_guns", D(1, "00:00"), mline(50, -12), h=HUS)
 # 1 January: batteries built overnight 600 yards out; the duel from breakfast to one; a probe on the swamp flank; the
 # infantry formed for an assault that Pakenham calls off at three
 for id, p in BR_BATT.items(): appear(id, D(1, "02:00"), p, h=HBR)
 ASSAULT1 = {"r85": front(150, 900), "r93": front(250, 900), "wi1": front(200, 1050), "r21": front(650, 900), "r4": front(750, 900), "r44": front(600, 1050), "wi5": front(700, 1050), "r95": front(500, 950)}
 for n, (id, p) in enumerate(ASSAULT1.items()): move(id, D(1, f"06:{30 + n * 2:02d}"), [p], h=HBR, kmh=3)
-for id in [*BR_BATT, *BATTERIES, "patterson"]: at(id, D(1, "08:00"), state="firing")
+for id in [*BR_BATT, *BATTERIES, "patterson3"]: at(id, D(1, "08:00"), state="firing")
 for id, n in [*share(34, BATTERIES).items(), *share(78, list(BR_BATT)).items()]: lose(id, D(1, "08:10"), D(1, "12:50"), n)
-for id in [*BR_BATT, *BATTERIES, "patterson"]: at(id, D(1, "13:00"), state="line")
+for id in [*BR_BATT, *BATTERIES, "patterson3"]: at(id, D(1, "13:00"), state="line")
 move("r95", D(1, "09:00"), [front(1050, 300)], h=HBR, state="firing")
 keys("coffee", [K(D(1, "09:20"), POST["coffee"], state="firing"), K(D(1, "11:00"), POST["coffee"], state="line")])
 move("r95", D(1, "11:00"), [ASSAULT1["r95"]], h=HBR, moving="retreat")
@@ -413,6 +419,8 @@ move("r85", D(7, "19:00"), [MOUTH], h=200)
 for id in ("seamen", "rmar"): appear(id, D(7, "22:00"), (MOUTH[0] + (60 if id == "seamen" else 120), MOUTH[1] + 40), h=200)
 appear("arnaud", D(7, "18:00"), PICKET, h=heading(PICKET, (500, -1700)))
 appear("ross", D(7, "18:00"), REDOUBT, h=HUS)
+at("patterson3", D(7, "18:00"), state="hidden"); appear("patterson", D(7, "18:00"), PATTERSON, h=PATTERSON_H)
+at("r95", D(7, "18:00"), state="hidden")
 
 # ---- 8 January ----
 # The boats take the night to reach the river and the crossing is hours late; the first 500 are over by half past five,
@@ -423,7 +431,7 @@ appear("r85", D(8, "05:30"), LANDING, "column", h=290); appear("seamen", D(8, "0
 appear("rmar", D(8, "06:00"), (LANDING[0] + 40, LANDING[1] - 80), "column", h=290)
 # Pakenham's columns form in the dark, Gibbs's toward Battery 7 and Keane's by the river, Lambert's reserve behind
 FORM = {"r21": front(560, 560), "r4": front(520, 650), "wi5": front(480, 760), "r44": front(380, 920), "r93": front(150, 600), "wi1": front(120, 760),
-        "rennie": front(30, 520), "r95": front(450, 450), "r7": front(250, 950), "r43": front(600, 950), "ld14": front(420, 1060)}
+        "rennie": front(30, 520), "r7": front(250, 950), "r43": front(600, 950), "ld14": front(420, 1060)}
 appear("rennie", D(8, "03:00"), CAMP_B["r4"], "column")
 for n, (id, p) in enumerate(FORM.items()): move(id, D(8, f"03:{10 + n * 3:02d}"), [p], h=HBR, state="column", kmh=3)
 appear("brC", D(8, "03:00"), front(400, 731), h=HBR)
@@ -431,32 +439,35 @@ keys("brC", [K(D(8, "06:20"), front(400, 731), state="firing"), K(D(8, "09:00"),
 for id in [*BATTERIES, "patterson"]: at(id, D(8, "06:20"), state="firing")
 # the rocket at twenty past six; Rennie on the redoubt, Gibbs on Battery 7, the 93rd across the field; broken in
 # about twenty-five minutes, the columns rally four hundred yards out. Losses are the regimental returns.
-LOSS = {"r4": 301, "r21": 411, "rennie": 100, "r44": 278, "wi5": 1, "r93": 164, "wi1": 29, "r95": 112, "r7": 102, "r43": 218}
+LOSS = {"r4": 301, "r21": 411, "rennie": 100, "r44": 278, "wi5": 1, "r93": 164, "wi1": 29}
+ASSAULT = ("r21", "r4", "r44", "r93", "wi5", "wi1")
+def on_arrival(id, n): KEYS[id][-1]["strength"] = carried(id, "strength") - n  # a loss spread over the leg just walked
 move("rennie", D(8, "06:20"), [(REDOUBT[0] + 10 * V[0], REDOUBT[1] + 10 * V[1])], h=HBR, state="firing", moving="charge", kmh=5)
 keys("ross", [K(D(8, "06:22"), REDOUBT, state="firing")]); move("ross", D(8, "06:29"), [line(30, 40)], h=HUS, state="firing", moving="retreat")
-lose("rennie", D(8, "06:31"), D(8, "06:38"), 70); move("rennie", D(8, "06:39"), [front(40, 380)], h=HBR, state="line", moving="rout", kmh=5)
-lose("rennie", plus(KEYS["rennie"][-1]["t"], 1), D(8, "07:10"), 30)
+lose("rennie", D(8, "06:31"), D(8, "06:38"), 70); move("rennie", D(8, "06:39"), [front(40, 380)], h=HBR, state="line", moving="rout", kmh=5); on_arrival("rennie", 30)
 move("ross", D(8, "06:50"), [REDOUBT], h=HUS, state="firing")
-move("r95", D(8, "06:20"), [front(450, 160)], h=HBR, state="firing", moving="charge", kmh=2.5)
 for id, d, f in (("r21", 560, 25), ("r4", 520, 70)): move(id, D(8, "06:20"), [front(d, f)], h=HBR, state="charge", moving="charge", kmh=2.2)
 move("r44", D(8, "06:20"), [front(540, 300)], h=HBR, moving="column", state="charge", kmh=3.5)
 move("r44", D(8, "06:33"), [front(540, 110)], h=HBR, state="firing", moving="charge", kmh=2.5)
 move("wi5", D(8, "06:22"), [front(500, 460)], h=HBR, kmh=2.5)
 move("r93", D(8, "06:22"), [front(470, 220)], h=HBR, state="firing", moving="charge", kmh=2.5)
 move("wi1", D(8, "06:24"), [front(150, 520)], h=HBR, kmh=2.5)
-for id in ("r21", "r4", "r44", "r93", "r95", "wi5", "wi1"): lose(id, max(KEYS[id][-1]["t"], D(8, "06:36")), D(8, "06:44"), round(LOSS[id] * 0.7))
+for id in ASSAULT: on_arrival(id, round(LOSS[id] * 0.3))
+for id in ASSAULT: lose(id, max(KEYS[id][-1]["t"], D(8, "06:36")), D(8, "06:44"), round(LOSS[id] * 0.4))
 for id in ON_LINE: keys(id, [K(D(8, "06:25"), POST[id], state="firing")])
-RALLY = {"r21": front(560, 366), "r4": front(520, 420), "r44": front(480, 480), "r93": front(380, 420), "r95": front(450, 400), "wi5": front(480, 600), "wi1": front(150, 600)}
-for id, p in RALLY.items(): move(id, D(8, "06:45"), [p], h=HBR, moving="retreat", kmh=5)
-for id in RALLY: lose(id, plus(KEYS[id][-1]["t"], 1), D(8, "08:25"), LOSS[id] - round(LOSS[id] * 0.7))
+RALLY = {"r21": front(560, 366), "r4": front(520, 420), "r44": front(480, 480), "r93": front(380, 420), "wi5": front(480, 600), "wi1": front(150, 600)}
+for id, p in RALLY.items(): move(id, D(8, "06:45"), [p], h=HBR, moving="retreat", kmh=5); on_arrival(id, LOSS[id] - round(LOSS[id] * 0.3) - round(LOSS[id] * 0.4))
 # Lambert sends part of the reserve forward, then halts it; it lies down in the stubble about 650 yards out
 for id, d in (("r7", 250), ("r43", 600), ("ld14", 420)): move(id, D(8, "07:00"), [front(d, 594 if id != "ld14" else 700)], h=HBR)
-for id in ("r7", "r43"): lose(id, plus(KEYS[id][-1]["t"], 1), D(8, "14:00"), LOSS[id])
+for id, n in share(182, ["r7", "r43"]).items(): lose(id, plus(KEYS[id][-1]["t"], 1), D(8, "08:30"), n)
 for id, n in share(34, ON_LINE).items(): lose(id, D(8, "06:30"), D(8, "08:25"), n)
 for id in ON_LINE: at(id, D(8, "08:30"), state="line")
 at("ross", D(8, "08:30"), state="line")
-for id in RALLY: move(id, D(8, "09:00"), [(RALLY[id][0] + 250 * V[0], RALLY[id][1] + 250 * V[1])], h=HBR)
 for id in BATTERIES: at(id, D(8, "14:00"), state="line")
+# 'stayed in position until night, then returned to its previous ground'
+NIGHT = D(8, "17:45")
+for n, id in enumerate([*RALLY, "rennie", "r7", "r43", "ld14"]):
+    move(id, plus(NIGHT, 2 * n), [CAMP_B[id] if id != "rennie" else (CAMP_B["r4"][0] + 150, CAMP_B["r4"][1])], h=HBR)
 # the west bank: Thornton up the bank, Arnaud's picket turned, then Davis, and Morgan's line breaks; Patterson spikes his
 # guns. About ten Lambert orders Gubbins back.
 t_pk = move("r85", D(8, "06:00"), road(on_road(LANDING[0], ROAD_W), on_road(PICKET[0] + 250, ROAD_W), ROAD_W), h=290, state="firing", kmh=3.5)
@@ -484,12 +495,13 @@ for id in KEYS:
 units = []
 TOP = {"infantry": 6, "light_infantry": 6, "militia": 6, "riflemen": 6, "artillery": 6, "cavalry": 15}  # km/h, the fastest any leg may go
 for id, side, short, name, commander, type, strength, extra in OOB:
-    ks, state = KEYS[id], None
+    ks, state, h = KEYS[id], None, None
     for a, b in zip(ks, ks[1:]):
-        state = a.get("state", state)
+        state, h = a.get("state", state), a.get("h", h)
         assert sec(b["t"]) > sec(a["t"]), (id, a["t"], b["t"])
         if state == "hidden": continue
         moved = (a["x"], a["y"]) != (b["x"], b["y"])
+        assert moved or b.get("h", h) == h or "strength" in b or sec(b["t"]) - sec(a["t"]) <= 600, (id, a["t"], b["t"], "a slow turn in place holds the time-lapse")
         assert not (moved and sec(b["t"]) - sec(a["t"]) > 3 * 3600), (id, a["t"], b["t"], "a march leg over three hours")
         kmh = math.dist((a["x"], a["y"]), (b["x"], b["y"])) / (sec(b["t"]) - sec(a["t"])) * 3.6
         assert kmh <= TOP[type], (id, a["t"], b["t"], f"{kmh:.1f} km/h")
@@ -507,32 +519,31 @@ for id, side, short, name, commander, type, strength, extra in OOB:
 CHAPTERS = [
     (START, "New Orleans, December 1814", "The first British division reached the far end of Villeré's canal, in the swamp beyond the north edge of this map, by four this morning. From there the way to the river is about a mile of wood and then nearly two miles of cane fields, by Latour's count. The ground is a strip of sugar plantations between the Mississippi and a cypress swamp. At the Rodriguez Canal it is somewhat more than half a mile deep. New Orleans is six miles upriver, beyond the west edge.", [0, 0], 9000, 300, None),
     (D(23, "11:30"), "Villeré's plantation", "At about half past eleven the British advance surrounds Villeré's house, within nine miles of the city. It is about 1,680 men. The house is the British headquarters from now until 19 January. It is gone: an oil refinery covers the site, and this map places it within about 600 m.", [3000, -500], 3200, 120, "about half past 11"),
-    (D(23, "13:30"), "Jackson hears", "Latour, Jackson's engineer, sees the British position at half past one, and Jackson has the news within twenty-five minutes; the park handbook says about one o'clock. By half past two his artillery and the 7th Infantry are formed on the river road.", [2500, -800], 3600, 300, "half past 1"),
-    (D(23, "17:00"), "Jackson marches", "Jackson marches at five, by his report of 27 December, and Plauché's battalion comes up about then. Coffee's mounted Tennesseans reach de la Ronde's plantation at nightfall. Latour counts about 1,800 effective men once the horse-holders are left behind; Jackson's own figure is about 1,500. The schooner Carolina, with Patterson aboard, is on its way down the river.", [-1200, -100], 7400, 120, "5 PM"),
+    (D(23, "16:00"), "Jackson hears", "Latour, Jackson's engineer, saw the British position at half past one, and Jackson had the news within twenty-five minutes; the park handbook says about one o'clock. By half past two his artillery and the 7th Infantry were formed on the river road.", [-1200, -100], 7400, 120, None),
+    (D(23, "17:00"), "Jackson marches", "Jackson marches at five, by his report of 27 December, and Plauché's battalion comes up about then. Coffee's mounted Tennesseans reach de la Ronde's plantation at nightfall. Latour counts about 1,800 effective men once the horse-holders are left behind; Jackson's own figure is about 1,500, and a modern count gives 2,131. The units drawn here add up to about 2,070. The schooner Carolina, with Patterson aboard, is on its way down the river.", [-1200, -100], 7400, 120, "5 PM"),
     (D(23, "19:30"), "The Carolina", "At about half past seven the Carolina opens on the British camp from the river: three 9-pounders and twelve 12-pounder carronades, with more than 100 men aboard. Patterson wrote of 'about forty minutes of most incessant fire'. Jackson reached the camp about seven.", [2000, -1150], 2600, 60, "about half past 7"),
-    (D(23, "20:00"), "The night attack", "About half an hour later Jackson attacks by land. The marines go in along the levee with the 7th and 44th behind them, and Plauché's and Daquin's battalions come up from the rear. Coffee swings through de la Ronde's against the British right. In the dark, the fog and the smoke the fighting breaks into confused clashes, and the 21st, newly arrived, drives Coffee's men back.", [1800, -750], 2400, 60, None),
-    (D(23, "21:30"), "The British fall back", "The Carolina stops firing about nine. Latour has the British falling back about half past nine and the fighting over by ten; Keane's despatch says half past twelve, which Latour rejects. The 21st and 93rd reach the camp during the night. Americans lost 24 killed, 115 wounded and 74 missing; the British 46 killed, 167 wounded and 64 missing, which their own report makes 305 and Latour about 400.", [1600, -750], 3000, 120, "about half past 9"),
+    (D(23, "20:00"), "The night attack", "About half an hour later Jackson attacks by land. The marines go in along the levee with the 7th and 44th behind them, and Plauché's and Daquin's battalions come up from the rear. Coffee swings through de la Ronde's against the British right. In the dark, the fog and the smoke, the fighting breaks into confused clashes, and the 21st, newly arrived, drives Coffee's men back.", [1800, -750], 2400, 60, None),
+    (D(23, "21:30"), "The British fall back", "The Carolina stops firing about nine. Latour has the British falling back about half past nine and the fighting over by ten; Keane's despatch says half past twelve, which Latour rejects. The 93rd comes up later in the night. Americans lost 24 killed, 115 wounded and 74 missing; the British 46 killed, 167 wounded and 64 missing, 277 in all. The British report gives 305, and Latour about 400.", [1600, -750], 3000, 120, "about half past 9"),
     (D(24, "04:00"), "Back to the Rodriguez Canal", "At four in the morning Jackson draws back about two miles to the Rodriguez Canal, a disused millrace on the boundary between the Macarty and Chalmette plantations, 10 to 20 feet wide and 4 to 8 feet deep. It runs from the river back into the swamp. On the 24th his men cut the levee to flood the ground in front; the river falls and the flooding fails.", [-500, -200], 4800, 120, "4 AM"),
     (D(24, "09:00"), "Line Jackson", "Behind the canal the men build a wall of mud, driving fence rails into the soil and piling earth against them; the ground is too wet for trenches. Latour gives it as much as twenty feet thick at the top though hardly five feet high, and in the wood a double row of logs with two feet of earth between. He measures 815 toises, about a mile, somewhat more than half of it from the river to the wood. It is drawn here as it stood by 8 January, with its eight batteries; it grew over the fortnight. Jackson's headquarters are in the Macarty house, behind the right.", [-1350, 450], 2300, 120, None),
     (D(27, "07:00"), "The Carolina burned", "At seven on the morning of the 27th a British battery opens on the Carolina with hot shot, and burns her.", [2100, -1300], 2400, 60, "7 AM"),
     (D(28, "08:30"), "The reconnaissance in force", "On the 28th, as soon as the mist clears, the British come on in two columns, one by the river and one by the swamp, with skirmishers between. The Louisiana, which fires upwards of eight hundred shot today, and the batteries on the line break the river column. On the swamp flank Hutchinson's Tennessee detachment is driven in. Pakenham calls the attack off. The Americans lose 7 killed and 8 or 10 wounded; the British 16 killed, 38 wounded and 2 missing by one count, 9 killed and 8 wounded by another, and two to three hundred by Latour's guess.", [-900, 200], 3200, 60, "as soon as the mist cleared"),
     (D(1, "08:00"), "The artillery duel", "Overnight the British have built batteries about 600 yards from the line: two 12-pounders on the left, eight 18-pounders and 24-pounder carronades in the centre, and eight more pieces on the right. They open in fog, during breakfast by one account, and their first target is the Macarty house. Across the river Patterson has had guns ashore behind the levee since 29 December.", [-1350, 100], 2700, 120, "during breakfast"),
     (D(1, "13:00"), "The duel ends", "By noon the British fire has slackened and by one it has stopped, by the park handbook; Latour has it going on until about three. On the line the 32-pounder of Battery 4, a 24-pounder and a 12-pounder are disabled and two caissons blown up; all three guns are firing again by the 8th. Cotton bales tried in the works catch fire. A British probe on the swamp flank is driven off by Coffee. At three Pakenham calls off the assault. The Americans lose 11 killed and 23 wounded, the British 32 killed, 44 wounded and 2 missing. Once Patterson's battery opens across the river, the British camp moves back from the bank.", [-900, 250], 3400, 120, "1 PM"),
-    (D(6, "12:00"), "Reinforcements", "On 4 January some 2,250 Kentucky militia reach Jackson, only 550 of them armed. On the 6th the British finish the cut from Villeré's canal to the river, and Lambert arrives with the 7th and 43rd; about 8,000 British troops have landed. Across the river Morgan's Louisiana militia hold a line on Raguet's old canal, about 200 yards of it dug, with one 12-pounder and two 6-pounders. The canal runs some 2,000 yards back to the wood.", [0, -400], 7600, 300, None),
+    (D(6, "12:00"), "Reinforcements", "On 4 January some 2,250 Kentucky militia reach Jackson, only 550 of them armed. The order of battle, which this map draws, gives Adair's two regiments 526, or 462, and Harrison's battalion 305; those counts do not square with the 550. On the 6th the British finish the cut from Villeré's canal to the river, and Lambert arrives with the 7th and 43rd; about 8,000 British troops have landed. Across the river Morgan's Louisiana militia hold a line on Raguet's old canal, about 200 yards of it dug, with one 12-pounder and two 6-pounders. The canal runs some 2,000 yards back to the wood.", [0, -400], 7600, 300, None),
     (D(8, "01:00"), "The night of the 7th", "Through the night Thornton's boats are dragged along the canal to the river. A dam fails, and the crossing loses four or five hours by Lambert's account, about eight by Thornton's. At one in the morning Patterson learns that the British have launched barges.", [2800, -1500], 4000, 120, "1 AM"),
-    (D(8, "05:30"), "Over the river", "Only by half past five are Thornton's first 500 men over, landing about a thousand yards below the point intended; in all about a third of the planned force crosses, 298 of the 85th with seamen and marines. Davis's Kentuckians reached Morgan's line at four after a five-mile march: about 500 set out and about 250 armed men arrived. Morgan has about 640 by the order of battle; Latour says no more than 800, against Thornton's 1,500.", [1200, -1900], 6800, 60, "half past 5"),
+    (D(8, "05:30"), "Over the river", "Only by half past five are Thornton's first 500 men over, landing about a thousand yards below the point intended; in all about a third of the planned force crosses, 298 of the 85th with seamen and marines. Davis's Kentuckians reached Morgan's line at four after a five-mile march: about 500 set out and about 250 armed men arrived. The counts for this bank disagree: the order of battle gives Morgan's brigade 640, the returns 546 on this bank, and Latour no more than 800 effective, against Thornton's claim of 1,500. The map draws the brigade's 640 and Davis's 250.", [1200, -1900], 6800, 60, "half past 5"),
     (D(8, "06:00"), "Dawn", "Dawn, Latour writes, 'discovered to us the enemy occupying two-thirds of the space between the wood and the Mississippi'. Jackson has about 3,200 men on the parapet out of about 4,000; the returns give 4,698 on this bank and 546 across the river. Gibbs's brigade is to attack toward Battery 7, Keane's by the river, with Lambert's in reserve. The sun will not be up until about seven, and there is fog.", [-1150, 250], 2300, 30, None),
     (D(8, "06:20"), "The rocket", "At twenty past six a signal rocket goes up; Latour saw 'a Congreve rocket' go off 'from the skirt of the wood, in the direction of the river'. The British guns open on the Macarty house. The 44th, which was to carry the fascines and ladders, has gone to the wrong place, and they are fetched after the column is already moving. The fascines are nine or ten inches thick and four feet long, the ladders ten to twelve feet.", [-1150, 300], 1900, 20, "6:20 AM"),
     (D(8, "06:30"), "The redoubt", "By the river Rennie's light companies of the 4th and 21st come along the bank and take the unfinished redoubt in front of the line, held by a company of the 7th under Lieutenant Ross. The line fires into it, and they are shot down there; Rennie is killed.", [-1620, -40], 900, 20, "about half past 6"),
     (D(8, "06:35"), "Gibbs's column", "Gibbs's column comes on toward Battery 7, about sixty men in front. The fog lifts as it nears the line; Lambert says the columns could be seen 'at more than two hundred yards'. Carroll's Tennesseans and Adair's Kentuckians fire over the mud wall. Keane's 93rd Highlanders cross the field at a slant to join the attack, and lose 164 men by the returns.", [-1250, 450], 1300, 20, "soon after half past 6"),
     (D(8, "06:45"), "Pakenham", "Pakenham is hit in the knee and then 'fatally in the body', and falls 'in the arms of major M'Dougall'. Gibbs is mortally wounded and Keane carried off wounded soon after. Latour says the grape that killed Pakenham came from Battery 8's twelve-pounder, though his own list gives that battery a small brass carronade; the park handbook calls it 'the Mysterious Gun'. The attack has broken after about twenty-five minutes, and the columns fall back to rally about four hundred yards out.", [-1150, 350], 1800, 30, "about a quarter to 7"),
-    (D(8, "07:00"), "Lambert", "Lambert, now in command, sends part of the reserve forward, then halts it. The 7th and 43rd lie down in the stubble about 650 yards from the line, where the edition of Dickson's journal counts 182 casualties; the regimental returns give the 7th 102 and the 43rd 218 for the day.", [-1000, 150], 2600, 60, None),
+    (D(8, "07:00"), "Lambert", "Lambert, now in command, sends part of the reserve forward, then halts it. The 7th and 43rd lie down in the stubble about 650 yards from the line, where the edition of Dickson's journal counts 182 casualties, the loss drawn here. The regimental returns give the 7th 102 and the 43rd 218 for the day, but they also count companies not drawn: two of the 7th with Keane, and light companies of both with Jones on the swamp flank.", [-1000, 150], 2600, 60, None),
     (D(8, "08:00"), "The west bank", "Across the river Thornton has come up the bank; no clock time for it is recorded. He turns Arnaud's picket of 100, then Davis's Kentuckians, and Morgan's line breaks. Patterson's battery, its fire masked by the militia, spikes its guns and the crews withdraw. Thornton is wounded and Gubbins takes command. Humbert, sent across with 400 reinforcements, is rebuffed by Morgan.", [-1300, -1500], 3600, 60, None),
-    (D(8, "08:30"), "Half past eight", "By half past eight the musketry has stopped, by Latour; the British guns stop at nine. Remini puts the British loss at 2,037: 291 killed, 1,262 wounded and 484 missing. By the regimental returns the 21st lost 461, 236 of them missing, the 4th 351 and the 44th 278. On this bank the Americans lost 11 killed and 23 wounded.", [-1150, 300], 2600, 60, "half past 8"),
+    (D(8, "08:30"), "Half past eight", "By half past eight the musketry has stopped, by Latour; the British guns stop at nine. Remini puts the British loss at 2,037: 291 killed, 1,262 wounded and 484 missing. By the regimental returns the 21st lost 461, 236 of them missing, the 4th 351 and the 44th 278. The 4th's and 21st's returns include their light companies with Rennie; how the loss splits between Rennie's party and the regiments is a guess here. On this bank the Americans lost 11 killed and 23 wounded.", [-1150, 300], 2600, 60, "half past 8"),
     (D(8, "10:00"), "Gubbins recalled", "About ten Lambert learns of the success across the river by a rocket from Gubbins. Dickson advises that about two thousand men would be needed to hold the battery, and Lambert orders Gubbins back.", [-300, -1100], 6400, 120, "about 10"),
-    (D(8, "14:00"), "Ceasefire", "The American batteries stop firing at two in the afternoon. The British army stays where it is until night, then goes back to its camp.", [-1100, 250], 3200, 120, "2 PM"),
-    (D(8, "15:00"), "The truce", "A truce is agreed for burying the dead; Jackson wrote on the 9th that 'upwards of three hundred' had already been handed over for burial. The British leave Villeré's by 19 January, leaving behind, by a letter of Lambert's, 80 men wounded too badly to be taken home, and the last are back aboard the fleet on the 27th. Butler's return of 16 January gives the American loss on 8 January as 71: 13 killed, 39 wounded and 19 missing.", [-900, 150], 4200, 120, None),
-    (D(8, "16:00"), "Ghent", "The treaty that ended the war had been signed at Ghent on 24 December, the day after the night battle. Over the whole campaign Butler counted 333 Americans killed, wounded and missing; the British official returns give 2,459.", [0, -300], 9000, 300, None),
+    (NIGHT, "Back to camp", "The American batteries stopped firing at two in the afternoon, and a truce was agreed for burying the dead; Jackson wrote on the 9th that 'upwards of three hundred' had already been handed over for burial. The British army stayed where it was until night. Now it goes back to its camp.", [200, 100], 4400, 120, "after dark"),
+    (D(8, "18:15"), "Ghent", "The British leave Villeré's by 19 January, leaving behind, by a letter of Lambert's, 80 men wounded too badly to be taken home, and the last are back aboard the fleet on the 27th. Butler's return of 16 January gives the American loss on 8 January as 71: 13 killed, 39 wounded and 19 missing. The treaty that ended the war had been signed at Ghent on 24 December, the day after the night battle. Over the whole campaign Butler counted 333 Americans killed, wounded and missing; the British official returns give 2,459.", [0, -300], 9000, 120, None),
 ]
 events = [dict(t=t, title=a, text=b, at=at_, view=v, speed=s, **({"when": w} if w else {})) for t, a, b, at_, v, s, w in CHAPTERS]
 for e in events:  # without `when` the card speaks the nearest hour (app.js chapterWhen), so it must be near the frame's clock
@@ -548,18 +559,18 @@ battle = dict(
     sides=dict(american=dict(name="Americans (Jackson)", color="#27497f", light="#6f8fc4", dark="#12254a"),
                british=dict(name="British (Pakenham, then Lambert)", color="#b3331f", light="#d87a68", dark="#5a150c")),
     features=features, units=units, events=events,
-    tints=[dict(color="rgba(232,234,236,0.5)", **{"from": D(8, "05:30"), "until": D(8, "07:00")}), dict(color="rgba(232,234,236,0.3)", **{"from": D(1, "06:00"), "until": D(1, "09:30")})],
+    tints=[dict(color="rgba(232,234,236,0.5)", **{"from": D(8, "05:30"), "until": D(8, "06:36")}), dict(color="rgba(232,234,236,0.3)", **{"from": D(1, "06:00"), "until": D(1, "09:30")})],
     outcome={"result": "American victory: the assault on Line Jackson beaten off; the west bank taken and given up", "losses": [
         ["american", "8 January, both banks: 71 by Butler's return of 16 January (13 killed, 39 wounded, 19 missing); on this bank 11 killed and 23 wounded. The whole campaign: 333 (55 killed, 185 wounded, 93 missing)."],
         ["british", "8 January: 2,037 by Remini (291 killed, 1,262 wounded, 484 missing); four returns give 386 killed, 1,516 wounded and 552 missing; Latour says at least 3,000. Pakenham and Gibbs killed, Keane wounded. The campaign: 2,459 by the official returns."]],
         "note": "The peace had been signed at Ghent on 24 December 1814, the day after the night battle. The sources' clock times are the diarists' watches, good to about a quarter of an hour."},
     sources=[
-        "Arsène Lacarrière Latour, <a href='https://archive.org/details/historicalmemoi00latogoog' target='_blank'><i>Historical Memoir of the War in West Florida and Louisiana in 1814-15</i></a> (Philadelphia, 1816), with its appendix of Jackson's, Patterson's, Keane's and Lambert's reports and Butler's return: the line, its length and its eight batteries by their distances from the bank, the strengths on the line, the night battle's times, Morgan's line and Patterson's battery. Latour was Jackson's chief engineer. Read in the Internet Archive's text, not his atlas.",
+        "Arsène Lacarrière Latour, <a href='https://archive.org/details/historicalmemoi00latogoog' target='_blank'><i>Historical Memoir of the War in West Florida and Louisiana in 1814-15</i></a> (Philadelphia, 1816), with its appendix of Jackson's, Patterson's, Keane's and Lambert's reports and Butler's return: the line, its length and its eight batteries by their distances from the bank, the strengths on the line for the regulars, the New Orleans battalions, the marines, Beale's rifles and Coffee's men, the night battle's times, Morgan's line and Patterson's battery. Latour was Jackson's chief engineer. Read in the Internet Archive's text, not his atlas.",
         "J. Fred Roush, <a href='https://npshistory.com/handbooks/historical/29/' target='_blank'><i>Chalmette National Historical Park</i></a>, National Park Service Historical Handbook 29 (1954, revised 1958): the night battle, the mud rampart, 28 December, 1 January, 8 January, the river's loss of the bank and the guide to the nearby sites.",
-        "Wikipedia, <a href='https://en.wikipedia.org/wiki/Battle_of_New_Orleans' target='_blank'>Battle of New Orleans</a>, <a href='https://en.wikipedia.org/wiki/Battle_of_New_Orleans_order_of_battle:_American' target='_blank'>order of battle: American</a> and <a href='https://en.wikipedia.org/wiki/Battle_of_New_Orleans_order_of_battle:_British' target='_blank'>order of battle: British</a> (read 23 October 2026): the British strengths for 8 January from the WO 17 monthly returns and Pringle, the regimental losses, the rocket at 6:20, Remini's totals and the American aggregates. Remini, Reilly, Owsley and Dickson's journal are quoted only through it.",
+        "Wikipedia, <a href='https://en.wikipedia.org/wiki/Battle_of_New_Orleans' target='_blank'>Battle of New Orleans</a>, <a href='https://en.wikipedia.org/wiki/Battle_of_New_Orleans_order_of_battle:_American' target='_blank'>order of battle: American</a> and <a href='https://en.wikipedia.org/wiki/Battle_of_New_Orleans_order_of_battle:_British' target='_blank'>order of battle: British</a> (read 23 October 2026): the British strengths for 8 January from the WO 17 monthly returns and Pringle, the regimental losses, the rocket at 6:20, Remini's totals, and the aggregates for Carroll, Adair, Hinds and Harrison. Remini, Reilly, Owsley and Dickson's journal are quoted only through it.",
         "Places: OpenStreetMap contributors (ODbL) for the Chalmette Monument, the surviving trace of the Rodriguez Canal, the National Cemetery and the Jourdan plantation plaque; the de la Ronde ruins from the Historical Marker Database's position for the Chalmette Plantations marker in the median of St. Bernard Highway, opposite the ruins. The National Register nomination for Chalmette Battlefield (seen only in search excerpts) gives the 200 feet of bank the river has taken.",
         "Terrain: USGS 3DEP elevation at 10 m, sampled to 22.5 m. The river is traced from the survey's flattened water surface, and the bank at the line moved out to 200 feet beyond the park's river edge, over about 1.6 km. The modern levee, the refinery's fill and the canal banks are flattened to the height of the natural bank, the drained suburbs raised to sea level and the swamp held below 1 m, so the ground reads as it did in 1815. Sunrise and sunset for 8 January from the NOAA solar formulae, local mean time; the map uses them for every day, so dusk on 23 December falls eleven minutes late.",
-        "What is reconstructed: the 1815 bank, the levee and the river road, which are placed 20 and 50 m inside it; the swamp's edge, from Latour's distances; the cane fields' boundaries; Villeré's and Macarty's houses, the redoubt, Morgan's line, Patterson's battery, Arnaud's picket and Thornton's landing, labelled 'about here'; the night battle's ground and the camp, from the plantation names; the British columns on 28 December, drawn as the brigades of 8 January; Rennie's party, about 150 by guess, taken from the 4th and 21st; Spotts's two guns of 23 December drawn as Battery 7, which he commanded; and every loss within a day, shared among the units engaged in proportion to their strength. The works are drawn whole from 24 December. Carroll's, Lacoste's and Hinds's men stand on the line from 24 December and Morgan's from 1 January, since the sources read do not say when each took post. The Louisiana's station, crew and guns are not in them either. Jones's light companies on the swamp flank, the 95th's and 7th's companies with Keane and the rocket troop are not drawn.",
+        "What is reconstructed: the 1815 bank, the levee and the river road, which are placed 20 and 50 m inside it; the swamp's edge, from Latour's distances; the cane fields' boundaries; Villeré's and Macarty's houses, the redoubt, Morgan's line, Patterson's battery, Arnaud's picket and Thornton's landing, labelled 'about here'; the night battle's ground and the camp, from the plantation names; Keane's advance on 23 December, about 1,680, split evenly among the 85th, 95th and 4th, and where it falls back to; the British columns on 28 December, drawn as the brigades of 8 January; Rennie's party, about 150 by guess, taken from the 4th and 21st, and 100 of their 8 January losses given to it, also by guess; when Patterson's last six guns came ashore, drawn from 7 January; the west bank's militia at the brigade's 640 and Davis's 250, more than Latour's 800; the British march back to camp after dark on 8 January, its time inferred from Lambert's 'until night'; Spotts's two guns of 23 December drawn as Battery 7, which he commanded; and every loss within a day, shared among the units engaged in proportion to their strength. The works are drawn whole from 24 December. Carroll's, Lacoste's and Hinds's men stand on the line from 24 December and Morgan's from 1 January, since the sources read do not say when each took post. The Louisiana's station, crew and guns are not in them either. Jones's light companies on the swamp flank, the two companies each of the 95th and the 7th with Keane, and the rocket troop are not drawn; nor is the 95th on 8 January, since the sources read give no strength for its companies there. Hutchinson's detachment on 28 December is in the caption only.",
     ],
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1)
