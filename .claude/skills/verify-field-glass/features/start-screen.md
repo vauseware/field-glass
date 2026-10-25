@@ -7,7 +7,7 @@ The start screen shows one war at a time. A bar along the foot rules the years 1
 - `ss-default` opens the American Revolution from a bare URL.
 - `ss-war` switches card, backdrop and URL hash when a timeline button is chosen, without adding history entries.
 - `ss-empty` shows the in-preparation card for a war with no battles, with buttons to the other wars.
-- `ss-open` opens a battle from its row and starts it playing without reloading the page.
+- `ss-open` opens a battle from its row and starts it playing, after the opening shot, without reloading the page.
 - `ss-home` takes All battles back to the war the battle belongs to, and Back returns to the battle.
 - `ss-link` opens a war directly from `#revolution`, `#civil-war` or `#ww2`.
 

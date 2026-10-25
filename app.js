@@ -11,7 +11,8 @@ const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $(
   marks: $('#marks'), splash: $('#splash'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list'),
   outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body'),
   card: $('#card'), cardSwatch: $('#card-swatch'), cardName: $('#card-name'), cardCmd: $('#card-cmd'), cardKind: $('#card-kind'), cardLive: $('#card-live'), cardClose: $('#card-close'),
-  fx: $('#fx'), fonts: $('#theme-fonts'), kicker: $('#kicker'), hours: $('#hours'), loading: $('#loading') };
+  fx: $('#fx'), fonts: $('#theme-fonts'), kicker: $('#kicker'), hours: $('#hours'), loading: $('#loading'),
+  opening: $('#opening'), opName: $('#op-name'), opDate: $('#op-date') };
 
 let B = null, skin = null, sheet = null, buildMs = 0; // the battle, its skin (themes.js), what the skin built for it and how long that took
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
@@ -21,6 +22,7 @@ let airClock = 0; // real seconds of play, which fly the aircraft of an air stri
 const smoke = [], pops = [], placed = []; // placed: label boxes drawn this frame, so labels avoid each other
 let popN = 0; // live muzzle flashes are pops[0..popN); the objects past it are kept for reuse
 let mouse = null, selected = null, cardAt = null, cardLive = '', cardSwap = 0; // cardAt: the card's eased screen position
+let opening = null, openingDue = false; // the opening shot while it runs, { e, wide, target, beats, hold }; due: the next Play runs it
 
 // ---------- loading ----------
 
@@ -66,8 +68,9 @@ async function loadBattle(id) {
   cam = { x: v.x, y: v.y, zoom: Math.min(W, H) / v.width };
   follow = true; ui.follow.checked = true; lapse = true; ui.lapse.checked = true;
   clampCam();
-  const [, , at, play, pickId, warp, legend, outcome, bench] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(?:,select=([^,]+))?(,warp)?(,legend)?(,outcome)?(,bench)?$/) ?? [];
+  const [link, , at, play, pickId, warp, legend, outcome, shotOpening, bench] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(?:,select=([^,]+))?(,warp)?(,legend)?(,outcome)?(,opening)?(,bench)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
+  openingDue = link === `#${id}`; // a bare link opens on the first Play; any time or flag goes straight to the battle
   setPlaying(!!play); foldTop(!!play);
   if (legend) ui.legendDlg.showModal(); // screenshots
   if (outcome) ui.outcome.open = true;
@@ -78,6 +81,10 @@ async function loadBattle(id) {
     step(0); updateHud();
     for (let i = 0; i < 300; i++) step(1 / 60);
     draw(); updateHud();
+  }
+  if (shotOpening) { // screenshots: the opening held at its title
+    await document.fonts.ready; rects = null;
+    startOpening(); opening.e = opening.hold = 3.2; step(0); draw();
   }
   if (bench) (await import('./tools/bench.js')).bench(skin.id, ctx, draw, buildMs); // per-frame draw cost; tools/bench.sh
   location.hash = id;
@@ -226,6 +233,7 @@ canvas.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.clientX, e.
 
 // Advance the clock, camera, unit poses and smoke by dt real seconds. Drawing reads the results.
 function step(dt) {
+  if (opening) return stepOpening(dt);
   if (playing) {
     [t, lapsing] = advance(B, t, dt, speed, lapse);
     if (t >= B.endT) setPlaying(false);
@@ -262,6 +270,48 @@ function step(dt) {
   }
   smoke.length = w;
 }
+
+// ---------- the opening shot ----------
+
+// The whole field, the battle's name over its date, then the camera closing in on the first chapter's frame; the clock
+// waits until it lands (docs/adr/0009-opening-shot.md). Beats in real seconds: the title fades in at `titleIn` and out at
+// `titleOut`, the camera eases from `ease` for `easeFor`, the panels fade back from `pageIn` and the clock starts at `end`.
+// Under reduced motion the title holds still and the camera cuts.
+const BEATS = {
+  motion: { titleIn: 1, titleInFor: 1.2, titleOut: 4.2, titleOutFor: 1, drift: 0.03, ease: 5.2, easeFor: 4, pageIn: 8, end: 9.2 },
+  still: { titleIn: 1, titleInFor: 0.4, titleOut: 3.6, titleOutFor: 0.4, drift: 0, ease: 4, easeFor: 0, pageIn: 4, end: 4 },
+};
+const ramp = x => Math.min(1, Math.max(0, x)), smooth = x => { const u = ramp(x); return u * u * (3 - 2 * u); };
+const easeAt = ({ e, beats: b }) => (b.easeFor ? smooth((e - b.ease) / b.easeFor) : +(e >= b.ease));
+
+// The target is where Follow settles for the first chapter, worked out now against the panels play will show.
+function startOpening() {
+  openingDue = false;
+  step(0); updateHud(0);
+  for (let i = 0; i < 400; i++) updateCamera(0.1);
+  opening = { e: 0, wide: { x: 0, y: 0, zoom: Math.min(W, H) / B.extent }, target: { ...cam }, beats: BEATS[matchMedia('(prefers-reduced-motion: reduce)').matches ? 'still' : 'motion'] };
+  ui.opName.textContent = B.name; ui.opDate.textContent = B.dateText ?? B.date;
+  ui.opening.hidden = false; document.body.classList.add('opening');
+  setPlaying(true);
+  stepOpening(0);
+}
+function stepOpening(dt) {
+  const o = opening, b = o.beats;
+  o.e = Math.min(o.hold ?? Infinity, o.e + dt);
+  if (o.e >= b.end) return endOpening();
+  const u = easeAt(o), mix = (p, q) => p + (q - p) * u;
+  cam = { x: mix(o.wide.x, o.target.x), y: mix(o.wide.y, o.target.y), zoom: Math.exp(mix(Math.log(o.wide.zoom), Math.log(o.target.zoom))) };
+  const a = Math.min(ramp((o.e - b.titleIn) / b.titleInFor), 1 - ramp((o.e - b.titleOut) / b.titleOutFor));
+  ui.opening.style.opacity = a.toFixed(3);
+  ui.opening.style.transform = `translate(-50%, -50%) scale(${(1 + b.drift * (1 - ramp((o.e - b.titleIn) / (b.titleOut + b.titleOutFor - b.titleIn)))).toFixed(4)})`;
+  document.body.classList.toggle('opening', o.e < b.pageIn);
+}
+// Any input ends it at once: the camera cuts to its target, the page comes back, and the input then does what it does.
+function endOpening() {
+  cam = { ...opening.target }; opening = null;
+  ui.opening.hidden = true; document.body.classList.remove('opening');
+}
+for (const type of ['pointerdown', 'keydown', 'wheel']) addEventListener(type, () => { if (opening) endOpening(); }, { capture: true });
 
 // The frame, back to front: the layer and what lies beyond it, the skin's underlay, the features that come and go, the
 // fallen, the units, smoke, names, the skin's furniture, night and weather, then muzzle flashes, which glow through it all.
@@ -429,10 +479,11 @@ let fxDark = 0;
 function drawNight() {
   let dark = 0;
   if (B.sunriseT != null) {
-    const tod = mod(t, 86400), ramp = x => Math.min(1, Math.max(0, x));
+    const tod = mod(t, 86400);
     dark = ramp((B.sunriseT - tod) / 2800);
     if (B.sunsetT != null) dark = Math.max(dark, ramp((tod - B.sunsetT) / 2800));
   }
+  if (opening && dark > 0.35) dark = 0.35 + (dark - 0.35) * easeAt(opening); // dawn under the title, so the field reads; true dark by the landing
   V.dark = dark;
   if (Math.abs(dark - fxDark) > 0.02 || (dark === 0) !== (fxDark === 0)) { fxDark = dark; ui.fx.style.setProperty('--dark', dark.toFixed(2)); }
   if (dark > 0) {
@@ -701,9 +752,13 @@ ui.topFold.onclick = () => foldTop(!ui.top.classList.contains('folded'));
 
 const nudge = () => Math.max(30, (B.endT - B.startT) / 240); // arrow keys: 30 s, or 1/240 of a long battle
 function setPlaying(v) { playing = v; ui.play.textContent = v ? '❚❚' : '▶'; ui.play.setAttribute('aria-label', v ? 'Pause' : 'Play'); }
-function seek(v) { t = Math.max(B.startT, Math.min(B.endT, v)); smoke.length = 0; popN = 0; }
+function seek(v) { t = Math.max(B.startT, Math.min(B.endT, v)); smoke.length = 0; popN = 0; openingDue = false; }
 
-ui.play.onclick = () => { if (!playing && t >= B.endT) seek(B.startT); setPlaying(!playing); };
+ui.play.onclick = () => {
+  if (!playing && openingDue) return startOpening();
+  if (!playing && t >= B.endT) seek(B.startT);
+  setPlaying(!playing);
+};
 ui.speed.onchange = () => { speed = +ui.speed.value; };
 ui.scrub.oninput = () => seek(+ui.scrub.value);
 ui.follow.onchange = () => { follow = ui.follow.checked; };
@@ -735,7 +790,7 @@ function sizeClock() {
   }
   ui.clock.style.width = `${w + 4}px`;
 }
-addEventListener('resize', () => { resize(); if (B) { clampCam(); sizeClock(); } if (selected) fillCard(selected); });
+addEventListener('resize', () => { resize(); if (opening) endOpening(); if (B) { clampCam(); sizeClock(); } if (selected) fillCard(selected); });
 new ResizeObserver(() => B && layoutMarks()).observe(ui.marks); // the track also narrows when the clock text widens
 resize();
 
@@ -752,9 +807,13 @@ const named = () => location.hash.slice(1).split(/[@,]/)[0]; // a battle, a war 
 if (list.some(b => b.id === named())) await loadBattle(named());
 else showSplash(list, WARS.some(w => w.id === named()) ? named() : WARS[0].id, async id => {
   ui.splash.hidden = true;
-  await loadBattle(id); setPlaying(true); foldTop(true); // loadBattle puts the battle in the hash
+  await loadBattle(id); foldTop(true); startOpening(); // loadBattle puts the battle in the hash
 });
 // The battles and the war lists are hashes of one page, so All battles, Back and Forward change only the hash: load what it names.
 addEventListener('hashchange', () => { if (named() !== B?.id) location.reload(); });
 ui.home.onclick = () => { location.hash = WARS.find(w => w.war === list.find(e => e.id === B.id).war).id; };
 requestAnimationFrame(frame);
+if (navigator.webdriver) window.fg = { // journeys only: read the camera and clock, and hold the opening at a moment for a frame
+  state: () => ({ cam: { ...cam }, t, playing, follow, opening: opening && { e: opening.e, wide: opening.wide, target: opening.target } }),
+  hold: e => { if (opening) opening.hold = opening.e = e; },
+};

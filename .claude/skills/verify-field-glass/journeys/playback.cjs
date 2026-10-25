@@ -18,8 +18,9 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
   let s = await hud(); await shot('1-open');
   ok(s.play === 'Play' && s.scrub === s.min, `it opens paused at the start (${s.clock}, caption "${s.cap}")`);
   const blur = () => p.evaluate(() => document.activeElement?.blur()); // the app ignores keys aimed at a button, and Space on a focused button is the button's own click
-  await p.click('#play'); await wait(3000); const a = await hud();
-  ok(a.play === 'Pause' && a.scrub > s.scrub, `Play runs the clock (+${a.scrub - s.scrub} s of battle time)`);
+  await p.click('#play'); const op = await p.$eval('#opening', el => !el.hidden); // the first Play from the start runs the opening shot
+  await p.waitForFunction(() => document.querySelector('#opening').hidden, { timeout: 30000 }); await wait(3000); const a = await hud();
+  ok(op && a.play === 'Pause' && a.scrub > s.scrub, `Play runs the opening shot, then the clock (+${a.scrub - s.scrub} s of battle time)`);
   await p.click('#play'); const b = await hud(); await wait(1500); const c = await hud();
   ok(b.play === 'Play' && c.scrub === b.scrub, `Pause holds the clock at ${c.clock}`);
   await blur(); await p.keyboard.press('Space'); await wait(1000); const d = await hud(); await p.keyboard.press('Space');

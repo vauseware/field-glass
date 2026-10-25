@@ -31,4 +31,5 @@ Each feature file starts with an H1 title and one paragraph describing the viewe
 
 - [Start screen](./start-screen.md) covers the war timeline, each war's card, opening a battle, All battles and Back.
 - [Battle playback](./battle-playback.md) covers play and pause, Space, the scrubber, the arrow keys, speed, Follow, Time-lapse, Legend and Sources.
-- [Screenshot links](./screenshot-links.md) covers `#<battle>@<time>,play,select=,warp,legend,outcome` links that open a battle at a set moment.
+- [Opening shot](./opening-shot.md) covers the whole field, the title and the ease in that open a battle from its start, what skips it, reduced motion and the dawn cap.
+- [Screenshot links](./screenshot-links.md) covers `#<battle>@<time>,play,select=,warp,legend,outcome,opening` links that open a battle at a set moment.
