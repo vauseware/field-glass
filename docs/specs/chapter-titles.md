@@ -15,8 +15,8 @@ them gone. A viewer who hides them still needs to see when a new chapter begins.
    `t` toggle the other two. Off hides the slanted labels and their leader lines. Each chapter keeps its
    short tick on the scale, so the viewer still sees where chapters fall. The ticks are not clickable.
 2. **A chapter title when a chapter begins.** The chapter's name fades in at the bottom of the map, just
-   above the timeline, holds, and fades out. It has no panel behind it: lettering with a halo in the skin's paper colour, as
-   the map's own place names are drawn. It shows whether the labels are on or off.
+   above the timeline, holds, and fades out. It has no panel behind it: the lettering sits on a soft band
+   of the skin's paper colour that fades out at its edges. It shows whether the labels are on or off.
 
 ## Behaviour
 
@@ -53,7 +53,13 @@ them gone. A viewer who hides them still needs to see when a new chapter begins.
   and ink, as each skin already dresses the panels. Starting points from the prototype: the Revolution in
   IM Fell with a fine rule above and below; the War of 1812 in Cardo; the Civil War in Playfair Display
   SC; the First World War in spaced Archivo Narrow capitals with a short red trench trace under it; the
-  Second World War stencilled in chalk on the dark board. The halo uses each skin's `--paper-solid`.
+  Second World War stencilled in chalk on the dark board.
+- **Backing.** A band of the skin's `--paper-solid` behind the lettering, as an elliptical radial gradient
+  at about 80% opacity in the middle, 55% at half its width and clear at three quarters, reaching about
+  140 px past each end of the name. The prototype tried three backings on Cowpens, Sidi Bou Zid and New
+  Orleans. A halo alone failed where the title landed on map lettering (on Sidi Bou Zid "Dive bombers"
+  sat on "CCA COMMAND POST" and both blurred). A solid ribbon read best but looked like a card. The band
+  read on all three and still let the map show at its edges.
 - **No new skin hook.** The title is a DOM element over the canvas, like the panels. The canvas never
   draws it, so it costs no frame time, and `themes/*.js` do not change.
 - **Reduced motion.** Under `prefers-reduced-motion: reduce` the title appears and disappears with no fade.
