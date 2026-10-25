@@ -182,9 +182,9 @@ OOB = [
     ("r16_1", "american", "16th Inf.", "A battalion of the 16th Infantry, which relieved the 28th on the night of the 30th", "", "infantry", 1000, A1),
     ("r16_2", "american", "16th Inf.", "A battalion of the 16th Infantry, which relieved the 28th on the night of the 30th", "", "infantry", 1000, A1),
     ("r16_3", "american", "16th Inf.", "A battalion of the 16th Infantry, which relieved the 28th on the night of the 30th", "", "infantry", 1000, A1),
-    ("tank1", "french", "1st battery", "1st battery, French 5th Tank Battalion: four Schneider tanks", "Capt. Noscereau", "armor", 4, {}),
-    ("tank2", "french", "2nd battery", "2nd battery, French 5th Tank Battalion: four Schneider tanks, which crossed the gardens north-east of the village", "Capt. Noscereau", "armor", 4, {}),
-    ("tank3", "french", "3rd battery", "3rd battery, French 5th Tank Battalion: four Schneider tanks, at their objective north of Cantigny about seven", "Capt. Noscereau", "armor", 4, {}),
+    ("tank1", "french", "1st battery", "1st battery, French 5th Tank Battalion (the 5th Group, Capt. Noscereau): four Schneider tanks", "", "armor", 4, {}),
+    ("tank2", "french", "2nd battery", "2nd battery, French 5th Tank Battalion (the 5th Group, Capt. Noscereau): four Schneider tanks, which crossed the gardens north-east of the village", "", "armor", 4, {}),
+    ("tank3", "french", "3rd battery", "3rd battery, French 5th Tank Battalion (the 5th Group, Capt. Noscereau): four Schneider tanks, at their objective north of Cantigny about seven", "", "armor", 4, {}),
     ("g271_1", "german", "I/271 R.I.R.", "1st Battalion, 271st Reserve Infantry (1st to 3rd companies), the garrison of Cantigny", "", "infantry", 375, dict(loose=True)),
     ("g271_4", "german", "4th Coy, 271", "4th Company, 271st Reserve Infantry, in the Bois de Framicourt", "", "infantry", 125, {}),
     ("g271_3", "german", "III/271 R.I.R.", "3rd Battalion, 271st Reserve Infantry (9th, 11th and 12th companies), north-west of the village on the road to St Aignan", "", "infantry", 400, dict(loose=True)),
@@ -277,7 +277,7 @@ at("g271_1", D(28, "07:15"), strength=100, state="surrender"); hide("g271_1", D(
 at("g271_3", D(28, "06:50"), state="firing"); at("g271_3", D(28, "07:00"), strength=300, state="retreat")
 move("g271_3", D(28, "07:01"), [(-200, 700), (350, 880)], h=240, moving="retreat", kmh=3)
 at("g272_1", D(28, "06:55"), state="firing"); at("g272_1", D(28, "07:05"), strength=380, state="retreat")
-move("g272_1", D(28, "07:06"), [(0, 1350)], h=220, moving="retreat", kmh=3)
+hide("g272_1", plus(move("g272_1", D(28, "07:06"), [(-350, 1050)], h=0, moving="retreat", kmh=3), 1))  # the note gives no destination
 # A feeble counter-attack by a small force out of the Bois de Fontaine at 7.30; then the company holds the château.
 run("g83", D(28, "07:20"), [(D(28, "07:30"), (500, -1080), dict(state="firing", h=250)), (D(28, "07:40"), (500, -1080), dict(state="retreat", strength=100))], state="charge", h=260)
 move("g83", D(28, "07:41"), [FONTAINE_CH], h=260, moving="retreat", kmh=3)
@@ -296,10 +296,11 @@ move("g271_r", D(28, "17:11"), [(450, 250)], h=245, moving="rout", kmh=3)
 move("g271_r", D(28, "17:50"), [(900, 200)], h=245)
 fire("r28_2", D(28, "17:00"), D(28, "17:15")); fire("r28_3", D(28, "17:02"), D(28, "17:15"))
 # 6.40 p.m.: a rolling barrage, then waves from the southern and western edges of the wood. The first is killed to a man
-# by rifle and machine-gun fire, the second crushed by the guns; much of it falls on the 26th's battalion.
+# by rifle and machine-gun fire, by the artillery's report, the second crushed by the guns; much of it falls on the 26th's
+# battalion. Which companies made the first wave the note does not say, so the 4th is cut down, not wiped out.
 move("g271_4", D(28, "18:25"), [(700, -20)], h=220)
-run("g271_4", D(28, "18:40"), [(D(28, "18:55"), (100, -550), dict(state="firing", h=225)), (D(28, "19:00"), (100, -550), dict(strength=0))], state="charge", h=225)
-hide("g271_4", D(28, "19:01"))
+run("g271_4", D(28, "18:40"), [(D(28, "18:55"), (100, -550), dict(state="firing", h=225)), (D(28, "19:00"), (100, -550), dict(state="rout", strength=40))], state="charge", h=225)
+hide("g271_4", plus(move("g271_4", D(28, "19:01"), [(700, -20)], h=45, moving="rout", kmh=3), 1))
 move("g271_r", D(28, "18:30"), [(900, -30)], h=225)
 run("g271_r", D(28, "18:45"), [(D(28, "19:00"), (400, -500), dict(state="rout", h=225)), (D(28, "19:07"), (450, -440), dict(strength=280))], state="charge", h=225)
 move("g271_r", D(28, "19:08"), [(900, 150)], h=225, moving="rout", kmh=3)
@@ -321,19 +322,20 @@ appear("r18_b", D(28, "22:00"), last("r18_b"), state="column", h=90); move("r18_
 
 # ---- 29 May: holding ----
 # Two small counter-attacks at six and seven, broken up by artillery and rifle fire.
+appear("g272_1", D(29, "05:44"), (-100, 1050), h=225)
 for t0, t1, n in (("05:45", "06:00", 330), ("06:45", "06:55", 290)):
     move("g272_1", D(29, t0), [(-100, 1050)], h=225)
     run("g272_1", D(29, t1), [(plus(D(29, t1), 8), (-500, 700), dict(state="firing")), (plus(D(29, t1), 12), (-500, 700), dict(state="retreat", strength=n))], state="charge", h=225)
     move("g272_1", plus(D(29, t1), 13), [(-100, 1050)], h=225, moving="retreat", kmh=3)
     fire("r28_3", plus(D(29, t1), 2), plus(D(29, t1), 14))
-move("g272_1", D(29, "07:30"), [(0, 1350)], h=225)
+hide("g272_1", D(29, "07:30"))
 # 5.45 p.m.: a strong and determined assault against the left. The advanced elements on the extreme left draw back to the
 # old line; hand-to-hand fighting at 7.43; the 2nd Battalion falls back under the shells at 8.11 and is sent back in.
 move("g272_2", D(29, "17:20"), [(250, 720)], h=250)
 move("g271_3", D(29, "17:25"), [(150, 800)], h=255)
 run("g272_2", D(29, "17:45"), [(D(29, "18:00"), (-560, 600), dict(state="firing", h=255))], state="charge", h=255)
 run("g271_3", D(29, "17:50"), [(D(29, "18:05"), (-600, 780), dict(state="firing", h=250))], state="charge", h=250)
-run("r28_3", D(29, "17:45"), [(D(29, "18:05"), (-1000, 520), dict(state="firing", h=70))], state="retreat", h=250)
+run("r28_3", D(29, "17:45"), [(D(29, "18:05"), J3, dict(state="firing", h=70))], state="retreat", h=250)
 run("g272_2", D(29, "19:38"), [(D(29, "19:45"), (-800, 560), dict(state="firing")), (D(29, "19:55"), (-800, 560), {}), (D(29, "20:05"), (-560, 600), {})], state="charge")
 at("g272_2", D(29, "20:50"), strength=340, state="retreat"); at("g271_3", D(29, "20:50"), strength=220, state="retreat")
 move("g272_2", D(29, "20:51"), [(650, 1000)], h=60, moving="retreat", kmh=3)
@@ -355,7 +357,7 @@ move("g272_2", D(30, "05:44"), [(650, 1000)], h=60, moving="rout", kmh=3)
 move("g271_3", D(30, "05:48"), [(350, 880)], h=60, moving="rout", kmh=3)
 fire("r28_3", D(30, "05:32"), D(30, "05:50")); fire("r28_2", D(30, "05:34"), D(30, "05:48"))
 
-# ---- the night of the 30th: the 16th Infantry relieves the 28th ----
+# ---- the night of the 30th: the 16th Infantry relieves the 28th and the 18th ----
 for new, old, t0, via in (("r16_3", "r28_3", "21:45", [(-1300, -500), (-1150, 100)]), ("r16_2", "r28_2", "21:55", []), ("r16_1", "r28_1", "22:05", [(-900, -1000)])):
     post, h = last(old), next(k["h"] for k in reversed(KEYS[old]) if "h" in k)
     road = by_road(WEST, via[0] if via else post)
@@ -363,6 +365,8 @@ for new, old, t0, via in (("r16_3", "r28_3", "21:45", [(-1300, -500), (-1150, 10
     arrive = move(new, plus(D(30, t0), 1), road + via + [post], h=h)
     back = move(old, plus(arrive, 10), [*reversed(via), *by_road(via[0] if via else post, WEST), WEST], h=270)
     hide(old, plus(back, 1))
+for old, t0 in (("r18co_a", "23:10"), ("r18co_b", "23:20"), ("r18_a", "23:40"), ("r18_b", "23:50")):
+    hide(old, plus(move(old, D(30, t0), [*by_road(last(old), WEST), WEST], h=270), 1))
 
 # ---- American losses: the First Division's 1,067 for 28 to 30 May, shared among the units engaged by inference: a few in
 # the assault, the engineers' 32 before it, the rest under the shelling from noon on the 28th and in the counter-attacks ----
@@ -437,7 +441,7 @@ CHAPTERS = [
     (D(29, "17:45"), "The left gives a little", "Tanks were reported coming out of the Framicourt wood in the afternoon, and the infantry claimed two hit by the heavy guns. At 5.45 'a strong and determined assault was made against the left of the line'. On the extreme left the advanced elements of the 28th draw back to the old line near St Aignan. At 7.43 the artillery's Colonel Holbrook sees hand-to-hand fighting.", [-700, 600], 2200, 120, "5.45 p.m."),
     (D(29, "20:11"), "Driven out by the shells", "At 8.11 the 2nd Battalion is reported falling back and asks the heavy guns to fire in front of it; at 8.21 Roosevelt reports a large body of Germans near the château in the Bois de Fontaine. An aeroplane sees no counter-attack and light German fire on the village, and Holbrook thinks shellfire drove the infantry out of the line. Bullard orders Ely to send the battalion back in. By ten past nine things are quieter.", [-400, -200], 2800, 60, "8.11 p.m."),
     (D(30, "05:30"), "The last attack", "Now 'the enemy made his final effort'. Behind a rolling barrage of 210, 150 and 77 mm guns, two well-formed waves, probably a battalion, come on determinedly from the Bois de Lalval and are swept back before they reach the line. Wise counts it the seventh effort. The artillery's journal puts an attack at about 3.30, its first wave through the barrage, its second destroyed by it.", [-250, 750], 2200, 30, "5.30 a.m."),
-    (D(30, "22:00"), "The relief", "In the night the 16th Infantry comes up and relieves the 28th; the relief is completed the next night. The division's records count 1,067 casualties for the three days: 199 killed, 652 wounded, 16 missing and 200 gassed. Five German officers and 225 men were taken. Pershing wrote on the 28th that the attack 'marks a distinct step forward in American participation in the war'.", [-1300, -500], 4500, 300, None),
+    (D(30, "22:00"), "The relief", "In the night the 16th Infantry comes up and relieves the 28th and the 18th; the relief is completed the next night. The division's records count 1,067 casualties for the three days: 199 killed, 652 wounded, 16 missing and 200 gassed. Five German officers and 225 men were taken. Pershing wrote on the 28th that the attack 'marks a distinct step forward in American participation in the war'.", [-1300, -500], 4500, 300, None),
 ]
 events = [dict(t=t, title=a, text=b, at=at_, view=v, speed=s, **({"when": w} if w else {})) for t, a, b, at_, v, s, w in CHAPTERS]
 for e in events:  # without `when` the card speaks the nearest hour (app.js chapterWhen), so it must be near the frame's clock

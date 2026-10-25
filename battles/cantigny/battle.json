@@ -8070,28 +8070,28 @@
     },
     {
      "t": "1918-05-29 18:05",
-     "x": -1000,
-     "y": 520,
+     "x": -1190,
+     "y": 470,
      "state": "firing",
      "h": 70,
      "strength": 727
     },
     {
      "t": "1918-05-29 20:59",
-     "x": -1000,
-     "y": 520,
+     "x": -1190,
+     "y": 470,
      "strength": 704
     },
     {
      "t": "1918-05-29 21:00",
-     "x": -1000,
-     "y": 520,
-     "h": 102,
+     "x": -1190,
+     "y": 470,
+     "h": 91,
      "state": "line",
      "strength": 704
     },
     {
-     "t": "1918-05-29 21:03:58",
+     "t": "1918-05-29 21:06:44",
      "x": -741,
      "y": 465,
      "h": 63,
@@ -8289,9 +8289,89 @@
      "strength": 210
     },
     {
-     "t": "1918-05-31 01:00",
+     "t": "1918-05-30 23:09",
      "x": -420,
-     "y": 0
+     "y": 0,
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:10",
+     "x": -420,
+     "y": 0,
+     "h": 197,
+     "state": "column",
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:15:31",
+     "x": -527,
+     "y": -352,
+     "h": 279,
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:17:14",
+     "x": -640,
+     "y": -335,
+     "h": 239,
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:22:43",
+     "x": -955,
+     "y": -521,
+     "h": 259,
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:25:28",
+     "x": -1134,
+     "y": -557,
+     "h": 231,
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:30:12",
+     "x": -1380,
+     "y": -755,
+     "h": 228,
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:44:23",
+     "x": -2078,
+     "y": -1394,
+     "h": 267,
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:48:15",
+     "x": -2335,
+     "y": -1408,
+     "h": 279,
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:50:43",
+     "x": -2497,
+     "y": -1383,
+     "h": 276,
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:58:09",
+     "x": -2990,
+     "y": -1330,
+     "h": 270,
+     "state": "line",
+     "strength": 210
+    },
+    {
+     "t": "1918-05-30 23:59:09",
+     "x": -2990,
+     "y": -1330,
+     "state": "hidden",
+     "strength": 210
     }
    ]
   },
@@ -8359,9 +8439,96 @@
      "strength": 205
     },
     {
-     "t": "1918-05-31 01:00",
+     "t": "1918-05-30 23:19",
      "x": -350,
-     "y": -1050
+     "y": -1050,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-30 23:20",
+     "x": -350,
+     "y": -1050,
+     "h": 3,
+     "state": "column",
+     "strength": 205
+    },
+    {
+     "t": "1918-05-30 23:28:56",
+     "x": -316,
+     "y": -455,
+     "h": 296,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-30 23:32:28",
+     "x": -527,
+     "y": -352,
+     "h": 279,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-30 23:34:11",
+     "x": -640,
+     "y": -335,
+     "h": 239,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-30 23:39:40",
+     "x": -955,
+     "y": -521,
+     "h": 259,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-30 23:42:24",
+     "x": -1134,
+     "y": -557,
+     "h": 231,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-30 23:47:08",
+     "x": -1380,
+     "y": -755,
+     "h": 228,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-31 00:01:20",
+     "x": -2078,
+     "y": -1394,
+     "h": 267,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-31 00:05:12",
+     "x": -2335,
+     "y": -1408,
+     "h": 279,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-31 00:07:39",
+     "x": -2497,
+     "y": -1383,
+     "h": 276,
+     "strength": 205
+    },
+    {
+     "t": "1918-05-31 00:15:05",
+     "x": -2990,
+     "y": -1330,
+     "h": 270,
+     "state": "line",
+     "strength": 205
+    },
+    {
+     "t": "1918-05-31 00:16:05",
+     "x": -2990,
+     "y": -1330,
+     "state": "hidden",
+     "strength": 205
     }
    ]
   },
@@ -8616,9 +8783,61 @@
      "strength": 710
     },
     {
-     "t": "1918-05-31 01:00",
+     "t": "1918-05-30 23:39",
      "x": -2140,
-     "y": -580
+     "y": -580,
+     "strength": 710
+    },
+    {
+     "t": "1918-05-30 23:40",
+     "x": -2140,
+     "y": -580,
+     "h": 103,
+     "state": "column",
+     "strength": 710
+    },
+    {
+     "t": "1918-05-30 23:51:42",
+     "x": -1380,
+     "y": -755,
+     "h": 228,
+     "strength": 710
+    },
+    {
+     "t": "1918-05-31 00:05:54",
+     "x": -2078,
+     "y": -1394,
+     "h": 267,
+     "strength": 710
+    },
+    {
+     "t": "1918-05-31 00:09:45",
+     "x": -2335,
+     "y": -1408,
+     "h": 279,
+     "strength": 710
+    },
+    {
+     "t": "1918-05-31 00:12:13",
+     "x": -2497,
+     "y": -1383,
+     "h": 276,
+     "strength": 710
+    },
+    {
+     "t": "1918-05-31 00:19:39",
+     "x": -2990,
+     "y": -1330,
+     "h": 270,
+     "state": "line",
+     "strength": 710
+    },
+    {
+     "t": "1918-05-31 00:20:39",
+     "x": -2990,
+     "y": -1330,
+     "state": "hidden",
+     "strength": 710
     }
    ]
   },
@@ -8676,9 +8895,40 @@
      "strength": 710
     },
     {
-     "t": "1918-05-31 01:00",
+     "t": "1918-05-30 23:49",
      "x": -2450,
-     "y": -1300
+     "y": -1300,
+     "strength": 710
+    },
+    {
+     "t": "1918-05-30 23:50",
+     "x": -2450,
+     "y": -1300,
+     "h": 210,
+     "state": "column",
+     "strength": 710
+    },
+    {
+     "t": "1918-05-30 23:51:26",
+     "x": -2497,
+     "y": -1383,
+     "h": 276,
+     "strength": 710
+    },
+    {
+     "t": "1918-05-30 23:58:52",
+     "x": -2990,
+     "y": -1330,
+     "h": 270,
+     "state": "line",
+     "strength": 710
+    },
+    {
+     "t": "1918-05-30 23:59:52",
+     "x": -2990,
+     "y": -1330,
+     "state": "hidden",
+     "strength": 710
     }
    ]
   },
@@ -8958,9 +9208,9 @@
   {
    "id": "tank1",
    "side": "french",
-   "name": "1st battery, French 5th Tank Battalion: four Schneider tanks",
+   "name": "1st battery, French 5th Tank Battalion (the 5th Group, Capt. Noscereau): four Schneider tanks",
    "short": "1st battery",
-   "commander": "Capt. Noscereau",
+   "commander": "",
    "type": "armor",
    "strength": 4,
    "keys": [
@@ -9051,9 +9301,9 @@
   {
    "id": "tank2",
    "side": "french",
-   "name": "2nd battery, French 5th Tank Battalion: four Schneider tanks, which crossed the gardens north-east of the village",
+   "name": "2nd battery, French 5th Tank Battalion (the 5th Group, Capt. Noscereau): four Schneider tanks, which crossed the gardens north-east of the village",
    "short": "2nd battery",
-   "commander": "Capt. Noscereau",
+   "commander": "",
    "type": "armor",
    "strength": 4,
    "keys": [
@@ -9144,9 +9394,9 @@
   {
    "id": "tank3",
    "side": "french",
-   "name": "3rd battery, French 5th Tank Battalion: four Schneider tanks, at their objective north of Cantigny about seven",
+   "name": "3rd battery, French 5th Tank Battalion (the 5th Group, Capt. Noscereau): four Schneider tanks, at their objective north of Cantigny about seven",
    "short": "3rd battery",
-   "commander": "Capt. Noscereau",
+   "commander": "",
    "type": "armor",
    "strength": 4,
    "keys": [
@@ -9330,12 +9580,27 @@
      "t": "1918-05-28 19:00",
      "x": 100,
      "y": -550,
-     "strength": 0
+     "state": "rout",
+     "strength": 40
     },
     {
      "t": "1918-05-28 19:01",
      "x": 100,
      "y": -550,
+     "h": 49,
+     "state": "rout"
+    },
+    {
+     "t": "1918-05-28 19:17:01",
+     "x": 700,
+     "y": -20,
+     "h": 45,
+     "state": "line"
+    },
+    {
+     "t": "1918-05-28 19:18:01",
+     "x": 700,
+     "y": -20,
      "state": "hidden"
     }
    ]
@@ -9541,30 +9806,31 @@
      "t": "1918-05-28 07:06",
      "x": -350,
      "y": 780,
-     "h": 32,
+     "h": 0,
      "state": "retreat"
     },
     {
-     "t": "1918-05-28 07:19:23",
-     "x": 0,
-     "y": 1350,
-     "h": 220,
+     "t": "1918-05-28 07:11:24",
+     "x": -350,
+     "y": 1050,
+     "h": 0,
      "state": "line"
     },
     {
+     "t": "1918-05-28 07:12:24",
+     "x": -350,
+     "y": 1050,
+     "state": "hidden"
+    },
+    {
      "t": "1918-05-29 05:44",
-     "x": 0,
-     "y": 1350
+     "x": -100,
+     "y": 1050,
+     "state": "line",
+     "h": 225
     },
     {
      "t": "1918-05-29 05:45",
-     "x": 0,
-     "y": 1350,
-     "h": 198,
-     "state": "column"
-    },
-    {
-     "t": "1918-05-29 05:49:45",
      "x": -100,
      "y": 1050,
      "h": 225,
@@ -9661,28 +9927,10 @@
      "state": "line"
     },
     {
-     "t": "1918-05-29 07:29",
-     "x": -100,
-     "y": 1050
-    },
-    {
      "t": "1918-05-29 07:30",
      "x": -100,
      "y": 1050,
-     "h": 18,
-     "state": "column"
-    },
-    {
-     "t": "1918-05-29 07:34:45",
-     "x": 0,
-     "y": 1350,
-     "h": 225,
-     "state": "line"
-    },
-    {
-     "t": "1918-05-31 01:00",
-     "x": 0,
-     "y": 1350
+     "state": "hidden"
     }
    ],
    "loose": true
@@ -10497,7 +10745,7 @@
   {
    "t": "1918-05-30 22:00",
    "title": "The relief",
-   "text": "In the night the 16th Infantry comes up and relieves the 28th; the relief is completed the next night. The division's records count 1,067 casualties for the three days: 199 killed, 652 wounded, 16 missing and 200 gassed. Five German officers and 225 men were taken. Pershing wrote on the 28th that the attack 'marks a distinct step forward in American participation in the war'.",
+   "text": "In the night the 16th Infantry comes up and relieves the 28th and the 18th; the relief is completed the next night. The division's records count 1,067 casualties for the three days: 199 killed, 652 wounded, 16 missing and 200 gassed. Five German officers and 225 men were taken. Pershing wrote on the 28th that the attack 'marks a distinct step forward in American participation in the war'.",
    "at": [
     -1300,
     -500
