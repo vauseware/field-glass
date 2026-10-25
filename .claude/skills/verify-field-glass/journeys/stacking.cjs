@@ -10,9 +10,10 @@ const ok = (c, m) => console.log(`${c ? 'PASS' : 'FAIL'} ${m}`);
   for (const [id, sel] of [['first-manassas', 'va33'], ['sidi-bou-zid', null], ['cowpens', 'howard']]) {
     await p.goto(`${base}#${id}${sel ? `@14:32,select=${sel}` : ''}`, { waitUntil: 'networkidle0' });
     await p.waitForFunction(() => document.querySelector('#splash').hidden && document.querySelector('#title').textContent !== 'Loading…', { timeout: 60000 });
+    if (!(await p.$eval('#chapters', el => el.checked))) await p.keyboard.press('c'); // a battle of more than 15 chapters opens with its labels off
     await new Promise(r => setTimeout(r, 1500));
     const res = await p.evaluate(() => {
-      const m = document.querySelector('#marks button').getBoundingClientRect(), out = {};
+      const m = document.querySelector('#marks button:not([hidden])').getBoundingClientRect(), out = { labels: [m.width] };
       const hv = document.querySelector('#hover'); hv.hidden = false; hv.innerHTML = '<b>Test</b><br>a unit<br>over the chapters'; hv.style.left = `${m.left}px`; hv.style.top = `${m.top - 60}px`; hv.style.pointerEvents = 'auto'; // elementFromPoint skips pointer-events: none
       const cd = document.querySelector('#card'); cd.style.opacity = 1; cd.style.pointerEvents = 'auto'; cd.style.transform = `translate(${m.left + 360}px, ${m.top - 80}px)`;
       for (const el of [hv, cd]) {
@@ -22,6 +23,7 @@ const ok = (c, m) => console.log(`${c ? 'PASS' : 'FAIL'} ${m}`);
       }
       return out;
     });
+    ok(res.labels[0] > 0, `${id}: the chapter labels are showing`);
     for (const k of ['hover', 'card']) ok(!res[k].length, `${id}: #${k} over the chapter labels is on top${res[k].length ? ', but under ' + res[k].join(', ') : ''}`);
   }
   await br.close();

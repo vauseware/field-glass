@@ -8,7 +8,7 @@ A battle link opens paused at its first moment with its map, the top panel (titl
 - `pb-scrub` seeks with the scrubber; the caption changes to that moment's chapter.
 - `pb-step` steps forward and back with the arrow keys.
 - `pb-speed` sets the speed from the Speed menu.
-- `pb-toggles` turns Follow the action (`f`) and Time-lapse (`t`) on and off.
+- `pb-toggles` turns Follow the action (`f`), Time-lapse (`t`) and Chapters (`c`, see `chapters.md`) on and off.
 - `pb-legend` opens the Legend dialog with the skin's key.
 - `pb-sources` opens the Sources dialog listing the battle's sources.
 

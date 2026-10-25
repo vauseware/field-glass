@@ -12,11 +12,12 @@ const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $(
   outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body'),
   card: $('#card'), cardSwatch: $('#card-swatch'), cardName: $('#card-name'), cardCmd: $('#card-cmd'), cardKind: $('#card-kind'), cardLive: $('#card-live'), cardClose: $('#card-close'),
   fx: $('#fx'), fonts: $('#theme-fonts'), kicker: $('#kicker'), hours: $('#hours'), loading: $('#loading'),
-  opening: $('#opening'), opName: $('#op-name'), opDate: $('#op-date') };
+  opening: $('#opening'), opName: $('#op-name'), opDate: $('#op-date'), chapters: $('#chapters'), chTitle: $('#chapter-title') };
 
 let B = null, skin = null, sheet = null, buildMs = 0; // the battle, its skin (themes.js), what the skin built for it and how long that took
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
-let cam = { x: 0, y: 0, zoom: 0.5 }, follow = true, lapse = true, lapsing = false;
+let cam = { x: 0, y: 0, zoom: 0.5 }, follow = true, lapse = true, lapsing = false, chapterLabels = true;
+let quiet = false; // the scrubber or an arrow key moved the clock since the last frame: a chapter it lands in gets no title
 let W = 0, H = 0, DPR = 1, last = performance.now();
 let airClock = 0; // real seconds of play, which fly the aircraft of an air strike
 const smoke = [], pops = [], placed = []; // placed: label boxes drawn this frame, so labels avoid each other
@@ -50,6 +51,7 @@ async function loadBattle(id) {
   ui.speed.value = speed;
   ui.scrub.min = b.startT; ui.scrub.max = b.endT;
   sizeClock();
+  chapterLabels = ui.chapters.checked = storedChapters() ?? b.events.length <= 15; // past 15 the labels take a large share of the map
   buildMarks(b); buildLegend(b);
   ui.title.textContent = b.name; ui.kicker.textContent = skin.kicker;
   ui.sub.textContent = `${b.place} · ${b.dateText ?? b.date}`;
@@ -68,19 +70,20 @@ async function loadBattle(id) {
   cam = { x: v.x, y: v.y, zoom: Math.min(W, H) / v.width };
   follow = true; ui.follow.checked = true; lapse = true; ui.lapse.checked = true;
   clampCam();
-  const [link, , at, play, pickId, warp, legend, outcome, shotOpening, bench] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(?:,select=([^,]+))?(,warp)?(,legend)?(,outcome)?(,opening)?(,bench)?$/) ?? [];
+  const [link, , at, play, pickId, warp, shotTitle, legend, outcome, shotOpening, bench] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(?:,select=([^,]+))?(,warp)?(,title)?(,legend)?(,outcome)?(,opening)?(,bench)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
   openingDue = link === `#${id}`; // a bare link opens on the first Play; any time or flag goes straight to the battle
   setPlaying(!!play); foldTop(!!play);
   if (legend) ui.legendDlg.showModal(); // screenshots
   if (outcome) ui.outcome.open = true;
   if (pickId) select(b.units.find(u => u.id === pickId) ?? null); // screenshots: the card open on this unit
-  document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption and card fades
+  document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption and card fades, and the chapter title unless ,title holds it
   if (warp) { // five seconds of frames for screenshots, framed around the caption, with the card beside its unit
     await document.fonts.ready; rects = null; // the Fell faces resize the panels
     step(0); updateHud();
     for (let i = 0; i < 300; i++) step(1 / 60);
     draw(); updateHud();
+    if (shotTitle) { showTitle(curEvent); ui.chTitle.classList.add('held'); }
   }
   if (shotOpening) { // screenshots: the opening held at its title
     await document.fonts.ready; rects = null;
@@ -291,7 +294,7 @@ function startOpening() {
   for (let i = 0; i < 400; i++) updateCamera(0.1);
   opening = { e: 0, wide: { x: 0, y: 0, zoom: Math.min(W, H) / B.extent }, target: { ...cam }, beats: BEATS[matchMedia('(prefers-reduced-motion: reduce)').matches ? 'still' : 'motion'] };
   ui.opName.textContent = B.name; ui.opDate.textContent = B.dateText ?? B.date;
-  ui.opening.hidden = false; document.body.classList.add('opening');
+  ui.opening.hidden = false; document.body.classList.add('opening'); showTitle(null);
   setPlaying(true);
   stepOpening(0);
 }
@@ -310,6 +313,7 @@ function stepOpening(dt) {
 function endOpening() {
   cam = { ...opening.target }; opening = null;
   ui.opening.hidden = true; document.body.classList.remove('opening');
+  showTitle(curEvent);
 }
 for (const type of ['pointerdown', 'keydown', 'wheel']) addEventListener(type, () => { if (opening) endOpening(); }, { capture: true });
 
@@ -521,9 +525,9 @@ function layoutMarks() {
   rects = null;
   const px = B.events.map(ev => ((ev.t - B.startT) / dur) * tw);
   const k = Math.max(1, Math.ceil((marks.length * gap) / Math.max(1, tw))); // too many for the width: label every k-th
-  const idx = [...marks.keys()].filter(i => i % k === 0), ax = idx.map(i => px[i]);
+  const idx = chapterLabels ? [...marks.keys()].filter(i => i % k === 0) : [], ax = idx.map(i => px[i]);
   for (let j = 1; j < ax.length; j++) ax[j] = Math.max(ax[j], ax[j - 1] + gap); // push crowded labels right…
-  ax[ax.length - 1] = Math.min(ax[ax.length - 1], tw);
+  if (ax.length) ax[ax.length - 1] = Math.min(ax[ax.length - 1], tw);
   for (let j = ax.length - 2; j >= 0; j--) ax[j] = Math.min(ax[j], ax[j + 1] - gap); // …then back from the end
   marks.forEach((el, i) => { el.hidden = true; leads[i].setAttribute('d', `M${px[i]} 23V15`); });
   idx.forEach((i, j) => {
@@ -531,6 +535,41 @@ function layoutMarks() {
     leads[i].setAttribute('d', `M${px[i]} 23V15L${ax[j]} 0`);
   });
   layoutHours(ui.scrub.clientWidth - 26, dur); // the thumb's travel; the marks are hidden on a phone
+  placeTitle();
+}
+
+// The Chapters switch. The viewer's choice holds for every battle in this browser; until they make one, the chapter
+// count decides. Storage may be blocked, so it is read and written inside try.
+const CHAPTERS_KEY = 'fieldglass.chapters';
+function storedChapters() { try { return { on: true, off: false }[localStorage.getItem(CHAPTERS_KEY)]; } catch { return undefined; } }
+function setChapterLabels(v) {
+  chapterLabels = ui.chapters.checked = v;
+  try { localStorage.setItem(CHAPTERS_KEY, v ? 'on' : 'off'); } catch {}
+  layoutMarks();
+}
+
+// The chapter title: the name fading in just above the timeline, on the page's clock (index.html), over the tallest
+// label still showing or, on a phone, over the story panel. Centred in the map less 48 px each side (a phone's 17 px
+// gutter there), narrowed past a panel that reaches down level with it. Showing one restarts its animation; null clears it.
+function placeTitle() {
+  const el = ui.chTitle, box = e => e.getBoundingClientRect(), story = ui.caption.classList.contains('show') ? [ui.caption] : [];
+  const under = [ui.bar, ...marks.filter(m => !m.hidden), ...(W <= 640 ? story : [])].map(box).filter(r => r.width);
+  const bottom = Math.min(...under.map(r => r.top)) - 14, top = bottom - el.offsetHeight;
+  const m = W <= 640 ? 17 : 48;
+  let l = m, r = W - m;
+  if (W > 640) for (const p of [ui.top, ...story].map(box)) {
+    if (p.bottom <= top || p.top >= bottom) continue;
+    if (p.left + p.right < W) l = Math.max(l, p.right + 24); else r = Math.min(r, p.left - 24);
+  }
+  Object.assign(el.style, { bottom: `${H - bottom}px`, left: `${(l + r) / 2}px`, maxWidth: `${Math.max(0, r - l)}px` });
+}
+function showTitle(ev) {
+  const el = ui.chTitle;
+  el.classList.remove('run', 'held');
+  if (!ev) return;
+  el.firstChild.textContent = ev.title; placeTitle();
+  void el.offsetWidth; // a reflow between, so the animation starts again
+  el.classList.add('run');
 }
 
 // The scale of hours under the scrubber, for a skin that rules one: alternate inked and blank segments of a round number
@@ -660,7 +699,9 @@ function updateHud(dt) {
     ui.caption.classList.toggle('show', !!curEvent); rects = null;
     foldCaption(false); // every new chapter opens with its story showing
     marks.forEach((m, i) => { m.classList.toggle('on', B.events[i] === curEvent); leads[i].classList.toggle('on', B.events[i] === curEvent); });
+    if (!quiet && !opening) showTitle(curEvent);
   }
+  quiet = false;
   const under = mouse && !ptrs.size ? pick(mouse[0], mouse[1]) : null, best = under !== selected && under;
   if (canvas.style.cursor !== (under ? 'pointer' : '')) canvas.style.cursor = under ? 'pointer' : '';
   ui.hover.hidden = !best;
@@ -760,19 +801,21 @@ ui.play.onclick = () => {
   setPlaying(!playing);
 };
 ui.speed.onchange = () => { speed = +ui.speed.value; };
-ui.scrub.oninput = () => seek(+ui.scrub.value);
+ui.scrub.oninput = () => { quiet = true; seek(+ui.scrub.value); };
 ui.follow.onchange = () => { follow = ui.follow.checked; };
 ui.lapse.onchange = () => { lapse = ui.lapse.checked; };
+ui.chapters.onchange = () => setChapterLabels(ui.chapters.checked);
 ui.srcBtn.onclick = () => ui.sources.showModal();
 ui.legendBtn.onclick = () => ui.legendDlg.showModal();
 addEventListener('keydown', e => {
   if (e.key === 'Escape' && selected && !document.querySelector('dialog[open]')) return select(null);
   if (['INPUT', 'SELECT', 'BUTTON'].includes(e.target.tagName)) return;
   if (e.code === 'Space') { e.preventDefault(); ui.play.click(); }
-  else if (e.key === 'ArrowRight') seek(t + nudge());
-  else if (e.key === 'ArrowLeft') seek(t - nudge());
+  else if (e.key === 'ArrowRight') { quiet = true; seek(t + nudge()); }
+  else if (e.key === 'ArrowLeft') { quiet = true; seek(t - nudge()); }
   else if (e.key === 'f') { follow = !follow; ui.follow.checked = follow; }
   else if (e.key === 't') { lapse = !lapse; ui.lapse.checked = lapse; }
+  else if (e.key === 'c') setChapterLabels(!chapterLabels);
 });
 
 function resize() {

@@ -28,6 +28,19 @@
     background: radial-gradient(closest-side, color-mix(in srgb, var(--paper-solid) 82%, transparent), color-mix(in srgb, var(--paper-solid) 55%, transparent) 55%, transparent); }
   #op-name { font: 400 64px/1.1 var(--fell); color: var(--ink); }
   #op-date { margin-top: 10px; font: italic 24px/1.3 var(--read, var(--text)); color: var(--muted); }
+  /* The chapter title (app.js sets its text and its bottom, over the labels or the bar): in 0.6 s, held 2 s, out 1 s, on
+     the page's clock. A band of the skin's paper behind the letters, clear at its edges; each skin dresses the letters. */
+  #chapter-title { position: fixed; left: 50%; bottom: 120px; z-index: 0; isolation: isolate; max-width: calc(100vw - 96px); transform: translateX(-50%);
+    text-align: center; white-space: nowrap; pointer-events: none; opacity: 0; font: 400 44px/1.15 var(--fell); color: var(--ink); }
+  #chapter-title span { display: block; overflow: hidden; text-overflow: ellipsis; }
+  #chapter-title::before { content: ""; position: absolute; inset: -34px -190px; z-index: -1;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--paper-solid) 80%, transparent), color-mix(in srgb, var(--paper-solid) 55%, transparent) 50%, transparent 75%); }
+  #chapter-title.run { animation: chapter-title 3.6s both; }
+  #chapter-title.held { opacity: 1; }
+  .nofade #chapter-title:not(.held) { visibility: hidden; }
+  @keyframes chapter-title { 0% { opacity: 0; } 16.67%, 72.22% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes chapter-title-still { from { opacity: 1; } to { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { #chapter-title.run { animation: chapter-title-still 3.6s step-end both; } }
   #top { left: 21px; top: 21px; z-index: 1; padding: 12px 18px 14px; max-width: min(490px, calc(100vw - 42px)); max-height: calc(100vh - 170px); overflow-y: auto; scrollbar-color: var(--rule) transparent; }
   #top h1 { margin: 0; font: 400 30px/1.1 var(--fell); letter-spacing: 0.01em; }
   .top-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
@@ -249,6 +262,7 @@
   .theme-revolution #play { border-radius: 50%; height: 52px; border: 1.5px solid var(--ink); background: radial-gradient(circle at 35% 30%, #fbf1d6, #c9a35e 70%, #8a6430); }
   .theme-revolution #clock { font: 400 27px/1 var(--fell); }
   body.theme-revolution #opening #op-date { display: inline-block; padding-top: 8px; border-top: 1px solid var(--rule); }
+  body.theme-revolution #chapter-title span { padding: 2px 20px 4px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
   .theme-revolution #fx .candle { mix-blend-mode: screen; opacity: var(--dark); background: radial-gradient(circle at 48% 50%, rgba(255,190,110,0.5), rgba(255,170,90,0.16) 42%, transparent 72%); }
   .theme-revolution #scrub::-webkit-slider-runnable-track { height: 7px; border: 1px solid var(--ink); border-radius: 0;
     background: linear-gradient(var(--accent), var(--accent)) 0 100% / var(--p, 0%) 2px no-repeat, linear-gradient(90deg, var(--ink) 50%, #f6ecd2 50%) var(--seg0, 0) 0 / calc(2 * var(--seg, 40px)) 100% repeat-x; }
@@ -269,6 +283,7 @@
   .theme-war-of-1812 #fx .binnacle { mix-blend-mode: screen; opacity: var(--dark); background: radial-gradient(circle at 50% 50%, rgba(200,225,235,0.4), rgba(170,200,220,0.12) 45%, transparent 75%); }
   .theme-war-of-1812 #loading { color: var(--ink); font: italic 28px var(--fell); background: #9fb3bd; }
   body.theme-war-of-1812 #opening #op-name { letter-spacing: 0.04em; }
+  body.theme-war-of-1812 #chapter-title { letter-spacing: 0.04em; }
   /* First World War: a 1:10,000 trench map. Cream panels with an ink rule inside the border, the kicker in spaced
      capitals; a star shell over the field at night (#fx), drifting down as it burns. */
   body.theme-ww1 { --paper: rgba(242,238,226,0.97); --paper-solid: #f2eee2; --ink: #1f1d1a; --muted: #55524a; --rule: #1f1d1a; --accent: #c3162b; --fell: "Crimson Pro", Georgia, serif; --sc: "Archivo Narrow", sans-serif; --text: "Crimson Pro", Georgia, serif; --read: "Crimson Pro", Georgia, serif; --panel-bg: #f2eee2; background: #f2eee2; }
@@ -279,6 +294,9 @@
   .theme-ww1 #loading { color: var(--ink); font: italic 28px var(--fell); background: #f2eee2; }
   body.theme-ww1 #opening #op-name { font-family: var(--sc); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
   body.theme-ww1 #opening #op-name::after { content: ""; display: block; width: 96px; height: 3px; margin: 14px auto 0; background: var(--accent); }
+  body.theme-ww1 #chapter-title { font-family: var(--sc); font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; }
+  body.theme-ww1 #chapter-title::after { content: ""; display: block; width: 96px; height: 10px; margin: 4px auto 0;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='10'><path d='M0 1.5 H8 V8.5 H16' fill='none' stroke='%23c3162b' stroke-width='2'/></svg>") 0 0 / 16px 10px repeat-x; }
   .theme-ww1 #fx .flare { mix-blend-mode: screen; opacity: var(--dark); background: radial-gradient(circle at 62% 30%, rgba(255,250,220,0.55), rgba(255,240,200,0.15) 30%, transparent 60%); animation: flare 7s ease-in-out infinite; }
   @keyframes flare { 0%, 100% { transform: translate(0, 0); filter: brightness(1); } 40% { filter: brightness(1.3); } 70% { transform: translate(-4vw, 12vh); filter: brightness(0.7); } }
   /* Civil War: an engineer's survey sheet. Panels of ruled linen with a rule inside the border and titles in small
@@ -300,11 +318,13 @@
   .theme-civil-war #clock { font: 400 27px/1 var(--fell); } .theme-civil-war #clock small { color: var(--gilt); }
   .theme-civil-war #hours { color: #c9bfa3; }
   .theme-civil-war #bar input[type=checkbox] { accent-color: var(--gilt); }
+  .theme-civil-war #marks path { stroke: #c9bfa3; } .theme-civil-war #marks path.on { stroke: var(--gilt); } /* the ticks sit on the blue cloth */
   .theme-civil-war #scrub::-webkit-slider-runnable-track { border-color: var(--gilt); background: linear-gradient(var(--gilt), var(--gilt)) 0 / var(--p, 0%) 100% no-repeat, #121a2e; }
   .theme-civil-war #scrub::-moz-range-track { border-color: var(--gilt); background: #121a2e; }
   .theme-civil-war #scrub::-moz-range-progress { background: var(--gilt); }
   .theme-civil-war #loading { color: var(--ink); font: italic 28px var(--fell); background: radial-gradient(ellipse at 50% 45%, #f6f2e8, #f1ece0 60%, #cfc6b0); }
   body.theme-civil-war #opening #op-name { font-family: var(--sc); font-weight: 700; }
+  body.theme-civil-war #chapter-title { font-family: var(--sc); font-weight: 700; }
   @media (max-width: 640px) { .theme-civil-war #top h1 { font-size: 21px; } .theme-civil-war #cap-title { font-size: 20px; } .theme-civil-war #clock { font-size: 20px; } }
 
   /* Second World War: an operations room. Dark boards with chalk stencilling, the story as a yellow teleprinter strip that
@@ -372,6 +392,7 @@
   .theme-ww2 #legend-list { font-size: 16px; } .theme-ww2 #legend-list canvas { border: 1px solid #000; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
   .theme-ww2 #loading { color: var(--tape); font: 700 22px var(--text); letter-spacing: 0.25em; text-transform: uppercase; background: radial-gradient(ellipse at 50% 45%, #2c3127, #141310 70%, #0a0907); }
   body.theme-ww2 #opening #op-name { font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--chalk); }
+  body.theme-ww2 #chapter-title { font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--chalk); }
   body.theme-ww2 #opening #op-date { font-family: var(--text); font-style: normal; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--tape); }
   .theme-ww2 #loading p::after { content: "_"; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
@@ -393,6 +414,7 @@
     #play { width: 44px; min-width: 44px; font-size: 18px; } #clock { font-size: 15px; }
     #track { order: 1; flex: 1 0 100%; padding-top: 0; } #marks { display: none; } /* the scrubber takes its own row; no room for chapters */
     #opening { padding: 40px 28px; } #opening #op-name { font-size: 40px; } #opening #op-date { font-size: 18px; }
+    #chapter-title { font-size: 30px; } #bar label.chapters { display: none; }
     #caption { top: auto; bottom: 150px; left: 17px; right: 17px; width: auto; max-height: 40vh; padding: 10px 14px; } #cap-title { font-size: 21px; } #cap-when { font-size: 15px; } #cap-text { font-size: 17px; margin-top: 6px; padding-top: 6px; }
   }
 </style>
@@ -437,6 +459,7 @@
   <div id="cap-text"></div>
 </div>
 
+<div id="chapter-title" aria-hidden="true"><span></span></div>
 <div id="opening" aria-hidden="true" hidden><div id="op-name"></div><div id="op-date"></div></div>
 <footer id="bar" class="panel">
   <button id="play" aria-label="Play">▶</button>
@@ -445,6 +468,7 @@
   <span id="clock"></span>
   <label title="Camera follows the story"><input id="follow" type="checkbox" checked> <span>Follow the action</span></label>
   <label title="Hurry through the quiet stretches"><input id="lapse" type="checkbox" checked> <span>Time-lapse</span></label>
+  <label class="chapters" title="Show the chapter names over the map"><input id="chapters" type="checkbox" checked> <span>Chapters</span></label>
 </footer>
 
 <div id="loading" hidden><p>Drawing the map…</p></div>

@@ -47,8 +47,8 @@ The vause.io zone redirects only the bare domain and www to vauseware.com.
 Static files only. `index.html` is the shell, `app.js` runs the camera, the clock and the panels, the skins in
 `themes/` draw, `sim.js` is the DOM-free timeline logic. `#cowpens@07:45` opens a battle at a time of day
 (`#yorktown@1781-10-14T20:00` for a dated one); `#cowpens@07:45,play` starts it playing. `,warp` pre-runs five
-seconds of frames, which is how headless screenshots see smoke and the camera; `,select=howard` opens a unit's card;
-`,legend` opens the legend.
+seconds of frames, which is how headless screenshots see smoke and the camera; `,warp,title` also holds the chapter
+title on screen; `,select=howard` opens a unit's card; `,legend` opens the legend.
 
 A battle started from its beginning opens like a television programme: the whole map with every unit in place and
 no panels, the battle's name over its date fading in and out, then a four-second ease in to the frame Follow the
@@ -62,7 +62,14 @@ its title, for screenshots. See [ADR-0009](docs/adr/0009-opening-shot.md).
 ![Cowpens, the opening shot's title](docs/screenshots/cowpens-opening.jpg)
 
 The chapters sit above the scrubber as ticks, their titles slanting up over the map on leader lines
-so crowded chapters can be spread apart: click one to jump there (the camera follows again). **Legend** in the
+so crowded chapters can be spread apart: click one to jump there (the camera follows again). **Chapters** in the bar
+(key `c`) hides the labels and keeps the ticks. It starts on for a battle of 15 chapters or fewer and off for more;
+once the viewer uses it, the browser keeps that choice for every battle (`localStorage` key `fieldglass.chapters`).
+Phones never show the labels, so the switch is hidden there. When play runs into a chapter, a label is clicked or
+the page opens, the chapter's name fades in just above the labels, or the bar when they are off, on a soft band of
+the skin's paper: 0.6 s in, 2 s held, 1 s out on the page's clock. A drag of the scrubber or an arrow key shows none,
+nor does the opening shot, which shows the chapter's name once as it ends or is skipped. See
+[ADR-0010](docs/adr/0010-chapter-titles.md). **Legend** in the
 top panel lists only the symbols the current battle uses. The story panel opens at each new chapter with the chapter's approximate hour; **Hide** folds it to the title. **Outcome** in the top panel opens to the result and each side's losses (`outcome` in `make.py`).
 Every unit carries its name when there is
 room; labels that would overlap are dropped, biggest unit first.

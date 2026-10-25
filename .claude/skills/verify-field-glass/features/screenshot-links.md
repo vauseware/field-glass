@@ -1,13 +1,14 @@
 # Screenshot links
 
-A battle link can open a battle at a set moment and state, which is how README images, PR screenshots and data checks are made. The hash is `#<battle>[@<time>][,play][,select=<unit id>][,warp][,legend][,outcome][,opening][,bench]`, with the flags in that order. Once the battle loads, the hash settles to `#<battle>` without a reload.
+A battle link can open a battle at a set moment and state, which is how README images, PR screenshots and data checks are made. The hash is `#<battle>[@<time>][,play][,select=<unit id>][,warp][,title][,legend][,outcome][,opening][,bench]`, with the flags in that order. Once the battle loads, the hash settles to `#<battle>` without a reload.
 
 ## Sub-features
 
 - `sl-time` opens at `@HH:MM`, or `@YYYY-MM-DDTHH:MM` for a battle spanning days.
 - `sl-play` starts playing and folds the top panel.
 - `sl-select` opens the unit card on one unit.
-- `sl-warp` runs 300 frames at load so the camera, smoke and caption have settled for a still frame, and turns off the caption fades.
+- `sl-warp` runs 300 frames at load so the camera, smoke and caption have settled for a still frame, and turns off the caption fades. It never shows the chapter title.
+- `sl-title`, after `,warp`, holds the chapter title at full opacity, to show its place and its skin's dress.
 - `sl-legend` and `sl-outcome` open the Legend dialog or the Outcome details.
 - `sl-opening` runs the opening shot and holds it at the title: the whole map, no panels, the battle's name over its date.
 - `sl-war` opens a war's start screen with `#revolution`, `#civil-war` or `#ww2`, with an optional `?plan=<battle id>` to fix the Revolution backdrop.
@@ -25,6 +26,7 @@ Preconditions:
 - **Still frame.** Run `bash .claude/skills/verify-field-glass/fg.sh shot <dir> '#cowpens@07:30,play,warp' cowpens-0730`. `<dir>/cowpens-0730.png` shows the clock at `7:30`, the caption "The main line", the Pause button, and the units engaged.
 - **Unit card.** Run `fg.sh shot <dir> '#cowpens@07:30,play,select=<unit id>,warp' cowpens-card`, using a unit id from `battles/cowpens/battle.json`. `#card` shows that unit's name beside it.
 - **Legend.** Run `fg.sh shot <dir> '#sidi-bou-zid@1943-02-14T10:00,warp,legend' sbz-legend`. The Legend dialog is open over the WW2 skin, and the clock behind it reads `1000 HRS 14 FEB`.
+- **Chapter title.** Run `fg.sh shot <dir> '#cowpens@07:31,play,warp,title' cowpens-title 1536 830`. "The main line" sits just above the chapter labels on its paper band.
 - **Phone.** Add width and height: `fg.sh shot <dir> '#cowpens@07:30,play,warp' cowpens-phone 390 844`.
 - **Settles.** In a journey, load `#cowpens@10:00,play,warp`, set `window.mark = 1`, and wait. `location.hash` becomes `#cowpens` and `window.mark` is still `1`, so the page did not reload.
 
