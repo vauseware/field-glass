@@ -39,9 +39,10 @@ bash $F/fg.sh drive <dir> $F/journeys/playback.cjs [battle id]   # play, pause, 
 bash $F/fg.sh drive <dir> $F/journeys/laptop.cjs [ids]           # the target laptop: 1536x830 at DPR 1.25 and 1280x700 at 1.5; no scroll, nothing covered, 16 px text, 44 px targets, sharp canvas
 bash $F/fg.sh drive <dir> $F/journeys/stacking.cjs                 # the unit hover tip and card stay on top of the chapter labels
 bash $F/fg.sh drive <dir> $F/journeys/opening.cjs [ids] [clip]     # the opening shot: beats, what starts and skips it, reduced motion, dawn cap; field, title and landing shots
+bash $F/fg.sh drive <dir> $F/journeys/chapters.cjs                 # the Chapters switch and stored choice; the chapter title: what shows it, its place, the opening, reduced motion
 ```
 
-`drive` writes the output to `<dir>/<journey>.log` and exits 1 if any line starts with `FAIL`. To prove something new, copy the closest journey, keep its `ok()` and `shot()` helpers, and drive the page the way a user would: click the real buttons and type real keys. Handles worth using are `#splash`, `.tl-war[data-war=<war id>]`, `.row[data-id=<battle id>]`, `#play` (its `aria-label` is `Play` or `Pause`), `#speed`, `#scrub`, `#clock`, `#cap-title`, `#home` (All battles), `#legend-btn` with `#legend-dlg`, and `#src-btn` with `#sources`. The feature files name more.
+`drive` writes the output to `<dir>/<journey>.log` and exits 1 if any line starts with `FAIL`. To prove something new, copy the closest journey, keep its `ok()` and `shot()` helpers, and drive the page the way a user would: click the real buttons and type real keys. Handles worth using are `#splash`, `.tl-war[data-war=<war id>]`, `.row[data-id=<battle id>]`, `#play` (its `aria-label` is `Play` or `Pause`), `#speed`, `#scrub`, `#clock`, `#cap-title`, `#home` (All battles), `#legend-btn` with `#legend-dlg`, `#src-btn` with `#sources`, `#chapters` (the Chapters checkbox) and `#chapter-title`. The feature files name more.
 
 For a still frame of a moment in a battle, use a screenshot link (see `features/screenshot-links.md`):
 
