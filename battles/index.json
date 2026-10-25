@@ -84,6 +84,13 @@
   "runtime": 925
  },
  {
+  "id": "cantigny",
+  "name": "Cantigny, 28–31 May 1918",
+  "date": "1918-05-28",
+  "war": "World War I",
+  "runtime": 1000
+ },
+ {
   "id": "sidi-bou-zid",
   "name": "Sidi Bou Zid, 14–17 Feb 1943",
   "date": "1943-02-14",
