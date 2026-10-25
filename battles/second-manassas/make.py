@@ -354,6 +354,7 @@ SOUTH_IN = SUDLEY_RD[-1]      # the Manassas-Sudley road from Manassas
 AT_START = {
     "stafford": (gp(2100, -150), SE(2100)), "stonewall": (gp(2350, -150), SE(2350)), "jones_bj": (gp(2550, -150), SE(2550)),
     "taliaferro_ag": (gp(2750, -150), SE(2750)), "jguns": (gp(2450, -350), SE(2450)),
+    "pelham": (gp(3000, -350), SE(3000)),
     "lawton": ((2650, 815), 290), "trimble": ((2950, 900), 290), "early": ((3250, 985), 290), "hays": ((3550, 1070), 290), "eguns": ((3850, 1160), 290),
 }
 for id in BASE:
@@ -362,7 +363,316 @@ for id in BASE:
         side = BASE[id][1]
         edge = EAST_IN if id in ("branch", "pender", "thomas", "gregg", "archer", "field", "hguns", "robinson", "birney", "poe", "grover", "taylor", "carr", "stevens", "nagle", "ferrero") \
             else WEST_IN if side == "confederate" or id in ("hatch", "doubleday", "patrick", "gibbon", "b4us") else SOUTH_IN
-        appear(id, START, edge, 90, state="hidden")
+        appear(id, START, (4480, -900) if id == "buford" else edge, 90, state="hidden")
+
+def path_from(id, pts):
+    out = [last(id)] + [tuple(p) for p in pts]
+    return [p for i, p in enumerate(out) if i == 0 or math.dist(p, out[i - 1]) > 5]
+def mv(id, t0, t1, *pts, h=None, state="line", moving="column", **kw):  # from where it stands at t0 to the last point at t1, times spread by distance
+    pts = path_from(id, pts)
+    if len(pts) < 2: return stand(id, t1, state=state, **({"h": h} if h is not None else {}), **kw)
+    d = [0]
+    for a, b in zip(pts, pts[1:]): d.append(d[-1] + math.dist(a, b))
+    ks = [K(t0, pts[0], h=heading(pts[0], pts[1]), state=moving)]
+    for i in range(1, len(pts) - 1): ks.append(K(fmt(sec(t0) + (sec(t1) - sec(t0)) * d[i] / d[-1]), pts[i], h=heading(pts[i], pts[i + 1])))
+    ks.append(K(t1, pts[-1], h=heading(pts[-2], pts[-1]) if h is None else h, state=state, **kw))
+    keys(id, ks)
+def walk(id, t0, *pts, h=None, state="line", kmh=3.5, **kw):  # at a marching pace from t0; returns the arrival time
+    pts = path_from(id, pts); t = sec(t0)
+    ks = [K(t0, pts[0], h=heading(pts[0], pts[1]), state="column")]
+    for i in range(1, len(pts)):
+        t += math.dist(pts[i - 1], pts[i]) / (kmh / 3.6)
+        ks.append(K(fmt(t), pts[i], h=heading(pts[i], pts[i + 1]) if i + 1 < len(pts) else (h if h is not None else heading(pts[i - 1], pts[i]))))
+    ks[-1].update(state=state, **kw); keys(id, ks); return ks[-1]["t"]
+def stand(id, t, **kw): keys(id, [K(t, last(id), **kw)])
+def fight(id, t0, t1, strength, h=None, after="line"):  # firing from t0 to t1, where it stands, down to `strength`
+    stand(id, t0, state="firing", **({"h": h} if h is not None else {})); stand(id, t1, state=after, strength=strength)
+def lose(id, n): return carried(id, "strength") - n
+def show(id, t, p, h, state="column"): keys(id, [K(t, p, h=h, state=state)])
+def hide(id, t): stand(id, t, state="hidden")
+def NW(s): return (SE(s) + 180) % 360  # facing the railroad grade from the Union side
+PIKE_AT = lambda x: at_x(PIKE, x)
+GROVETON_X = L['groveton_rd'][0]          # the crossroads, where the Groveton roads leave the turnpike
+STONE_X = along(PIKE, P['stone_house'], P['stone_house'])[0]
+def pike(a, b): return along(PIKE, a, b)
+def sudley(a, b): return along(SUDLEY_RD, a, b)
+SOUTH_EDGE = (L['groveton_rd'][-1][0], -4450)
+TO_MANASSAS = L['groveton_rd'] + [SOUTH_EDGE]   # the Groveton-Manassas road from the crossroads off the south edge
+
+# ---- 28 August: Ewell and Hill come up; the woods of Stony Ridge ----
+# Ewell back over the Stone Bridge and west on the turnpike, up the Groveton-Sudley road to the grade; Hill from
+# Centreville by the turnpike and the Sudley road to the north end of the grade. Their hours are inferred.
+FB = L['featherbed']; FB_GRADE = (-1650, 700)
+for n, (id, s, off) in enumerate((("lawton", 3150, -200), ("trimble", 2850, -200), ("early", 2550, -260), ("hays", 2300, -260), ("eguns", 2950, -450))):
+    walk(id, A("05:30"), *pike(last(id), GROVETON_X), *along(FB, GROVETON_X, FB_GRADE), gp(2100, -350), gp(s, off), h=SE(s), kmh=3)
+for n, (id, s, off) in enumerate((("gregg", 450, -60), ("thomas", 1150, -60), ("branch", 350, -350), ("archer", 700, -330),
+                                  ("pender", 950, -380), ("field", 1300, -350), ("hguns", 800, -200))):
+    show(id, plus(A("08:00"), n * 12), EAST_IN, 270)
+    walk(id, plus(A("08:00"), n * 12), *pike(EAST_IN, P['stone_house']), *sudley(P['stone_house'], (-560, 1800)), gp(s, off), h=SE(s), kmh=3)
+# Jackson's division shifts west in the woods to face the turnpike by the Brawner farm
+for id, s, off in (("taliaferro_ag", 3750, -200), ("stonewall", 3450, -200), ("jones_bj", 3500, -450), ("stafford", 3800, -450), ("pelham", 3650, -350)):
+    walk(id, A("13:00"), gp(s, off), h=SE(s), kmh=2.5)
+walk("jguns", A("13:00"), P['stony_guns'], h=160, kmh=2.5)
+
+# McDowell east on the turnpike: Reynolds leads and goes on toward Manassas; King's four brigades follow at evening.
+for n, id in enumerate(("meade", "seymour", "hardin")):
+    show(id, plus(A("13:30"), n * 15), WEST_IN, 70)
+    hide(id, plus(walk(id, plus(A("13:30"), n * 15), *pike(WEST_IN, P['stone_house']), *sudley(P['stone_house'], SOUTH_IN), kmh=3.2), 1))
+for id, t0, end in (("hatch", "17:15", (-900, -340)), ("gibbon", "17:50", PIKE_AT(-2700)), ("b4us", "17:58", PIKE_AT(-2950)),
+                    ("doubleday", "18:05", PIKE_AT(-3250)), ("patrick", "18:15", PIKE_AT(-3650))):
+    show(id, A(t0), WEST_IN, 70); walk(id, A(t0), *pike(WEST_IN, end), state="column", kmh=3)
+
+# ---- Brawner farm ----
+# The two lines 75 yards apart across the farm north of the pike, the Union line south-west to north-east along the
+# loop trail, facing north-west. U(f) is a point a fraction f along it; C(f) the Confederate line opposite.
+U1, U2 = (-3150, -480), (-2250, -230)
+def U(f): return (U1[0] + f * (U2[0] - U1[0]), U1[1] + f * (U2[1] - U1[1]))
+FACE = (heading(U1, U2) - 90) % 360
+def CL(f): ux, uy = dv(FACE); p = U(f); return (p[0] + 75 * ux, p[1] + 75 * uy)
+fight("jguns", A("18:30"), A("21:00"), 640, h=150); fight("eguns", A("18:40"), A("21:00"), 560, h=150)
+mv("gibbon", A("18:35"), A("18:55"), U(0.45), h=FACE, state="firing", moving="line")
+mv("b4us", A("18:35"), A("18:50"), (-2560, -700), h=FACE, state="firing")
+for id, f, t0 in (("taliaferro_ag", 0.1, "18:40"), ("stonewall", 0.35, "18:40"), ("lawton", 0.62, "18:50"), ("trimble", 0.88, "19:10")):
+    mv(id, A(t0), plus(A(t0), 18), CL(f), h=(FACE + 180) % 360, state="firing", moving="line")
+mv("pelham", A("18:45"), A("19:05"), (-3170, -390), h=110, state="firing")
+mv("doubleday", A("19:20"), A("19:45"), PIKE_AT(-2550), U(0.85), h=FACE, state="firing", moving="line")
+fight("gibbon", A("19:00"), A("21:00"), 1300); fight("b4us", A("18:50"), A("21:00"), 80)
+fight("doubleday", A("19:45"), A("21:00"), 850)
+for id, n in (("taliaferro_ag", 300), ("stonewall", 300), ("lawton", 400), ("trimble", 250)): fight(id, KEYS[id][-1]["t"], A("21:00"), lose(id, n))
+fight("pelham", A("19:05"), A("21:00"), 90)
+mv("gibbon", A("21:00"), A("21:20"), PIKE_AT(-2700), h=70); mv("doubleday", A("21:00"), A("21:20"), PIKE_AT(-2450), h=70)
+mv("b4us", A("21:00"), A("21:15"), PIKE_AT(-2850), h=70)
+for id, s, off in (("taliaferro_ag", 3200, -60), ("stonewall", 2900, -60), ("lawton", 1900, -60), ("trimble", 1550, -60), ("pelham", 3300, -400)):
+    walk(id, A("22:00"), gp(s, off), h=SE(s), kmh=2.5)
+for id, s, off in (("jones_bj", 2620, -60), ("stafford", 2330, -60), ("early", 1800, -380), ("hays", 2150, -380), ("eguns", 1700, -250)):
+    walk(id, A("22:30"), gp(s, off), h=SE(s), kmh=2.5)
+# Midnight: King's division goes off to Manassas by the Groveton road
+for id, t0 in (("hatch", "00:50"), ("gibbon", "01:00"), ("b4us", "01:10"), ("doubleday", "01:15"), ("patrick", "01:25")):
+    hide(id, plus(walk(id, B(t0), *pike(last(id), GROVETON_X), *TO_MANASSAS[1:], kmh=3.2), 1))
+
+# ---- 29 August: Sigel up the Sudley road in the night; Schurz finds Jackson at seven ----
+for n, (id, end) in enumerate((("schimmelfennig", (0, 650)), ("krzyzanowski", (150, 500)), ("milroy", (-250, 250)), ("stahel", (550, -350)),
+                               ("mclean", (650, -550)), ("koltes", (450, -150)), ("dogan_guns", (300, -50)),
+                               ("meade", (200, -800)), ("seymour", (350, -1000)), ("hardin", (100, -1050)))):
+    show(id, plus(B("02:00"), n * 10), SOUTH_IN, 0)
+    walk(id, plus(B("02:00"), n * 10), *sudley(SOUTH_IN, (400, -300)), end, h=290, kmh=3)
+for id, s in (("schimmelfennig", 1150), ("krzyzanowski", 650)):
+    walk(id, B("06:00"), *sudley(last(id), (-470, 1400)), gp(s, 320), h=NW(s), state="skirmish", kmh=3)
+    stand(id, B("09:40"), state="line")
+    mv(id, B("10:00"), B("10:10"), gp(s, 80), h=NW(s), state="firing", moving="charge")
+    fight(id, B("10:10"), B("10:35"), lose(id, 250))
+    mv(id, B("10:35"), B("10:55"), gp(s, 420), h=NW(s), moving="retreat")
+for id in ("gregg", "thomas"): fight(id, B("07:00"), B("10:40"), lose(id, 120))
+# Schenck and Reynolds west on the pike into the Groveton woods; Milroy up the Groveton-Sudley road
+for id, end in (("stahel", (-1850, -900)), ("mclean", (-2050, -1100)), ("meade", (-1650, -1200)), ("seymour", (-1950, -1300)), ("hardin", (-1550, -980))):
+    walk(id, B("06:30"), *pike(PIKE_AT(last(id)[0]) if last(id)[1] > -700 else P['stone_house'], PIKE_AT(end[0])), end, h=270, kmh=3)
+walk("dogan_guns", B("06:30"), (-1300, -300), h=300, kmh=3)
+walk("koltes", B("07:00"), (-800, -200), h=290, kmh=3)
+walk("milroy", B("07:00"), (-1200, -300), *along(FB, (-1650, -300), (-1650, 300)), gp(2120, 450), h=NW(2120), kmh=3)
+for id in ("dogan_guns", "jguns", "eguns"): fight(id, B("10:00"), B("12:00"), lose(id, 30))
+mv("milroy", B("10:00"), B("10:12"), gp(2120, 30), h=NW(2120), state="firing", moving="charge")
+fight("milroy", B("10:12"), B("10:25"), lose("milroy", 300)); fight("lawton", B("10:05"), B("10:30"), lose("lawton", 80))
+mv("milroy", B("10:25"), B("10:50"), gp(2120, 650), (-1500, -250), h=60, moving="retreat")
+
+# Longstreet in on the turnpike from Gainesville and deployed across the Union left, unseen by Pope
+LONG = [("hood", (-2650, -1120), 70), ("law", (-2700, -770), 70), ("frobel", P['battery_heights'], 80), ("evans", (-2950, -1200), 70),
+        ("wilcox", (-3150, -850), 70), ("pryor", (-3350, -950), 70), ("featherston", (-3200, -650), 70),
+        ("corse", (-2850, -1500), 70), ("jenkins", (-3000, -1800), 70), ("hunton", (-3150, -2100), 70), ("sdlee", (-3350, -1150), 70),
+        ("benning", (-3350, -2450), 60), ("drayton", (-3550, -2800), 60), ("gtanderson", (-3750, -3150), 60),
+        ("robertson", (-3700, -3500), 60), ("fitzlee", (-4000, -3900), 60)]
+for n, (id, end, h) in enumerate(LONG):
+    t0 = plus(B("10:30"), n * 8); kmh = 8 if BASE[id][5] == "cavalry" else 3
+    show(id, t0, WEST_IN, 70)
+    walk(id, t0, *pike(WEST_IN, PIKE_AT(max(-3700, min(end[0], -2600)))), end, h=h, kmh=kmh)
+
+# Hooker, Kearny and Reno from Centreville, over the Stone Bridge
+for n, (id, end, h) in enumerate((("robinson", gp(560, 300), NW(560)), ("birney", (-520, 2120), 250), ("poe", (-450, 1600), 290),
+                                  ("grover", gp(820, 420), NW(820)), ("taylor", (-500, 1150), 300), ("carr", (-380, 950), 300),
+                                  ("stevens", (100, 800), 290), ("nagle", (-200, 1000), 300), ("ferrero", (-100, 650), 300))):
+    t0 = plus(B("10:00"), n * 12)
+    show(id, t0, EAST_IN, 270)
+    walk(id, t0, *pike(EAST_IN, P['stone_house']), *sudley(P['stone_house'], (-470, 1450) if end[1] > 1300 else (-265, 700)), end, h=h, kmh=3.5)
+for id in ("schimmelfennig", "krzyzanowski"): walk(id, B("13:30"), (-100, 500) if id == "schimmelfennig" else (100, 350), h=290, kmh=3)
+# Grover's bayonet charge at three into the gap between Thomas's and Gregg's brigades
+mv("grover", B("15:00"), B("15:10"), gp(820, 20), h=NW(820), state="charge", moving="charge")
+mv("grover", B("15:10"), B("15:15"), gp(820, -80), h=NW(820), state="firing", moving="charge")
+fight("grover", B("15:15"), B("15:30"), 1013)
+mv("grover", B("15:30"), B("15:50"), gp(820, 450), h=NW(820), moving="retreat")
+fight("gregg", B("15:10"), B("15:35"), lose("gregg", 150), h=SE(820) + 60)
+mv("pender", B("15:12"), B("15:22"), gp(850, -180), h=SE(850), state="firing", moving="charge")
+fight("pender", B("15:22"), B("15:40"), lose("pender", 150)); fight("thomas", B("15:10"), B("15:35"), lose("thomas", 150))
+mv("pender", B("15:45"), B("16:05"), gp(950, -380), h=SE(950))
+# About four Hays's brigade and then Early come up on Gregg's left by Sudley Church
+walk("hays", B("15:40"), gp(1500, -420), gp(150, -60), h=SE(150), kmh=4)
+walk("early", B("16:00"), gp(1500, -450), gp(400, -450), h=SE(400), kmh=4)
+# Kearny at five on Jackson's far left; Gregg is badly hit; Branch and Early stop him and drive him back
+for id, s, t0 in (("robinson", 560, "17:00"), ("birney", 280, "17:00")):
+    mv(id, B(t0), B("17:12"), gp(s, 20), h=NW(s), state="charge", moving="charge")
+    mv(id, B("17:12"), B("17:20"), gp(s, -110), h=NW(s), state="firing", moving="charge")
+    fight(id, B("17:20"), B("17:35"), lose(id, 300))
+    mv(id, B("17:35"), B("18:00"), gp(s, 380), h=NW(s), moving="retreat")
+mv("birney", B("18:00"), B("18:20"), (-520, 2120), h=250)
+fight("gregg", B("17:10"), B("17:35"), lose("gregg", 300)); fight("hays", B("17:10"), B("17:35"), lose("hays", 150))
+mv("branch", B("17:20"), B("17:32"), gp(450, -130), h=SE(450), state="firing", moving="charge")
+mv("early", B("17:20"), B("17:35"), gp(250, -130), h=SE(250), state="firing", moving="charge")
+mv("early", B("17:40"), B("17:55"), gp(250, 60), h=SE(250), state="firing", moving="charge")
+fight("branch", B("17:32"), B("17:50"), lose("branch", 120)); fight("early", B("17:55"), B("18:10"), lose("early", 100))
+mv("early", B("18:10"), B("18:30"), gp(250, -100), h=SE(250)); mv("branch", B("18:00"), B("18:20"), gp(350, -350), h=SE(350))
+# Schenck and Reynolds draw back from the Groveton woods in the afternoon; King's division comes back up the Sudley road
+for id, end in (("stahel", (-650, -450)), ("mclean", (-450, -700)), ("meade", (-950, -700)), ("seymour", (-750, -900)), ("hardin", (-1050, -500))):
+    walk(id, B("16:00"), end, h=270, kmh=3)
+for n, (id, end) in enumerate((("hatch", (150, 200)), ("patrick", (50, 330)), ("doubleday", (300, 330)), ("gibbon", (480, 260)), ("b4us", (380, 160)))):
+    show(id, plus(B("14:00"), n * 10), SOUTH_IN, 0)
+    walk(id, plus(B("14:00"), n * 10), *sudley(SOUTH_IN, (330, 0)), end, h=280, kmh=3)
+# Sunset: Hood's reconnaissance east along the pike meets Hatch's division coming west near Groveton about seven
+for id, end, t0 in (("hatch", PIKE_AT(-1420), "18:25"), ("doubleday", PIKE_AT(-1150), "18:30"), ("patrick", PIKE_AT(-950), "18:35")):
+    walk(id, B(t0), *pike(STONE_X, end), h=260, state="line", kmh=4)
+mv("hood", B("18:30"), B("19:00"), (-1650, -700), h=70, state="firing", moving="line")
+mv("law", B("18:30"), B("19:00"), (-1700, -480), h=70, state="firing", moving="line")
+mv("evans", B("18:35"), B("19:05"), (-2000, -850), h=70)
+fight("hatch", B("19:00"), B("19:35"), lose("hatch", 250), h=250); fight("doubleday", B("19:05"), B("19:35"), lose("doubleday", 120), h=250)
+fight("hood", B("19:00"), B("19:35"), lose("hood", 150)); fight("law", B("19:00"), B("19:35"), lose("law", 120))
+for id, end in (("hatch", (-150, -100)), ("doubleday", (50, -50)), ("patrick", (-100, 100))):
+    mv(id, B("19:35"), B("20:05"), *pike(last(id), PIKE_AT(end[0])), h=280, moving="retreat")
+for id, (end, h) in (("hood", ((-2650, -1120), 70)), ("law", ((-2700, -770), 70)), ("evans", ((-2950, -1200), 70))):
+    walk(id, B("22:30"), end, h=h, kmh=2)
+
+# The night of the 29th: Ricketts up the Sudley road; R. H. Anderson's division in by the pike at three, alone east of Groveton
+for n, (id, end) in enumerate((("duryee", (-320, 700)), ("tower", (-160, 580)), ("stiles", (-60, 430)), ("thoburn", (-380, 480)), ("leppien", (-220, 380)))):
+    show(id, plus(B("21:00"), n * 10), SOUTH_IN, 0)
+    walk(id, plus(B("21:00"), n * 10), *sudley(SOUTH_IN, (289, 36)), (0, 200), end, h=290, kmh=3)
+for n, (id, x) in enumerate((("armistead", -1450), ("mahone", -1330), ("wright", -1210))):
+    show(id, plus(C("01:55"), n * 8), WEST_IN, 70); walk(id, plus(C("01:55"), n * 8), *pike(WEST_IN, PIKE_AT(x)), state="column", kmh=3)
+for n, (id, end) in enumerate((("armistead", (-3250, -1350)), ("mahone", (-3400, -1500)), ("wright", (-3550, -1650)))):
+    walk(id, plus(C("05:00"), n * 6), *pike(last(id), PIKE_AT(-3100)), end, h=70, kmh=3)
+show("walton", C("04:00"), WEST_IN, 70); walk("walton", C("04:00"), *pike(WEST_IN, PIKE_AT(-3000)), (-3000, -1300), h=70, kmh=3)
+# Porter's corps from Manassas at dawn, to the ground behind Henry Hill
+for n, (id, end) in enumerate((("roberts", (480, -300)), ("weeks", (650, -450)), ("berdan", (400, -120)), ("hazlett", (300, -250)),
+                               ("buchanan", (820, -700)), ("chapman", (900, -880)), ("warren", (700, -950)))):
+    show(id, plus(C("05:30"), n * 10), SOUTH_IN, 0)
+    walk(id, plus(C("05:30"), n * 10), *sudley(SOUTH_IN, (700, -1200)), end, h=290, kmh=3)
+show("piatt", C("07:00"), EAST_IN, 270); walk("piatt", C("07:00"), *pike(EAST_IN, (1000, 300)), (950, -150), h=270, kmh=3)
+
+# ---- 30 August: the morning probes; Porter's attack at three ----
+mv("stevens", C("10:00"), C("10:40"), (-700, 1050), h=300); mv("stevens", C("11:30"), C("12:10"), (100, 800), h=290)
+for id, s in (("duryee", 1500), ("thoburn", 1300)):
+    walk(id, C("10:00"), gp(s, 420), h=NW(s), kmh=3)
+    mv(id, C("11:00"), C("11:10"), gp(s, 40), h=NW(s), state="firing", moving="charge")
+    fight(id, C("11:10"), C("11:25"), lose(id, 150))
+    mv(id, C("11:25"), C("11:45"), gp(s, 500), h=NW(s), moving="retreat")
+    walk(id, C("12:00"), (-320, 700) if id == "duryee" else (-380, 480), h=290, kmh=3)
+fight("trimble", C("11:05"), C("11:25"), lose("trimble", 60)); fight("field", C("11:05"), C("11:25"), lose("field", 40), h=SE(1300))
+# Reynolds to Chinn Ridge with McLean; then McDowell takes him across the pike, leaving McLean and Warren south of it
+for id, end in (("meade", (-350, -800)), ("seymour", (-250, -1050)), ("hardin", (150, -1150))): walk(id, C("12:20"), end, h=270, kmh=3)
+walk("mclean", C("12:40"), P['chinn_ridge'], h=270, kmh=3)
+for id, end in (("meade", (-750, -80)), ("seymour", (-550, 20)), ("hardin", (-350, -150))): walk(id, C("13:40"), *pike(PIKE_AT(last(id)[0]), PIKE_AT(end[0])), end, h=290, kmh=3)
+walk("sdlee", C("11:30"), (-2800, -320), h=75, kmh=3)
+# Porter forms in the Groveton woods and north of the pike: Weeks and Roberts left and centre, Hatch's division right
+FORM = (("weeks", 2750, 560), ("roberts", 2480, 560), ("hatch", 2150, 280), ("patrick", 1900, 300), ("doubleday", 2050, 620), ("gibbon", 1800, 650))
+for id, s, off in FORM: walk(id, C("13:00"), *pike(PIKE_AT(last(id)[0]), PIKE_AT(gp(s, off)[0])), gp(s, off), h=NW(s), kmh=2.5)
+walk("berdan", C("13:10"), *pike(PIKE_AT(last("berdan")[0]), PIKE_AT(-1700)), gp(2600, 300), h=NW(2600), state="skirmish", kmh=3)
+for id, end in (("buchanan", (-1150, -260)), ("chapman", (-950, -200))): walk(id, C("13:00"), *pike(PIKE_AT(last(id)[0]), PIKE_AT(end[0])), end, h=300, kmh=3)
+walk("warren", C("13:20"), *pike(PIKE_AT(last("warren")[0]), LEWIS_LANE[0]), P['ny5'], h=250, kmh=3)
+walk("hazlett", C("13:20"), *pike(PIKE_AT(last("hazlett")[0]), LEWIS_LANE[0]), (LEWIS_LANE[0][0], LEWIS_LANE[0][1] - 90), h=260, kmh=3)
+walk("b4us", C("13:00"), (-1250, -250), h=300, kmh=3)
+fight("berdan", C("14:30"), C("15:00"), lose("berdan", 40))
+for id in ("dogan_guns", "b4us"): fight(id, C("14:30"), C("16:00"), lose(id, 20))
+for id, s, off in FORM[:4]:
+    mv(id, C("15:00"), C("15:12"), gp(s, 40), h=NW(s), state="firing", moving="charge")
+    fight(id, C("15:12"), C("15:35"), lose(id, 450 if id in ("weeks", "roberts") else 350))
+    mv(id, C("15:35"), C("15:55"), gp(s, 750), h=NW(s), moving="retreat"); stand(id, C("16:00"), state="line")
+mv("berdan", C("15:00"), C("15:15"), gp(2600, 650), h=NW(2600), moving="retreat")
+for id in ("stafford", "jones_bj", "stonewall", "taliaferro_ag"): fight(id, C("15:05"), C("15:40"), lose(id, 250))
+fight("sdlee", C("15:00"), C("15:50"), lose("sdlee", 20), h=60); fight("jguns", C("15:00"), C("15:50"), lose("jguns", 20), h=120)
+mv("lawton", C("15:10"), C("15:30"), gp(2200, -160), h=SE(2200), state="firing"); fight("lawton", C("15:30"), C("15:45"), lose("lawton", 60))
+mv("field", C("15:05"), C("15:35"), gp(2000, -200), h=SE(2000), state="firing"); fight("field", C("15:35"), C("15:50"), lose("field", 40))
+
+# ---- Longstreet's counterattack: Hood overruns Warren at four ----
+mv("hood", C("15:20"), C("15:50"), (-1950, -880), h=90, moving="line"); mv("law", C("15:20"), C("15:50"), (-1950, -620), h=80, moving="line")
+mv("evans", C("15:25"), C("15:55"), (-2150, -1000), h=90, moving="line")
+mv("hood", C("16:00"), C("16:08"), (P['ny5'][0] - 90, P['ny5'][1]), h=90, state="firing", moving="charge")
+fight("warren", C("16:00"), C("16:10"), 588, h=250)
+mv("warren", C("16:10"), C("16:35"), (350, -700), h=90, state="line", moving="rout")
+mv("hazlett", C("16:08"), C("16:25"), (300, -300), h=90, moving="retreat")
+mv("law", C("16:00"), C("16:12"), (LEWIS_LANE[0][0] - 100, LEWIS_LANE[0][1] - 40), h=80, state="firing", moving="charge")
+fight("hood", C("16:08"), C("16:15"), lose("hood", 150)); fight("law", C("16:12"), C("16:20"), lose("law", 80))
+mv("hood", C("16:15"), C("16:45"), (P['texas_mon'][0] - 120, P['texas_mon'][1] + 30), h=95, state="firing", moving="charge")
+mv("law", C("16:20"), C("16:55"), (-450, -520), h=110, state="firing", moving="line")
+mv("evans", C("16:00"), C("16:35"), (-700, -720), h=100, moving="line")
+# McLean's Ohioans at the fence line on Chinn Ridge; Corse's Virginians and Evans's charge on his flank; Hardin shattered
+fight("mclean", C("16:25"), C("17:00"), 800, h=270)
+for id, end, t0, t1 in (("corse", (-500, -1050), "15:50", "16:30"), ("jenkins", (-480, -1330), "15:55", "16:50"), ("hunton", (-430, -1560), "16:00", "16:55")):
+    mv(id, C(t0), C(t1), end, h=75, state="firing", moving="line")
+fight("corse", C("16:30"), C("17:10"), lose("corse", 300)); fight("jenkins", C("16:50"), C("17:50"), lose("jenkins", 250)); fight("hunton", C("16:55"), C("17:50"), lose("hunton", 200))
+mv("evans", C("16:40"), C("16:50"), (-350, -800), h=150, state="firing", moving="charge")
+mv("evans", C("16:50"), C("17:10"), (-750, -700), h=150, moving="retreat", strength=lose("evans", 200))
+walk("hardin", C("16:00"), (150, -1150), h=260, kmh=4)
+fight("hardin", C("16:30"), C("16:55"), 900); mv("hardin", C("16:55"), C("17:20"), (850, -950), h=80, moving="rout")
+fight("hood", C("16:45"), C("17:40"), lose("hood", 330))
+mv("mclean", C("17:00"), C("17:25"), (750, -650), h=90, moving="retreat")
+# Ricketts and Sigel's men south over Young's Branch and up the ridge: Tower, Stiles, Koltes, Stahel; the 5th Maine
+for id, end, t0 in (("tower", (-120, -820), "16:30"), ("stiles", (-60, -700), "16:35"), ("leppien", (-150, -930), "16:30"),
+                    ("koltes", (-300, -760), "16:20"), ("stahel", (-200, -620), "16:25")):
+    walk(id, C(t0), end, h=260, state="firing", kmh=4.5)
+for id, n in (("tower", 400), ("stiles", 350), ("koltes", 400), ("stahel", 350)): fight(id, KEYS[id][-1]["t"], C("17:50"), lose(id, n))
+fight("leppien", C("17:30"), C("18:00"), 20)
+for id, end in (("tower", (700, -450)), ("stiles", (650, -250)), ("koltes", (900, -350)), ("stahel", (950, -200))):
+    mv(id, C("17:50"), C("18:15"), end, h=80, moving="retreat")
+mv("leppien", C("18:00"), C("18:20"), (750, -150), h=80, moving="retreat")
+# About five Lee sends Dick Anderson's three brigades and part of Wilcox's division from the Brawner farm to Chinn Ridge
+for id, end, t0 in (("armistead", (-350, -1000), "17:00"), ("mahone", (-250, -1250), "17:05"), ("wright", (-150, -1450), "17:10"), ("wilcox", (-650, -780), "17:00")):
+    walk(id, C(t0), end, h=90, kmh=3.6)
+for id, end in (("mahone", (420, -1150)), ("wright", (480, -1350))):
+    mv(id, C("18:15"), C("18:45"), end, h=60, state="firing", moving="line"); fight(id, C("18:45"), C("19:20"), lose(id, 250))
+# Benning's and G. T. Anderson's Georgians against Henry Hill; Milroy in the Sudley road's bed; the 15th Georgia breaks him
+for id, mid, end in (("benning", (-200, -1250), (380, -780)), ("gtanderson", (-100, -1500), (430, -1080))):
+    walk(id, C("16:05"), (-1600, -2000), mid, h=70, kmh=3.6)
+    mv(id, C("17:40"), C("17:55"), end, h=70, state="firing", moving="charge")
+walk("drayton", C("16:10"), (-1300, -2100), h=60, kmh=3)
+# Pope's line on Henry Hill: Reynolds's Reserves and Sykes's regulars, Milroy in front in the road's cut
+for id, end, t0 in (("buchanan", (620, -430), "16:40"), ("chapman", (660, -660), "16:45"), ("meade", (720, -900), "16:50"), ("seymour", (780, -1120), "16:55")):
+    walk(id, C(t0), *pike(PIKE_AT(last(id)[0]), STONE_X), end, h=255, kmh=4.5)
+walk("milroy", C("17:10"), *pike(PIKE_AT(last("milroy")[0]), STONE_X), *sudley(STONE_X, (520, -650)), h=250, kmh=4.5)
+walk("piatt", C("17:00"), (980, -700), h=260, kmh=3)
+for id in ("buchanan", "chapman", "meade", "seymour"): fight(id, C("17:55"), C("19:00"), lose(id, 250))
+fight("milroy", C("17:55"), C("18:30"), lose("milroy", 300))
+mv("milroy", C("18:30"), C("18:50"), (850, -500), h=80, moving="retreat")
+fight("benning", C("17:55"), C("18:40"), lose("benning", 300)); fight("gtanderson", C("17:55"), C("18:40"), lose("gtanderson", 300))
+for id, end in (("benning", (60, -900)), ("gtanderson", (120, -1250))): mv(id, C("18:40"), C("19:05"), end, h=70, moving="retreat")
+
+# ---- six o'clock: Jackson comes down off the railroad; the Union right goes back to the Sudley road ----
+for id, end, t0 in (("taliaferro_ag", (-1400, -350), "18:00"), ("stonewall", (-1250, -150), "18:00"), ("jones_bj", (-1100, 50), "18:00"), ("stafford", (-950, 250), "18:00"),
+                    ("lawton", (-850, 450), "18:05"), ("trimble", (-750, 650), "18:05"), ("hays", (-650, 1100), "18:10"), ("early", (-600, 1350), "18:10"),
+                    ("thomas", (-750, 850), "18:05"), ("pender", (-650, 1550), "18:10"), ("field", (-1000, 650), "18:05"), ("archer", (-800, 1750), "18:15"),
+                    ("jguns", (-1650, -350), "18:20"), ("eguns", (-1300, 300), "18:20"), ("hguns", (-1050, 1300), "18:20")):
+    mv(id, C(t0), plus(C(t0), 50), end, h=100, state="firing", moving="line")
+UNION_RIGHT = (("dogan_guns", (350, 250)), ("b4us", (450, 150)), ("weeks", (200, 350)), ("roberts", (250, 500)), ("hatch", (150, 650)), ("patrick", (200, 800)),
+               ("doubleday", (300, 950)), ("gibbon", (350, 1100)), ("duryee", (100, 1000)), ("thoburn", (50, 1200)), ("schimmelfennig", (-50, 1050)),
+               ("krzyzanowski", (250, 1250)), ("stevens", (150, 1400)), ("nagle", (300, 1550)), ("ferrero", (-100, 1550)), ("grover", (-150, 1350)),
+               ("taylor", (0, 1650)), ("carr", (200, 1750)), ("robinson", (-250, 1800)), ("birney", (-300, 2000)), ("poe", (-100, 1900)))
+for id, end in UNION_RIGHT:
+    mv(id, C("18:05"), C("18:50"), end, h=270, moving="retreat")
+for id in ("taliaferro_ag", "stonewall", "jones_bj", "stafford", "lawton", "trimble", "thomas", "field"): stand(id, C("19:10"), state="line")
+for id in ("hood", "corse", "jenkins", "hunton", "armistead", "wilcox", "evans", "law"): stand(id, C("18:00"), state="line")
+
+# ---- seven: Lewis Ford. Robertson's cavalry round the south end; Buford meets it for ten minutes ----
+walk("robertson", C("17:40"), (-1500, -3200), (1200, -2500), (2700, -1950), h=90, kmh=9)
+show("buford", C("18:20"), (4480, -900), 240); walk("buford", C("18:20"), (3300, -1900), (2950, -1960), h=270, kmh=9)
+mv("robertson", C("19:00"), C("19:03"), (2850, -1950), h=90, state="firing", moving="charge")
+fight("robertson", C("19:03"), C("19:12"), lose("robertson", 100)); fight("buford", C("19:00"), C("19:12"), lose("buford", 150), h=270)
+mv("buford", C("19:12"), C("19:35"), (3300, -1900), (3700, -1650), h=60, moving="retreat")
+mv("robertson", C("19:20"), C("19:50"), (2200, -1900), h=250)
+
+# ---- eight: Pope orders the retreat to Centreville, by the Stone Bridge and the turnpike, and by Lewis Ford ----
+SOUTHERN = ("hardin", "seymour", "meade", "piatt", "chapman", "warren", "mclean", "milroy")
+order = [id for id, end in UNION_RIGHT] + ["berdan", "hazlett", "stiles", "tower", "leppien", "koltes", "stahel", "buchanan"]
+for n, id in enumerate(order):
+    p = last(id); way = sudley(p, STONE_X) + pike(STONE_X, EAST_IN) if p[1] > 300 else pike(PIKE_AT(max(-90, min(1500, p[0]))), EAST_IN)
+    hide(id, plus(walk(id, plus(C("20:00"), n * 3), *way, kmh=4), 1))
+for n, id in enumerate(SOUTHERN):
+    t0 = plus(C("20:10"), n * 6)
+    hide(id, plus(walk(id, t0, (1600, -1500), (LEWIS_FORD[0] - 100, LEWIS_FORD[1] + 30), (LEWIS_FORD[0] + 100, LEWIS_FORD[1] - 10), (4450, -1700), kmh=3.5), 1))
+hide("buford", plus(walk("buford", C("20:30"), (4450, -1500), kmh=6), 1))
 
 for id in KEYS:
     if sec(KEYS[id][-1]["t"]) < sec(END): keys(id, [K(END, last(id))])
