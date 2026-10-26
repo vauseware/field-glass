@@ -119,6 +119,13 @@
   "runtime": 1000
  },
  {
+  "id": "belleau-wood",
+  "name": "Belleau Wood, 1–26 Jun 1918",
+  "date": "1918-06-01",
+  "war": "World War I",
+  "runtime": 1978
+ },
+ {
   "id": "sidi-bou-zid",
   "name": "Sidi Bou Zid, 14–17 Feb 1943",
   "date": "1943-02-14",
