@@ -198,17 +198,17 @@ features = [
     dict(type="creek", name="Chinn Branch", pts=L['chinn_br'], **label_on(L['chinn_br'][3], L['chinn_br'][4], -50)),
     dict(type="creek", name="Little Bull Run", pts=L['little_bull'], **label_on(L['little_bull'][3], L['little_bull'][5], 60)),
     dict(type="creek", name="Holkums Branch", pts=L['holkums']),
-    dict(type="road", name="Warrenton Turnpike", pts=PIKE, **label_on(PIKE[1], PIKE[2], -60)),
+    dict(type="road", name="Warrenton Turnpike", pts=PIKE, **label_on(PIKE[7], PIKE[8], -60)),
     dict(type="road", name="Manassas-Sudley road", pts=SUDLEY_RD, **label_on(SUDLEY_RD[11], SUDLEY_RD[12], 60)),
     dict(type="road", name="Groveton-Sudley road", pts=L['featherbed'], **label_on(L['featherbed'][1], L['featherbed'][2], -50)),
     dict(type="road", name="road to Manassas", pts=L['groveton_rd'], **label_on(L['groveton_rd'][3], L['groveton_rd'][4], -50)),
     dict(type="road", name="Pageland Lane", pts=L['pageland'], **label_on(L['pageland'][11], L['pageland'][12], -50)),
     dict(type="road", name="Lewis Lane (about here)", pts=LEWIS_LANE, **label_on(LEWIS_LANE[0], LEWIS_LANE[1], -45)),
     dict(type="works", name="the unfinished railroad", pts=RR_IN, **label_on(gp(1300), gp(1500), -80)),
-    lab("Brawner farm", 'brawner', 0, -90), lab("Dogan house", 'dogan', -90, 80), lab("Groveton", 'groveton', 170, -190),
+    lab("Brawner farm", 'brawner', 260, -60), lab("Dogan house", 'dogan', -90, 80), lab("Groveton", 'groveton', 170, -190),
     dict(name="the Deep Cut", at=[DEEP_CUT[0] + 140, DEEP_CUT[1] - 60]), dict(name="the Dump", at=[DUMP[0] + 120, DUMP[1] - 40]),
     lab("Stony Ridge", 'stony_guns', -150, 200), lab("Battery Heights", 'battery_heights', 0, -70),
-    lab("Chinn Ridge", 'chinn_ridge', 160, 0), lab("Chinn house (ruins)", 'chinn_house', 0, -80), lab("Bald Hill", 'bald_hill', 120, -60),
+    lab("Chinn Ridge", 'chinn_ridge', 0, -220), lab("Chinn house (ruins)", 'chinn_house', 0, -80), lab("Bald Hill", 'bald_hill', 120, -60),
     lab("Henry house (ruins)", 'henry_house', 60, 70), lab("Henry Hill", 'henry_hill', 150, -40), lab("Robinson house (ruins)", 'robinson', 60, 70),
     lab("Stone House", 'stone_house', 130, -50), lab("Buck Hill", 'buck_hill', 230, 60), lab("Matthews Hill", 'matthews_hill', -330, 90),
     lab("Sudley Church", 'sudley_church', -170, 40), lab("Sudley Springs Ford", 'sudley_ford', 60, 100),
@@ -234,7 +234,7 @@ OOB = [
     ("milroy", "union", "Milroy", "Milroy's independent brigade: 82nd Ohio, 2nd, 3rd, 5th West Virginia", "Brig. Gen. Robert Milroy", "infantry", 1800, {}),
     ("dogan_guns", "union", "Union guns", "The Union guns on Dogan Ridge: Sigel's on the 29th, 28 pieces under Porter on the 30th", "", "artillery", 500, dict(guns=5)),
     # III Corps (McDowell): King's division, then Hatch's
-    ("hatch", "union", "Hatch", "Hatch's brigade, Sullivan's once Hatch had the division: 22nd, 24th, 30th, 84th New York (14th Brooklyn), 2nd U.S. Sharpshooters", "Brig. Gen. John Hatch, then Col. Timothy Sullivan", "infantry", 1800, {}),
+    ("hatch", "union", "Hatch", "Hatch's brigade, Sullivan's once Hatch had the division: 22nd, 24th, 30th, 84th New York (14th Brooklyn), 2nd U.S. Sharpshooters", "Brig. Gen. John Hatch, then Col. Sullivan", "infantry", 1800, {}),
     ("doubleday", "union", "Doubleday", "Doubleday's brigade (King's division): 76th, 95th New York, 56th Pennsylvania", "Brig. Gen. Abner Doubleday", "infantry", 1200, {}),
     ("patrick", "union", "Patrick", "Patrick's brigade (King's division): 21st, 23rd, 35th, 80th New York", "Brig. Gen. Marsena Patrick", "infantry", 1500, {}),
     ("gibbon", "union", "Gibbon", "Gibbon's brigade, the Black Hats: 19th Indiana, 2nd, 6th, 7th Wisconsin", "Brig. Gen. John Gibbon", "infantry", 2100, {}),
@@ -242,26 +242,26 @@ OOB = [
     # Ricketts's division
     ("duryee", "union", "Duryée", "Duryée's brigade (Ricketts's division): 97th, 104th, 105th New York, 107th Pennsylvania", "Brig. Gen. Abram Duryée", "infantry", 1250, {}),
     ("tower", "union", "Tower", "Tower's brigade (Ricketts's division): 26th, 94th New York, 88th, 90th Pennsylvania", "Brig. Gen. Zealous Tower (wounded)", "infantry", 1250, {}),
-    ("stiles", "union", "Stiles", "Hartsuff's brigade under Stiles (Ricketts's division): 12th, 13th Massachusetts, 83rd New York, 11th Pennsylvania", "Col. John Stiles", "infantry", 1250, {}),
-    ("thoburn", "union", "Thoburn", "Thoburn's brigade (Ricketts's division): 7th Indiana, 84th, 110th Pennsylvania, 1st West Virginia", "Col. Joseph Thoburn (wounded)", "infantry", 1250, {}),
-    ("leppien", "union", "5th Maine Battery", "5th Maine Battery, five guns", "Capt. George Leppien", "artillery", 100, dict(guns=1)),
+    ("stiles", "union", "Stiles", "Hartsuff's brigade under Stiles (Ricketts's division): 12th, 13th Massachusetts, 83rd New York, 11th Pennsylvania", "Col. Stiles", "infantry", 1250, {}),
+    ("thoburn", "union", "Thoburn", "Thoburn's brigade (Ricketts's division): 7th Indiana, 84th, 110th Pennsylvania, 1st West Virginia", "Col. Thoburn (wounded)", "infantry", 1250, {}),
+    ("leppien", "union", "5th Maine Battery", "5th Maine Battery, five guns", "Capt. Leppien", "artillery", 100, dict(guns=1)),
     # the Pennsylvania Reserves (Reynolds)
     ("meade", "union", "Meade", "Meade's brigade of Pennsylvania Reserves: 3rd, 4th, 7th, 8th, 13th", "Brig. Gen. George Meade", "infantry", 1500, {}),
     ("seymour", "union", "Seymour", "Seymour's brigade of Pennsylvania Reserves: 1st, 2nd, 5th, 6th", "Brig. Gen. Truman Seymour", "infantry", 1500, {}),
-    ("hardin", "union", "Hardin", "C. F. Jackson's brigade of Pennsylvania Reserves under Hardin: 9th, 10th, 11th, 12th", "Col. Martin Hardin", "infantry", 1500, {}),
+    ("hardin", "union", "Hardin", "C. F. Jackson's brigade of Pennsylvania Reserves under Hardin: 9th, 10th, 11th, 12th", "Col. Hardin", "infantry", 1500, {}),
     ("piatt", "union", "Piatt", "Piatt's brigade (Sturgis's reserve): 63rd Indiana (four companies), 86th New York", "Brig. Gen. Abram Piatt", "infantry", 800, {}),
     # Army of the Potomac, III Corps (Heintzelman)
     ("robinson", "union", "Robinson", "Robinson's brigade (Kearny's division): 20th Indiana, 30th Ohio (six companies), 63rd, 105th Pennsylvania", "Brig. Gen. John Robinson", "infantry", 1500, {}),
     ("birney", "union", "Birney", "Birney's brigade (Kearny's division): 3rd, 4th Maine, 1st, 38th, 40th, 101st New York, 57th Pennsylvania", "Brig. Gen. David Birney", "infantry", 1800, {}),
     ("poe", "union", "Poe", "Poe's brigade (Kearny's division): 2nd, 3rd, 5th Michigan, 37th New York, 99th Pennsylvania", "Col. Orlando Poe", "infantry", 1500, {}),
     ("grover", "union", "Grover", "Grover's brigade (Hooker's division): 1st, 11th, 16th Massachusetts, 2nd New Hampshire, 26th Pennsylvania", "Brig. Gen. Cuvier Grover", "infantry", 1500, {}),
-    ("taylor", "union", "Excelsior", "Taylor's Excelsior Brigade (Hooker's division): 70th to 74th New York", "Col. Nelson Taylor", "infantry", 1500, {}),
+    ("taylor", "union", "Excelsior", "Taylor's Excelsior Brigade (Hooker's division): 70th to 74th New York", "Col. Taylor", "infantry", 1500, {}),
     ("carr", "union", "Carr", "Carr's brigade (Hooker's division): 5th to 8th New Jersey, 2nd New York, 115th Pennsylvania", "Brig. Gen. Joseph Carr", "infantry", 1800, {}),
     # V Corps (Porter)
-    ("roberts", "union", "Roberts", "Roberts's brigade (Butterfield's division): 2nd Maine, 18th Massachusetts, 1st Michigan, 13th, 25th New York", "Col. Charles Roberts", "infantry", 1800, {}),
-    ("weeks", "union", "Weeks", "Weeks's brigade (Butterfield's division): 16th Michigan, 12th, 17th, 44th New York, 83rd Pennsylvania", "Col. Henry Weeks", "infantry", 1800, {}),
+    ("roberts", "union", "Roberts", "Roberts's brigade (Butterfield's division): 2nd Maine, 18th Massachusetts, 1st Michigan, 13th, 25th New York", "Col. Roberts", "infantry", 1800, {}),
+    ("weeks", "union", "Weeks", "Weeks's brigade (Butterfield's division): 16th Michigan, 12th, 17th, 44th New York, 83rd Pennsylvania", "Col. Weeks", "infantry", 1800, {}),
     ("berdan", "union", "Berdan", "1st U.S. Sharpshooters", "Col. Hiram Berdan", "riflemen", 400, dict(loose=True)),
-    ("hazlett", "union", "Hazlett", "Battery D, 5th U.S. Artillery, six guns", "Lt. Charles Hazlett", "artillery", 100, dict(guns=1)),
+    ("hazlett", "union", "Hazlett", "Battery D, 5th U.S. Artillery, six guns", "Lt. Hazlett", "artillery", 100, dict(guns=1)),
     ("buchanan", "union", "Buchanan", "Buchanan's brigade of regulars (Sykes's division): 3rd, 4th, 12th, 14th U.S.", "Lt. Col. Robert Buchanan", "infantry", 1800, {}),
     ("chapman", "union", "Chapman", "Chapman's brigade of regulars (Sykes's division): 1st, 2nd, 6th, 10th, 11th, 17th U.S.", "Lt. Col. William Chapman", "infantry", 1800, {}),
     ("warren", "union", "Warren", "Warren's brigade (Sykes's division): the 5th and 10th New York", "Col. Gouverneur Warren", "infantry", 1000, {}),
@@ -294,7 +294,7 @@ OOB = [
     ("hood", "confederate", "Texas Brigade", "Hood's Texas Brigade: 1st, 4th, 5th Texas, 18th Georgia, Hampton's Legion", "Brig. Gen. John Bell Hood", "infantry", 2500, {}),
     ("law", "confederate", "Law", "Whiting's brigade under Law (Hood's division): 4th Alabama, 2nd, 11th Mississippi, 6th North Carolina", "Col. Evander Law", "infantry", 1700, {}),
     ("frobel", "confederate", "Frobel", "Hood's artillery: the Rowan, German and Palmetto batteries", "Maj. Bushrod Frobel", "artillery", 300, dict(guns=3)),
-    ("evans", "confederate", "Evans", "Evans's South Carolina brigade under Stevens: 17th, 18th, 22nd, 23rd South Carolina, Holcombe Legion", "Brig. Gen. Nathan Evans", "infantry", 1800, {}),
+    ("evans", "confederate", "Evans", "Evans's South Carolina brigade under Stevens: 17th, 18th, 22nd, 23rd South Carolina, Holcombe Legion", "Col. Stevens", "infantry", 1800, {}),
     ("corse", "confederate", "Corse", "Kemper's brigade under Corse (Kemper's division): 1st, 7th, 11th, 17th, 24th Virginia", "Col. Montgomery Corse (wounded)", "infantry", 1400, {}),
     ("jenkins", "confederate", "Jenkins", "Jenkins's South Carolina brigade (Kemper's division): 1st, 2nd, 5th, 6th South Carolina, 4th Battalion, Palmetto Sharpshooters", "Col. Micah Jenkins (wounded)", "infantry", 1900, {}),
     ("hunton", "confederate", "Hunton", "Pickett's brigade under Hunton (Kemper's division): 8th, 18th, 19th, 28th, 56th Virginia", "Col. Eppa Hunton", "infantry", 1500, {}),
@@ -405,7 +405,7 @@ TO_MANASSAS = L['groveton_rd'] + [SOUTH_EDGE]   # the Groveton-Manassas road fro
 FB = L['featherbed']; FB_GRADE = (-1650, 700)
 for n, (id, s, off) in enumerate((("lawton", 3150, -200), ("trimble", 2850, -200), ("early", 2550, -260), ("hays", 2300, -260), ("eguns", 2950, -450))):
     walk(id, A("05:30"), *pike(last(id), GROVETON_X), *along(FB, GROVETON_X, FB_GRADE), gp(2100, -350), gp(s, off), h=SE(s), kmh=3)
-for n, (id, s, off) in enumerate((("gregg", 450, -60), ("thomas", 1150, -60), ("branch", 350, -350), ("archer", 700, -330),
+for n, (id, s, off) in enumerate((("gregg", 450, -60), ("thomas", 1045, -60), ("branch", 350, -350), ("archer", 700, -330),
                                   ("pender", 950, -380), ("field", 1300, -350), ("hguns", 800, -200))):
     show(id, plus(A("08:00"), n * 12), EAST_IN, 270)
     walk(id, plus(A("08:00"), n * 12), *pike(EAST_IN, P['stone_house']), *sudley(P['stone_house'], (-560, 1800)), gp(s, off), h=SE(s), kmh=3)
@@ -488,19 +488,20 @@ for n, (id, end, h) in enumerate(LONG):
 
 # Hooker, Kearny and Reno from Centreville, over the Stone Bridge
 for n, (id, end, h) in enumerate((("robinson", gp(560, 300), NW(560)), ("birney", (-520, 2120), 250), ("poe", (-450, 1600), 290),
-                                  ("grover", gp(820, 420), NW(820)), ("taylor", (-500, 1150), 300), ("carr", (-380, 950), 300),
+                                  ("grover", gp(755, 420), NW(755)), ("taylor", (-500, 1150), 300), ("carr", (-380, 950), 300),
                                   ("stevens", (-150, 350), 290), ("nagle", (-200, 1000), 300), ("ferrero", (-100, 650), 300))):
     t0 = plus(B("10:00"), n * 12)
     show(id, t0, EAST_IN, 270)
     walk(id, t0, *pike(EAST_IN, P['stone_house']), *sudley(P['stone_house'], (-470, 1450) if end[1] > 1300 else (-265, 700)), end, h=h, kmh=3.5)
 for id in ("schimmelfennig", "krzyzanowski"): walk(id, B("13:30"), (-100, 500) if id == "schimmelfennig" else (100, 350), h=290, kmh=3)
-# Grover's bayonet charge at three into the gap between Thomas's and Gregg's brigades
-mv("grover", B("15:00"), B("15:10"), gp(820, 20), h=NW(820), state="charge", moving="charge")
-mv("grover", B("15:10"), B("15:15"), gp(820, -80), h=NW(820), state="firing", moving="charge")
+# Grover's bayonet charge at three into the 125-yard (115 m) gap between Thomas's and Gregg's brigades. The note sets the
+# break-in at the Dump, but also puts Gregg by Sudley Church, 2.3 km up the grade; the gap stays by Gregg.
+mv("grover", B("15:00"), B("15:10"), gp(755, 20), h=NW(755), state="charge", moving="charge")
+mv("grover", B("15:10"), B("15:15"), gp(755, -80), h=NW(755), state="firing", moving="charge")
 fight("grover", B("15:15"), B("15:30"), 1013)
-mv("grover", B("15:30"), B("15:50"), gp(820, 450), h=NW(820), moving="retreat")
-fight("gregg", B("15:10"), B("15:35"), lose("gregg", 150), h=SE(820) + 60); stand("gregg", B("15:45"), h=SE(450))
-mv("pender", B("15:12"), B("15:22"), gp(850, -180), h=SE(850), state="firing", moving="charge")
+mv("grover", B("15:30"), B("15:50"), gp(755, 450), h=NW(755), moving="retreat")
+fight("gregg", B("15:10"), B("15:35"), lose("gregg", 150), h=SE(755) + 60); stand("gregg", B("15:45"), h=SE(450))
+mv("pender", B("15:12"), B("15:22"), gp(770, -180), h=SE(770), state="firing", moving="charge")
 fight("pender", B("15:22"), B("15:40"), lose("pender", 150)); fight("thomas", B("15:10"), B("15:35"), lose("thomas", 150))
 mv("pender", B("15:45"), B("16:05"), gp(950, -380), h=SE(950))
 # About four Hays's brigade and then Early come up on Gregg's left by Sudley Church
@@ -602,7 +603,7 @@ mv("law", C("16:00"), C("16:12"), (LEWIS_LANE[0][0] - 100, LEWIS_LANE[0][1] - 12
 fight("hood", C("16:08"), C("16:15"), lose("hood", 150)); fight("law", C("16:12"), C("16:20"), lose("law", 80))
 mv("hood", C("16:15"), C("16:45"), (-480, -870), h=95, state="firing", moving="charge")
 mv("law", C("16:20"), C("16:55"), (-450, -520), h=110, state="firing", moving="line")
-mv("evans", C("16:00"), C("16:35"), (-700, -720), h=100, moving="line")
+mv("evans", C("16:00"), C("16:35"), (-850, -1000), h=100, moving="line")  # behind Hood's right, clear of his line
 # McLean's Ohioans at the fence line on Chinn Ridge; Corse's Virginians and Evans's charge on his flank; Hardin shattered
 fight("mclean", C("16:25"), C("17:00"), 800, h=270)
 for id, end, t0, t1 in (("corse", (-500, -1050), "15:50", "16:30"), ("jenkins", (-480, -1330), "15:55", "16:50"), ("hunton", (-430, -1560), "16:00", "16:55")):
@@ -717,10 +718,10 @@ CHAPTERS = [
     (A("21:00"), "Back to the turnpike", "Both lines stood 'exposed to the discharges of musketry and artillery until about 9 o'clock,' Jackson reported. At nine Gibbon and Doubleday withdraw to the turnpike in good order. Of about 7,000 men engaged, nearly a third have fallen: about 1,150 Federals and 1,250 Confederates. Ewell and W. B. Taliaferro are wounded.", [-2400, -600], 1800, 300, "9 PM"),
     (B("00:00"), "King's division marches off", "At midnight King's division leaves the turnpike for Manassas. At daybreak Pope learns that Ricketts and King have gone south.", [-1900, -1400], 3500, 600, "midnight"),
     (B("07:00"), "Schurz finds Jackson", "Jackson's line runs about 3,000 yards along the unfinished railroad, from near the turnpike toward Sudley Church: his own division under Starke on the right, Ewell's under Lawton in the centre, A. P. Hill's on the left by the church, Gregg's and Thomas's brigades in front. About 20,000 men. Sigel's corps, fewer than 12,000, comes on. Schurz's division, north on the Sudley road, finds Jackson about seven and skirmishes with Gregg and Thomas in the woods south of the railroad; Milroy moves on the centre, Schenck and Reynolds west on the turnpike toward Groveton.", [-600, 1300], 3500, 120, "about 7 AM"),
-    (B("10:00"), "The 82nd Ohio at the Dump", "'About 10 o'clock the Federal artillery opened with spirit and animation upon our right,' Jackson reported. Sigel's offensive runs until ten, Schurz making a second assault on Hill's division. Milroy's two regiments are repulsed along the Groveton-Sudley road by Lawton, and part of the 82nd Ohio breaks briefly into the line near the Dump, a 75-yard low point in the grade. Schenck and Reynolds come under heavy artillery fire in the woods around Groveton.", [-1500, 500], 2800, 60, "about 10 AM"),
+    (B("10:00"), "The 82nd Ohio at the Dump", "'In the morning, about 10 o'clock, the Federal artillery opened with spirit and animation upon our right,' Jackson reported. Sigel's offensive runs until ten, Schurz making a second assault on Hill's division. Milroy's two regiments are repulsed along the Groveton-Sudley road by Lawton, and part of the 82nd Ohio breaks briefly into the line near the Dump, a 75-yard low point in the grade. Schenck and Reynolds come under heavy artillery fire in the woods around Groveton.", [-1500, 500], 2800, 60, "about 10 AM"),
     (B("11:00"), "Longstreet from Gainesville", "Late in the morning Lee arrives with Longstreet's wing, 25,000 men in five divisions, on the march from Thoroughfare Gap since six. Hood's division forms astride the turnpike at the Brawner farm, Kemper's on its right, D. R. Jones's out toward the Manassas Gap Railroad, Wilcox's behind Hood. Lee makes his headquarters on Stuart's Hill.", [-3200, -1700], 3600, 120, "late in the morning"),
     (B("13:00"), "Pope on the field", "Pope reaches the field at one. Hooker's division and Stevens's come up to reinforce Sigel, and Kearny's and Reno's divisions come up as well. About two, by Jackson's report, 'the Federal infantry in large force advanced to the attack of our left.'", [-300, 900], 3500, 120, "1 PM"),
-    (B("15:00"), "Grover's bayonet charge", "About three Cuvier Grover's brigade, five regiments and about 1,500 men, attacks with bayonets fixed along a front about a quarter mile wide, into the 125-yard gap between Thomas's and Gregg's brigades. Gregg's regiments strike its flank and Pender's brigade its front, and within 30 minutes Grover's men fall back. The brigade loses 487.", list(gp(820, 150)), 1400, 60, "about 3 PM"),
+    (B("15:00"), "Grover's bayonet charge", "About three Cuvier Grover's brigade, five regiments and about 1,500 men, attacks with bayonets fixed along a front about a quarter mile wide, into the 125-yard gap between Thomas's and Gregg's brigades. Gregg's regiments strike its flank and Pender's brigade its front, and within 30 minutes Grover's men fall back. The brigade loses 487.", list(gp(755, 150)), 1400, 60, "about 3 PM"),
     (B("17:00"), "Kearny at Sudley", "About four Hays's brigade, under Forno, came to help Gregg, and Early's came up to relieve him. At five Phil Kearny attacks Hill's Light Division with nearly 3,000 men and breaks through the unfinished railroad. Gregg's brigade is badly hit, and Branch's North Carolinians and Jubal Early's troops stop and push back the attack; Early 'drove them from the wood and railroad cut.' Hill reports six separate and distinct assaults met and repulsed today.", list(gp(380, 0)), 1500, 60, "5 PM"),
     (B("19:00"), "Hood and Hatch at dusk", "At sunset Hood's brigades, parts of Wilcox's and Kemper's divisions behind them, go forward south of the turnpike in a reconnaissance in force. About seven they meet Hatch's division, King's under Hatch, near Groveton, in a brief, violent clash in the dark, and the Union troops fall back. At half past four Pope sent Porter an explicit order; it was delivered at half past six. Porter's corps stands at Dawkins Branch, off this map to the south-west.", [-1500, -550], 2000, 60, "7 PM"),
     (B("20:50"), "The night of the 29th", "At ten to nine Pope orders Fitz John Porter to join the army by morning. In the dark Hood draws back to the Brawner farm.", [-1500, -400], 5000, 600, "8:50 PM"),
@@ -729,7 +730,7 @@ CHAPTERS = [
     (C("11:00"), "Ricketts is repulsed", "At ten Ricketts, Stevens and Reynolds reconnoitre and find Jackson's men still firmly in position. Late in the morning Ricketts attacks and is repulsed by Jackson's line.", list(gp(1400, 300)), 2400, 120, "late in the morning"),
     (C("13:00"), "Pope orders the attack", "Shortly after noon Pope orders Porter's corps, with Hatch and Reynolds in support, west along the turnpike; at one he orders Porter's two divisions and Hatch's to assault. Porter's corps, about 10,000 men, takes nearly two hours to form. Reynolds goes back to Chinn Ridge, where McLean's Ohio brigade reinforces him: about 8,000 Federals south of the turnpike against Longstreet's roughly 30,000. Eighteen guns, S. D. Lee's, are placed north-east of the Brawner farm to support Jackson's right.", [-1300, -350], 4000, 120, "1 PM"),
     (C("15:00"), "Porter at the Deep Cut", "Berdan's sharpshooters opened the fight at half past two and skirmished for nearly 30 minutes. At three Porter attacks: Weeks's and Roberts's brigades on the left and centre, Hatch's division on the right, Sykes's two regular brigades in reserve. Porter's men cross 600 yards of pasture, the last 150 rising sharply uphill; Hatch's, 300 yards. Starke's division holds the railroad: Stafford's Louisianians near the Dump, Bradley Johnson's Virginians at the Deep Cut, the Stonewall Brigade and Taliaferro's men on the right. S. D. Lee's guns fire into the Union ranks from the heights north of the Brawner farm, and Lawton's division and Field's Virginia brigade come up to finish the repulse. Baylor of the Stonewall Brigade is killed.", [-1950, 250], 1800, 30, "3 PM"),
-    (C("16:00"), "Hood overruns Warren", "McDowell has sent Reynolds across the turnpike, leaving about 2,200 men south of it, McLean's brigade and Warren's. At four Longstreet attacks. Hood's division, with the Texas Brigade and Evans's South Carolinians, leads on the left near the turnpike, Kemper's division on its right, D. R. Jones's brigades in support. Warren's two New York regiments, roughly 1,000 men beside Hazlett's six-gun battery on a knoll above Groveton, are overrun along Lewis Lane. The 5th New York loses almost 300 of its roughly 500 men in the first ten minutes.", [-1500, -900], 2400, 30, "4 PM"),
+    (C("16:00"), "Hood overruns Warren", "McDowell has sent Reynolds across the turnpike, leaving about 2,200 men south of it, McLean's brigade and Warren's. At four Longstreet attacks. Hood's division, with the Texas Brigade and Evans's South Carolinians, leads on the left near the turnpike, Kemper's division on its right, D. R. Jones's brigades in support. Warren's two New York regiments, roughly 1,000 men beside Hazlett's six-gun battery on a knoll above Groveton, are overrun along Lewis Lane. The 5th New York loses almost 300 of its roughly 500 men in the first ten minutes.", [-1500, -1000], 1200, 30, "4 PM"),
     (C("16:30"), "McLean on Chinn Ridge", "McLean's Ohio brigade, about 1,200 men, holds Chinn Ridge, 800 yards east of Warren's ground, until Corse's Virginia brigade attacks; heavy firing at the fence line lasts about ten minutes. Evans's charge on McLean's flank is repulsed. The Ohioans lose about a third and buy Pope roughly 30 minutes. McDowell orders Ricketts to disengage and reinforce the left on Chinn Ridge, and Hardin's brigade is shattered there.", [-250, -1000], 1800, 30, "4:30 PM"),
     (C("17:30"), "The 5th Maine's guns", "Ricketts's brigades come from north of the turnpike by the Stone House, over Young's Branch and up the ridge, Tower's leading, Stiles's behind, Koltes's and Stahel's with them. Tower's brigade covers Leppien's 5th Maine Battery, five guns; after a fight of about 30 minutes the Confederates take four. Tower is badly wounded, Koltes is killed, and Fletcher Webster of the 12th Massachusetts falls, mortally wounded. Hunton's and Jenkins's brigades fire into the Union line from the Chinn Branch swale. By about six Longstreet holds Chinn Ridge.", [-200, -950], 1600, 30, "5:30 PM"),
     (C("18:00"), "Jackson off the railroad", "At six Jackson's divisions attack north of the turnpike. They come down off the grade across the Dogan farm and overrun Union artillery and infantry, and the Union right falls back east.", [-500, 500], 3500, 30, "6 PM"),
@@ -764,7 +765,7 @@ battle = dict(
         "National Park Service, Manassas National Battlefield Park: 'Battle of Second Manassas' and the tour stops and panels at the Brawner farm, the unfinished railroad, Sudley, Chinn Ridge, the 5th Maine's guns and Henry Hill, each dated to the hour.",
         "Wikipedia, 'Second Battle of Bull Run', its Union and Confederate orders of battle, 'Battle of Thoroughfare Gap' and 'Texas Brigade' (read 25 October 2026), for the organisation, the army totals, the losses and the times the Park Service does not give. The 13th Massachusetts' letters and timeline at <a href='https://13thmass.org/1862/second_bull_run.html' target='_blank'>13thmass.org</a>, and Warren's brigade from his report and the regimental returns at ironbrigader.com.",
         "Terrain: USGS 3DEP elevation at 10 m, sampled to 22.5 m, with three modern quarries filled. Farms, ruins, monuments, hills, the railroad grade, the roads and the streams from OpenStreetMap (ODbL). Sunrise and sunset from the NOAA solar formulae for Groveton, local mean time.",
-        "What is reconstructed: John Hennessy's <i>Return to Bull Run</i> and his troop-movement maps for the Park Service were not consulted, so most brigade strengths are estimates (1,500 to a brigade of the Army of Virginia, 1,800 to one of the Army of the Potomac, 1,400 to one of Jackson's and 1,700 to one of Longstreet's), and the positions between the recorded times are inferred, as are the losses of every brigade the sources do not count. The woods are drawn from the sources' descriptions, not from an 1862 map. Lewis Lane, Lewis Ford and Portici are placed within 200 to 500 m. Reynolds's and King's routes on the 28th and 29th, Ricketts's and Porter's approaches, and the routes of the retreat are inferred from the roads. Grover's attack is set where Thomas's brigade met Gregg's, 600 m north-east of the Dump. Longstreet's line of the 29th is taken from his order of the 30th, and Hood's twilight clash is set by Groveton, as Greene has it.",
+        "What is reconstructed: John Hennessy's <i>Return to Bull Run</i> and his troop-movement maps for the Park Service were not consulted, so most brigade strengths are estimates (1,500 to a brigade of the Army of Virginia, 1,800 to one of the Army of the Potomac, 1,400 to one of Jackson's and 1,700 to one of Longstreet's), and the positions between the recorded times are inferred, as are the losses of every brigade the sources do not count. The woods are drawn from the sources' descriptions, not from an 1862 map. Lewis Lane, Lewis Ford and Portici are placed within 200 to 500 m. Reynolds's and King's routes on the 28th and 29th, Ricketts's and Porter's approaches, and the routes of the retreat are inferred from the roads. Greene puts Grover's break-in at the 125-yard gap between Thomas's brigade and Gregg's, and Gregg by Sudley Church, so the attack is set there, about 1.6 km north-east of the Dump. Longstreet's line of the 29th is taken from his order of the 30th, and Hood's twilight clash is set by Groveton, as Greene has it. Bayard's and Beardsley's cavalry brigades and Catharpin Run are left out.",
     ],
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1)

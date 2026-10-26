@@ -15927,10 +15927,10 @@
     ]
    ],
    "at": [
-    -3228,
-    -1215
+    3052,
+    842
    ],
-   "rot": -20
+   "rot": -16
   },
   {
    "type": "road",
@@ -16309,8 +16309,8 @@
   {
    "name": "Brawner farm",
    "at": [
-    -3048,
-    -611
+    -2788,
+    -581
    ]
   },
   {
@@ -16358,8 +16358,8 @@
   {
    "name": "Chinn Ridge",
    "at": [
-    -72,
-    -951
+    -232,
+    -1171
    ]
   },
   {
@@ -18013,7 +18013,7 @@
    "side": "union",
    "name": "Hatch's brigade, Sullivan's once Hatch had the division: 22nd, 24th, 30th, 84th New York (14th Brooklyn), 2nd U.S. Sharpshooters",
    "short": "Hatch",
-   "commander": "Brig. Gen. John Hatch, then Col. Timothy Sullivan",
+   "commander": "Brig. Gen. John Hatch, then Col. Sullivan",
    "type": "infantry",
    "strength": 1800,
    "keys": [
@@ -20299,7 +20299,7 @@
    "side": "union",
    "name": "Hartsuff's brigade under Stiles (Ricketts's division): 12th, 13th Massachusetts, 83rd New York, 11th Pennsylvania",
    "short": "Stiles",
-   "commander": "Col. John Stiles",
+   "commander": "Col. Stiles",
    "type": "infantry",
    "strength": 1250,
    "keys": [
@@ -20442,7 +20442,7 @@
    "side": "union",
    "name": "Thoburn's brigade (Ricketts's division): 7th Indiana, 84th, 110th Pennsylvania, 1st West Virginia",
    "short": "Thoburn",
-   "commander": "Col. Joseph Thoburn (wounded)",
+   "commander": "Col. Thoburn (wounded)",
    "type": "infantry",
    "strength": 1250,
    "keys": [
@@ -20667,7 +20667,7 @@
    "side": "union",
    "name": "5th Maine Battery, five guns",
    "short": "5th Maine Battery",
-   "commander": "Capt. George Leppien",
+   "commander": "Capt. Leppien",
    "type": "artillery",
    "strength": 100,
    "keys": [
@@ -21553,7 +21553,7 @@
    "side": "union",
    "name": "C. F. Jackson's brigade of Pennsylvania Reserves under Hardin: 9th, 10th, 11th, 12th",
    "short": "Hardin",
-   "commander": "Col. Martin Hardin",
+   "commander": "Col. Hardin",
    "type": "infantry",
    "strength": 1500,
    "keys": [
@@ -22804,61 +22804,61 @@
      "t": "1862-08-29 12:19:37",
      "x": -473,
      "y": 1450,
-     "h": 303
+     "h": 341
     },
     {
-     "t": "1862-08-29 12:20:57",
-     "x": -538,
-     "y": 1493,
+     "t": "1862-08-29 12:21:26",
+     "x": -508,
+     "y": 1551,
      "h": 297,
      "state": "line"
     },
     {
      "t": "1862-08-29 15:00",
-     "x": -538,
-     "y": 1493,
+     "x": -508,
+     "y": 1551,
      "h": 297,
      "state": "charge"
     },
     {
      "t": "1862-08-29 15:10",
-     "x": -894,
-     "y": 1675,
+     "x": -864,
+     "y": 1733,
      "h": 297,
      "state": "charge"
     },
     {
      "t": "1862-08-29 15:15",
-     "x": -983,
-     "y": 1720,
+     "x": -954,
+     "y": 1778,
      "h": 297,
      "state": "firing"
     },
     {
      "t": "1862-08-29 15:30",
-     "x": -983,
-     "y": 1720,
+     "x": -954,
+     "y": 1778,
      "state": "retreat",
      "strength": 1013,
      "h": 117
     },
     {
      "t": "1862-08-29 15:50",
-     "x": -511,
-     "y": 1480,
+     "x": -481,
+     "y": 1537,
      "h": 297,
      "state": "line"
     },
     {
      "t": "1862-08-30 18:04",
-     "x": -511,
-     "y": 1480
+     "x": -481,
+     "y": 1537
     },
     {
      "t": "1862-08-30 18:05",
-     "x": -511,
-     "y": 1480,
-     "h": 110,
+     "x": -481,
+     "y": 1537,
+     "h": 119,
      "state": "retreat"
     },
     {
@@ -22959,7 +22959,7 @@
    "side": "union",
    "name": "Taylor's Excelsior Brigade (Hooker's division): 70th to 74th New York",
    "short": "Excelsior",
-   "commander": "Col. Nelson Taylor",
+   "commander": "Col. Taylor",
    "type": "infantry",
    "strength": 1500,
    "keys": [
@@ -23323,7 +23323,7 @@
    "side": "union",
    "name": "Roberts's brigade (Butterfield's division): 2nd Maine, 18th Massachusetts, 1st Michigan, 13th, 25th New York",
    "short": "Roberts",
-   "commander": "Col. Charles Roberts",
+   "commander": "Col. Roberts",
    "type": "infantry",
    "strength": 1800,
    "keys": [
@@ -23548,7 +23548,7 @@
    "side": "union",
    "name": "Weeks's brigade (Butterfield's division): 16th Michigan, 12th, 17th, 44th New York, 83rd Pennsylvania",
    "short": "Weeks",
-   "commander": "Col. Henry Weeks",
+   "commander": "Col. Weeks",
    "type": "infantry",
    "strength": 1800,
    "keys": [
@@ -23954,7 +23954,7 @@
    "side": "union",
    "name": "Battery D, 5th U.S. Artillery, six guns",
    "short": "Hazlett",
-   "commander": "Lt. Charles Hazlett",
+   "commander": "Lt. Hazlett",
    "type": "artillery",
    "strength": 100,
    "keys": [
@@ -26143,33 +26143,33 @@
      "t": "1862-08-29 15:12",
      "x": -1297,
      "y": 1779,
-     "h": 101,
+     "h": 83,
      "state": "charge"
     },
     {
      "t": "1862-08-29 15:22",
-     "x": -1086,
-     "y": 1739,
+     "x": -1050,
+     "y": 1810,
      "h": 117,
      "state": "firing"
     },
     {
      "t": "1862-08-29 15:40",
-     "x": -1086,
-     "y": 1739,
+     "x": -1050,
+     "y": 1810,
      "state": "line",
      "strength": 1250
     },
     {
      "t": "1862-08-29 15:44",
-     "x": -1086,
-     "y": 1739
+     "x": -1050,
+     "y": 1810
     },
     {
      "t": "1862-08-29 15:45",
-     "x": -1086,
-     "y": 1739,
-     "h": 281,
+     "x": -1050,
+     "y": 1810,
+     "h": 263,
      "state": "column"
     },
     {
@@ -26297,51 +26297,51 @@
      "t": "1862-08-28 10:20:19",
      "x": -524,
      "y": 1814,
-     "h": 240
+     "h": 243
     },
     {
-     "t": "1862-08-28 10:34:37",
-     "x": -1144,
-     "y": 1457,
-     "h": 134,
+     "t": "1862-08-28 10:32:48",
+     "x": -1081,
+     "y": 1532,
+     "h": 128,
      "state": "line"
     },
     {
      "t": "1862-08-29 07:00",
-     "x": -1144,
-     "y": 1457,
+     "x": -1081,
+     "y": 1532,
      "state": "firing"
     },
     {
      "t": "1862-08-29 10:40",
-     "x": -1144,
-     "y": 1457,
+     "x": -1081,
+     "y": 1532,
      "state": "line",
      "strength": 1280
     },
     {
      "t": "1862-08-29 15:10",
-     "x": -1144,
-     "y": 1457,
+     "x": -1081,
+     "y": 1532,
      "state": "firing"
     },
     {
      "t": "1862-08-29 15:35",
-     "x": -1144,
-     "y": 1457,
+     "x": -1081,
+     "y": 1532,
      "state": "line",
      "strength": 1130
     },
     {
      "t": "1862-08-30 18:04",
-     "x": -1144,
-     "y": 1457
+     "x": -1081,
+     "y": 1532
     },
     {
      "t": "1862-08-30 18:05",
-     "x": -1144,
-     "y": 1457,
-     "h": 147,
+     "x": -1081,
+     "y": 1532,
+     "h": 154,
      "state": "line"
     },
     {
@@ -28159,7 +28159,7 @@
    "side": "confederate",
    "name": "Evans's South Carolina brigade under Stevens: 17th, 18th, 22nd, 23rd South Carolina, Holcombe Legion",
    "short": "Evans",
-   "commander": "Brig. Gen. Nathan Evans",
+   "commander": "Col. Stevens",
    "type": "infantry",
    "strength": 1800,
    "keys": [
@@ -28259,34 +28259,29 @@
      "state": "line"
     },
     {
-     "t": "1862-08-30 15:59",
-     "x": -2150,
-     "y": -1000
-    },
-    {
      "t": "1862-08-30 16:00",
      "x": -2150,
      "y": -1000,
-     "h": 79,
+     "h": 90,
      "state": "line"
     },
     {
      "t": "1862-08-30 16:35",
-     "x": -700,
-     "y": -720,
+     "x": -850,
+     "y": -1000,
      "h": 100,
      "state": "line"
     },
     {
      "t": "1862-08-30 16:39",
-     "x": -700,
-     "y": -720
+     "x": -850,
+     "y": -1000
     },
     {
      "t": "1862-08-30 16:40",
-     "x": -700,
-     "y": -720,
-     "h": 103,
+     "x": -850,
+     "y": -1000,
+     "h": 68,
      "state": "charge"
     },
     {
@@ -30007,7 +30002,7 @@
   {
    "t": "1862-08-29 10:00",
    "title": "The 82nd Ohio at the Dump",
-   "text": "'About 10 o'clock the Federal artillery opened with spirit and animation upon our right,' Jackson reported. Sigel's offensive runs until ten, Schurz making a second assault on Hill's division. Milroy's two regiments are repulsed along the Groveton-Sudley road by Lawton, and part of the 82nd Ohio breaks briefly into the line near the Dump, a 75-yard low point in the grade. Schenck and Reynolds come under heavy artillery fire in the woods around Groveton.",
+   "text": "'In the morning, about 10 o'clock, the Federal artillery opened with spirit and animation upon our right,' Jackson reported. Sigel's offensive runs until ten, Schurz making a second assault on Hill's division. Milroy's two regiments are repulsed along the Groveton-Sudley road by Lawton, and part of the 82nd Ohio breaks briefly into the line near the Dump, a 75-yard low point in the grade. Schenck and Reynolds come under heavy artillery fire in the woods around Groveton.",
    "at": [
     -1500,
     500
@@ -30045,8 +30040,8 @@
    "title": "Grover's bayonet charge",
    "text": "About three Cuvier Grover's brigade, five regiments and about 1,500 men, attacks with bayonets fixed along a front about a quarter mile wide, into the 125-yard gap between Thomas's and Gregg's brigades. Gregg's regiments strike its flank and Pender's brigade its front, and within 30 minutes Grover's men fall back. The brigade loses 487.",
    "at": [
-    -778,
-    1616
+    -749,
+    1674
    ],
    "view": 1400,
    "speed": 60,
@@ -30154,9 +30149,9 @@
    "text": "McDowell has sent Reynolds across the turnpike, leaving about 2,200 men south of it, McLean's brigade and Warren's. At four Longstreet attacks. Hood's division, with the Texas Brigade and Evans's South Carolinians, leads on the left near the turnpike, Kemper's division on its right, D. R. Jones's brigades in support. Warren's two New York regiments, roughly 1,000 men beside Hazlett's six-gun battery on a knoll above Groveton, are overrun along Lewis Lane. The 5th New York loses almost 300 of its roughly 500 men in the first ten minutes.",
    "at": [
     -1500,
-    -900
+    -1000
    ],
-   "view": 2400,
+   "view": 1200,
    "speed": 30,
    "when": "4 PM"
   },
@@ -30265,6 +30260,6 @@
   "National Park Service, Manassas National Battlefield Park: 'Battle of Second Manassas' and the tour stops and panels at the Brawner farm, the unfinished railroad, Sudley, Chinn Ridge, the 5th Maine's guns and Henry Hill, each dated to the hour.",
   "Wikipedia, 'Second Battle of Bull Run', its Union and Confederate orders of battle, 'Battle of Thoroughfare Gap' and 'Texas Brigade' (read 25 October 2026), for the organisation, the army totals, the losses and the times the Park Service does not give. The 13th Massachusetts' letters and timeline at <a href='https://13thmass.org/1862/second_bull_run.html' target='_blank'>13thmass.org</a>, and Warren's brigade from his report and the regimental returns at ironbrigader.com.",
   "Terrain: USGS 3DEP elevation at 10 m, sampled to 22.5 m, with three modern quarries filled. Farms, ruins, monuments, hills, the railroad grade, the roads and the streams from OpenStreetMap (ODbL). Sunrise and sunset from the NOAA solar formulae for Groveton, local mean time.",
-  "What is reconstructed: John Hennessy's <i>Return to Bull Run</i> and his troop-movement maps for the Park Service were not consulted, so most brigade strengths are estimates (1,500 to a brigade of the Army of Virginia, 1,800 to one of the Army of the Potomac, 1,400 to one of Jackson's and 1,700 to one of Longstreet's), and the positions between the recorded times are inferred, as are the losses of every brigade the sources do not count. The woods are drawn from the sources' descriptions, not from an 1862 map. Lewis Lane, Lewis Ford and Portici are placed within 200 to 500 m. Reynolds's and King's routes on the 28th and 29th, Ricketts's and Porter's approaches, and the routes of the retreat are inferred from the roads. Grover's attack is set where Thomas's brigade met Gregg's, 600 m north-east of the Dump. Longstreet's line of the 29th is taken from his order of the 30th, and Hood's twilight clash is set by Groveton, as Greene has it."
+  "What is reconstructed: John Hennessy's <i>Return to Bull Run</i> and his troop-movement maps for the Park Service were not consulted, so most brigade strengths are estimates (1,500 to a brigade of the Army of Virginia, 1,800 to one of the Army of the Potomac, 1,400 to one of Jackson's and 1,700 to one of Longstreet's), and the positions between the recorded times are inferred, as are the losses of every brigade the sources do not count. The woods are drawn from the sources' descriptions, not from an 1862 map. Lewis Lane, Lewis Ford and Portici are placed within 200 to 500 m. Reynolds's and King's routes on the 28th and 29th, Ricketts's and Porter's approaches, and the routes of the retreat are inferred from the roads. Greene puts Grover's break-in at the 125-yard gap between Thomas's brigade and Gregg's, and Gregg by Sudley Church, so the attack is set there, about 1.6 km north-east of the Dump. Longstreet's line of the 29th is taken from his order of the 30th, and Hood's twilight clash is set by Groveton, as Greene has it. Bayard's and Beardsley's cavalry brigades and Catharpin Run are left out."
  ]
 }
