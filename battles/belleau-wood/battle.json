@@ -14,7 +14,7 @@
  "sunrise": "04:44",
  "sunset": "20:50",
  "speed": 60,
- "lapse": 7200,
+ "lapse": 43200,
  "menPerDot": 10,
  "terrainExaggeration": 2,
  "contourInterval": 10,
@@ -8752,8 +8752,8 @@
     ]
    ],
    "at": [
-    400,
-    1340
+    650,
+    1320
    ],
    "rot": 2
   },
@@ -9468,8 +9468,8 @@
   {
    "name": "Hill 133 (about here)",
    "at": [
-    231,
-    1342
+    111,
+    1512
    ]
   },
   {
@@ -10152,7 +10152,7 @@
      "strength": 194
     },
     {
-     "t": "1918-06-13 05:00",
+     "t": "1918-06-13 04:30",
      "x": 2100,
      "y": -800,
      "state": "line",
@@ -10350,19 +10350,19 @@
      "strength": 163
     },
     {
-     "t": "1918-06-06 09:02:31",
+     "t": "1918-06-06 08:27:47",
      "x": -600,
      "y": 1250,
      "h": 155,
-     "strength": 142
+     "strength": 154
     },
     {
-     "t": "1918-06-06 09:30",
+     "t": "1918-06-06 08:40",
      "x": -520,
      "y": 1080,
      "h": 0,
      "state": "line",
-     "strength": 134
+     "strength": 150
     },
     {
      "t": "1918-06-06 09:34",
@@ -10641,7 +10641,7 @@
      "strength": 192
     },
     {
-     "t": "1918-06-13 05:00",
+     "t": "1918-06-13 04:30",
      "x": 2000,
      "y": -920,
      "state": "line",
@@ -11009,67 +11009,73 @@
      "t": "1918-06-11 03:30",
      "x": -150,
      "y": 750,
-     "h": 152,
+     "h": 155,
      "state": "column",
      "strength": 750
     },
     {
-     "t": "1918-06-11 03:40:40",
-     "x": 180,
-     "y": 120,
+     "t": "1918-06-11 03:43:05",
+     "x": 220,
+     "y": -40,
      "h": 90,
      "state": "line",
      "strength": 750
     },
     {
      "t": "1918-06-11 04:29",
-     "x": 180,
-     "y": 120,
+     "x": 220,
+     "y": -40,
      "strength": 750
     },
     {
      "t": "1918-06-11 04:30",
-     "x": 180,
-     "y": 120,
-     "h": 82,
+     "x": 220,
+     "y": -40,
+     "h": 74,
      "state": "charge",
      "strength": 750
     },
     {
      "t": "1918-06-11 04:50",
-     "x": 520,
-     "y": 170,
-     "h": 90,
+     "x": 560,
+     "y": 60,
+     "h": 80,
      "state": "firing",
      "strength": 723
     },
     {
      "t": "1918-06-11 04:59",
-     "x": 520,
-     "y": 170,
+     "x": 560,
+     "y": 60,
      "strength": 711
     },
     {
      "t": "1918-06-11 05:00",
-     "x": 520,
-     "y": 170,
-     "h": 86,
+     "x": 560,
+     "y": 60,
+     "h": 72,
      "state": "charge",
      "strength": 710
     },
     {
-     "t": "1918-06-11 06:00:48",
+     "t": "1918-06-11 05:29:47",
      "x": 1000,
      "y": 200,
      "h": 74,
-     "strength": 629
+     "strength": 670
+    },
+    {
+     "t": "1918-06-11 06:00",
+     "x": 1450,
+     "y": 330,
+     "h": 80,
+     "state": "line",
+     "strength": 630
     },
     {
      "t": "1918-06-11 07:00",
      "x": 1450,
      "y": 330,
-     "h": 80,
-     "state": "line",
      "strength": 550
     },
     {
@@ -11413,51 +11419,51 @@
      "t": "1918-06-11 03:20",
      "x": -1150,
      "y": 650,
-     "h": 127,
+     "h": 131,
      "state": "column",
      "strength": 204
     },
     {
-     "t": "1918-06-11 03:36:03",
+     "t": "1918-06-11 03:37",
      "x": -300,
-     "y": 0,
-     "h": 99,
+     "y": -100,
+     "h": 107,
      "strength": 204
     },
     {
-     "t": "1918-06-11 03:43:21",
-     "x": 180,
-     "y": -80,
+     "t": "1918-06-11 03:45:10",
+     "x": 220,
+     "y": -260,
      "h": 90,
      "state": "line",
      "strength": 204
     },
     {
      "t": "1918-06-11 04:29",
-     "x": 180,
-     "y": -80,
+     "x": 220,
+     "y": -260,
      "strength": 204
     },
     {
      "t": "1918-06-11 04:30",
-     "x": 180,
-     "y": -80,
-     "h": 92,
+     "x": 220,
+     "y": -260,
+     "h": 81,
      "state": "charge",
      "strength": 204
     },
     {
      "t": "1918-06-11 05:00",
      "x": 700,
-     "y": -100,
-     "h": 104,
+     "y": -180,
+     "h": 101,
      "state": "charge",
      "strength": 183
     },
     {
      "t": "1918-06-11 05:40",
      "x": 1300,
-     "y": -250,
+     "y": -300,
      "h": 100,
      "state": "firing",
      "strength": 154
@@ -11465,21 +11471,21 @@
     {
      "t": "1918-06-11 06:30",
      "x": 1300,
-     "y": -250,
+     "y": -300,
      "state": "line",
      "strength": 154
     },
     {
      "t": "1918-06-12 03:59",
      "x": 1300,
-     "y": -250,
+     "y": -300,
      "strength": 154
     },
     {
      "t": "1918-06-12 04:00",
      "x": 1300,
-     "y": -250,
-     "h": 284,
+     "y": -300,
+     "h": 291,
      "state": "retreat",
      "strength": 154
     },
@@ -11534,7 +11540,7 @@
      "strength": 124
     },
     {
-     "t": "1918-06-13 05:00",
+     "t": "1918-06-13 04:30",
      "x": 1450,
      "y": 200,
      "state": "line",
@@ -11924,16 +11930,10 @@
      "y": 600,
      "h": 10,
      "state": "firing",
-     "strength": 446
+     "strength": 407
     },
     {
-     "t": "1918-06-23 22:00",
-     "x": 640,
-     "y": 600,
-     "strength": 370
-    },
-    {
-     "t": "1918-06-23 23:20",
+     "t": "1918-06-23 20:45",
      "x": 640,
      "y": 600,
      "state": "line",
@@ -12335,15 +12335,15 @@
      "strength": 940
     },
     {
-     "t": "1918-06-11 06:30",
+     "t": "1918-06-11 06:00",
      "x": 1150,
      "y": -700,
      "h": 40,
      "state": "firing",
-     "strength": 850
+     "strength": 880
     },
     {
-     "t": "1918-06-11 07:00",
+     "t": "1918-06-11 06:30",
      "x": 1150,
      "y": -700,
      "state": "line",
@@ -12520,60 +12520,60 @@
      "t": "1918-06-06 23:15:49",
      "x": 1200,
      "y": -1700,
-     "h": 47,
+     "h": 48,
      "strength": 750
     },
     {
-     "t": "1918-06-06 23:31:13",
-     "x": 1950,
-     "y": -1000,
+     "t": "1918-06-06 23:29:37",
+     "x": 1880,
+     "y": -1080,
      "h": 30,
      "state": "line",
      "strength": 750
     },
     {
      "t": "1918-06-08 01:26",
-     "x": 1950,
-     "y": -1000,
+     "x": 1880,
+     "y": -1080,
      "strength": 750
     },
     {
      "t": "1918-06-08 01:27",
-     "x": 1950,
-     "y": -1000,
+     "x": 1880,
+     "y": -1080,
      "state": "firing",
      "strength": 750
     },
     {
      "t": "1918-06-08 02:00",
-     "x": 1950,
-     "y": -1000,
+     "x": 1880,
+     "y": -1080,
      "state": "line",
      "strength": 750
     },
     {
      "t": "1918-06-09 22:59",
-     "x": 1950,
-     "y": -1000,
+     "x": 1880,
+     "y": -1080,
      "strength": 750
     },
     {
      "t": "1918-06-09 23:00",
-     "x": 1950,
-     "y": -1000,
-     "h": 227,
+     "x": 1880,
+     "y": -1080,
+     "h": 228,
      "state": "column",
      "strength": 750
     },
     {
-     "t": "1918-06-09 23:15:23",
+     "t": "1918-06-09 23:13:48",
      "x": 1200,
      "y": -1700,
      "h": 183,
      "strength": 750
     },
     {
-     "t": "1918-06-09 23:41:41",
+     "t": "1918-06-09 23:40:06",
      "x": 1100,
      "y": -3450,
      "h": 183,
@@ -12581,7 +12581,7 @@
      "strength": 750
     },
     {
-     "t": "1918-06-09 23:42:41",
+     "t": "1918-06-09 23:41:06",
      "x": 1100,
      "y": -3450,
      "state": "hidden",
@@ -13321,14 +13321,14 @@
      "y": -720,
      "h": 0,
      "state": "firing",
-     "strength": 151
+     "strength": 143
     },
     {
      "t": "1918-06-08 06:00",
      "x": 1100,
      "y": -720,
      "state": "line",
-     "strength": 124
+     "strength": 91
     },
     {
      "t": "1918-06-08 06:01",
@@ -13336,7 +13336,7 @@
      "y": -720,
      "h": 164,
      "state": "retreat",
-     "strength": 124
+     "strength": 91
     },
     {
      "t": "1918-06-08 06:20",
@@ -13344,36 +13344,16 @@
      "y": -900,
      "h": 340,
      "state": "line",
-     "strength": 119
-    },
-    {
-     "t": "1918-06-08 07:29",
-     "x": 1150,
-     "y": -900,
-     "strength": 98
-    },
-    {
-     "t": "1918-06-08 07:30",
-     "x": 1150,
-     "y": -900,
-     "state": "firing",
-     "strength": 98
-    },
-    {
-     "t": "1918-06-08 08:30",
-     "x": 1150,
-     "y": -900,
-     "state": "line",
      "strength": 80
     },
     {
-     "t": "1918-06-08 10:29",
+     "t": "1918-06-08 10:59",
      "x": 1150,
      "y": -900,
      "strength": 80
     },
     {
-     "t": "1918-06-08 10:30",
+     "t": "1918-06-08 11:00",
      "x": 1150,
      "y": -900,
      "h": 169,
@@ -13769,43 +13749,23 @@
      "y": -880,
      "h": 0,
      "state": "firing",
-     "strength": 182
+     "strength": 172
     },
     {
      "t": "1918-06-08 06:00",
      "x": 760,
      "y": -880,
      "state": "line",
-     "strength": 159
-    },
-    {
-     "t": "1918-06-08 07:29",
-     "x": 760,
-     "y": -880,
-     "strength": 136
-    },
-    {
-     "t": "1918-06-08 07:30",
-     "x": 760,
-     "y": -880,
-     "state": "firing",
-     "strength": 136
-    },
-    {
-     "t": "1918-06-08 08:30",
-     "x": 760,
-     "y": -880,
-     "state": "line",
      "strength": 120
     },
     {
-     "t": "1918-06-08 10:29",
+     "t": "1918-06-08 10:59",
      "x": 760,
      "y": -880,
      "strength": 120
     },
     {
-     "t": "1918-06-08 10:30",
+     "t": "1918-06-08 11:00",
      "x": 760,
      "y": -880,
      "h": 175,
@@ -14128,94 +14088,94 @@
      "t": "1918-06-06 23:00",
      "x": 1400,
      "y": -1000,
-     "h": 72,
+     "h": 69,
      "state": "column",
      "strength": 434
     },
     {
      "t": "1918-06-06 23:40",
-     "x": 2000,
-     "y": -800,
+     "x": 2250,
+     "y": -680,
      "h": 30,
      "state": "line",
      "strength": 434
     },
     {
      "t": "1918-06-07 23:30",
-     "x": 2000,
-     "y": -800,
+     "x": 2250,
+     "y": -680,
      "strength": 434
     },
     {
      "t": "1918-06-07 23:34",
-     "x": 2000,
-     "y": -800,
+     "x": 2250,
+     "y": -680,
      "strength": 433
     },
     {
      "t": "1918-06-07 23:35",
-     "x": 2000,
-     "y": -800,
+     "x": 2250,
+     "y": -680,
      "state": "firing",
      "strength": 433
     },
     {
      "t": "1918-06-07 23:55",
-     "x": 2000,
-     "y": -800,
+     "x": 2250,
+     "y": -680,
      "state": "line",
      "strength": 428
     },
     {
      "t": "1918-06-08 01:26",
-     "x": 2000,
-     "y": -800,
+     "x": 2250,
+     "y": -680,
      "strength": 408
     },
     {
      "t": "1918-06-08 01:27",
-     "x": 2000,
-     "y": -800,
+     "x": 2250,
+     "y": -680,
      "state": "firing",
      "strength": 407
     },
     {
      "t": "1918-06-08 02:00",
-     "x": 2000,
-     "y": -800,
+     "x": 2250,
+     "y": -680,
      "state": "line",
      "strength": 400
     },
     {
      "t": "1918-06-08 22:09",
-     "x": 2000,
-     "y": -800,
+     "x": 2250,
+     "y": -680,
      "strength": 400
     },
     {
      "t": "1918-06-08 22:10",
-     "x": 2000,
-     "y": -800,
-     "h": 222,
+     "x": 2250,
+     "y": -680,
+     "h": 226,
      "state": "column",
      "strength": 400
     },
     {
-     "t": "1918-06-08 22:28:04",
+     "t": "1918-06-08 22:31:57",
      "x": 1200,
      "y": -1700,
      "h": 230,
      "strength": 400
     },
     {
-     "t": "1918-06-08 22:39:47",
+     "t": "1918-06-08 22:43:40",
      "x": 600,
      "y": -2200,
      "h": 224,
      "strength": 400
     },
     {
-     "t": "1918-06-08 23:05:46",
+     "t": "1918-06-08 23:09:40",
      "x": -600,
      "y": -3450,
      "h": 224,
@@ -14223,7 +14183,7 @@
      "strength": 400
     },
     {
-     "t": "1918-06-08 23:06:46",
+     "t": "1918-06-08 23:10:40",
      "x": -600,
      "y": -3450,
      "state": "hidden",
@@ -14359,80 +14319,80 @@
      "state": "column"
     },
     {
-     "t": "1918-06-07 01:34:23",
+     "t": "1918-06-07 01:33:26",
      "x": 708,
      "y": -1292,
-     "h": 76
+     "h": 83
     },
     {
-     "t": "1918-06-07 01:56:43",
+     "t": "1918-06-07 01:53:50",
      "x": 1900,
-     "y": -1000,
-     "h": 56
+     "y": -1150,
+     "h": 62
     },
     {
      "t": "1918-06-07 02:00",
-     "x": 2050,
-     "y": -900,
+     "x": 2220,
+     "y": -980,
      "h": 30,
      "state": "line"
     },
     {
      "t": "1918-06-08 01:26",
-     "x": 2050,
-     "y": -900
+     "x": 2220,
+     "y": -980
     },
     {
      "t": "1918-06-08 01:27",
-     "x": 2050,
-     "y": -900,
+     "x": 2220,
+     "y": -980,
      "state": "firing"
     },
     {
      "t": "1918-06-08 02:00",
-     "x": 2050,
-     "y": -900,
+     "x": 2220,
+     "y": -980,
      "state": "line"
     },
     {
      "t": "1918-06-10 01:24",
-     "x": 2050,
-     "y": -900
+     "x": 2220,
+     "y": -980
     },
     {
      "t": "1918-06-10 01:25",
-     "x": 2050,
-     "y": -900,
-     "h": 236,
+     "x": 2220,
+     "y": -980,
+     "h": 266,
      "state": "column"
     },
     {
-     "t": "1918-06-10 01:27:42",
+     "t": "1918-06-10 01:29:49",
      "x": 1900,
      "y": -1000,
      "h": 256
     },
     {
-     "t": "1918-06-10 01:46:07",
+     "t": "1918-06-10 01:48:13",
      "x": 708,
      "y": -1292,
      "h": 261
     },
     {
-     "t": "1918-06-10 01:57:58",
+     "t": "1918-06-10 02:00:04",
      "x": -73,
      "y": -1413,
      "h": 181
     },
     {
-     "t": "1918-06-10 02:28:32",
+     "t": "1918-06-10 02:30:38",
      "x": -100,
      "y": -3450,
      "h": 181,
      "state": "column"
     },
     {
-     "t": "1918-06-10 02:29:32",
+     "t": "1918-06-10 02:31:38",
      "x": -100,
      "y": -3450,
      "state": "hidden"
@@ -14501,12 +14461,12 @@
      "state": "line"
     },
     {
-     "t": "1918-06-08 10:29",
+     "t": "1918-06-08 10:59",
      "x": 560,
      "y": -960
     },
     {
-     "t": "1918-06-08 10:30",
+     "t": "1918-06-08 11:00",
      "x": 560,
      "y": -960,
      "h": 173,
@@ -14645,9 +14605,29 @@
      "state": "line"
     },
     {
-     "t": "1918-06-26 08:00",
+     "t": "1918-06-08 22:14",
      "x": 2300,
      "y": -1350
+    },
+    {
+     "t": "1918-06-08 22:15",
+     "x": 2300,
+     "y": -1350,
+     "h": 188,
+     "state": "column"
+    },
+    {
+     "t": "1918-06-08 22:46:49",
+     "x": 2000,
+     "y": -3450,
+     "h": 188,
+     "state": "column"
+    },
+    {
+     "t": "1918-06-08 22:47:49",
+     "x": 2000,
+     "y": -3450,
+     "state": "hidden"
     }
    ]
   },
@@ -15191,14 +15171,21 @@
      "y": 540,
      "h": 40,
      "state": "firing",
-     "strength": 914
+     "strength": 919
+    },
+    {
+     "t": "1918-06-21 04:30",
+     "x": 560,
+     "y": 540,
+     "state": "line",
+     "strength": 853
     },
     {
      "t": "1918-06-21 05:30",
      "x": 560,
      "y": 540,
      "state": "retreat",
-     "strength": 742
+     "strength": 781
     },
     {
      "t": "1918-06-21 05:31",
@@ -15206,16 +15193,10 @@
      "y": 540,
      "h": 229,
      "state": "retreat",
-     "strength": 740
+     "strength": 780
     },
     {
-     "t": "1918-06-21 05:40",
-     "x": 543,
-     "y": 525,
-     "strength": 727
-    },
-    {
-     "t": "1918-06-21 07:30",
+     "t": "1918-06-21 06:15",
      "x": 330,
      "y": 340,
      "h": 40,
@@ -16827,13 +16808,13 @@
      "strength": 585
     },
     {
-     "t": "1918-06-03 08:59",
+     "t": "1918-06-03 11:29",
      "x": 600,
      "y": 750,
      "strength": 585
     },
     {
-     "t": "1918-06-03 09:00",
+     "t": "1918-06-03 11:30",
      "x": 600,
      "y": 750,
      "h": 189,
@@ -16841,7 +16822,7 @@
      "strength": 585
     },
     {
-     "t": "1918-06-03 09:40",
+     "t": "1918-06-03 12:10",
      "x": 520,
      "y": 250,
      "h": 250,
@@ -17150,13 +17131,13 @@
      "strength": 584
     },
     {
-     "t": "1918-06-03 08:59",
+     "t": "1918-06-03 11:29",
      "x": 1100,
      "y": 450,
      "strength": 584
     },
     {
-     "t": "1918-06-03 09:00",
+     "t": "1918-06-03 11:30",
      "x": 1100,
      "y": 450,
      "h": 191,
@@ -17164,7 +17145,7 @@
      "strength": 584
     },
     {
-     "t": "1918-06-03 10:00",
+     "t": "1918-06-03 12:30",
      "x": 850,
      "y": -800,
      "h": 210,
@@ -17257,26 +17238,6 @@
      "x": 850,
      "y": -800,
      "h": 190,
-     "state": "line",
-     "strength": 408
-    },
-    {
-     "t": "1918-06-08 07:29",
-     "x": 850,
-     "y": -800,
-     "strength": 408
-    },
-    {
-     "t": "1918-06-08 07:30",
-     "x": 850,
-     "y": -800,
-     "state": "firing",
-     "strength": 408
-    },
-    {
-     "t": "1918-06-08 08:30",
-     "x": 850,
-     "y": -800,
      "state": "line",
      "strength": 408
     },
@@ -18751,9 +18712,33 @@
      "strength": 70
     },
     {
-     "t": "1918-06-26 08:00",
+     "t": "1918-06-16 22:59",
      "x": 1900,
-     "y": 400
+     "y": 400,
+     "strength": 70
+    },
+    {
+     "t": "1918-06-16 23:00",
+     "x": 1900,
+     "y": 400,
+     "h": 94,
+     "state": "column",
+     "strength": 70
+    },
+    {
+     "t": "1918-06-16 23:23:18",
+     "x": 3450,
+     "y": 300,
+     "h": 94,
+     "state": "column",
+     "strength": 70
+    },
+    {
+     "t": "1918-06-16 23:24:18",
+     "x": 3450,
+     "y": 300,
+     "state": "hidden",
+     "strength": 70
     }
    ]
   },
@@ -18978,15 +18963,15 @@
      "strength": 600
     },
     {
-     "t": "1918-06-11 13:00",
-     "x": 3450,
+     "t": "1918-06-11 13:30",
+     "x": 2900,
      "y": 500,
-     "h": 268,
+     "h": 267,
      "state": "column",
      "strength": 600
     },
     {
-     "t": "1918-06-11 13:45",
+     "t": "1918-06-11 13:50",
      "x": 1900,
      "y": 450,
      "h": 250,
@@ -19013,10 +18998,10 @@
      "y": 380,
      "h": 259,
      "state": "firing",
-     "strength": 573
+     "strength": 547
     },
     {
-     "t": "1918-06-11 15:30",
+     "t": "1918-06-11 14:45",
      "x": 1550,
      "y": 380,
      "state": "line",
@@ -19110,22 +19095,22 @@
      "strength": 314
     },
     {
-     "t": "1918-06-13 05:00",
+     "t": "1918-06-13 04:30",
      "x": 1700,
      "y": -50,
      "state": "rout",
-     "strength": 210
+     "strength": 234
     },
     {
-     "t": "1918-06-13 05:01",
+     "t": "1918-06-13 04:31",
      "x": 1700,
      "y": -50,
      "h": 51,
      "state": "rout",
-     "strength": 210
+     "strength": 233
     },
     {
-     "t": "1918-06-13 05:30",
+     "t": "1918-06-13 05:00",
      "x": 2250,
      "y": 400,
      "h": 60,
@@ -19264,31 +19249,25 @@
      "y": -760,
      "h": 210,
      "state": "firing",
-     "strength": 328
+     "strength": 324
     },
     {
-     "t": "1918-06-13 05:00",
+     "t": "1918-06-13 04:30",
      "x": 2130,
      "y": -760,
      "state": "rout",
-     "strength": 136
+     "strength": 157
     },
     {
-     "t": "1918-06-13 05:01",
+     "t": "1918-06-13 04:31",
      "x": 2130,
      "y": -760,
      "h": 32,
      "state": "rout",
-     "strength": 135
+     "strength": 155
     },
     {
-     "t": "1918-06-13 05:20",
-     "x": 2383,
-     "y": -356,
-     "strength": 107
-    },
-    {
-     "t": "1918-06-13 05:25",
+     "t": "1918-06-13 05:00",
      "x": 2450,
      "y": -250,
      "h": 40,
@@ -19403,31 +19382,9 @@
      "strength": 250
     },
     {
-     "t": "1918-06-11 07:59",
+     "t": "1918-06-11 06:41",
      "x": 2900,
      "y": 550,
-     "strength": 250
-    },
-    {
-     "t": "1918-06-11 08:00",
-     "x": 2900,
-     "y": 550,
-     "h": 80,
-     "state": "column",
-     "strength": 250
-    },
-    {
-     "t": "1918-06-11 08:08:23",
-     "x": 3450,
-     "y": 650,
-     "h": 80,
-     "state": "column",
-     "strength": 250
-    },
-    {
-     "t": "1918-06-11 08:09:23",
-     "x": 3450,
-     "y": 650,
      "state": "hidden",
      "strength": 250
     }
@@ -19563,7 +19520,7 @@
      "strength": 600
     },
     {
-     "t": "1918-06-23 23:20",
+     "t": "1918-06-23 20:45",
      "x": 850,
      "y": 760,
      "state": "line",
@@ -19728,25 +19685,25 @@
      "state": "firing"
     },
     {
-     "t": "1918-06-21 05:30",
+     "t": "1918-06-21 04:30",
      "x": 600,
      "y": 650,
      "state": "line"
     },
     {
-     "t": "1918-06-22 00:59",
+     "t": "1918-06-22 20:59",
      "x": 600,
      "y": 650
     },
     {
-     "t": "1918-06-22 01:00",
+     "t": "1918-06-22 21:00",
      "x": 600,
      "y": 650,
      "h": 11,
      "state": "column"
     },
     {
-     "t": "1918-06-22 01:30",
+     "t": "1918-06-22 21:30",
      "x": 700,
      "y": 1150,
      "h": 180,
@@ -19911,7 +19868,399 @@
    ]
   }
  ],
- "events": [],
+ "events": [
+  {
+   "t": "1918-06-01 14:00",
+   "title": "Into the line",
+   "text": "On 31 May the 2nd Division, Major General Omar Bundy, embussed north-west of Paris; its orders changed four times, and the Marines unloaded along the Paris-Metz road at night. On 1 June the columns march at 4.30, and that afternoon the 6th Marines go into line along the Paris road under the French 43rd Division, deploying through the fields: 1/6 north-east of Lucy-le-Bocage, 2/6 from Triangle Farm to Lucy, 3/6 in reserve by La Voie du Ch\u00e2tel. Brigadier General James Harbord, commanding the 4th Brigade of Marines, reports to the French at Lucy, 'a fairly noisy town'. Ch\u00e2teau-Thierry falls that day.",
+   "at": [
+    -300,
+    -1900
+   ],
+   "view": 4600,
+   "speed": 300
+  },
+  {
+   "t": "1918-06-02 19:45",
+   "title": "Cote 126",
+   "text": "In the night the 5th Marines came into line on the left, 2/5 at Les Mares Farm with two companies of 1/5, and the German 10th Division took Bouresches. At 8.10 on the evening of 2 June Germans come out of the woods between Licy and Torcy and take Cote 126; at 8.45 they cross south of the Belleau-Torcy road and push the French back. 'Bussiares, Torcy and the wood of Belleau have been taken from us during the evening,' the French report.",
+   "at": [
+    -100,
+    1300
+   ],
+   "view": 4400,
+   "speed": 120,
+   "when": "8.10 p.m."
+  },
+  {
+   "t": "1918-06-03 11:30",
+   "title": "The 237th Division",
+   "text": "At 11.30 on 3 June the German 237th Division attacks. Its 462nd Infantry comes on toward Hill 142 and Champillon and is stopped a kilometre south of Torcy. The 461st, under Major Hans Bischoff, 'a veteran in African bush and forest fighting', completes the occupation of the wood to its west edge, repulses a counter-attack at two and clears the south-west corner. At noon the 82nd Company of 3/6 goes into the line north-east of Champillon and loses four killed.",
+   "at": [
+    -400,
+    600
+   ],
+   "view": 3600,
+   "speed": 120,
+   "when": "11.30 a.m."
+  },
+  {
+   "t": "1918-06-03 15:50",
+   "title": "Retreat, hell",
+   "text": "In the afternoon Germans of the 197th Division come through the wheat toward Les Mares Farm. 2/5 holds its fire until they are within 100 yards, then stops them; the Marines' rifle fire reaches out to 800 yards. Captain Lloyd Williams of the 51st Company: 'Retreat, hell. We just got here.' At dark the 83rd Company of 3/6 joins the 82nd south of Torcy, 'in the same woods' as the Germans and about fifty yards from them.",
+   "at": [
+    -2600,
+    900
+   ],
+   "view": 2800,
+   "speed": 120,
+   "when": "in the afternoon"
+  },
+  {
+   "t": "1918-06-04 08:00",
+   "title": "Field Order No. 1",
+   "text": "At eight on 4 June the 2nd Division relieves the French 45th Division on the Champillon front. On the 5th General Degoutte ordered the French 167th Division to attack next morning, and the Americans to support it 'by the capture of the slopes of Champillon'; 'the Infantry will attack by infiltration rather than by waves.' The brigade's Field Order No. 1 sends 1/5, Major Julius Turrill, with two machine-gun companies, to seize Hill 142 at 3.45 on an 800 m front. The French relieve the Marine left only at three, 'instead of 9 o'clock last night'. The 49th Company reaches the jump-off on Hill 176 at 2.40, the 67th at 3.45. A battalion of the 23rd Infantry takes over 2/6's line at three.",
+   "at": [
+    -1600,
+    100
+   ],
+   "view": 4400,
+   "speed": 600,
+   "when": "8 a.m."
+  },
+  {
+   "t": "1918-06-06 03:45",
+   "title": "Hill 142",
+   "text": "At 3.15 the American guns open on the German positions. At 3.45 the 49th Company, Captain Hamilton, and the 67th, Captain Crowther, 11 officers and 475 men in four waves each, step off north from Hill 176 across 300 m of wheat. They are fired on after 18 m. The 9th Company of the 460th is overrun and fires a red rocket; the 67th is hit by the machine guns in the Champillon ravine; the 49th overruns the 10th Company of the 462nd and takes fire from the square woods. The 15th Machine Gun Company's ten guns at Champillon fire over their heads.",
+   "at": [
+    -800,
+    850
+   ],
+   "view": 1900,
+   "speed": 60,
+   "when": "3.45 a.m."
+  },
+  {
+   "t": "1918-06-06 05:15",
+   "title": "The rest of the battalion",
+   "text": "Gilfillan's platoon of the 66th Company arrives at 4.30 and goes forward, and the German 273rd Infantry reports both its flanks giving ground. The rest of the 66th, the 8th Machine Gun Company and Company D of the 2nd Engineers come up by 5.30, and the 17th Company, Captain Winans, goes in on the 49th's right at 5.37. At six Lieutenant Colonel Logan Feland asks for the open left flank to be covered, and the 51st Company of 2/5 is sent to Champillon and up the ravine at a right angle to the 67th. At 6.10 the German guns fall on Hill 142.",
+   "at": [
+    -1300,
+    600
+   ],
+   "view": 3200,
+   "speed": 120,
+   "when": "5.15 a.m."
+  },
+  {
+   "t": "1918-06-06 07:00",
+   "title": "Past the objective",
+   "text": "'Reached our objectives. We are throwing out strong points and are consolidating,' 1/5 reports at seven. Hamilton's 49th has run on past the objective through the square woods toward the road short of Bussiares, and three men get into Torcy; he brings the company back to the nose of Hill 142. At 7.30 an aviator reports that 'it is uncertain who holds Bois de Belleau'. On the left the French enter Bussiares at 8.10 and are thrown out at 8.45 by a Saxon J\u00e4ger battalion.",
+   "at": [
+    -1300,
+    1600
+   ],
+   "view": 3400,
+   "speed": 120,
+   "when": "7 a.m."
+  },
+  {
+   "t": "1918-06-06 09:30",
+   "title": "So far have held the hill",
+   "text": "At 9.50 Hamilton writes from 'the nose of Hill 142 and about 400 yds N.E. of square woods ... counter-attacked several times but so far have held the hill. Our casualties are very heavy.' Between nine and six the 12th Company of the 460th and the J\u00e4ger counter-attack five times. Janson (Hoffman) bayonets two of twelve Germans with five light machine guns 18 m from the line. The French come up on the left at 1.10. The 10th and 11th Companies of the 460th hold the square woods all day and slip away after dark without losing a gun. 1/5 loses 14 officers and 318 men; the 273rd Infantry 13 officers and 405.",
+   "at": [
+    -800,
+    1250
+   ],
+   "view": 2600,
+   "speed": 120,
+   "when": "9.50 a.m."
+  },
+  {
+   "t": "1918-06-06 14:05",
+   "title": "Field Order No. 2",
+   "text": "At 2.05 Harbord orders the wood taken in two phases: first the wood itself at five, 3/5 on the left and 3/6 on the right under Colonel Albertus Catlin of the 6th Marines, 2/6 conforming on the right; then the railway station, Bouresches, the brook crossing and Hills 126 and 133. 2/5 waits in reserve in the woods north-west of Lucy. There is to be no artillery preparation: the wood is thought to be lightly held. Catlin gets the order at 3.45 from Harbord's aide by motorcycle, and his company commanders are shown the map and led to the line.",
+   "at": [
+    300,
+    -800
+   ],
+   "view": 4400,
+   "speed": 120,
+   "when": "2.05 p.m."
+  },
+  {
+   "t": "1918-06-06 17:00",
+   "title": "Through the wheat",
+   "text": "At five 3/5, Major Benjamin Berry, crosses 400 yards of wheat from the Lucy-Torcy road toward the west face of the wood in waves. 'Halfway across the wheat field, German machine guns and rifles opened up on the long, straight lines and mowed them down.' Berry is wounded. On the right 3/6 steps off from the ravine east of Lucy, the 82nd Company left and the 84th right, the 83rd and 97th behind, 200 yards from the southern tip of the wood. The 96th Company of 2/6 starts across 600 yards toward Bouresches; Captain Duncan is killed by a shell as it goes. First Sergeant Dan Daly: 'Do you want to live forever?' At 5.30 Catlin is shot through the chest watching 3/6 reach the wood, and Lieutenant Colonel Harry Lee takes the regiment.",
+   "at": [
+    700,
+    -700
+   ],
+   "view": 3400,
+   "speed": 60,
+   "when": "5 p.m."
+  },
+  {
+   "t": "1918-06-06 19:15",
+   "title": "Bouresches",
+   "text": "At 7.15 an aviator sees 'advance elements about 400 meters southwest of Bouresches ... still fighting in the Bois de Belleau ... in the northern part of the attack I see absolutely nothing'. At 7.20 the 83rd Company is reported at the railway station, a claim doubted that night. At 7.30 the 96th enters Bouresches, 'making good use of the bed of a brook', and clears the 7th and 8th Companies of the 398th out house by house; the outpost falls back to the railway. Lieutenants Robertson and Clifton Cates hold the village with about 24 men. South-east of Triangle Farm the 23rd Infantry, attacking toward Hill 192, is driven back at 8.14 by the 1st Battalion of the 47th.",
+   "at": [
+    1900,
+    -1200
+   ],
+   "view": 2400,
+   "speed": 120,
+   "when": "7.15 p.m."
+  },
+  {
+   "t": "1918-06-06 21:40",
+   "title": "Held up",
+   "text": "At 8.45 Major Berton Sibley reports 'Unable to advance infantry further ... Losses already heavy.' 3/6 has halted at the far edge of the wood near Bouresches, its 82nd Company held by machine-gun nests in the rocks. At 9.40 the division hears that the attack on the north edge is 'held up by machine gun nest', and Wise's three reserve companies go north on the Torcy road into the gap between Turrill and Berry. Major Thomas Holcomb asks for reinforcements for Bouresches; the 84th and 97th Companies march in from the field at 11.40 without resistance, and Lieutenant Moore and Sergeant Major Quick drive an ammunition truck into the village under flares. The 4th Brigade has lost 31 officers and 1,056 men in the day.",
+   "at": [
+    900,
+    -300
+   ],
+   "view": 4200,
+   "speed": 120,
+   "when": "9.40 p.m."
+  },
+  {
+   "t": "1918-06-07 23:30",
+   "title": "The night attack",
+   "text": "7 June is comparatively quiet; at four that morning the 45th Company came up on 1/5's right on Hill 142. At 11.30 that night the Germans attack 3/6 and, from the north, Bouresches, after heavy artillery and machine-gun fire; the 83rd Company on the east edge shoots the attack down with automatic rifles and captured guns. At 12.15 an attack on the 23rd Infantry's front is repulsed, and at 1.25 another on Bouresches, where 110 men of Company A, 2nd Engineers, are in the line.",
+   "at": [
+    2150,
+    -800
+   ],
+   "view": 2800,
+   "speed": 120,
+   "when": "11.30 p.m."
+  },
+  {
+   "t": "1918-06-08 04:00",
+   "title": "The rocks",
+   "text": "At four on 8 June, after a Stokes-mortar bombardment, 3/6 attacks north through the south lobe, the 82nd Company on the right at the south-east corner and the 83rd on the left, with Company B of the engineers on a flank. The machine-gun nests are 'well fortified in the rocks ... one flanked the other'. Four guns are taken; the fighting goes on to 8.30, and by 11.30 the battalion is back under cover. The 461st's 6th and 8th Companies and the 365th Engineer Company throw back a break-in from the Bouresches side and take 40 prisoners. At 1.55 Sibley reports that 'officers and men are too much exhausted for further attack'. 3/6 has lost nearly 400 men.",
+   "at": [
+    950,
+    -950
+   ],
+   "view": 1800,
+   "speed": 120,
+   "when": "4 a.m."
+  },
+  {
+   "t": "1918-06-08 22:00",
+   "title": "The guns",
+   "text": "That night 3/6 and the engineers are taken out and the wood is left to the artillery; they reach the Bois de Plati\u00e8re by daylight and get their first hot food since 31 May. The German 398th gives way to the 109th Grenadiers of the 28th (Baden) Division, and the 197th Division to the 5th Guard. On 9 June the American and French guns fire 28,000 75 mm and 6,000 155 mm shells into the wood. On the left the French 116th Infantry attacks Bussiares at 3.40, takes 4 officers and 85 men of the 20th Regiment in the triangular wood south-west of it and gets into the village at 8.30, but is thrown out by two companies of the 460th and holds the west houses only until 3.30.",
+   "at": [
+    -1000,
+    900
+   ],
+   "view": 5600,
+   "speed": 600
+  },
+  {
+   "t": "1918-06-10 04:30",
+   "title": "The rolling barrage",
+   "text": "In the night 1/5 relieved 2/6 in Bouresches, and the 2nd Battalion of the 40th Fusiliers took over the east half of the wood. At 4.30 on 10 June 1/6, Major John Hughes, attacks the south lobe behind the brigade's first rolling barrage, lifting every two minutes, two companies up and two in support, while twelve machine guns massed in Bouresches fire up the east flank. 'Objective reached by 5:10 and being consolidated ... two large Minenwerfers captured. Our losses slight.' Hughes has in fact got no further than 3/6's high-water mark of the 8th. Major Edward Cole of the 6th Machine Gun Battalion is mortally wounded.",
+   "at": [
+    750,
+    -950
+   ],
+   "view": 1800,
+   "speed": 120,
+   "when": "4.30 a.m."
+  },
+  {
+   "t": "1918-06-11 04:30",
+   "title": "Wise across the wood",
+   "text": "At 3.25 on 11 June the American guns open up. At 4.30, in morning mist, 2/5, Lieutenant Colonel Frederic Wise, attacks from the west edge, east across the wood instead of north-east, while 1/6 renews the attack in the south. It breaks through the right of the 2/40th by the brook bed and takes its 5th, 7th and 8th Companies from flank and rear: 'Wo ist das Regiment 40?' The 1st and 4th Companies of the 461st are cut off, 3 officers and 80 men taken, and the rest fight their way north to Major Hartlieb. 1/6 clears the south half; Captains Burns and Fuller are killed. Captain Lloyd Williams is mortally wounded.",
+   "at": [
+    800,
+    0
+   ],
+   "view": 2400,
+   "speed": 120,
+   "when": "4.30 a.m."
+  },
+  {
+   "t": "1918-06-11 05:55",
+   "title": "The ravine north of Bouresches",
+   "text": "At 5.55 a German battalion forms in the ravine north of Bouresches and attacks 'en masse'. The first volley of the 2nd Battalion, 12th Field Artillery lands among it and the 155s finish it: 'great slaughter of fleeing Germans as they left the Bois de Belleau by our machine guns from a flank'. At seven: 'The northern half of the Bois de Belleau belongs to 5th Marines. 20 prisoners sent back.' By 10.40 the division has 3 officers and 169 men.",
+   "at": [
+    1900,
+    -100
+   ],
+   "view": 2600,
+   "speed": 120,
+   "when": "5.55 a.m."
+  },
+  {
+   "t": "1918-06-11 11:30",
+   "title": "Hartlieb",
+   "text": "About noon Hartlieb's counter-attack regains the 461st's old position in the west half of the wood, and the 1st Battalion of the 462nd goes into the woods at Les Brusses. The German brigade orders the old line retaken 'at any cost'. On the east edge the 1st Battalion of the 40th counter-attacks 200 m, and the 2nd Battalion of the 110th Grenadiers, Mencke, another 200 m; they are exhausted by seven, and the Marine line has been pulled back a little. Companies D and F of the 2nd Engineers go to Wise, a platoon to each Marine company.",
+   "at": [
+    1100,
+    500
+   ],
+   "view": 3200,
+   "speed": 120,
+   "when": "about noon"
+  },
+  {
+   "t": "1918-06-12 03:15",
+   "title": "The old line",
+   "text": "At 3.15 on 12 June the 2/110th and part of the 1/40th renew the attack and reach 'the old line' at 5.01. In the afternoon the German guns put 'more than 80,000 shells in less than four hours' on the wood, and at one Bouresches is on fire.",
+   "at": [
+    1100,
+    250
+   ],
+   "view": 2200,
+   "speed": 120,
+   "when": "3.15 a.m."
+  },
+  {
+   "t": "1918-06-12 16:30",
+   "title": "Without artillery preparation",
+   "text": "Between four and five 2/5 attacks again, without artillery preparation. The 8th Company of the 461st is cut off, the 7th attacked from the rear and the north-east corner broken into; Bischoff pulls his 2nd Battalion back to the Pavilion hill, counter-attacks with its 5th and 7th Companies and two companies of the 462nd, and holds south of the Pavilion. On the Baden division's front the Americans, 'advancing in part in columns', break through at 4.30 and drive the 2/110th and 1/40th out of the wood to the Bouresches-Belleau road.",
+   "at": [
+    1100,
+    450
+   ],
+   "view": 2600,
+   "speed": 120,
+   "when": "4.30 p.m."
+  },
+  {
+   "t": "1918-06-12 19:00",
+   "title": "Relief at dusk",
+   "text": "At dusk 3/6, back from the Bois de Plati\u00e8re, relieves 1/5 north-east of Hill 142. At 11.20 that night an officer and 56 men of the 461st come in, 'some surrendered under a flag of truce', and say a fresh division attacks tonight. At 1.30 2/6 is ordered up to the woods north-west of Lucy as brigade reserve; a dying German officer tells them the attack will come at dawn.",
+   "at": [
+    -500,
+    0
+   ],
+   "view": 4400,
+   "speed": 600
+  },
+  {
+   "t": "1918-06-13 02:30",
+   "title": "The Baden division",
+   "text": "At 2.30 on 13 June, after an intense barrage with gas, the 28th Division attacks Bouresches and the wood. At 4.30 Wise reports 'line appears to be holding ... Loss (German) must be very heavy'; at 5.05 Hughes: 'Everything O.K. now, Men digging in. Trenches badly ruined by shell fire. Casualties under 20%.' By 5.30 the attack is 'thoroughly broken with very severe losses'. The 1st Company of the 109th gets into Bouresches and leaves 'only dead and prisoners'. Later a false report that Bouresches has fallen sends the 78th and 96th Companies 2 km in open order to the woods south-east of Lucy.",
+   "at": [
+    1800,
+    -400
+   ],
+   "view": 2800,
+   "speed": 120,
+   "when": "2.30 a.m."
+  },
+  {
+   "t": "1918-06-14 02:00",
+   "title": "Mustard gas",
+   "text": "In the night mustard gas falls on the south of the wood, Bouresches and Lucy. At two 2/6 relieves 2/5 in the wood and is gassed; by the next afternoon practically all of the 78th and 96th Companies have been evacuated, and there are 700 gas cases in 24 hours. At 4.50 that afternoon, with German troops coming into Torcy and Belleau in motor trucks and the wood 'heavily shelled with mustard gas', Harbord pulls the battalion back to Hill 181 and holds the east edge with 'a very thin line of machine guns'.",
+   "at": [
+    600,
+    -300
+   ],
+   "view": 3800,
+   "speed": 120,
+   "when": "2 a.m."
+  },
+  {
+   "t": "1918-06-15 21:00",
+   "title": "The 7th Infantry",
+   "text": "On 15 June three battalions of the 7th Infantry, 3rd Division, are attached for seven days 'for the purpose of relieving battalions of the 4th Brigade which have been continually in front line positions for the last fourteen days'. In the next nights they relieve 3/5, 2/6 and 1/6 ('it was a mad house', in Cates's words), and the 1st Battalion of the French 174th Infantry relieves 3/6 north-east of Hill 142. Across the wood the German 87th Division, newly arrived, takes over from the 237th.",
+   "at": [
+    100,
+    0
+   ],
+   "view": 5200,
+   "speed": 600
+  },
+  {
+   "t": "1918-06-20 03:50",
+   "title": "The 7th Infantry attacks",
+   "text": "At 3.50 on 20 June the 1st Battalion of the 7th attacks the north end of the wood in strong lines of skirmishers, without special artillery support. It fails, with 63 casualties; the 3rd Battalion of the 347th finds 60 to 70 American dead. At 3.15 next morning, after a short barrage, Lieutenant Colonel Adams's battalion tries again. Two companies lose touch, the German counter-barrage and hidden machine guns catch it, and it is back in its positions by 7.30 with over 200 casualties.",
+   "at": [
+    500,
+    500
+   ],
+   "view": 1800,
+   "speed": 120,
+   "when": "3.50 a.m."
+  },
+  {
+   "t": "1918-06-22 21:00",
+   "title": "The Marines come back",
+   "text": "On 21 and 22 June the Marines come back into the line: 3/6 into the south-east corner of the wood in place of the 2nd Battalion of the 7th, and 3/5 into the north in place of the 1st, while wire is strung across the whole front. 2/6 and 1/6 go to the woods north-west of Lucy, and Company B of the 4th Machine Gun Battalion comes into the wood.",
+   "at": [
+    300,
+    -800
+   ],
+   "view": 5000,
+   "speed": 600
+  },
+  {
+   "t": "1918-06-23 19:00",
+   "title": "Shearer's first attack",
+   "text": "At seven on the 23rd 3/5, now under Major Maurice Shearer, attacks the north end after a small barrage, with sharpshooter pairs, extra grenades and Company B of the 4th Machine Gun Battalion. It gains 200 yards against machine-gun nests that cover one another, loses 130 men in three hours, and stops at 11.20. At nine a German attack out of Torcy hits the Marine company south of the Torcy-Belleau road and is driven back.",
+   "at": [
+    300,
+    900
+   ],
+   "view": 2600,
+   "speed": 120,
+   "when": "7 p.m."
+  },
+  {
+   "t": "1918-06-25 03:00",
+   "title": "Fourteen hours",
+   "text": "From three in the morning of 25 June the 75s and 155s fire on the north-west corner of the wood for fourteen hours, and the German nests are 'knocked out or disorganized'. Otto has medium and heavy mine throwers falling on the 347th's part of the wood from four in the afternoon; its 3rd and 4th Companies, near the edge, suffer most, 'since the mines burst for the most part in the trees'.",
+   "at": [
+    900,
+    800
+   ],
+   "view": 1800,
+   "speed": 300,
+   "when": "3 a.m."
+  },
+  {
+   "t": "1918-06-25 17:00",
+   "title": "The assault",
+   "text": "At five 3/5 attacks, two platoons of the 83rd Company of 3/6 on its right, with two companies of the 4th Machine Gun Battalion and the 15th Company of the 6th. At 5.30 a heavy mist comes down over the area. The 1st Battalion of the 347th gives ground; at six Captain Kaulbars calls for his 3rd Battalion by radio and feeds his shock company into the line, and at 6.12 his battalion is 'again advancing on the woods'. At seven Shearer reports two companies on their objectives and about 150 prisoners: 'more prisoners are coming in now too fast to be counted'.",
+   "at": [
+    950,
+    800
+   ],
+   "view": 1600,
+   "speed": 120,
+   "when": "5 p.m."
+  },
+  {
+   "t": "1918-06-25 19:30",
+   "title": "Rolled up",
+   "text": "At 7.30 the Marines break in between the 347th's 3rd Company and what is left of its 4th, and roll both up against the 2nd and 5th; the captains of the 3rd and 4th are killed. 'Things are going O.K.,' Harbord reports at 8.15. At 8.50 a small counter-attack is repulsed. By 9.15 'only remnants of the five companies' are back along the Torcy-Belleau road, and two companies of the 3rd Ersatz Regiment go into Belleau. Prisoners say 'the reserves are in caves by the Chateau where the artillery can't reach them'.",
+   "at": [
+    600,
+    400
+   ],
+   "view": 3200,
+   "speed": 120,
+   "when": "7.30 p.m."
+  },
+  {
+   "t": "1918-06-26 07:00",
+   "title": "Woods now U.S. Marine Corps entirely",
+   "text": "'Woods now U.S. Marine Corps entirely,' Shearer reports at seven on 26 June. The division counts 7 officers and 302 men taken; the 347th's five companies lost 7 officers and 433 men, and 3/5 about 250. On 30 June Degoutte renames the wood the Bois de la Brigade de Marine. 'They have added the Bois de Belleau, Hill 142 and Bouresches to Mexico, China, Santo Domingo, Tripoli,' Harbord wrote of his Marines, and von Conta reported on 17 August: 'The 2nd American may be described as a very good division ... Our fire did not affect their morale.'",
+   "at": [
+    700,
+    0
+   ],
+   "view": 4400,
+   "speed": 60,
+   "when": "7 a.m."
+  }
+ ],
  "tints": [
   {
    "color": "rgba(225,228,232,0.35)",
@@ -19929,8 +20278,28 @@
    "until": "1918-06-25 19:00"
   }
  ],
+ "outcome": {
+  "result": "American victory: the 4th Brigade took Hill 142, Bouresches and the whole of the wood, which the French renamed the Bois de la Brigade de Marine",
+  "losses": [
+   [
+    "american",
+    "The 4th Brigade lost 112 officers and 4,598 men in June, over 1,000 of them killed; 31 officers and 1,056 men fell on 6 June alone. Harbord counted some 3,400 killed and wounded by 2 July. The 2nd Division, with Vaux, lost 1,811 battle deaths and 7,252 other casualties from 31 May to 9 July. The 7th Infantry lost 63 men on 20 June and over 200 on the 21st. The map draws only the losses the sources give for the units on it."
+   ],
+   [
+    "german",
+    "No total survives in the sources read. Otto gives the divisions' daily losses: the 237th 401 on 6 June alone, the 28th (Baden) 70 officers and 2,100 men from 27 May to 15 June, the 197th about 2,000 from 4 to 6 June; five companies of the 347th lost 7 officers and 433 men on 25 June. The brigade took more than 500 prisoners from 2 to 13 June. Estimates of over 10,000 German casualties are only estimates."
+   ]
+  ],
+  "note": "The German records run an hour ahead of the American clock and are converted to it here. The hills, Triangle Farm and positions inside the wood day by day are placed from the text, not from a map of 1918; the strengths of the French and of most German battalions are not recorded and are drawn at battalion size."
+ },
  "sources": [
-  "Woods, roads and places from OpenStreetMap (ODbL).",
-  "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 \u00a9 DLR e.V. 2010-2014 and \u00a9 Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m, sampled to 17.5 m."
+  "Lt. Col. Ernst Otto (Reichsarchiv), <a href='https://www.usni.org/magazines/proceedings/1928/november/battles-possession-belleau-woods-june-1918' target='_blank'>\"The Battles for the Possession of Belleau Woods, June, 1918\"</a>, <i>U.S. Naval Institute Proceedings</i> 54/11 (November 1928), from the war diaries of the German 237th, 10th, 28th and 87th Divisions; and Capt. John W. Thomason Jr.'s discussion of it in the same issue.",
+  "<a href='https://archive.org/details/recordsofsecondd04unit' target='_blank'><i>Records of the Second Division (Regular)</i></a> (Army War College, 1928): the division's field messages and telephone logs, with their clock times.",
+  "<a href='https://archive.org/details/historyofthirdba00hillrich' target='_blank'><i>History of the Third Battalion, Sixth Regiment, U.S. Marines</i></a> (1919), with Brigade Field Order No. 2; and <a href='https://archive.org/details/historyofsixthre00tien' target='_blank'><i>History of the Sixth Regiment, United States Marines</i></a> (Tientsin, 1928).",
+  "James G. Harbord, <a href='https://archive.org/details/leavesfromwardia00jame' target='_blank'><i>Leaves from a War Diary</i></a> (1925); Edwin N. McClellan, <a href='https://archive.org/details/unitedstatesmari00unit' target='_blank'><i>The United States Marine Corps in the World War</i></a> (1920); <a href='https://archive.org/details/officialhistoryo00uni' target='_blank'><i>The Official History of the Second Regiment of Engineers</i></a> (1920).",
+  "Gary W. Cozzens, \"How Will the Americans Behave in a Pitched Battle?\", <i>Marine Corps History</i> 4/2 (Winter 2018): Hill 142 minute by minute; J. Wayne Hill, <i>A Regiment Like No Other: The 6th Marine Regiment at Belleau Wood</i> (MMAS thesis, 2012); Mark R. Folse, \"Keystone Battle Brief: The Battle of Belleau Wood\" (Marine Corps History Division, 2019).",
+  "American Battle Monuments Commission, <a href='https://archive.org/details/americanarmiesba00wash' target='_blank'><i>American Armies and Battlefields in Europe</i></a> (1938); War Department, <a href='https://archive.org/details/historiesoftwohu00unit' target='_blank'><i>Histories of Two Hundred and Fifty-One Divisions of the German Army</i></a> (1920); Wikipedia, <a href='https://en.wikipedia.org/wiki/Battle_of_Belleau_Wood' target='_blank'>Battle of Belleau Wood</a> (read 25 October 2026), for the casualty estimates.",
+  "Woods, roads, the railway and places from OpenStreetMap (ODbL); the wood is the memorial park's outline. Hills 126, 133, 142, 169, 176 and 181, the Pavilion and Triangle Farm are placed from the sources' text and the surface model, within 150 to 400 m. Sunrise and sunset computed for the place and date, French summer time.",
+  "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 \u00a9 DLR e.V. 2010-2014 and \u00a9 Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m, sampled to 17.5 m. A surface model: the wood and the villages stand 10 to 25 m above the ground."
  ]
 }
