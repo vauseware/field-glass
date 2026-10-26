@@ -10152,7 +10152,7 @@
      "strength": 194
     },
     {
-     "t": "1918-06-13 04:30",
+     "t": "1918-06-13 04:00",
      "x": 2100,
      "y": -800,
      "state": "line",
@@ -10411,33 +10411,33 @@
      "strength": 124
     },
     {
-     "t": "1918-06-06 16:34",
+     "t": "1918-06-06 15:34",
      "x": -520,
      "y": 1080,
      "strength": 124
     },
     {
-     "t": "1918-06-06 16:35",
+     "t": "1918-06-06 15:35",
      "x": -520,
      "y": 1080,
      "state": "firing",
      "strength": 124
     },
     {
-     "t": "1918-06-06 16:55",
+     "t": "1918-06-06 15:55",
      "x": -520,
      "y": 1080,
      "state": "line",
      "strength": 124
     },
     {
-     "t": "1918-06-12 20:29",
+     "t": "1918-06-12 21:49",
      "x": -520,
      "y": 1080,
      "strength": 124
     },
     {
-     "t": "1918-06-12 20:30",
+     "t": "1918-06-12 21:50",
      "x": -520,
      "y": 1080,
      "h": 179,
@@ -10445,14 +10445,14 @@
      "strength": 124
     },
     {
-     "t": "1918-06-12 20:56:42",
+     "t": "1918-06-12 22:16:42",
      "x": -500,
      "y": -700,
      "h": 182,
      "strength": 124
     },
     {
-     "t": "1918-06-12 21:37:59",
+     "t": "1918-06-12 22:57:59",
      "x": -600,
      "y": -3450,
      "h": 182,
@@ -10460,7 +10460,7 @@
      "strength": 124
     },
     {
-     "t": "1918-06-12 21:38:59",
+     "t": "1918-06-12 22:58:59",
      "x": -600,
      "y": -3450,
      "state": "hidden",
@@ -10641,7 +10641,7 @@
      "strength": 192
     },
     {
-     "t": "1918-06-13 04:30",
+     "t": "1918-06-13 04:00",
      "x": 2000,
      "y": -920,
      "state": "line",
@@ -10814,13 +10814,13 @@
      "strength": 133
     },
     {
-     "t": "1918-06-12 20:29",
+     "t": "1918-06-12 21:49",
      "x": -1000,
      "y": 880,
      "strength": 133
     },
     {
-     "t": "1918-06-12 20:30",
+     "t": "1918-06-12 21:50",
      "x": -1000,
      "y": 880,
      "h": 169,
@@ -10828,14 +10828,14 @@
      "strength": 133
     },
     {
-     "t": "1918-06-12 20:54:07",
+     "t": "1918-06-12 22:14:07",
      "x": -700,
      "y": -700,
      "h": 180,
      "strength": 133
     },
     {
-     "t": "1918-06-12 21:35:22",
+     "t": "1918-06-12 22:55:22",
      "x": -700,
      "y": -3450,
      "h": 180,
@@ -10843,7 +10843,7 @@
      "strength": 133
     },
     {
-     "t": "1918-06-12 21:36:22",
+     "t": "1918-06-12 22:56:22",
      "x": -700,
      "y": -3450,
      "state": "hidden",
@@ -11151,13 +11151,13 @@
      "strength": 550
     },
     {
-     "t": "1918-06-12 03:59",
+     "t": "1918-06-12 04:29",
      "x": 1150,
      "y": 250,
      "strength": 550
     },
     {
-     "t": "1918-06-12 04:00",
+     "t": "1918-06-12 04:30",
      "x": 1150,
      "y": 250,
      "h": 254,
@@ -11215,7 +11215,7 @@
      "strength": 450
     },
     {
-     "t": "1918-06-13 04:30",
+     "t": "1918-06-13 04:00",
      "x": 1350,
      "y": 450,
      "state": "line",
@@ -11476,13 +11476,13 @@
      "strength": 154
     },
     {
-     "t": "1918-06-12 03:59",
+     "t": "1918-06-12 04:29",
      "x": 1300,
      "y": -300,
      "strength": 154
     },
     {
-     "t": "1918-06-12 04:00",
+     "t": "1918-06-12 04:30",
      "x": 1300,
      "y": -300,
      "h": 291,
@@ -11540,7 +11540,7 @@
      "strength": 124
     },
     {
-     "t": "1918-06-13 04:30",
+     "t": "1918-06-13 04:00",
      "x": 1450,
      "y": 200,
      "state": "line",
@@ -11647,7 +11647,7 @@
      "t": "1918-06-02 01:00",
      "x": -400,
      "y": -3450,
-     "h": 1,
+     "h": 16,
      "state": "column",
      "strength": 750
     },
@@ -11663,33 +11663,33 @@
      "t": "1918-06-02 01:30:15",
      "x": -400,
      "y": -1500,
-     "h": 3,
+     "h": 69,
      "strength": 750
     },
     {
-     "t": "1918-06-02 01:46:01",
-     "x": -350,
-     "y": -450,
+     "t": "1918-06-02 01:40:42",
+     "x": 250,
+     "y": -1250,
      "h": 10,
      "state": "line",
      "strength": 750
     },
     {
      "t": "1918-06-06 16:19",
-     "x": -350,
-     "y": -450,
+     "x": 250,
+     "y": -1250,
      "strength": 750
     },
     {
      "t": "1918-06-06 16:20",
-     "x": -350,
-     "y": -450,
-     "h": 18,
+     "x": 250,
+     "y": -1250,
+     "h": 349,
      "state": "column",
      "strength": 750
     },
     {
-     "t": "1918-06-06 16:33:06",
+     "t": "1918-06-06 16:44:57",
      "x": -80,
      "y": 380,
      "h": 80,
@@ -12067,7 +12067,7 @@
      "t": "1918-06-02 01:00",
      "x": -500,
      "y": -3450,
-     "h": 357,
+     "h": 16,
      "state": "column",
      "strength": 250
     },
@@ -12083,49 +12083,107 @@
      "t": "1918-06-02 01:30:15",
      "x": -500,
      "y": -1500,
-     "h": 353,
+     "h": 81,
      "strength": 250
     },
     {
-     "t": "1918-06-02 01:49:08",
-     "x": -650,
-     "y": -250,
+     "t": "1918-06-02 01:39:22",
+     "x": 100,
+     "y": -1400,
      "h": 0,
      "state": "line",
      "strength": 250
     },
     {
-     "t": "1918-06-07 03:39",
-     "x": -650,
-     "y": -250,
+     "t": "1918-06-06 19:59",
+     "x": 100,
+     "y": -1400,
      "strength": 250
     },
     {
-     "t": "1918-06-07 03:40",
-     "x": -650,
-     "y": -250,
-     "h": 22,
+     "t": "1918-06-06 20:00",
+     "x": 100,
+     "y": -1400,
+     "h": 1,
      "state": "column",
      "strength": 250
     },
     {
-     "t": "1918-06-07 04:00",
-     "x": -155,
-     "y": 988,
-     "strength": 250
+     "t": "1918-06-06 20:12:42",
+     "x": 121,
+     "y": -554,
+     "h": 340,
+     "strength": 240
     },
     {
-     "t": "1918-06-07 04:00:12",
+     "t": "1918-06-06 20:17:27",
+     "x": 11,
+     "y": -257,
+     "h": 36,
+     "strength": 236
+    },
+    {
+     "t": "1918-06-06 20:21:09",
+     "x": 157,
+     "y": -58,
+     "h": 351,
+     "strength": 233
+    },
+    {
+     "t": "1918-06-06 20:23:59",
+     "x": 128,
+     "y": 129,
+     "h": 309,
+     "strength": 231
+    },
+    {
+     "t": "1918-06-06 20:25:37",
+     "x": 44,
+     "y": 198,
+     "h": 339,
+     "strength": 229
+    },
+    {
+     "t": "1918-06-06 20:33:19",
+     "x": -142,
+     "y": 676,
+     "h": 263,
+     "strength": 223
+    },
+    {
+     "t": "1918-06-06 20:36:27",
+     "x": -350,
+     "y": 650,
+     "h": 0,
+     "state": "line",
+     "strength": 220
+    },
+    {
+     "t": "1918-06-06 21:30",
+     "x": -350,
+     "y": 650,
+     "strength": 177
+    },
+    {
+     "t": "1918-06-07 03:39",
+     "x": -350,
+     "y": 650,
+     "strength": 177
+    },
+    {
+     "t": "1918-06-07 03:40",
+     "x": -350,
+     "y": 650,
+     "h": 30,
+     "state": "column",
+     "strength": 177
+    },
+    {
+     "t": "1918-06-07 04:00",
      "x": -150,
      "y": 1000,
      "h": 0,
      "state": "line",
-     "strength": 250
-    },
-    {
-     "t": "1918-06-07 20:00",
-     "x": -150,
-     "y": 1000,
      "strength": 177
     },
     {
@@ -12363,7 +12421,7 @@
      "strength": 850
     },
     {
-     "t": "1918-06-13 04:30",
+     "t": "1918-06-13 04:00",
      "x": 1150,
      "y": -700,
      "state": "line",
@@ -13273,13 +13331,13 @@
      "strength": 160
     },
     {
-     "t": "1918-06-07 21:59",
+     "t": "1918-06-07 22:49",
      "x": 650,
      "y": -1000,
      "strength": 160
     },
     {
-     "t": "1918-06-07 22:00",
+     "t": "1918-06-07 22:50",
      "x": 650,
      "y": -1000,
      "h": 149,
@@ -13287,14 +13345,14 @@
      "strength": 160
     },
     {
-     "t": "1918-06-07 22:04:22",
+     "t": "1918-06-07 22:54:22",
      "x": 800,
      "y": -1250,
      "h": 63,
      "strength": 160
     },
     {
-     "t": "1918-06-07 22:11:05",
+     "t": "1918-06-07 23:01:05",
      "x": 1200,
      "y": -1050,
      "h": 340,
@@ -13405,7 +13463,7 @@
      "strength": 80
     },
     {
-     "t": "1918-06-12 19:10",
+     "t": "1918-06-12 20:40",
      "x": -700,
      "y": -3450,
      "h": 0,
@@ -13413,7 +13471,7 @@
      "strength": 80
     },
     {
-     "t": "1918-06-12 19:11",
+     "t": "1918-06-12 20:41",
      "x": -700,
      "y": -3450,
      "h": 2,
@@ -13421,14 +13479,14 @@
      "strength": 80
     },
     {
-     "t": "1918-06-12 19:52:17",
+     "t": "1918-06-12 21:22:17",
      "x": -600,
      "y": -700,
      "h": 346,
      "strength": 80
     },
     {
-     "t": "1918-06-12 20:16:17",
+     "t": "1918-06-12 21:46:17",
      "x": -1000,
      "y": 850,
      "h": 0,
@@ -13817,7 +13875,7 @@
      "strength": 120
     },
     {
-     "t": "1918-06-12 19:15",
+     "t": "1918-06-12 20:45",
      "x": -600,
      "y": -3450,
      "h": 0,
@@ -13825,7 +13883,7 @@
      "strength": 120
     },
     {
-     "t": "1918-06-12 19:16",
+     "t": "1918-06-12 20:46",
      "x": -600,
      "y": -3450,
      "h": 2,
@@ -13833,14 +13891,14 @@
      "strength": 120
     },
     {
-     "t": "1918-06-12 19:57:17",
+     "t": "1918-06-12 21:27:17",
      "x": -500,
      "y": -700,
      "h": 358,
      "strength": 120
     },
     {
-     "t": "1918-06-12 20:22:12",
+     "t": "1918-06-12 21:52:12",
      "x": -560,
      "y": 960,
      "h": 0,
@@ -14190,7 +14248,7 @@
      "strength": 400
     },
     {
-     "t": "1918-06-12 19:20",
+     "t": "1918-06-12 20:50",
      "x": -500,
      "y": -3450,
      "h": 0,
@@ -14198,7 +14256,7 @@
      "strength": 400
     },
     {
-     "t": "1918-06-12 19:21",
+     "t": "1918-06-12 20:51",
      "x": -500,
      "y": -3450,
      "h": 2,
@@ -14206,14 +14264,14 @@
      "strength": 400
     },
     {
-     "t": "1918-06-12 20:02:17",
+     "t": "1918-06-12 21:32:17",
      "x": -400,
      "y": -700,
      "h": 5,
      "strength": 400
     },
     {
-     "t": "1918-06-12 20:27:08",
+     "t": "1918-06-12 21:57:08",
      "x": -250,
      "y": 950,
      "h": 0,
@@ -14707,13 +14765,13 @@
      "strength": 191
     },
     {
-     "t": "1918-06-12 03:59",
+     "t": "1918-06-12 04:29",
      "x": 1000,
      "y": 180,
      "strength": 190
     },
     {
-     "t": "1918-06-12 04:00",
+     "t": "1918-06-12 04:30",
      "x": 1000,
      "y": 180,
      "h": 241,
@@ -14863,12 +14921,12 @@
      "state": "line"
     },
     {
-     "t": "1918-06-12 03:59",
+     "t": "1918-06-12 04:29",
      "x": 950,
      "y": 0
     },
     {
-     "t": "1918-06-12 04:00",
+     "t": "1918-06-12 04:30",
      "x": 950,
      "y": 0,
      "h": 231,
@@ -15171,32 +15229,25 @@
      "y": 540,
      "h": 40,
      "state": "firing",
-     "strength": 919
+     "strength": 884
     },
     {
-     "t": "1918-06-21 04:30",
-     "x": 560,
-     "y": 540,
-     "state": "line",
-     "strength": 853
-    },
-    {
-     "t": "1918-06-21 05:30",
+     "t": "1918-06-21 04:00",
      "x": 560,
      "y": 540,
      "state": "retreat",
-     "strength": 781
+     "strength": 797
     },
     {
-     "t": "1918-06-21 05:31",
+     "t": "1918-06-21 04:01",
      "x": 560,
      "y": 540,
      "h": 229,
      "state": "retreat",
-     "strength": 780
+     "strength": 794
     },
     {
-     "t": "1918-06-21 06:15",
+     "t": "1918-06-21 04:20",
      "x": 330,
      "y": 340,
      "h": 40,
@@ -16518,53 +16569,53 @@
      "strength": 101
     },
     {
-     "t": "1918-06-06 16:29",
+     "t": "1918-06-06 15:29",
      "x": -700,
      "y": 1450,
-     "strength": 83
+     "strength": 88
     },
     {
-     "t": "1918-06-06 16:30",
+     "t": "1918-06-06 15:30",
      "x": -700,
      "y": 1450,
      "h": 171,
      "state": "charge",
-     "strength": 83
+     "strength": 88
     },
     {
-     "t": "1918-06-06 16:40",
+     "t": "1918-06-06 15:40",
      "x": -650,
      "y": 1150,
      "h": 171,
      "state": "firing",
-     "strength": 82
+     "strength": 87
     },
     {
-     "t": "1918-06-06 16:49",
+     "t": "1918-06-06 15:49",
      "x": -650,
      "y": 1150,
-     "strength": 81
+     "strength": 86
     },
     {
-     "t": "1918-06-06 16:50",
+     "t": "1918-06-06 15:50",
      "x": -650,
      "y": 1150,
      "h": 351,
      "state": "retreat",
-     "strength": 81
+     "strength": 86
     },
     {
-     "t": "1918-06-06 17:00",
-     "x": -683,
-     "y": 1350,
-     "strength": 80
-    },
-    {
-     "t": "1918-06-06 17:05",
+     "t": "1918-06-06 16:05",
      "x": -700,
      "y": 1450,
      "h": 180,
      "state": "line",
+     "strength": 85
+    },
+    {
+     "t": "1918-06-06 17:00",
+     "x": -700,
+     "y": 1450,
      "strength": 80
     },
     {
@@ -18413,13 +18464,13 @@
      "strength": 360
     },
     {
-     "t": "1918-06-07 22:59",
+     "t": "1918-06-07 22:49",
      "x": 2750,
      "y": -1600,
      "strength": 360
     },
     {
-     "t": "1918-06-07 23:00",
+     "t": "1918-06-07 22:50",
      "x": 2750,
      "y": -1600,
      "h": 90,
@@ -18427,7 +18478,7 @@
      "strength": 360
     },
     {
-     "t": "1918-06-07 23:10:30",
+     "t": "1918-06-07 23:00:30",
      "x": 3450,
      "y": -1600,
      "h": 90,
@@ -18435,7 +18486,7 @@
      "strength": 360
     },
     {
-     "t": "1918-06-07 23:11:30",
+     "t": "1918-06-07 23:01:30",
      "x": 3450,
      "y": -1600,
      "state": "hidden",
@@ -18760,10 +18811,10 @@
      "strength": 600
     },
     {
-     "t": "1918-06-11 10:00",
-     "x": 3450,
-     "y": 800,
-     "h": 264,
+     "t": "1918-06-11 10:30",
+     "x": 2300,
+     "y": 700,
+     "h": 263,
      "state": "column",
      "strength": 600
     },
@@ -18805,13 +18856,13 @@
      "strength": 480
     },
     {
-     "t": "1918-06-12 03:14",
+     "t": "1918-06-12 04:29",
      "x": 1650,
      "y": 480,
      "strength": 480
     },
     {
-     "t": "1918-06-12 03:15",
+     "t": "1918-06-12 04:30",
      "x": 1650,
      "y": 480,
      "h": 261,
@@ -18892,22 +18943,22 @@
      "strength": 322
     },
     {
-     "t": "1918-06-13 04:30",
+     "t": "1918-06-13 04:00",
      "x": 1800,
      "y": 100,
      "state": "rout",
-     "strength": 283
+     "strength": 295
     },
     {
-     "t": "1918-06-13 04:31",
+     "t": "1918-06-13 04:01",
      "x": 1800,
      "y": 100,
      "h": 69,
      "state": "rout",
-     "strength": 283
+     "strength": 294
     },
     {
-     "t": "1918-06-13 05:00",
+     "t": "1918-06-13 04:30",
      "x": 2200,
      "y": 250,
      "h": 60,
@@ -18963,10 +19014,10 @@
      "strength": 600
     },
     {
-     "t": "1918-06-11 13:30",
-     "x": 2900,
+     "t": "1918-06-11 13:40",
+     "x": 2300,
      "y": 500,
-     "h": 267,
+     "h": 263,
      "state": "column",
      "strength": 600
     },
@@ -19008,13 +19059,13 @@
      "strength": 480
     },
     {
-     "t": "1918-06-12 03:14",
+     "t": "1918-06-12 04:29",
      "x": 1550,
      "y": 380,
      "strength": 480
     },
     {
-     "t": "1918-06-12 03:15",
+     "t": "1918-06-12 04:30",
      "x": 1550,
      "y": 380,
      "h": 258,
@@ -19095,26 +19146,32 @@
      "strength": 314
     },
     {
-     "t": "1918-06-13 04:30",
+     "t": "1918-06-13 04:00",
      "x": 1700,
      "y": -50,
      "state": "rout",
-     "strength": 234
+     "strength": 258
     },
     {
-     "t": "1918-06-13 04:31",
+     "t": "1918-06-13 04:01",
      "x": 1700,
      "y": -50,
      "h": 51,
      "state": "rout",
-     "strength": 233
+     "strength": 257
+    },
+    {
+     "t": "1918-06-13 04:30",
+     "x": 2250,
+     "y": 400,
+     "h": 60,
+     "state": "line",
+     "strength": 234
     },
     {
      "t": "1918-06-13 05:00",
      "x": 2250,
      "y": 400,
-     "h": 60,
-     "state": "line",
      "strength": 210
     },
     {
@@ -19252,26 +19309,32 @@
      "strength": 324
     },
     {
-     "t": "1918-06-13 04:30",
+     "t": "1918-06-13 04:00",
      "x": 2130,
      "y": -760,
      "state": "rout",
-     "strength": 157
+     "strength": 207
     },
     {
-     "t": "1918-06-13 04:31",
+     "t": "1918-06-13 04:01",
      "x": 2130,
      "y": -760,
      "h": 32,
      "state": "rout",
-     "strength": 155
+     "strength": 205
+    },
+    {
+     "t": "1918-06-13 04:30",
+     "x": 2450,
+     "y": -250,
+     "h": 40,
+     "state": "line",
+     "strength": 157
     },
     {
      "t": "1918-06-13 05:00",
      "x": 2450,
      "y": -250,
-     "h": 40,
-     "state": "line",
      "strength": 107
     },
     {
@@ -19685,7 +19748,7 @@
      "state": "firing"
     },
     {
-     "t": "1918-06-21 04:30",
+     "t": "1918-06-21 04:00",
      "x": 600,
      "y": 650,
      "state": "line"
@@ -19993,10 +20056,10 @@
    "title": "Through the wheat",
    "text": "At five 3/5, Major Benjamin Berry, crosses 400 yards of wheat from the Lucy-Torcy road toward the west face of the wood in waves. 'Halfway across the wheat field, German machine guns and rifles opened up on the long, straight lines and mowed them down.' Berry is wounded. On the right 3/6 steps off from the ravine east of Lucy, the 82nd Company left and the 84th right, the 83rd and 97th behind, 200 yards from the southern tip of the wood. The 96th Company of 2/6 starts across 600 yards toward Bouresches; Captain Duncan is killed by a shell as it goes. First Sergeant Dan Daly: 'Do you want to live forever?' At 5.30 Catlin is shot through the chest watching 3/6 reach the wood, and Lieutenant Colonel Harry Lee takes the regiment.",
    "at": [
-    700,
-    -700
+    950,
+    -650
    ],
-   "view": 3400,
+   "view": 2600,
    "speed": 60,
    "when": "5 p.m."
   },
@@ -20015,13 +20078,13 @@
   {
    "t": "1918-06-06 21:40",
    "title": "Held up",
-   "text": "At 8.45 Major Berton Sibley reports 'Unable to advance infantry further ... Losses already heavy.' 3/6 has halted at the far edge of the wood near Bouresches, its 82nd Company held by machine-gun nests in the rocks. At 9.40 the division hears that the attack on the north edge is 'held up by machine gun nest', and Wise's three reserve companies go north on the Torcy road into the gap between Turrill and Berry. Major Thomas Holcomb asks for reinforcements for Bouresches; the 84th and 97th Companies march in from the field at 11.40 without resistance, and Lieutenant Moore and Sergeant Major Quick drive an ammunition truck into the village under flares. The 4th Brigade has lost 31 officers and 1,056 men in the day.",
+   "text": "At 8.45 Major Berton Sibley reports 'Unable to advance infantry further ... Losses already heavy.' 3/6 has halted at the far edge of the wood near Bouresches, its 82nd Company held by machine-gun nests in the rocks. At 9.40 the division hears that the attack on the north edge is 'held up by machine gun nest', and Wise's three reserve companies go north on the Torcy road into the gap between Turrill and Berry. Major Thomas Holcomb asks for reinforcements for Bouresches; the 84th and 97th Companies march in from the field at 11.40 without resistance, and Lieutenant Moore and Sergeant Major Quick drive an ammunition truck into the village under flares. The 4th Brigade has lost 31 officers and 1,056 men in the day, 10 of them in the 8th Machine Gun Company.",
    "at": [
     900,
     -300
    ],
    "view": 4200,
-   "speed": 120,
+   "speed": 300,
    "when": "9.40 p.m."
   },
   {
@@ -20100,10 +20163,10 @@
    "title": "Hartlieb",
    "text": "About noon Hartlieb's counter-attack regains the 461st's old position in the west half of the wood, and the 1st Battalion of the 462nd goes into the woods at Les Brusses. The German brigade orders the old line retaken 'at any cost'. On the east edge the 1st Battalion of the 40th counter-attacks 200 m, and the 2nd Battalion of the 110th Grenadiers, Mencke, another 200 m; they are exhausted by seven, and the Marine line has been pulled back a little. Companies D and F of the 2nd Engineers go to Wise, a platoon to each Marine company.",
    "at": [
-    1100,
-    500
+    1300,
+    450
    ],
-   "view": 3200,
+   "view": 2200,
    "speed": 120,
    "when": "about noon"
   },
@@ -20132,7 +20195,7 @@
    "when": "4.30 p.m."
   },
   {
-   "t": "1918-06-12 19:00",
+   "t": "1918-06-12 20:45",
    "title": "Relief at dusk",
    "text": "At dusk 3/6, back from the Bois de Plati\u00e8re, relieves 1/5 north-east of Hill 142. At 11.20 that night an officer and 56 men of the 461st come in, 'some surrendered under a flag of truce', and say a fresh division attacks tonight. At 1.30 2/6 is ordered up to the woods north-west of Lucy as brigade reserve; a dying German officer tells them the attack will come at dawn.",
    "at": [
@@ -20140,7 +20203,8 @@
     0
    ],
    "view": 4400,
-   "speed": 600
+   "speed": 600,
+   "when": "at dusk"
   },
   {
    "t": "1918-06-13 02:30",
@@ -20163,7 +20227,7 @@
     -300
    ],
    "view": 3800,
-   "speed": 120,
+   "speed": 300,
    "when": "2 a.m."
   },
   {
@@ -20300,6 +20364,7 @@
   "Gary W. Cozzens, \"How Will the Americans Behave in a Pitched Battle?\", <i>Marine Corps History</i> 4/2 (Winter 2018): Hill 142 minute by minute; J. Wayne Hill, <i>A Regiment Like No Other: The 6th Marine Regiment at Belleau Wood</i> (MMAS thesis, 2012); Mark R. Folse, \"Keystone Battle Brief: The Battle of Belleau Wood\" (Marine Corps History Division, 2019).",
   "American Battle Monuments Commission, <a href='https://archive.org/details/americanarmiesba00wash' target='_blank'><i>American Armies and Battlefields in Europe</i></a> (1938); War Department, <a href='https://archive.org/details/historiesoftwohu00unit' target='_blank'><i>Histories of Two Hundred and Fifty-One Divisions of the German Army</i></a> (1920); Wikipedia, <a href='https://en.wikipedia.org/wiki/Battle_of_Belleau_Wood' target='_blank'>Battle of Belleau Wood</a> (read 25 October 2026), for the casualty estimates.",
   "Woods, roads, the railway and places from OpenStreetMap (ODbL); the wood is the memorial park's outline. Hills 126, 133, 142, 169, 176 and 181, the Pavilion and Triangle Farm are placed from the sources' text and the surface model, within 150 to 400 m. Sunrise and sunset computed for the place and date, French summer time.",
+  "Placed by inference, not from the sources: the Germans in the wheat at Les Mares Farm on 3 June as the 197th Division, which held Hill 164 by the farm that morning; the 45th Company's way up to Hill 142 on the evening of 6 June, where its 73 casualties are drawn; the 7th Infantry's battalions, 1st at the west edge, 2nd at Hill 181 and then the south-east corner, 3rd in Bouresches, so that 3/5 relieves the 1st in the north; the 28th Division leaving the map on the night of 16 June, when the 87th relieves the 237th. To keep the replay moving, the 12 June attack is drawn going forward from 4.30, the 13 June attack breaking at four, the 7th Infantry's second attack lasting an hour, and the Baden battalions of 11 June coming in from east of the railway.",
   "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 \u00a9 DLR e.V. 2010-2014 and \u00a9 Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m, sampled to 17.5 m. A surface model: the wood and the villages stand 10 to 25 m above the ground."
  ]
 }

@@ -303,7 +303,7 @@ hide("fr43", plus(move("fr43", D(1, "14:10"), [(-250, -500), (-150, -1200), (-60
 # ---- 2 June: the 5th Marines on the left; the Germans take Bouresches, Cote 126 and the wood ----
 for id, p0, p1, h, t in (("m5_2", (-3450, -450), (-2900, 250), 15, "01:15"), ("m5_51", (-3450, -400), (-2600, 300), 15, "01:15"),
                          ("m5_17", (-3450, -350), (-3200, 200), 0, "01:20"), ("m5_66", (-3450, -300), (-2750, 450), 15, "01:20"),
-                         ("m5_3", SOUTH(-400), (-350, -450), 10, "01:00"), ("m5_45", SOUTH(-500), (-650, -250), 0, "01:00")):
+                         ("m5_3", SOUTH(-400), (250, -1250), 10, "01:00"), ("m5_45", SOUTH(-500), (100, -1400), 0, "01:00")):
     appear(id, D(2, t), p0, h=heading(p0, p1), state="column"); move(id, plus(D(2, t), 1), [(p0[0], -1500), p1] if p0[1] < -3000 else [p1], h=h)
 appear("g398_3", D(2, "01:37"), (3450, 0), 240, state="column"); go("g398_3", D(2, "01:37"), D(2, "02:00"), [(2150, -750)], h=240, moving="charge")
 appear("g398_out", D(2, "01:37"), (3450, -200), 240, state="column"); go("g398_out", D(2, "01:37"), D(2, "02:00"), [(2000, -900)], h=240, moving="charge")
@@ -376,7 +376,7 @@ go("g_jager", D(6, "08:50"), D(6, "09:40"), [(-1000, 1550)], h=170)
 go("fr167", D(6, "12:30"), D(6, "13:10"), [(-1800, 1300)], h=30)
 # Five counter-attacks on the hill between nine and six, by the 12th Company of the 460th and the Jäger.
 G12 = (-700, 1450)
-for t in ("09:30", "12:30", "16:30"):
+for t in ("09:30", "12:30", "15:30"):
     go("g460_12", D(6, t), plus(D(6, t), 10), [(-650, 1150)], state="firing", moving="charge")
     go("g460_12", plus(D(6, t), 20), plus(D(6, t), 35), [G12], h=180, moving="retreat"); fire("m5_49", plus(D(6, t), 5), plus(D(6, t), 25))
 for t in ("11:00", "14:30"):
@@ -408,6 +408,7 @@ fire("g398_out", D(6, "17:30"), D(6, "19:30"), state="retreat"); go("g398_out", 
 go("eng_c", D(6, "19:45"), D(6, "20:15"), [(2350, -1050)]); go("eng_c", D(6, "21:30"), D(6, "22:00"), [(2300, -1350)], h=60)
 move("m6_2", D(6, "23:00"), [(1200, -1700), (1880, -1080)], h=30)
 move("m5_2", D(6, "21:45"), TORCY_RD + [(-150, 750)], h=0)
+move("m5_45", D(6, "20:00"), TORCY_RD + [(-350, 650)], h=0)  # its way up is not recorded; its losses fall on it
 # The 23rd Infantry toward Hill 192, south-east of Triangle Farm, and the 47th's counter-attack at 8.14.
 go("inf23", D(6, "18:30"), D(6, "19:10"), [(2300, -2350)], h=60, moving="charge")
 appear("g47_1", D(6, "19:30"), (3450, -1500), 250, state="column"); go("g47_1", D(6, "19:30"), D(6, "20:00"), [(2750, -1600)], h=220)
@@ -420,9 +421,9 @@ appear("g6g_2", D(6, "22:00"), (3450, 600), 250, state="column"); go("g6g_2", D(
 # ---- 7 and 8 June: the engineers come up; the night attacks; the rocks of the south lobe ----
 appear("eng_a", D(7, "01:20"), LUCY, 90, state="column"); go("eng_a", D(7, "01:20"), D(7, "02:00"), [(708, -1292), (1900, -1150), (2220, -980)], h=30)
 appear("eng_b", D(7, "01:50"), LUCY, 90, state="column"); go("eng_b", D(7, "01:50"), D(7, "02:30"), [(380, -1400), (600, -1250)], h=30)
-move("m5_45", D(7, "03:40"), [(-150, 1000)], h=0)
-leave("g47_1", D(7, "23:00"), [(3450, -1600)])
-move("m6_82", D(7, "22:00"), [(800, -1250), (1200, -1050)], h=340)
+go("m5_45", D(7, "03:40"), D(7, "04:00"), [(-150, 1000)], h=0)
+leave("g47_1", D(7, "22:50"), [(3450, -1600)])
+move("m6_82", D(7, "22:50"), [(800, -1250), (1200, -1050)], h=340)
 go("g6g_2", D(7, "23:30"), D(7, "23:45"), [(2200, -350)], state="firing", moving="charge"); at("g6g_2", D(7, "23:55"), state="rout")
 go("g6g_2", D(7, "23:56"), D(8, "00:20"), [(2300, 450)], h=200, moving="rout")
 fire("m6_83", D(7, "23:33"), D(7, "23:58")); fire("m6_8497", D(7, "23:35"), D(7, "23:55"))
@@ -493,10 +494,10 @@ fire("m5_17", D(11, "05:58"), D(11, "06:15")); fire("m5_66", D(11, "05:58"), D(1
 move("g462", D(11, "09:00"), [P['brusses']], h=200)
 go("g461_1", D(11, "11:30"), D(11, "12:00"), [(520, 250)], state="firing", moving="charge"); at("g461_1", D(11, "12:30"), state="line")
 fire("m5_3", D(11, "11:35"), D(11, "12:15"))
-appear("g40_1", D(11, "10:00"), (3450, 800), 260, state="column"); go("g40_1", D(11, "10:00"), D(11, "10:40"), [(1900, 650)], h=250)
+appear("g40_1", D(11, "10:30"), (2300, 700), 260, state="column"); go("g40_1", D(11, "10:30"), D(11, "10:40"), [(1900, 650)], h=250)
 go("g40_1", D(11, "11:00"), D(11, "11:15"), [(1650, 480)], state="firing", moving="charge"); at("g40_1", D(11, "12:00"), state="line")
 fire("m5_2", D(11, "11:02"), D(11, "11:14")); go("m5_2", D(11, "11:15"), D(11, "11:45"), [(1300, 280)], h=80, moving="retreat")
-appear("g110_2", D(11, "13:30"), (2900, 500), 260, state="column"); go("g110_2", D(11, "13:30"), D(11, "13:50"), [(1900, 450)], h=250)
+appear("g110_2", D(11, "13:40"), (2300, 500), 260, state="column"); go("g110_2", D(11, "13:40"), D(11, "13:50"), [(1900, 450)], h=250)
 go("g110_2", D(11, "14:00"), D(11, "14:20"), [(1550, 380)], state="firing", moving="charge"); at("g110_2", D(11, "14:45"), state="line")
 fire("m5_2", D(11, "14:05"), D(11, "14:19")); go("m5_2", D(11, "14:20"), D(11, "14:50"), [(1150, 250)], h=80, moving="retreat")
 move("eng_d", D(11, "16:20"), [(-150, 700), (180, 100), (1000, 180)], h=80)
@@ -504,10 +505,10 @@ appear("eng_f", D(11, "16:00"), SOUTH(-400), 0, state="column"); move("eng_f", D
 TINTS = [dict(color="rgba(225,228,232,0.35)", **{"from": D(11, "04:00"), "until": D(11, "06:30")})]  # morning mist
 
 # ---- 12 June: the old line retaken, then the north-east of the wood ----
-go("g110_2", D(12, "03:15"), D(12, "05:01"), [(1000, 260)], state="firing", moving="charge"); at("g110_2", D(12, "05:30"), state="line")
-go("g40_1", D(12, "03:15"), D(12, "05:01"), [(1250, 420)], state="firing", moving="charge"); at("g40_1", D(12, "05:30"), state="line")
-go("m5_2", D(12, "04:00"), D(12, "05:00"), [(800, 150)], h=80, moving="retreat"); go("m5_51", D(12, "04:00"), D(12, "05:00"), [(900, -150)], h=80, moving="retreat")
-go("eng_d", D(12, "04:00"), D(12, "05:00"), [(780, 60)], h=80, moving="retreat"); go("eng_f", D(12, "04:00"), D(12, "05:00"), [(850, -80)], h=80, moving="retreat")
+go("g110_2", D(12, "04:30"), D(12, "05:01"), [(1000, 260)], state="firing", moving="charge"); at("g110_2", D(12, "05:30"), state="line")
+go("g40_1", D(12, "04:30"), D(12, "05:01"), [(1250, 420)], state="firing", moving="charge"); at("g40_1", D(12, "05:30"), state="line")
+go("m5_2", D(12, "04:30"), D(12, "05:00"), [(800, 150)], h=80, moving="retreat"); go("m5_51", D(12, "04:30"), D(12, "05:00"), [(900, -150)], h=80, moving="retreat")
+go("eng_d", D(12, "04:30"), D(12, "05:00"), [(780, 60)], h=80, moving="retreat"); go("eng_f", D(12, "04:30"), D(12, "05:00"), [(850, -80)], h=80, moving="retreat")
 for p in ((500, 300), (900, 300), (1200, 100), (800, -300)): smoke(p, D(12, "12:30"), D(12, "16:30"), rate=16, spread=500)
 smoke(BOURESCHES, D(12, "13:00"), D(13, "08:00"), rate=6, spread=300)
 fire("g461_1", D(12, "15:00"), D(12, "15:30")); fire("m5_3", D(12, "15:00"), D(12, "15:30"))
@@ -520,22 +521,22 @@ go("g461_2", D(12, "17:45"), D(12, "18:00"), [(820, 470)], state="firing", movin
 go("g462", D(12, "16:40"), D(12, "17:30"), [(1100, 1200), (900, 700)], h=190)
 go("g462", D(12, "17:45"), D(12, "18:00"), [(950, 520)], state="firing", moving="charge"); at("g462", D(12, "18:30"), state="line")
 # Dusk: 3/6 relieves 1/5 north-east of Hill 142.
-for id, t, x, p in (("m6_82", "19:10", -700, (-1000, 850)), ("m6_83", "19:15", -600, (-560, 960)), ("m6_8497", "19:20", -500, (-250, 950))):
+for id, t, x, p in (("m6_82", "20:40", -700, (-1000, 850)), ("m6_83", "20:45", -600, (-560, 960)), ("m6_8497", "20:50", -500, (-250, 950))):
     appear(id, D(12, t), SOUTH(x), 0, state="column"); move(id, plus(D(12, t), 1), [(x + 100, -700), p], h=0)
-leave("m5_49", D(12, "20:30"), [(-500, -700), SOUTH(-600)]); leave("m5_67", D(12, "20:30"), [(-700, -700), SOUTH(-700)])
+leave("m5_49", D(12, "21:50"), [(-500, -700), SOUTH(-600)]); leave("m5_67", D(12, "21:50"), [(-700, -700), SOUTH(-700)])
 
 # ---- 13 June: the Baden division's attack ----
 appear("m6_2", D(13, "01:00"), SOUTH(-300), 0, state="column"); move("m6_2", D(13, "01:01"), [(-500, -700)], h=30)
 appear("m6_96", D(13, "01:00"), SOUTH(-200), 0, state="column"); move("m6_96", D(13, "01:01"), [(-450, -800)], h=30)
 for p in (BOURESCHES, (1300, -400), (800, -900)): smoke(p, D(13, "02:00"), D(13, "02:30"), rate=16, spread=400)
 smoke(P['torcy'], D(13, "03:45"), D(13, "04:30"), rate=10, spread=400)
-go("g109", D(13, "02:30"), D(13, "02:50"), [(2130, -760)], state="firing", moving="charge"); at("g109", D(13, "04:30"), state="rout")
-go("g109", D(13, "04:31"), D(13, "05:00"), [(2450, -250)], h=40, moving="rout")
-go("g110_2", D(13, "02:30"), D(13, "02:50"), [(1700, -50)], state="firing", moving="charge"); at("g110_2", D(13, "04:30"), state="rout")
-go("g110_2", D(13, "04:31"), D(13, "05:00"), [(2250, 400)], h=60, moving="rout")
-go("g40_1", D(13, "02:30"), D(13, "02:50"), [(1800, 100)], state="firing", moving="charge"); at("g40_1", D(13, "04:30"), state="rout")
-go("g40_1", D(13, "04:31"), D(13, "05:00"), [(2200, 250)], h=60, moving="rout")
-for id in ("m5_17", "m5_66", "m5_2", "m5_51", "m6_1"): fire(id, D(13, "02:50"), D(13, "04:30"))
+go("g109", D(13, "02:30"), D(13, "02:50"), [(2130, -760)], state="firing", moving="charge"); at("g109", D(13, "04:00"), state="rout")
+go("g109", D(13, "04:01"), D(13, "04:30"), [(2450, -250)], h=40, moving="rout")
+go("g110_2", D(13, "02:30"), D(13, "02:50"), [(1700, -50)], state="firing", moving="charge"); at("g110_2", D(13, "04:00"), state="rout")
+go("g110_2", D(13, "04:01"), D(13, "04:30"), [(2250, 400)], h=60, moving="rout")
+go("g40_1", D(13, "02:30"), D(13, "02:50"), [(1800, 100)], state="firing", moving="charge"); at("g40_1", D(13, "04:00"), state="rout")
+go("g40_1", D(13, "04:01"), D(13, "04:30"), [(2200, 250)], h=60, moving="rout")
+for id in ("m5_17", "m5_66", "m5_2", "m5_51", "m6_1"): fire(id, D(13, "02:50"), D(13, "04:00"))
 # A false report that Bouresches had fallen sends the 78th and 96th Companies 2 km in open order to the woods south-east of Lucy.
 move("m6_96", D(13, "07:20"), [(1000, -1700)], h=40, moving="charge", kmh=3); move("m6_2", D(13, "07:20"), [(1150, -1650)], h=40, moving="charge", kmh=3)
 
@@ -568,8 +569,8 @@ move("inf7_2", D(18, "22:00"), [(400, -1450), (1050, -750)], h=30); leave("m6_1"
 go("inf7_1", D(20, "03:50"), D(20, "04:10"), [(560, 540)], h=40, state="firing", moving="charge"); at("inf7_1", D(20, "04:30"), state="retreat")
 go("inf7_1", D(20, "04:31"), D(20, "05:00"), [(330, 340)], h=40, moving="retreat"); fire("g347_3", D(20, "03:52"), D(20, "04:30"))
 smoke((650, 650), D(21, "03:00"), D(21, "03:15"), rate=12, spread=400)
-go("inf7_1", D(21, "03:15"), D(21, "03:35"), [(560, 540)], h=40, state="firing", moving="charge"); at("inf7_1", D(21, "04:30"), state="line"); at("inf7_1", D(21, "05:30"), state="retreat")
-go("inf7_1", D(21, "05:31"), D(21, "06:15"), [(330, 340)], h=40, moving="retreat"); fire("g347_3", D(21, "03:20"), D(21, "04:30"))
+go("inf7_1", D(21, "03:15"), D(21, "03:35"), [(560, 540)], h=40, state="firing", moving="charge"); at("inf7_1", D(21, "04:00"), state="retreat")
+go("inf7_1", D(21, "04:01"), D(21, "04:20"), [(330, 340)], h=40, moving="retreat"); fire("g347_3", D(21, "03:20"), D(21, "04:00"))
 go("g347_3", D(22, "21:00"), D(22, "21:30"), [(700, 1150)], h=180)
 
 # ---- 22 and 23 June: the Marines come back; Shearer's first attack ----
@@ -617,7 +618,7 @@ def S(day, a, b, n, day2=None): return (D(day, a), D(day2 or day, b), n)
 LOSS = {
     "m5_49": [S(6, "03:47", "10:00", 120)], "m5_67": [S(6, "03:47", "07:00", 110)], "m5_66": [S(6, "05:10", "17:00", 52), S(14, "00:00", "12:00", 25)],
     "m5_17": [S(6, "05:36", "17:00", 50), S(14, "00:00", "12:00", 25)], "m5_51": [S(6, "06:40", "18:00", 46), S(11, "04:30", "05:40", 50), S(12, "16:30", "17:10", 30), S(14, "00:00", "12:00", 30)],
-    "m5_45": [S(7, "04:00", "20:00", 73)],
+    "m5_45": [S(6, "20:00", "21:30", 73)],
     "m5_3": [S(6, "17:02", "18:40", 250), S(23, "19:00", "20:45", 130), S(25, "17:00", "21:00", 250)],
     "m6_82": [S(6, "17:00", "20:30", 90), S(8, "04:00", "06:20", 80)], "m6_83": [S(6, "17:10", "20:30", 60), S(8, "04:00", "06:00", 70), S(25, "17:00", "20:00", 20)],
     "m6_8497": [S(6, "17:05", "18:30", 66), S(7, "23:30", "02:00", 34, 8)],
@@ -625,7 +626,7 @@ LOSS = {
     "m5_2": [S(11, "04:30", "07:00", 200), S(12, "16:30", "17:40", 100), S(14, "00:00", "12:00", 120)],
     "m6_1": [S(10, "04:30", "05:40", 60), S(11, "05:00", "06:30", 90), S(14, "00:00", "18:00", 200)],
     "eng_d": [S(6, "06:00", "18:00", 11, 12), S(13, "23:00", "02:00", 45, 14)],
-    "inf7_1": [S(20, "03:52", "04:30", 63), S(21, "03:20", "06:15", 210)],
+    "inf7_1": [S(20, "03:52", "04:30", 63), S(21, "03:20", "04:20", 210)],
     "g460_9": [S(6, "03:47", "04:05", 120)], "g462_10": [S(6, "03:50", "04:03", 90), S(6, "04:18", "04:19", 30)],
     "g460_12": [S(6, "09:30", "17:00", 40), S(10, "04:30", "10:00", 38)], "g460_1011": [S(6, "03:50", "21:30", 30), S(8, "04:00", "12:00", 39)],
     "g460_2": [S(7, "06:00", "20:00", 30), S(9, "08:30", "10:00", 69), S(11, "06:00", "18:00", 41), S(13, "02:30", "12:00", 47)],
@@ -636,8 +637,8 @@ LOSS = {
     "g462": [S(9, "06:00", "20:00", 80), S(10, "06:00", "20:00", 60), S(11, "12:00", "18:00", 70), S(12, "17:45", "18:30", 63), S(13, "02:30", "06:00", 57), S(15, "06:00", "20:00", 20)],
     "g109": [S(9, "06:00", "20:00", 54), S(10, "06:00", "20:00", 184), S(11, "05:55", "07:00", 49), S(12, "13:00", "20:00", 56), S(13, "02:30", "05:00", 250)],
     "g40_2": [S(10, "01:20", "05:20", 250), S(11, "05:05", "05:40", 280)],
-    "g40_1": [S(11, "11:00", "12:00", 120), S(12, "03:15", "05:01", 75), S(12, "16:32", "16:50", 75), S(13, "02:30", "04:30", 47)],
-    "g110_2": [S(11, "14:00", "14:45", 120), S(12, "03:15", "05:01", 75), S(12, "16:32", "16:50", 75), S(13, "02:30", "05:00", 120)],
+    "g40_1": [S(11, "11:00", "12:00", 120), S(12, "04:30", "05:01", 75), S(12, "16:32", "16:50", 75), S(13, "02:30", "04:30", 47)],
+    "g110_2": [S(11, "14:00", "14:45", 120), S(12, "04:30", "05:01", 75), S(12, "16:32", "16:50", 75), S(13, "02:30", "05:00", 120)],
     "g398_out": [S(6, "17:30", "19:50", 60), S(7, "06:00", "20:00", 27)], "g398_3": [S(6, "17:00", "23:00", 30), S(7, "06:00", "20:00", 30)],
     "g398_1": [S(6, "17:00", "23:00", 21)], "g47_1": [S(6, "20:14", "20:40", 40)], "g6g_2": [S(7, "23:30", "23:59", 40)],
     "g273": [S(3, "16:00", "16:40", 300), S(6, "03:55", "08:15", 418)], "g_jager": [S(6, "11:00", "15:00", 150)], "g20": [S(9, "03:45", "04:30", 89)],
@@ -645,7 +646,7 @@ LOSS = {
 }
 def lost(ids, day): return sum(n for id in ids for t0, _, n in LOSS.get(id, []) if t0.startswith(D(day, "")))
 MARINES = [r[0] for r in OOB if r[0].startswith("m")]
-assert lost(MARINES, 6) + 73 + 10 == 1087, "the brigade's 31 officers and 1,056 men on 6 June: the 45th Company's 73 fall on the 7th, the 8th MG Company's 10 are not drawn"
+assert lost(MARINES, 6) + 10 == 1087, "the brigade's 31 officers and 1,056 men on 6 June: the 8th MG Company's 10 are not drawn"
 assert lost(["m5_17", "m5_49", "m5_66", "m5_67"], 6) == 332, "1/5's 14 officers and 318 men"
 assert lost(["m6_82", "m6_83", "m6_8497"], 6) + lost(["m6_82", "m6_83", "m6_8497"], 7) + lost(["m6_82", "m6_83", "m6_8497"], 8) == 400, "3/6, nearly 400 by 8 June"
 assert lost(MARINES, 14) == 700, "700 gas cases in 24 hours"
@@ -723,21 +724,21 @@ CHAPTERS = [
     (D(6, "07:00"), "Past the objective", "'Reached our objectives. We are throwing out strong points and are consolidating,' 1/5 reports at seven. Hamilton's 49th has run on past the objective through the square woods toward the road short of Bussiares, and three men get into Torcy; he brings the company back to the nose of Hill 142. At 7.30 an aviator reports that 'it is uncertain who holds Bois de Belleau'. On the left the French enter Bussiares at 8.10 and are thrown out at 8.45 by a Saxon Jäger battalion.", [-1300, 1600], 3400, 120, "7 a.m."),
     (D(6, "09:30"), "So far have held the hill", "At 9.50 Hamilton writes from 'the nose of Hill 142 and about 400 yds N.E. of square woods ... counter-attacked several times but so far have held the hill. Our casualties are very heavy.' Between nine and six the 12th Company of the 460th and the Jäger counter-attack five times. Janson (Hoffman) bayonets two of twelve Germans with five light machine guns 18 m from the line. The French come up on the left at 1.10. The 10th and 11th Companies of the 460th hold the square woods all day and slip away after dark without losing a gun. 1/5 loses 14 officers and 318 men; the 273rd Infantry 13 officers and 405.", [-800, 1250], 2600, 120, "9.50 a.m."),
     (D(6, "14:05"), "Field Order No. 2", "At 2.05 Harbord orders the wood taken in two phases: first the wood itself at five, 3/5 on the left and 3/6 on the right under Colonel Albertus Catlin of the 6th Marines, 2/6 conforming on the right; then the railway station, Bouresches, the brook crossing and Hills 126 and 133. 2/5 waits in reserve in the woods north-west of Lucy. There is to be no artillery preparation: the wood is thought to be lightly held. Catlin gets the order at 3.45 from Harbord's aide by motorcycle, and his company commanders are shown the map and led to the line.", [300, -800], 4400, 120, "2.05 p.m."),
-    (D(6, "17:00"), "Through the wheat", "At five 3/5, Major Benjamin Berry, crosses 400 yards of wheat from the Lucy-Torcy road toward the west face of the wood in waves. 'Halfway across the wheat field, German machine guns and rifles opened up on the long, straight lines and mowed them down.' Berry is wounded. On the right 3/6 steps off from the ravine east of Lucy, the 82nd Company left and the 84th right, the 83rd and 97th behind, 200 yards from the southern tip of the wood. The 96th Company of 2/6 starts across 600 yards toward Bouresches; Captain Duncan is killed by a shell as it goes. First Sergeant Dan Daly: 'Do you want to live forever?' At 5.30 Catlin is shot through the chest watching 3/6 reach the wood, and Lieutenant Colonel Harry Lee takes the regiment.", [700, -700], 3400, 60, "5 p.m."),
+    (D(6, "17:00"), "Through the wheat", "At five 3/5, Major Benjamin Berry, crosses 400 yards of wheat from the Lucy-Torcy road toward the west face of the wood in waves. 'Halfway across the wheat field, German machine guns and rifles opened up on the long, straight lines and mowed them down.' Berry is wounded. On the right 3/6 steps off from the ravine east of Lucy, the 82nd Company left and the 84th right, the 83rd and 97th behind, 200 yards from the southern tip of the wood. The 96th Company of 2/6 starts across 600 yards toward Bouresches; Captain Duncan is killed by a shell as it goes. First Sergeant Dan Daly: 'Do you want to live forever?' At 5.30 Catlin is shot through the chest watching 3/6 reach the wood, and Lieutenant Colonel Harry Lee takes the regiment.", [950, -650], 2600, 60, "5 p.m."),
     (D(6, "19:15"), "Bouresches", "At 7.15 an aviator sees 'advance elements about 400 meters southwest of Bouresches ... still fighting in the Bois de Belleau ... in the northern part of the attack I see absolutely nothing'. At 7.20 the 83rd Company is reported at the railway station, a claim doubted that night. At 7.30 the 96th enters Bouresches, 'making good use of the bed of a brook', and clears the 7th and 8th Companies of the 398th out house by house; the outpost falls back to the railway. Lieutenants Robertson and Clifton Cates hold the village with about 24 men. South-east of Triangle Farm the 23rd Infantry, attacking toward Hill 192, is driven back at 8.14 by the 1st Battalion of the 47th.", [1900, -1200], 2400, 120, "7.15 p.m."),
-    (D(6, "21:40"), "Held up", "At 8.45 Major Berton Sibley reports 'Unable to advance infantry further ... Losses already heavy.' 3/6 has halted at the far edge of the wood near Bouresches, its 82nd Company held by machine-gun nests in the rocks. At 9.40 the division hears that the attack on the north edge is 'held up by machine gun nest', and Wise's three reserve companies go north on the Torcy road into the gap between Turrill and Berry. Major Thomas Holcomb asks for reinforcements for Bouresches; the 84th and 97th Companies march in from the field at 11.40 without resistance, and Lieutenant Moore and Sergeant Major Quick drive an ammunition truck into the village under flares. The 4th Brigade has lost 31 officers and 1,056 men in the day.", [900, -300], 4200, 120, "9.40 p.m."),
+    (D(6, "21:40"), "Held up", "At 8.45 Major Berton Sibley reports 'Unable to advance infantry further ... Losses already heavy.' 3/6 has halted at the far edge of the wood near Bouresches, its 82nd Company held by machine-gun nests in the rocks. At 9.40 the division hears that the attack on the north edge is 'held up by machine gun nest', and Wise's three reserve companies go north on the Torcy road into the gap between Turrill and Berry. Major Thomas Holcomb asks for reinforcements for Bouresches; the 84th and 97th Companies march in from the field at 11.40 without resistance, and Lieutenant Moore and Sergeant Major Quick drive an ammunition truck into the village under flares. The 4th Brigade has lost 31 officers and 1,056 men in the day, 10 of them in the 8th Machine Gun Company.", [900, -300], 4200, 300, "9.40 p.m."),
     (D(7, "23:30"), "The night attack", "7 June is comparatively quiet; at four that morning the 45th Company came up on 1/5's right on Hill 142. At 11.30 that night the Germans attack 3/6 and, from the north, Bouresches, after heavy artillery and machine-gun fire; the 83rd Company on the east edge shoots the attack down with automatic rifles and captured guns. At 12.15 an attack on the 23rd Infantry's front is repulsed, and at 1.25 another on Bouresches, where 110 men of Company A, 2nd Engineers, are in the line.", [2150, -800], 2800, 120, "11.30 p.m."),
     (D(8, "04:00"), "The rocks", "At four on 8 June, after a Stokes-mortar bombardment, 3/6 attacks north through the south lobe, the 82nd Company on the right at the south-east corner and the 83rd on the left, with Company B of the engineers on a flank. The machine-gun nests are 'well fortified in the rocks ... one flanked the other'. Four guns are taken; the fighting goes on to 8.30, and by 11.30 the battalion is back under cover. The 461st's 6th and 8th Companies and the 365th Engineer Company throw back a break-in from the Bouresches side and take 40 prisoners. At 1.55 Sibley reports that 'officers and men are too much exhausted for further attack'. 3/6 has lost nearly 400 men.", [950, -950], 1800, 120, "4 a.m."),
     (D(8, "22:00"), "The guns", "That night 3/6 and the engineers are taken out and the wood is left to the artillery; they reach the Bois de Platière by daylight and get their first hot food since 31 May. The German 398th gives way to the 109th Grenadiers of the 28th (Baden) Division, and the 197th Division to the 5th Guard. On 9 June the American and French guns fire 28,000 75 mm and 6,000 155 mm shells into the wood. On the left the French 116th Infantry attacks Bussiares at 3.40, takes 4 officers and 85 men of the 20th Regiment in the triangular wood south-west of it and gets into the village at 8.30, but is thrown out by two companies of the 460th and holds the west houses only until 3.30.", [-1000, 900], 5600, 600, None),
     (D(10, "04:30"), "The rolling barrage", "In the night 1/5 relieved 2/6 in Bouresches, and the 2nd Battalion of the 40th Fusiliers took over the east half of the wood. At 4.30 on 10 June 1/6, Major John Hughes, attacks the south lobe behind the brigade's first rolling barrage, lifting every two minutes, two companies up and two in support, while twelve machine guns massed in Bouresches fire up the east flank. 'Objective reached by 5:10 and being consolidated ... two large Minenwerfers captured. Our losses slight.' Hughes has in fact got no further than 3/6's high-water mark of the 8th. Major Edward Cole of the 6th Machine Gun Battalion is mortally wounded.", [750, -950], 1800, 120, "4.30 a.m."),
     (D(11, "04:30"), "Wise across the wood", "At 3.25 on 11 June the American guns open up. At 4.30, in morning mist, 2/5, Lieutenant Colonel Frederic Wise, attacks from the west edge, east across the wood instead of north-east, while 1/6 renews the attack in the south. It breaks through the right of the 2/40th by the brook bed and takes its 5th, 7th and 8th Companies from flank and rear: 'Wo ist das Regiment 40?' The 1st and 4th Companies of the 461st are cut off, 3 officers and 80 men taken, and the rest fight their way north to Major Hartlieb. 1/6 clears the south half; Captains Burns and Fuller are killed. Captain Lloyd Williams is mortally wounded.", [800, 0], 2400, 120, "4.30 a.m."),
     (D(11, "05:55"), "The ravine north of Bouresches", "At 5.55 a German battalion forms in the ravine north of Bouresches and attacks 'en masse'. The first volley of the 2nd Battalion, 12th Field Artillery lands among it and the 155s finish it: 'great slaughter of fleeing Germans as they left the Bois de Belleau by our machine guns from a flank'. At seven: 'The northern half of the Bois de Belleau belongs to 5th Marines. 20 prisoners sent back.' By 10.40 the division has 3 officers and 169 men.", [1900, -100], 2600, 120, "5.55 a.m."),
-    (D(11, "11:30"), "Hartlieb", "About noon Hartlieb's counter-attack regains the 461st's old position in the west half of the wood, and the 1st Battalion of the 462nd goes into the woods at Les Brusses. The German brigade orders the old line retaken 'at any cost'. On the east edge the 1st Battalion of the 40th counter-attacks 200 m, and the 2nd Battalion of the 110th Grenadiers, Mencke, another 200 m; they are exhausted by seven, and the Marine line has been pulled back a little. Companies D and F of the 2nd Engineers go to Wise, a platoon to each Marine company.", [1100, 500], 3200, 120, "about noon"),
+    (D(11, "11:30"), "Hartlieb", "About noon Hartlieb's counter-attack regains the 461st's old position in the west half of the wood, and the 1st Battalion of the 462nd goes into the woods at Les Brusses. The German brigade orders the old line retaken 'at any cost'. On the east edge the 1st Battalion of the 40th counter-attacks 200 m, and the 2nd Battalion of the 110th Grenadiers, Mencke, another 200 m; they are exhausted by seven, and the Marine line has been pulled back a little. Companies D and F of the 2nd Engineers go to Wise, a platoon to each Marine company.", [1300, 450], 2200, 120, "about noon"),
     (D(12, "03:15"), "The old line", "At 3.15 on 12 June the 2/110th and part of the 1/40th renew the attack and reach 'the old line' at 5.01. In the afternoon the German guns put 'more than 80,000 shells in less than four hours' on the wood, and at one Bouresches is on fire.", [1100, 250], 2200, 120, "3.15 a.m."),
     (D(12, "16:30"), "Without artillery preparation", "Between four and five 2/5 attacks again, without artillery preparation. The 8th Company of the 461st is cut off, the 7th attacked from the rear and the north-east corner broken into; Bischoff pulls his 2nd Battalion back to the Pavilion hill, counter-attacks with its 5th and 7th Companies and two companies of the 462nd, and holds south of the Pavilion. On the Baden division's front the Americans, 'advancing in part in columns', break through at 4.30 and drive the 2/110th and 1/40th out of the wood to the Bouresches-Belleau road.", [1100, 450], 2600, 120, "4.30 p.m."),
-    (D(12, "19:00"), "Relief at dusk", "At dusk 3/6, back from the Bois de Platière, relieves 1/5 north-east of Hill 142. At 11.20 that night an officer and 56 men of the 461st come in, 'some surrendered under a flag of truce', and say a fresh division attacks tonight. At 1.30 2/6 is ordered up to the woods north-west of Lucy as brigade reserve; a dying German officer tells them the attack will come at dawn.", [-500, 0], 4400, 600, None),
+    (D(12, "20:45"), "Relief at dusk", "At dusk 3/6, back from the Bois de Platière, relieves 1/5 north-east of Hill 142. At 11.20 that night an officer and 56 men of the 461st come in, 'some surrendered under a flag of truce', and say a fresh division attacks tonight. At 1.30 2/6 is ordered up to the woods north-west of Lucy as brigade reserve; a dying German officer tells them the attack will come at dawn.", [-500, 0], 4400, 600, "at dusk"),
     (D(13, "02:30"), "The Baden division", "At 2.30 on 13 June, after an intense barrage with gas, the 28th Division attacks Bouresches and the wood. At 4.30 Wise reports 'line appears to be holding ... Loss (German) must be very heavy'; at 5.05 Hughes: 'Everything O.K. now, Men digging in. Trenches badly ruined by shell fire. Casualties under 20%.' By 5.30 the attack is 'thoroughly broken with very severe losses'. The 1st Company of the 109th gets into Bouresches and leaves 'only dead and prisoners'. Later a false report that Bouresches has fallen sends the 78th and 96th Companies 2 km in open order to the woods south-east of Lucy.", [1800, -400], 2800, 120, "2.30 a.m."),
-    (D(14, "02:00"), "Mustard gas", "In the night mustard gas falls on the south of the wood, Bouresches and Lucy. At two 2/6 relieves 2/5 in the wood and is gassed; by the next afternoon practically all of the 78th and 96th Companies have been evacuated, and there are 700 gas cases in 24 hours. At 4.50 that afternoon, with German troops coming into Torcy and Belleau in motor trucks and the wood 'heavily shelled with mustard gas', Harbord pulls the battalion back to Hill 181 and holds the east edge with 'a very thin line of machine guns'.", [600, -300], 3800, 120, "2 a.m."),
+    (D(14, "02:00"), "Mustard gas", "In the night mustard gas falls on the south of the wood, Bouresches and Lucy. At two 2/6 relieves 2/5 in the wood and is gassed; by the next afternoon practically all of the 78th and 96th Companies have been evacuated, and there are 700 gas cases in 24 hours. At 4.50 that afternoon, with German troops coming into Torcy and Belleau in motor trucks and the wood 'heavily shelled with mustard gas', Harbord pulls the battalion back to Hill 181 and holds the east edge with 'a very thin line of machine guns'.", [600, -300], 3800, 300, "2 a.m."),
     (D(15, "21:00"), "The 7th Infantry", "On 15 June three battalions of the 7th Infantry, 3rd Division, are attached for seven days 'for the purpose of relieving battalions of the 4th Brigade which have been continually in front line positions for the last fourteen days'. In the next nights they relieve 3/5, 2/6 and 1/6 ('it was a mad house', in Cates's words), and the 1st Battalion of the French 174th Infantry relieves 3/6 north-east of Hill 142. Across the wood the German 87th Division, newly arrived, takes over from the 237th.", [100, 0], 5200, 600, None),
     (D(20, "03:50"), "The 7th Infantry attacks", "At 3.50 on 20 June the 1st Battalion of the 7th attacks the north end of the wood in strong lines of skirmishers, without special artillery support. It fails, with 63 casualties; the 3rd Battalion of the 347th finds 60 to 70 American dead. At 3.15 next morning, after a short barrage, Lieutenant Colonel Adams's battalion tries again. Two companies lose touch, the German counter-barrage and hidden machine guns catch it, and it is back in its positions by 7.30 with over 200 casualties.", [500, 500], 1800, 120, "3.50 a.m."),
     (D(22, "21:00"), "The Marines come back", "On 21 and 22 June the Marines come back into the line: 3/6 into the south-east corner of the wood in place of the 2nd Battalion of the 7th, and 3/5 into the north in place of the 1st, while wire is strung across the whole front. 2/6 and 1/6 go to the woods north-west of Lucy, and Company B of the 4th Machine Gun Battalion comes into the wood.", [300, -800], 5000, 600, None),
@@ -767,6 +768,7 @@ SOURCES = [
     "Gary W. Cozzens, \"How Will the Americans Behave in a Pitched Battle?\", <i>Marine Corps History</i> 4/2 (Winter 2018): Hill 142 minute by minute; J. Wayne Hill, <i>A Regiment Like No Other: The 6th Marine Regiment at Belleau Wood</i> (MMAS thesis, 2012); Mark R. Folse, \"Keystone Battle Brief: The Battle of Belleau Wood\" (Marine Corps History Division, 2019).",
     "American Battle Monuments Commission, <a href='https://archive.org/details/americanarmiesba00wash' target='_blank'><i>American Armies and Battlefields in Europe</i></a> (1938); War Department, <a href='https://archive.org/details/historiesoftwohu00unit' target='_blank'><i>Histories of Two Hundred and Fifty-One Divisions of the German Army</i></a> (1920); Wikipedia, <a href='https://en.wikipedia.org/wiki/Battle_of_Belleau_Wood' target='_blank'>Battle of Belleau Wood</a> (read 25 October 2026), for the casualty estimates.",
     "Woods, roads, the railway and places from OpenStreetMap (ODbL); the wood is the memorial park's outline. Hills 126, 133, 142, 169, 176 and 181, the Pavilion and Triangle Farm are placed from the sources' text and the surface model, within 150 to 400 m. Sunrise and sunset computed for the place and date, French summer time.",
+    "Placed by inference, not from the sources: the Germans in the wheat at Les Mares Farm on 3 June as the 197th Division, which held Hill 164 by the farm that morning; the 45th Company's way up to Hill 142 on the evening of 6 June, where its 73 casualties are drawn; the 7th Infantry's battalions, 1st at the west edge, 2nd at Hill 181 and then the south-east corner, 3rd in Bouresches, so that 3/5 relieves the 1st in the north; the 28th Division leaving the map on the night of 16 June, when the 87th relieves the 237th. To keep the replay moving, the 12 June attack is drawn going forward from 4.30, the 13 June attack breaking at four, the 7th Infantry's second attack lasting an hour, and the Baden battalions of 11 June coming in from east of the railway.",
     "Terrain: " + T["source"] + ", 30 m, sampled to 17.5 m. A surface model: the wood and the villages stand 10 to 25 m above the ground.",
 ]
 
