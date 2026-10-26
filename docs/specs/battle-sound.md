@@ -95,7 +95,7 @@ battles add only the cues and extras they lack.
    silence and a loudness far off target.
 5. **Dave listens.** The agent publishes an audition page with each new take, its cue, source and
    licence, and Dave marks each one keep or drop. Nothing enters the library without this pass. It is the
-   only human step, and it enforces the "no agony" rule the agent cannot check by ear.
+   only human step, Dave alone signs it off, and it enforces the "no agony" rule the agent cannot check by ear.
 6. **Commit** the kept files, manifest entries and credits to the build PR.
 
 ## Playback in the page
@@ -110,9 +110,11 @@ battles add only the cues and extras they lack.
 - **Quiet when nothing happens.** Paused: silent. Time-lapse over a quiet stretch: only the `field` bed.
   Scrubbing or arrow keys: silent until play resumes. The opening shot: the `field` bed fading up, and
   battle sound only once it ends.
-- **The control.** A speaker button in the bar, toggled by the `m` key, its state stored in
-  `localStorage` key `fieldglass.sound` inside `try`. It starts on. The bar is already full at 1280x700,
-  so it is an icon, not a fourth checkbox.
+- **The control.** A speaker button in the bar mutes and unmutes; the `m` key does the same. Pointing at
+  the button, or tabbing to it, slides out a short volume slider beside it, the way video players do, so
+  the bar at 1280x700 gains one icon and no fixed width. Sound starts on at 60% volume. The state is
+  stored as `{ on, volume }` in `localStorage` key `fieldglass.sound` inside `try`. Dragging the slider
+  to zero mutes; raising it unmutes.
 - **Loading.** An era's files load on the first Play, so the start screen and first frame cost nothing
   new. About 3 MB per era.
 - **Credits.** The Sources dialog lists every CC BY sound the battle can play, with title, author and
@@ -125,15 +127,18 @@ battles add only the cues and extras they lack.
 - A journey, `journeys/sound.cjs`, records which cues fire and how loud, through a hook available only
   under `navigator.webdriver`. It checks: silence while paused and during the opening; `volley` and `gun`
   during Cowpens's main line; `hooves` during Washington's charge; `air` during Sidi Bou Zid's dive
-  bombers; nothing while scrubbing; nothing after `m`.
-- `laptop.cjs` still passes with the speaker button, and the bar does not wrap at 1280x700.
+  bombers; nothing while scrubbing; nothing after `m`; the slider scales the master gain and its value
+  survives a reload.
+- `laptop.cjs` still passes with the speaker button and its slider open, and the bar does not wrap at
+  1280x700.
 
-## Open questions for Dave
+## Decided
 
-1. Sound on by default once he presses Play, or off until he turns it on? The spec says on.
-2. A volume slider, or only on and off? The spec says on and off, since Edge and Windows have their own
-   volume.
-3. Who signs off the audition page: Dave alone, or his father too?
+Dave answered on 2026-10-25:
+
+1. Sound is on by default once he presses Play.
+2. There is a volume slider as well as mute.
+3. Dave alone signs off the audition page.
 
 ## Out of scope
 
