@@ -179,21 +179,22 @@ for f in features:
 # June. Strengths the sources do not give (the French, the 23rd and 7th Infantry battalions, most German battalions) are
 # battalion-sized and said so in the unit's name.
 T15 = "1st Battalion, 5th Marines (Maj. Julius S. Turrill)"; T36 = "3rd Battalion, 6th Marines (Maj. Berton W. Sibley)"
+M1 = dict(ranks=1)  # companies, 3/5 and the 84th and 97th went forward in waves of single lines, a company about 175 m across
 OOB = [
-    ("m5_17", "american", "17th Co.", f"17th Company, {T15}", "Capt. Winans", "infantry", 244, {}),
-    ("m5_49", "american", "49th Co.", f"49th Company, {T15}", "Capt. Hamilton", "infantry", 244, {}),
-    ("m5_66", "american", "66th Co.", f"66th Company, {T15}", "", "infantry", 244, {}),
-    ("m5_67", "american", "67th Co.", f"67th Company, {T15}", "Capt. Crowther", "infantry", 243, {}),
+    ("m5_17", "american", "17th Co.", f"17th Company, {T15}", "Capt. Winans", "infantry", 244, M1),
+    ("m5_49", "american", "49th Co.", f"49th Company, {T15}", "Capt. Hamilton", "infantry", 244, M1),
+    ("m5_66", "american", "66th Co.", f"66th Company, {T15}", "", "infantry", 244, M1),
+    ("m5_67", "american", "67th Co.", f"67th Company, {T15}", "Capt. Crowther", "infantry", 243, M1),
     ("m5_2", "american", "2/5th Marines", "2nd Battalion, 5th Marines: the 18th, 43rd and 55th Companies", "Lt. Col. Frederic M. Wise", "infantry", 750, {}),
-    ("m5_51", "american", "51st Co.", "51st Company, 2nd Battalion, 5th Marines", "Capt. Lloyd Williams (mortally wounded 11 June)", "infantry", 250, {}),
-    ("m5_3", "american", "3/5th Marines", "3rd Battalion, 5th Marines: the 16th, 20th and 47th Companies", "Maj. Benjamin S. Berry (wounded 6 June), then Maj. Maurice E. Shearer", "infantry", 750, {}),
-    ("m5_45", "american", "45th Co.", "45th Company, 3rd Battalion, 5th Marines", "", "infantry", 250, {}),
+    ("m5_51", "american", "51st Co.", "51st Company, 2nd Battalion, 5th Marines", "Capt. Lloyd Williams (mortally wounded 11 June)", "infantry", 250, M1),
+    ("m5_3", "american", "3/5th Marines", "3rd Battalion, 5th Marines: the 16th, 20th and 47th Companies", "Maj. Benjamin S. Berry (wounded 6 June), then Maj. Maurice E. Shearer", "infantry", 750, M1),
+    ("m5_45", "american", "45th Co.", "45th Company, 3rd Battalion, 5th Marines", "", "infantry", 250, M1),
     ("m6_1", "american", "1/6th Marines", "1st Battalion, 6th Marines: the 74th, 75th, 76th and 95th Companies", "Maj. Maurice Shearer, then Maj. John A. Hughes", "infantry", 1000, {}),
     ("m6_2", "american", "2/6th Marines", "2nd Battalion, 6th Marines: the 78th, 79th and 80th Companies", "Maj. Thomas Holcomb", "infantry", 750, {}),
-    ("m6_96", "american", "96th Co.", "96th Company, 2nd Battalion, 6th Marines", "Capt. Duncan (killed 6 June), then Lt. Robertson and Lt. Clifton Cates", "infantry", 250, {}),
-    ("m6_82", "american", "82nd Co.", f"82nd Company, {T36}", "", "infantry", 250, {}),
-    ("m6_83", "american", "83rd Co.", f"83rd Company, {T36}", "", "infantry", 250, {}),
-    ("m6_8497", "american", "84th, 97th Cos.", f"84th and 97th Companies, {T36}", "", "infantry", 500, {}),
+    ("m6_96", "american", "96th Co.", "96th Company, 2nd Battalion, 6th Marines", "Capt. Duncan (killed 6 June), then Lt. Robertson and Lt. Clifton Cates", "infantry", 250, M1),
+    ("m6_82", "american", "82nd Co.", f"82nd Company, {T36}", "", "infantry", 250, M1),
+    ("m6_83", "american", "83rd Co.", f"83rd Company, {T36}", "", "infantry", 250, M1),
+    ("m6_8497", "american", "84th, 97th Cos.", f"84th and 97th Companies, {T36}", "", "infantry", 500, M1),
     ("eng_a", "american", "Co. A, 2nd Eng.", "Company A, 2nd Engineers (about 200)", "", "infantry", 200, {}),
     ("eng_b", "american", "Co. B, 2nd Eng.", "Company B, 2nd Engineers (about 200)", "", "infantry", 200, {}),
     ("eng_c", "american", "Co. C, 2nd Eng.", "Company C, 2nd Engineers (about 200)", "", "infantry", 200, {}),
@@ -203,8 +204,8 @@ OOB = [
     ("inf7_1", "american", "1/7th Inf.", "1st Battalion, 7th Infantry, 3rd Division, attached (about 1,000)", "Lt. Col. Adams", "infantry", 1000, {}),
     ("inf7_2", "american", "2/7th Inf.", "2nd Battalion, 7th Infantry, 3rd Division, attached (about 1,000)", "", "infantry", 1000, {}),
     ("inf7_3", "american", "3/7th Inf.", "3rd Battalion, 7th Infantry, 3rd Division, attached (about 1,000)", "", "infantry", 1000, {}),
-    ("fr43", "french", "French 43rd Div.", "Rearguards of the French 43rd Division, falling back through the Marines (strength not recorded)", "Gen. Michel", "infantry", 500, dict(loose=True)),
-    ("fr45", "french", "French 45th Div.", "The left of the French 45th Division, in line until the 2nd Division relieved it on 4 June (strength not recorded)", "", "infantry", 500, dict(loose=True)),
+    ("fr43", "french", "French 43rd Div.", "Rearguards of the French 43rd Division, falling back through the Marines (strength not recorded)", "Gen. Michel", "infantry", 500, {}),
+    ("fr45", "french", "French 45th Div.", "The left of the French 45th Division, in line until the 2nd Division relieved it on 4 June (strength not recorded)", "", "infantry", 500, {}),
     ("fr167", "french", "French 167th Div.", "The French 167th Division (116th, 409th and 147th Infantry) on the left, drawn as one battalion (strength not recorded)", "", "infantry", 800, {}),
     ("fr174", "french", "1/174th Inf.", "1st Battalion, French 174th Infantry (strength not recorded)", "", "infantry", 800, {}),
     ("g462", "german", "462nd I.R.", "462nd Infantry Regiment, 237th Division", "Maj. Mors (died of wounds)", "infantry", 822, {}),
@@ -213,8 +214,8 @@ OOB = [
     ("g460_1011", "german", "10th, 11th Coys, 460", "10th and 11th Companies, 460th Infantry, in the square woods", "", "infantry", 240, {}),
     ("g460_12", "german", "12th Coy, 460", "12th Company, 460th Infantry, in reserve behind Hill 142", "", "infantry", 120, {}),
     ("g460_2", "german", "II/460", "2nd Battalion, 460th Infantry, 237th Division", "Lt. Col. Friedrich Tismer (regiment)", "infantry", 570, {}),
-    ("g461_1", "german", "I/461", "1st Battalion, 461st Infantry, the west half of the wood", "Maj. Hartlieb", "infantry", 585, dict(loose=True)),
-    ("g461_2", "german", "II/461", "2nd Battalion, 461st Infantry, the east half of the wood", "Maj. Hans Bischoff (regiment)", "infantry", 584, dict(loose=True)),
+    ("g461_1", "german", "I/461", "1st Battalion, 461st Infantry, the west half of the wood", "Maj. Hartlieb", "infantry", 585, {}),
+    ("g461_2", "german", "II/461", "2nd Battalion, 461st Infantry, the east half of the wood", "Maj. Hans Bischoff (regiment)", "infantry", 584, {}),
     ("g273", "german", "273rd I.R.", "273rd Infantry Regiment, 197th Division (about 1,000)", "", "infantry", 1000, {}),
     ("g_jager", "german", "Saxon Jäger", "A Saxon Jäger battalion, 197th Division (about 500)", "", "infantry", 500, {}),
     ("g20", "german", "20th I.R.", "20th Infantry Regiment, 5th Guard Division, drawn as a battalion (about 600)", "", "infantry", 600, {}),
@@ -224,13 +225,13 @@ OOB = [
     ("g47_1", "german", "I/47", "1st Battalion, 47th Infantry, 10th Division (about 400)", "Capt. Rickert", "infantry", 400, {}),
     ("g6g_2", "german", "II/6 Gren.", "2nd Battalion, 6th Grenadiers, 10th Division", "", "infantry", 200, {}),
     ("g6g_3", "german", "III/6 Gren.", "3rd Battalion, 6th Grenadiers, 10th Division", "", "infantry", 200, {}),
-    ("g40_2", "german", "II/40 Fus.", "2nd Battalion, 40th Fusiliers, 28th (Baden) Division (about 600)", "", "infantry", 600, dict(loose=True)),
+    ("g40_2", "german", "II/40 Fus.", "2nd Battalion, 40th Fusiliers, 28th (Baden) Division (about 600)", "", "infantry", 600, {}),
     ("g40_1", "german", "I/40 Fus.", "1st Battalion, 40th Fusiliers, 28th (Baden) Division (about 600)", "", "infantry", 600, {}),
     ("g110_2", "german", "II/110 Gren.", "2nd Battalion, 110th Grenadiers, 28th (Baden) Division (about 600)", "Mencke", "infantry", 600, {}),
     ("g109", "german", "109th Gren.", "A battalion of the 109th Grenadiers, 28th (Baden) Division (about 700)", "", "infantry", 700, {}),
     ("g_rav", "german", "German battalion", "A German battalion that formed in the ravine north of Bouresches on 11 June (unit and strength not recorded)", "", "infantry", 500, {}),
     ("g345", "german", "345th I.R.", "345th Infantry, 87th Division, about Torcy, drawn as a battalion (about 500)", "", "infantry", 500, {}),
-    ("g347_1", "german", "I/347", "Five companies of the 1st and 2nd Battalions, 347th Infantry, 87th Division, in the north of the wood", "Capt. Kaulbars", "infantry", 600, dict(loose=True)),
+    ("g347_1", "german", "I/347", "Five companies of the 1st and 2nd Battalions, 347th Infantry, 87th Division, in the north of the wood", "Capt. Kaulbars", "infantry", 600, {}),
     ("g347_3", "german", "III/347", "3rd Battalion, 347th Infantry, 87th Division (about 400)", "", "infantry", 400, {}),
     ("g347_pow", "german", "prisoners", "Prisoners of the 347th, marched back through Lucy", "", "infantry", 300, {}),
     ("g3e", "german", "3rd Ersatz", "Two companies of the 3rd Ersatz Regiment, sent to Belleau", "", "infantry", 250, {}),
@@ -289,6 +290,401 @@ for id in BASE: appear(id, START, (0, 0), 0, state="hidden")
 for id, x in (("m6_1", -100), ("m6_2", 900), ("m6_82", -2250), ("m6_83", -2350), ("m6_8497", -2450)): appear(id, START, SOUTH(x), 0, state="column")
 appear("fr43", START, (-300, 200), 20, state="line")
 appear("fr45", START, (-550, 950), 0, state="line")
+LUCY, BOURESCHES, BELLEAU = P['lucy'], P['bouresches'], P['belleau']
+L_T = ROADS['lucy_torcy']; TORCY_RD = [(121, -554), (11, -257), (157, -58), (128, 129), (44, 198), (-142, 676)]  # its vertices north of Lucy
+def smoke(at, t0, t1, rate=10, spread=500): features.append(dict(type="smoke", at=list(at), rate=rate, spread=spread, **{"from": t0, "until": t1}))
+
+# ---- 1 June: into the line ----
+move("m6_1", START, [(-100, -2400), (-60, -1700), (-12, -1458), (50, -1050)], h=30)
+move("m6_2", START, [(900, -2500), (500, -1900)], h=20)
+move("m6_82", START, [(-2250, -1500)], h=30); move("m6_83", START, [(-2150, -1600)], h=30); move("m6_8497", START, [(-2400, -1650)], h=30)
+hide("fr43", plus(move("fr43", D(1, "14:10"), [(-250, -500), (-150, -1200), (-60, -1700), SOUTH(-100)], state="retreat", moving="retreat", kmh=3), 1))
+
+# ---- 2 June: the 5th Marines on the left; the Germans take Bouresches, Cote 126 and the wood ----
+for id, p0, p1, h, t in (("m5_2", (-3450, -450), (-2900, 250), 15, "01:15"), ("m5_51", (-3450, -400), (-2600, 300), 15, "01:15"),
+                         ("m5_17", (-3450, -350), (-3200, 200), 0, "01:20"), ("m5_66", (-3450, -300), (-2750, 450), 15, "01:20"),
+                         ("m5_3", SOUTH(-400), (-350, -450), 10, "01:00"), ("m5_45", SOUTH(-500), (-650, -250), 0, "01:00")):
+    appear(id, D(2, t), p0, h=heading(p0, p1), state="column"); move(id, plus(D(2, t), 1), [(p0[0], -1500), p1] if p0[1] < -3000 else [p1], h=h)
+appear("g398_3", D(2, "01:37"), (3450, 0), 240, state="column"); go("g398_3", D(2, "01:37"), D(2, "02:00"), [(2150, -750)], h=240, moving="charge")
+appear("g398_out", D(2, "01:37"), (3450, -200), 240, state="column"); go("g398_out", D(2, "01:37"), D(2, "02:00"), [(2000, -900)], h=240, moving="charge")
+appear("g462", D(2, "19:30"), (300, 2700), 220, state="column"); go("g462", D(2, "19:30"), D(2, "20:00"), [(-350, 1900)])
+go("g462", D(2, "20:00"), D(2, "20:10"), [P['h126']], state="firing", moving="charge")
+go("g462", D(2, "20:45"), D(2, "21:15"), [(-350, 1150)], h=200, moving="charge")
+go("fr45", D(2, "20:45"), D(2, "21:10"), [(-600, 600)], h=0, moving="retreat")
+appear("g461_1", D(2, "19:45"), (900, 2500), 200, state="column"); go("g461_1", D(2, "19:45"), D(2, "20:45"), [(800, 1400), (600, 750)], h=210)
+appear("g461_2", D(2, "19:45"), (1300, 2400), 200, state="column"); go("g461_2", D(2, "19:45"), D(2, "20:55"), [(1300, 1300), (1100, 450)], h=200)
+appear("g273", D(2, "20:00"), (-1700, 3450), 180, state="column"); go("g273", D(2, "20:00"), D(2, "20:50"), [(-1600, 2450)], h=180)
+appear("g_jager", D(2, "21:00"), (-1300, 3450), 180, state="column"); go("g_jager", D(2, "21:00"), D(2, "21:45"), [(-1450, 2550)], h=190)
+
+# ---- 3 June: the 237th Division's attack; Les Mares Farm ----
+appear("g398_1", D(3, "06:00"), (3450, -900), 260, state="column"); go("g398_1", D(3, "06:00"), D(3, "06:20"), [(2700, -1000)], h=250)
+go("g461_1", D(3, "09:00"), D(3, "09:40"), [(520, 250)], h=250, moving="charge")
+go("g461_2", D(3, "09:00"), D(3, "10:00"), [(850, -800)], h=210, moving="charge")
+go("g462", D(3, "11:30"), D(3, "12:00"), [(-650, 920)], h=220, state="firing", moving="charge"); at("g462", D(3, "12:40"), state="line")
+fire("fr45", D(3, "11:40"), D(3, "12:30"))
+move("m6_82", D(3, "11:20"), [(-1000, 580)], h=0)
+fire("g461_1", D(3, "14:00"), D(3, "14:20"))
+go("g273", D(3, "15:00"), D(3, "15:50"), [(-2650, 1300)], h=200)
+go("g273", D(3, "16:00"), D(3, "16:12"), [(-2900, 360)], h=195, state="rout", moving="charge")
+go("g273", D(3, "16:13"), D(3, "16:45"), [(-2500, 1600)], h=200, moving="rout")
+fire("m5_2", D(3, "15:58"), D(3, "16:15")); fire("m5_51", D(3, "16:00"), D(3, "16:15")); fire("m5_17", D(3, "16:00"), D(3, "16:12")); fire("m5_66", D(3, "16:00"), D(3, "16:15"))
+move("m6_83", D(3, "20:40"), [(-400, 620)], h=10)
+
+# ---- night 3/4 and 4 June: the 460th relieves the 462nd; the railway becomes the German line; the French 45th goes ----
+go("g462", D(4, "00:30"), D(4, "01:30"), [(-300, 1500), (-50, 2150)], h=180)
+for id, p0, p1, t1 in (("g460_9", (-700, 2000), (-820, 830), "01:15"), ("g460_1011", (-600, 2050), (-770, 1100), "01:10"), ("g460_12", (-500, 2050), (-700, 1450), "01:00"),
+                       ("g462_10", (-400, 2050), (-600, 1000), "01:20"), ("g460_2", (-1300, 2600), (-1300, 1800), "01:00")):
+    appear(id, D(4, "00:30"), p0, 180, state="column"); go(id, D(4, "00:30"), D(4, t1), [p1], h=180)
+go("g398_3", D(4, "00:30"), D(4, "00:45"), [(2350, -450)], h=220)
+leave("fr45", D(4, "08:00"), [(-700, -200), SOUTH(-900)])
+smoke(P['cense'], D(4, "08:00"), D(4, "11:00"), rate=6, spread=300)
+go("g273", D(4, "22:00"), D(4, "22:40"), [P['knoll_w']], h=120)
+
+# ---- night 5/6: 1/5 relieves 3/6 west of the wood; a battalion of the 23rd takes over 2/6's line ----
+appear("inf23", D(6, "02:20"), SOUTH(1200), 0, state="column"); go("inf23", D(6, "02:20"), D(6, "03:00"), [(1100, -2200)], h=40)
+move("m6_2", D(6, "03:05"), [(300, -2250)], h=30)
+appear("m6_96", D(6, "03:00"), SOUTH(1300), 0, state="column"); move("m6_96", D(6, "03:01"), [(1350, -1800)], h=20)
+J49, J67 = (-550, 580), (-1000, 560)  # the jump-off on Hill 176
+appear("m5_49", D(6, "01:54"), (-3450, -300), 85, state="column"); move("m5_49", D(6, "01:54"), [(-2100, -200), J49], h=0)
+appear("m5_67", D(6, "03:04"), (-3450, -300), 85, state="column"); move("m5_67", D(6, "03:04"), [(-2100, -200), J67], h=0)
+move("m6_82", D(6, "02:45"), [(-800, -300), (-400, -1650)], h=30)
+move("m6_83", D(6, "03:00"), [(-300, -300), (-300, -1700)], h=30)
+
+# ---- 6 June, 3.45 a.m.: Hill 142 ----
+smoke((-800, 1100), D(6, "03:15"), D(6, "03:45"), rate=14, spread=600); smoke(P['knoll_w'], D(6, "03:15"), D(6, "03:45"), rate=8, spread=400)
+go("m5_49", D(6, "03:45"), D(6, "03:53"), [(-560, 900)], h=0, state="firing", moving="charge")
+go("m5_49", D(6, "03:58"), D(6, "04:05"), [(-600, 980)], h=350, state="firing", moving="charge"); at("m5_49", D(6, "04:40"), state="line")
+go("m5_67", D(6, "03:45"), D(6, "03:55"), [(-1000, 880)], h=330, state="firing", moving="charge"); at("m5_67", D(6, "04:40"), state="line")
+fire("g460_9", D(6, "03:46"), D(6, "03:55"), state="rout"); go("g460_9", D(6, "03:56"), D(6, "04:05"), [(-900, 1000)], moving="rout", state="rout"); hide("g460_9", D(6, "04:06"))
+fire("g462_10", D(6, "03:50"), D(6, "04:03"), state="surrender"); hide("g462_10", D(6, "04:20"))
+fire("g460_1011", D(6, "03:50"), D(6, "04:40")); fire("g273", D(6, "03:55"), D(6, "04:30"))
+move("m5_66", D(6, "04:40"), [(-850, 760)], h=0)
+move("m5_17", D(6, "04:50"), [(-1500, 450), (-250, 950)], h=0)
+appear("eng_d", D(6, "05:00"), P['champillon'], 40, state="column"); go("eng_d", D(6, "05:00"), D(6, "05:30"), [(-700, 800)], h=0)
+move("m5_51", D(6, "06:00"), [P['champillon'], (-1500, 400), (-1150, 650)], h=290)
+smoke((-650, 950), D(6, "06:10"), D(6, "18:00"), rate=3, spread=600)
+go("g273", D(6, "07:30"), D(6, "08:15"), [(-1900, 2000)], h=30, moving="retreat")
+# Hamilton runs on through the square woods toward the Bussiares road, then brings the 49th back to the nose of the hill.
+go("m5_49", D(6, "07:00"), D(6, "07:25"), [(-600, 1250), (-750, 1650)], state="firing", moving="charge")
+go("m5_49", D(6, "08:00"), D(6, "09:30"), [(-600, 1250), (-520, 1080)], h=0, moving="retreat")
+fire("g460_1011", D(6, "07:10"), D(6, "07:30"))
+appear("fr167", D(6, "07:00"), (-3450, 1900), 80, state="column"); go("fr167", D(6, "07:00"), D(6, "07:40"), [(-2600, 2100)], h=80)
+go("fr167", D(6, "07:40"), D(6, "08:10"), [(-1750, 2380)], state="firing", moving="charge"); at("fr167", D(6, "08:45"), state="retreat")
+go("fr167", D(6, "08:46"), D(6, "09:15"), [(-2600, 2000)], h=90, moving="retreat")
+fire("g_jager", D(6, "08:10"), D(6, "08:30")); go("g_jager", D(6, "08:30"), D(6, "08:45"), [(-1700, 2380)], state="firing", moving="charge")
+go("g_jager", D(6, "08:50"), D(6, "09:40"), [(-1000, 1550)], h=170)
+go("fr167", D(6, "12:30"), D(6, "13:10"), [(-1800, 1300)], h=30)
+# Five counter-attacks on the hill between nine and six, by the 12th Company of the 460th and the Jäger.
+G12 = (-700, 1450)
+for t in ("09:30", "12:30", "16:30"):
+    go("g460_12", D(6, t), plus(D(6, t), 10), [(-650, 1150)], state="firing", moving="charge")
+    go("g460_12", plus(D(6, t), 20), plus(D(6, t), 35), [G12], h=180, moving="retreat"); fire("m5_49", plus(D(6, t), 5), plus(D(6, t), 25))
+for t in ("11:00", "14:30"):
+    go("g_jager", D(6, t), plus(D(6, t), 12), [(-850, 1180)], state="firing", moving="charge")
+    go("g_jager", plus(D(6, t), 20), plus(D(6, t), 40), [(-1000, 1550)], h=160, moving="retreat"); fire("m5_17", plus(D(6, t), 5), plus(D(6, t), 25)); fire("m5_67", plus(D(6, t), 5), plus(D(6, t), 25))
+go("g460_1011", D(6, "21:30"), D(6, "22:00"), [(-400, 1650)], h=180); go("g460_12", D(6, "22:00"), D(6, "22:20"), [(-150, 1700)], h=180)
+
+# ---- 6 June, 5 p.m.: into the wood and Bouresches ----
+move("m5_2", D(6, "14:30"), [(-500, -700)], h=30)
+move("m5_3", D(6, "16:20"), [(-80, 380)], h=80)
+move("m6_8497", D(6, "16:10"), [(480, -1700)], h=30); move("m6_82", D(6, "16:30"), [(150, -1620)], h=40); move("m6_83", D(6, "16:35"), [(250, -1800)], h=40)
+move("m6_96", D(6, "16:10"), [(1720, -1230)], h=40)
+appear("eng_c", D(6, "16:00"), SOUTH(1500), 0, state="column"); move("eng_c", D(6, "16:01"), [(1600, -1450)], h=40)
+go("m5_3", D(6, "17:00"), D(6, "17:15"), [(170, 360)], h=80, state="firing", moving="charge")
+go("m5_3", D(6, "17:40"), D(6, "18:10"), [(330, 340)], h=80, state="firing", moving="charge"); at("m5_3", D(6, "18:40"), state="line")
+fire("g461_1", D(6, "17:05"), D(6, "18:40"))
+go("m6_82", D(6, "17:00"), D(6, "17:08"), [(380, -1440)], state="charge", moving="charge")
+go("m6_82", D(6, "17:08"), D(6, "18:30"), [(500, -1250), (650, -1000)], state="firing", moving="charge"); at("m6_82", D(6, "20:30"), state="line")
+go("m6_83", D(6, "17:00"), D(6, "17:40"), [(700, -1300)], state="charge", moving="charge")
+go("m6_83", D(6, "17:40"), D(6, "19:20"), [(1300, -900), (1900, -600), (2140, -420)], state="firing", moving="charge")
+go("m6_83", D(6, "19:50"), D(6, "20:30"), [(1900, -650)], h=30, moving="retreat")
+go("m6_8497", D(6, "17:00"), D(6, "17:20"), [(900, -1350)], state="charge", moving="charge")
+go("m6_8497", D(6, "17:20"), D(6, "18:30"), [(1400, -1000)], h=60, moving="charge")
+go("m6_8497", D(6, "23:00"), D(6, "23:40"), [(2000, -800)], h=30)
+fire("g461_2", D(6, "17:15"), D(6, "20:30"))
+go("m6_96", D(6, "17:00"), D(6, "17:30"), [(1850, -1080)], state="firing", moving="charge")
+go("m6_96", D(6, "19:00"), D(6, "19:30"), [(2080, -870)], state="firing", moving="charge"); at("m6_96", D(6, "20:00"), state="line")
+fire("g398_out", D(6, "17:30"), D(6, "19:30"), state="retreat"); go("g398_out", D(6, "19:31"), D(6, "19:50"), [(2380, -520)], h=220, moving="retreat")
+go("eng_c", D(6, "19:45"), D(6, "20:15"), [(2350, -1050)]); go("eng_c", D(6, "21:30"), D(6, "22:00"), [(2300, -1350)], h=60)
+move("m6_2", D(6, "23:00"), [(1200, -1700), (1950, -1000)], h=30)
+move("m5_2", D(6, "21:45"), TORCY_RD + [(-150, 750)], h=0)
+# The 23rd Infantry toward Hill 192, south-east of Triangle Farm, and the 47th's counter-attack at 8.14.
+go("inf23", D(6, "18:30"), D(6, "19:10"), [(2300, -2350)], h=60, moving="charge")
+appear("g47_1", D(6, "19:30"), (3450, -1500), 250, state="column"); go("g47_1", D(6, "19:30"), D(6, "20:00"), [(2750, -1600)], h=220)
+fire("g47_1", D(6, "20:10"), D(6, "20:14")); go("g47_1", D(6, "20:14"), D(6, "20:22"), [(2400, -2200)], state="firing", moving="charge"); at("g47_1", D(6, "20:40"), state="line")
+go("g47_1", D(6, "21:30"), D(6, "22:00"), [(2750, -1600)], h=220)
+at("inf23", D(6, "20:22"), state="retreat"); go("inf23", D(6, "20:23"), D(6, "20:55"), [(1500, -2500)], h=40, moving="retreat")
+appear("g6g_3", D(6, "22:00"), (3450, 300), 250, state="column"); go("g6g_3", D(6, "22:00"), D(6, "22:15"), [(2750, 150)], h=240)
+appear("g6g_2", D(6, "22:00"), (3450, 600), 250, state="column"); go("g6g_2", D(6, "22:00"), D(6, "22:20"), [(2300, 450)], h=220)
+
+# ---- 7 and 8 June: the engineers come up; the night attacks; the rocks of the south lobe ----
+appear("eng_a", D(7, "01:20"), LUCY, 90, state="column"); go("eng_a", D(7, "01:20"), D(7, "02:00"), [(708, -1292), (1900, -1000), (2050, -900)], h=30)
+appear("eng_b", D(7, "01:50"), LUCY, 90, state="column"); go("eng_b", D(7, "01:50"), D(7, "02:30"), [(380, -1400), (600, -1250)], h=30)
+move("m5_45", D(7, "03:40"), [(-150, 1000)], h=0)
+leave("g47_1", D(7, "23:00"), [(3450, -1600)])
+move("m6_82", D(7, "22:00"), [(800, -1250), (1200, -1050)], h=340)
+go("g6g_2", D(7, "23:30"), D(7, "23:45"), [(2200, -350)], state="firing", moving="charge"); at("g6g_2", D(7, "23:55"), state="rout")
+go("g6g_2", D(7, "23:56"), D(8, "00:20"), [(2300, 450)], h=200, moving="rout")
+fire("m6_83", D(7, "23:33"), D(7, "23:58")); fire("m6_8497", D(7, "23:35"), D(7, "23:55"))
+go("g398_1", D(8, "00:15"), D(8, "00:25"), [(2450, -1350)], state="firing", moving="charge"); at("g398_1", D(8, "00:35"), state="rout")
+go("g398_1", D(8, "00:36"), D(8, "01:00"), [(2700, -1000)], h=230, moving="rout")
+fire("eng_c", D(8, "00:17"), D(8, "00:37")); fire("inf23", D(8, "00:17"), D(8, "00:37"))
+go("g398_3", D(8, "01:25"), D(8, "01:35"), [(2180, -700)], state="firing", moving="charge"); at("g398_3", D(8, "02:00"), state="rout")
+go("g398_3", D(8, "02:01"), D(8, "02:20"), [(2350, -450)], h=220, moving="rout")
+for id in ("m6_96", "eng_a", "m6_2", "m6_8497"): fire(id, D(8, "01:27"), D(8, "02:00"))
+move("m6_83", D(8, "02:45"), [(1300, -1000), (750, -1200)], h=0)
+smoke((900, -850), D(8, "03:45"), D(8, "04:00"), rate=12, spread=300)
+for id, p in (("m6_82", (1100, -720)), ("m6_83", (760, -880)), ("eng_b", (560, -960))):
+    go(id, D(8, "04:00"), D(8, "04:30"), [p], h=0, state="firing", moving="charge"); at(id, D(8, "06:00"), state="line")
+fire("g461_2", D(8, "04:05"), D(8, "05:00")); go("g461_2", D(8, "05:00"), D(8, "05:15"), [(980, -860)], state="firing", moving="charge")
+go("g461_2", D(8, "05:40"), D(8, "06:00"), [(850, -800)], h=190, moving="retreat")
+go("m6_82", D(8, "06:01"), D(8, "06:20"), [(1150, -900)], h=340, moving="retreat")
+for id in ("m6_82", "m6_83", "g461_2"): fire(id, D(8, "07:30"), D(8, "08:30"))
+for id, p in (("m6_82", (1200, -1150)), ("m6_83", (800, -1350)), ("eng_b", (600, -1300))): go(id, D(8, "10:30"), D(8, "11:30"), [p], h=0, moving="retreat")
+# The night of the 8th: the wood is left to the guns; 3/6 and the engineers go back to the Bois de Platière. The
+# 398th and the 6th Grenadiers give way to the 109th Grenadiers, the 197th Division to the 5th Guard.
+leave("m6_82", D(8, "22:00"), [(800, -2000), SOUTH(-800)]); leave("m6_83", D(8, "22:05"), [(500, -2000), SOUTH(-700)])
+leave("m6_8497", D(8, "22:10"), [(1200, -1700), (600, -2200), SOUTH(-600)]); leave("eng_b", D(8, "22:15"), [(300, -2000), SOUTH(-500)])
+for id, p in (("g398_3", (3450, 200)), ("g398_out", (3450, 0)), ("g398_1", (3450, -800)), ("g6g_2", (3450, 700)), ("g6g_3", (3450, 400))): leave(id, D(8, "23:00"), [p])
+leave("g273", D(8, "22:00"), [(-1900, 3450)]); leave("g_jager", D(8, "22:00"), [(-1100, 3450)])
+appear("g109", D(8, "23:30"), (3450, 100), 250, state="column"); go("g109", D(8, "23:30"), D(9, "00:10"), [(2400, -300)], h=220)
+appear("g20", D(8, "22:30"), (-2600, 3450), 180, state="column"); go("g20", D(8, "22:30"), D(9, "00:00"), [(-2600, 2300), (-2500, 1600)], h=160)
+
+# ---- 9 June: the guns on the wood; the French at Bussiares ----
+for p in ((500, 300), (900, 600), (800, -700), (1200, 0), (600, -1100)): smoke(p, D(9, "04:00"), D(10, "04:30"), rate=12, spread=500)
+go("fr167", D(9, "03:40"), D(9, "04:10"), [(-2350, 1600)], state="firing", moving="charge"); at("fr167", D(9, "04:40"), state="line")
+fire("g20", D(9, "03:45"), D(9, "04:30")); go("g20", D(9, "04:40"), D(9, "05:20"), [(-1750, 2500)], h=200, moving="retreat")
+go("fr167", D(9, "07:40"), D(9, "08:30"), [(-1850, 2350)], state="firing", moving="charge")
+go("g460_2", D(9, "08:30"), D(9, "08:45"), [(-1650, 2280)], state="firing", moving="charge"); at("g460_2", D(9, "09:00"), state="line")
+at("fr167", D(9, "08:50"), state="retreat"); go("fr167", D(9, "08:51"), D(9, "09:10"), [(-2000, 2350)], h=90, state="firing", moving="retreat")
+at("fr167", D(9, "09:40"), state="line"); at("fr167", D(9, "15:30"), state="retreat"); go("fr167", D(9, "15:31"), D(9, "16:00"), [(-2350, 1550)], h=60, moving="retreat")
+go("g20", D(9, "22:00"), D(9, "23:00"), [(-1600, 3150)], h=180)
+# The night of the 9th: two companies of 1/5 relieve 2/6 in Bouresches; the 2/40th takes over the east half of the wood.
+move("m5_17", D(9, "21:30"), [(-200, -700), (708, -1292), (1900, -1000), (2100, -800)], h=0)
+move("m5_66", D(9, "21:35"), [(-300, -600), (708, -1292), (1900, -1000), (2000, -920)], h=20)
+leave("m6_2", D(9, "23:00"), [(1200, -1700), SOUTH(1100)]); leave("m6_96", D(9, "23:05"), [(1300, -1700), SOUTH(1300)])
+leave("eng_a", D(10, "01:25"), [(1900, -1000), (708, -1292), LUCY, SOUTH(-100)])
+appear("g40_2", D(10, "00:40"), BELLEAU, 160, state="column"); go("g40_2", D(10, "00:40"), D(10, "01:20"), [(1300, 700), (1050, -450)], h=200)
+go("g461_2", D(10, "01:20"), D(10, "01:50"), [(850, 350)], h=190)
+
+# ---- 10 June, 4.30 a.m.: 1/6 behind the rolling barrage ----
+move("m6_1", D(10, "03:40"), [(420, -1480)], h=40)
+A0, A1 = (420, -1480), (900, -800); Lb = math.dist(A0, A1); ub = ((A1[0] - A0[0]) / Lb, (A1[1] - A0[1]) / Lb); d, t = 150, D(10, "04:30")
+while d < Lb + 100:
+    smoke((round(A0[0] + d * ub[0]), round(A0[1] + d * ub[1])), t, plus(t, 2), rate=14, spread=400); d, t = d + 100, plus(t, 2)
+go("m6_1", D(10, "04:30"), D(10, "05:10"), [(780, -950)], h=35, state="firing", moving="charge"); at("m6_1", D(10, "05:40"), state="line")
+fire("g40_2", D(10, "04:35"), D(10, "05:20")); fire("g461_1", D(10, "04:40"), D(10, "05:10"))
+
+# ---- 11 June, 4.30 a.m.: Wise across the wood ----
+move("m5_2", D(11, "03:30"), [(180, 120)], h=90); move("m5_51", D(11, "03:20"), [(-300, 0), (180, -80)], h=90)
+for p in ((600, 200), (1100, 100), (900, -400)): smoke(p, D(11, "03:25"), D(11, "04:30"), rate=10, spread=500)
+go("m5_2", D(11, "04:30"), D(11, "04:50"), [(520, 170)], h=90, state="firing", moving="charge")
+go("m5_2", D(11, "05:00"), D(11, "07:00"), [(1000, 200), (1450, 330)], h=80, moving="charge")
+go("m5_51", D(11, "04:30"), D(11, "05:00"), [(700, -100)], h=95, state="firing", moving="charge")
+go("m5_51", D(11, "05:00"), D(11, "05:40"), [(1300, -250)], h=100, state="firing", moving="charge"); at("m5_51", D(11, "06:30"), state="line")
+fire("g461_1", D(11, "04:32"), D(11, "04:50"), state="rout"); go("g461_1", D(11, "04:51"), D(11, "05:20"), [(700, 750)], h=200, moving="rout")
+fire("g40_2", D(11, "05:05"), D(11, "05:40"), state="rout"); go("g40_2", D(11, "05:41"), D(11, "06:20"), [(1900, 400)], h=60, moving="rout")
+go("m6_1", D(11, "05:00"), D(11, "06:30"), [(1150, -700)], h=40, state="firing", moving="charge"); at("m6_1", D(11, "07:00"), state="line")
+appear("g_rav", D(11, "05:20"), (2900, 600), 220, state="column"); go("g_rav", D(11, "05:20"), D(11, "05:55"), [(2250, 100)], h=200)
+go("g_rav", D(11, "05:55"), D(11, "06:05"), [(2150, -450)], state="firing", moving="charge"); at("g_rav", D(11, "06:08"), state="rout")
+go("g_rav", D(11, "06:09"), D(11, "06:40"), [(2900, 550)], h=50, moving="rout"); leave("g_rav", D(11, "08:00"), [(3450, 650)])
+smoke((2200, -200), D(11, "05:57"), D(11, "06:15"), rate=20, spread=400)
+fire("m5_17", D(11, "05:58"), D(11, "06:15")); fire("m5_66", D(11, "05:58"), D(11, "06:15"))
+# Noon: Hartlieb takes back the west half; the 1/40th and 2/110th push the Marines back from the east edge.
+move("g462", D(11, "09:00"), [P['brusses']], h=200)
+go("g461_1", D(11, "11:30"), D(11, "12:00"), [(520, 250)], state="firing", moving="charge"); at("g461_1", D(11, "12:30"), state="line")
+fire("m5_3", D(11, "11:35"), D(11, "12:15"))
+appear("g40_1", D(11, "10:00"), (3450, 800), 260, state="column"); go("g40_1", D(11, "10:00"), D(11, "10:40"), [(1900, 650)], h=250)
+go("g40_1", D(11, "11:00"), D(11, "11:15"), [(1650, 480)], state="firing", moving="charge"); at("g40_1", D(11, "12:00"), state="line")
+fire("m5_2", D(11, "11:02"), D(11, "11:14")); go("m5_2", D(11, "11:15"), D(11, "11:45"), [(1300, 280)], h=80, moving="retreat")
+appear("g110_2", D(11, "13:00"), (3450, 500), 260, state="column"); go("g110_2", D(11, "13:00"), D(11, "13:45"), [(1900, 450)], h=250)
+go("g110_2", D(11, "14:00"), D(11, "14:20"), [(1550, 380)], state="firing", moving="charge"); at("g110_2", D(11, "15:30"), state="line")
+fire("m5_2", D(11, "14:05"), D(11, "14:19")); go("m5_2", D(11, "14:20"), D(11, "14:50"), [(1150, 250)], h=80, moving="retreat")
+move("eng_d", D(11, "16:20"), [(-150, 700), (180, 100), (1000, 180)], h=80)
+appear("eng_f", D(11, "16:00"), SOUTH(-400), 0, state="column"); move("eng_f", D(11, "16:01"), [(-200, -700), (180, -100), (950, 0)], h=80)
+TINTS = [dict(color="rgba(225,228,232,0.35)", **{"from": D(11, "04:00"), "until": D(11, "06:30")})]  # morning mist
+
+# ---- 12 June: the old line retaken, then the north-east of the wood ----
+go("g110_2", D(12, "03:15"), D(12, "05:01"), [(1000, 260)], state="firing", moving="charge"); at("g110_2", D(12, "05:30"), state="line")
+go("g40_1", D(12, "03:15"), D(12, "05:01"), [(1250, 420)], state="firing", moving="charge"); at("g40_1", D(12, "05:30"), state="line")
+go("m5_2", D(12, "04:00"), D(12, "05:00"), [(800, 150)], h=80, moving="retreat"); go("m5_51", D(12, "04:00"), D(12, "05:00"), [(900, -150)], h=80, moving="retreat")
+go("eng_d", D(12, "04:00"), D(12, "05:00"), [(780, 60)], h=80, moving="retreat"); go("eng_f", D(12, "04:00"), D(12, "05:00"), [(850, -80)], h=80, moving="retreat")
+for p in ((500, 300), (900, 300), (1200, 100), (800, -300)): smoke(p, D(12, "12:30"), D(12, "16:30"), rate=16, spread=500)
+smoke(BOURESCHES, D(12, "13:00"), D(13, "08:00"), rate=6, spread=300)
+fire("g461_1", D(12, "15:00"), D(12, "15:30")); fire("m5_3", D(12, "15:00"), D(12, "15:30"))
+for id, p in (("m5_2", (1350, 450)), ("m5_51", (1450, 200)), ("eng_d", (1100, 400)), ("eng_f", (1250, 100))):
+    go(id, D(12, "16:30"), D(12, "17:10"), [p], h=60, state="firing", moving="charge"); at(id, D(12, "17:40"), state="line")
+for id, p in (("g110_2", (2250, 400)), ("g40_1", (2200, 250))):
+    fire(id, D(12, "16:32"), D(12, "16:50"), state="rout"); go(id, D(12, "16:51"), D(12, "17:20"), [p], h=250, moving="rout")
+go("g461_2", D(12, "16:40"), D(12, "17:00"), [P['pavilion']], h=180, moving="retreat")
+go("g461_2", D(12, "17:45"), D(12, "18:00"), [(820, 470)], state="firing", moving="charge"); at("g461_2", D(12, "18:30"), state="line")
+go("g462", D(12, "16:40"), D(12, "17:30"), [(1100, 1200), (900, 700)], h=190)
+go("g462", D(12, "17:45"), D(12, "18:00"), [(950, 520)], state="firing", moving="charge"); at("g462", D(12, "18:30"), state="line")
+# Dusk: 3/6 relieves 1/5 north-east of Hill 142.
+for id, t, x, p in (("m6_82", "19:10", -700, (-1000, 850)), ("m6_83", "19:15", -600, (-560, 960)), ("m6_8497", "19:20", -500, (-250, 950))):
+    appear(id, D(12, t), SOUTH(x), 0, state="column"); move(id, plus(D(12, t), 1), [(x + 100, -700), p], h=0)
+leave("m5_49", D(12, "20:30"), [(-500, -700), SOUTH(-600)]); leave("m5_67", D(12, "20:30"), [(-700, -700), SOUTH(-700)])
+
+# ---- 13 June: the Baden division's attack ----
+appear("m6_2", D(13, "01:00"), SOUTH(-300), 0, state="column"); move("m6_2", D(13, "01:01"), [(-500, -700)], h=30)
+appear("m6_96", D(13, "01:00"), SOUTH(-200), 0, state="column"); move("m6_96", D(13, "01:01"), [(-450, -800)], h=30)
+for p in (BOURESCHES, (1300, -400), (800, -900)): smoke(p, D(13, "02:00"), D(13, "02:30"), rate=16, spread=400)
+smoke(P['torcy'], D(13, "03:45"), D(13, "04:30"), rate=10, spread=400)
+go("g109", D(13, "02:30"), D(13, "02:50"), [(2130, -760)], state="firing", moving="charge"); at("g109", D(13, "05:00"), state="rout")
+go("g109", D(13, "05:01"), D(13, "05:25"), [(2450, -250)], h=40, moving="rout")
+go("g110_2", D(13, "02:30"), D(13, "02:50"), [(1700, -50)], state="firing", moving="charge"); at("g110_2", D(13, "05:00"), state="rout")
+go("g110_2", D(13, "05:01"), D(13, "05:30"), [(2250, 400)], h=60, moving="rout")
+go("g40_1", D(13, "02:30"), D(13, "02:50"), [(1800, 100)], state="firing", moving="charge"); at("g40_1", D(13, "04:30"), state="rout")
+go("g40_1", D(13, "04:31"), D(13, "05:00"), [(2200, 250)], h=60, moving="rout")
+for id, t1 in (("m5_17", "05:00"), ("m5_66", "05:00"), ("m5_2", "04:30"), ("m5_51", "05:00"), ("m6_1", "04:30")): fire(id, D(13, "02:50"), D(13, t1))
+# A false report that Bouresches had fallen sends the 78th and 96th Companies 2 km in open order to the woods south-east of Lucy.
+move("m6_96", D(13, "07:20"), [(1000, -1700)], h=40, moving="charge", kmh=3); move("m6_2", D(13, "07:20"), [(1150, -1650)], h=40, moving="charge", kmh=3)
+
+# ---- 14 June: gas; 2/6 relieves 2/5, then falls back to Hill 181 ----
+TINTS.append(dict(color="rgba(214,222,150,0.28)", **{"from": D(13, "23:00"), "until": D(14, "18:00")}))  # mustard gas
+move("m6_2", D(14, "01:15"), [(1300, -800), (1350, 400)], h=60); move("m6_96", D(14, "01:15"), [(1200, -800), (1400, 200)], h=80)
+move("m5_2", D(14, "02:10"), [(900, -300), (400, -1300), (-500, -700)], h=30); move("m5_51", D(14, "02:15"), [(900, -400), (400, -1300), (-600, -750)], h=30)
+leave("eng_d", D(14, "02:30"), [(400, -1300), SOUTH(-100)]); leave("eng_f", D(14, "02:30"), [(450, -1350), SOUTH(0)])
+move("m6_2", D(14, "16:50"), [(900, -300), (-50, -650)], h=30); move("m6_96", D(14, "16:50"), [(900, -400), (-150, -720)], h=30)
+
+# ---- 15 to 19 June: the French and the 7th Infantry take over; the 87th Division relieves the 237th ----
+appear("fr174", D(15, "21:00"), (-3450, 300), 80, state="column"); move("fr174", D(15, "21:01"), [(-2000, 300), (-560, 980)], h=0)
+leave("m6_82", D(15, "22:00"), [(-700, -700), SOUTH(-800)]); leave("m6_83", D(15, "22:05"), [(-500, -700), SOUTH(-700)]); leave("m6_8497", D(15, "22:10"), [(-300, -700), SOUTH(-600)])
+appear("inf7_1", D(15, "21:00"), SOUTH(-200), 0, state="column"); move("inf7_1", D(15, "21:01"), [(-60, -1700), (121, -554), (157, -58), (330, 340)], h=80)
+leave("m5_3", D(15, "22:10"), [(157, -58), (121, -554), (-60, -1700), SOUTH(-150)]); leave("m5_45", D(15, "22:00"), [(-100, -600), SOUTH(-250)])
+for id, p in (("g461_1", [(400, 1300), (300, 3450)]), ("g461_2", [(900, 1300), (800, 3450)]), ("g462", [(1100, 1300), (1200, 3450)]),
+              ("g460_2", [(-1600, 3450)]), ("g460_1011", [(-450, 3450)]), ("g460_12", [(-100, 3450)])): leave(id, D(16, "22:00"), p)
+appear("g347_1", D(16, "22:00"), (1100, 3450), 180, state="column"); go("g347_1", D(16, "22:00"), D(16, "23:30"), [(1050, 1300), (850, 760)], h=190)
+appear("g347_3", D(16, "22:00"), (600, 3450), 180, state="column"); go("g347_3", D(16, "22:00"), D(16, "23:30"), [(500, 1300), (600, 650)], h=200)
+appear("g345", D(16, "22:00"), (-400, 3450), 180, state="column"); go("g345", D(16, "22:00"), D(16, "23:00"), [(-300, 1650)], h=190)
+for id, p in (("g40_1", (3450, 400)), ("g110_2", (3450, 550)), ("g109", (3450, 0))): leave(id, D(16, "23:00"), [p])
+appear("inf7_2", D(16, "21:30"), SOUTH(0), 0, state="column"); move("inf7_2", D(16, "21:31"), [(-60, -1700), (-60, -700)], h=30)
+leave("m6_2", D(16, "22:20"), [(-150, -1700), SOUTH(-50)]); leave("m6_96", D(16, "22:25"), [(-250, -1700), SOUTH(-150)])
+appear("inf7_3", D(16, "21:30"), SOUTH(1300), 0, state="column"); move("inf7_3", D(16, "21:31"), [(1300, -1700), (2050, -850)], h=20)
+leave("m5_17", D(16, "22:30"), [(1300, -1700), SOUTH(1200)]); leave("m5_66", D(16, "22:35"), [(1250, -1700), SOUTH(1100)])
+leave("m5_2", D(16, "22:00"), [SOUTH(-500)]); leave("m5_51", D(16, "22:00"), [SOUTH(-600)])
+move("inf7_2", D(18, "22:00"), [(400, -1450), (1050, -750)], h=30); leave("m6_1", D(18, "22:40"), [(400, -1450), SOUTH(300)])
+
+# ---- 20 and 21 June: the 7th Infantry against the north end ----
+go("inf7_1", D(20, "03:50"), D(20, "04:10"), [(560, 540)], h=40, state="firing", moving="charge"); at("inf7_1", D(20, "04:30"), state="retreat")
+go("inf7_1", D(20, "04:31"), D(20, "05:00"), [(330, 340)], h=40, moving="retreat"); fire("g347_3", D(20, "03:52"), D(20, "04:30"))
+smoke((650, 650), D(21, "03:00"), D(21, "03:15"), rate=12, spread=400)
+go("inf7_1", D(21, "03:15"), D(21, "03:35"), [(560, 540)], h=40, state="firing", moving="charge"); at("inf7_1", D(21, "05:30"), state="retreat")
+go("inf7_1", D(21, "05:31"), D(21, "07:30"), [(330, 340)], h=40, moving="retreat"); fire("g347_3", D(21, "03:20"), D(21, "05:30"))
+go("g347_3", D(22, "01:00"), D(22, "01:30"), [(700, 1150)], h=180)
+
+# ---- 22 and 23 June: the Marines come back; Shearer's first attack ----
+for id, t, x, p in (("m6_82", "21:00", 800, (1150, -700)), ("m6_83", "21:05", 900, (1300, -500)), ("m6_8497", "21:10", 700, (1000, -900))):
+    appear(id, D(22, t), SOUTH(x), 0, state="column"); move(id, plus(D(22, t), 1), [(x + 100, -1700), p], h=20)
+leave("inf7_2", D(22, "22:00"), [(700, -1700), SOUTH(600)])
+appear("m5_3", D(22, "21:00"), SOUTH(-200), 0, state="column"); move("m5_3", D(22, "21:01"), [(-60, -1700), (121, -554), (157, -58), (330, 340)], h=80)
+leave("inf7_1", D(22, "22:10"), [(157, -58), (121, -554), (-60, -1700), SOUTH(-300)])
+appear("m5_45", D(22, "21:00"), SOUTH(-400), 0, state="column"); move("m5_45", D(22, "21:01"), [(-400, -1500), (-300, 1050)], h=0)
+leave("inf7_3", D(22, "23:00"), [(1300, -1700), SOUTH(1300)])
+for id, x, p in (("m6_2", -400, (-500, -700)), ("m6_96", -300, (-400, -800)), ("m6_1", -600, (-700, -500))):
+    appear(id, D(23, "01:00"), SOUTH(x), 0, state="column"); move(id, D(23, "01:01"), [p], h=30)
+move("m5_3", D(23, "17:30"), [(600, 420)], h=10)
+smoke((650, 700), D(23, "18:50"), D(23, "19:00"), rate=12, spread=400)
+go("m5_3", D(23, "19:00"), D(23, "20:15"), [(640, 600)], h=10, state="firing", moving="charge"); at("m5_3", D(23, "23:20"), state="line")
+fire("g347_1", D(23, "19:00"), D(23, "23:20"))
+go("g345", D(23, "21:00"), D(23, "21:12"), [(-300, 1180)], state="firing", moving="charge"); at("g345", D(23, "21:20"), state="rout")
+go("g345", D(23, "21:21"), D(23, "21:45"), [(-300, 1650)], h=180, moving="rout"); fire("m5_45", D(23, "21:02"), D(23, "21:20"))
+
+# ---- 25 June: fourteen hours of fire, then the north end ----
+for p in ((700, 750), (1000, 750), (850, 880)): smoke(p, D(25, "03:00"), D(25, "17:00"), rate=18, spread=400)
+move("m6_83", D(25, "15:00"), [(1300, 450)], h=0)
+go("m5_3", D(25, "17:00"), D(25, "17:30"), [(780, 760)], h=30, state="firing", moving="charge")
+go("m5_3", D(25, "18:30"), D(25, "19:00"), [(850, 830)], h=30, state="firing", moving="charge")
+go("m5_3", D(25, "19:30"), D(25, "20:00"), [(880, 880)], h=20, state="firing", moving="charge"); at("m5_3", D(25, "20:30"), state="line")
+go("m6_83", D(25, "17:00"), D(25, "17:30"), [(1250, 700)], h=330, state="firing", moving="charge")
+go("m6_83", D(25, "19:30"), D(25, "20:00"), [(1150, 820)], h=330, state="firing", moving="charge"); at("m6_83", D(25, "20:30"), state="line")
+fire("g347_1", D(25, "17:02"), D(25, "17:30"), state="retreat"); go("g347_1", D(25, "17:31"), D(25, "17:50"), [(950, 950)], state="firing", moving="retreat")
+go("g347_1", D(25, "18:12"), D(25, "18:40"), [(900, 850)], h=190, state="firing", moving="charge"); at("g347_1", D(25, "19:38"), state="rout")
+go("g347_1", D(25, "19:40"), D(25, "21:15"), [(700, 1270)], h=180, moving="rout")
+appear("g347_pow", D(25, "19:45"), (880, 850), 200, state="surrender")
+hide("g347_pow", plus(move("g347_pow", D(25, "19:46"), [(400, 300), (157, -58), (11, -257), (121, -554), (-17, -1009), (-60, -1380)], state="surrender", moving="surrender", kmh=3), 1))
+go("g347_3", D(25, "20:50"), D(25, "21:00"), [(700, 950)], state="firing", moving="charge"); at("g347_3", D(25, "21:05"), state="retreat")
+go("g347_3", D(25, "21:06"), D(25, "21:25"), [(700, 1150)], h=180, moving="retreat"); fire("m5_3", D(25, "20:52"), D(25, "21:05"))
+appear("g3e", D(25, "20:30"), (1250, 2300), 200, state="column"); go("g3e", D(25, "20:30"), D(25, "21:15"), [(950, 1200)], h=180)
+TINTS.append(dict(color="rgba(225,228,232,0.35)", **{"from": D(25, "17:30"), "until": D(25, "19:00")}))  # the heavy mist
+
+# ---- losses: (from, until, men) per unit, falling evenly through each span ----
+# Recorded: the brigade's 31 officers and 1,056 men on 6 June, 1/5's 14 officers and 318, the 51st Company's 46, 3/6's
+# nearly 400 by 8 June, 700 gas cases on 13/14 June, 3/5's 130 on 23 June and about 250 on 25/26 June, the 1/7th's 63 and
+# over 200, Company D's 11 and 40 to 50 gassed; the German divisions' daily losses from Otto. How they are shared among
+# the units of a division, and every loss not in that list (the 197th's at Les Mares Farm and on Hill 142, 2/5's and 1/6's
+# from 10 to 12 June, the ravine battalion's), is inferred.
+def S(day, a, b, n, day2=None): return (D(day, a), D(day2 or day, b), n)
+LOSS = {
+    "m5_49": [S(6, "03:47", "10:00", 120)], "m5_67": [S(6, "03:47", "07:00", 110)], "m5_66": [S(6, "05:10", "17:00", 52), S(14, "00:00", "12:00", 25)],
+    "m5_17": [S(6, "05:36", "17:00", 50), S(14, "00:00", "12:00", 25)], "m5_51": [S(6, "06:40", "18:00", 46), S(11, "04:30", "05:40", 50), S(12, "16:30", "17:10", 30), S(14, "00:00", "12:00", 30)],
+    "m5_45": [S(7, "04:00", "20:00", 73)],
+    "m5_3": [S(6, "17:02", "18:40", 250), S(23, "19:00", "22:00", 130), S(25, "17:00", "21:00", 250)],
+    "m6_82": [S(6, "17:00", "20:30", 90), S(8, "04:00", "08:30", 80)], "m6_83": [S(6, "17:10", "20:30", 60), S(8, "04:00", "08:30", 70), S(25, "17:00", "20:00", 20)],
+    "m6_8497": [S(6, "17:05", "18:30", 66), S(7, "23:30", "02:00", 34, 8)],
+    "m6_96": [S(6, "17:00", "19:40", 160), S(14, "02:30", "16:00", 60)], "m6_2": [S(14, "02:30", "16:00", 240)],
+    "m5_2": [S(11, "04:30", "07:00", 200), S(12, "16:30", "17:40", 100), S(14, "00:00", "12:00", 120)],
+    "m6_1": [S(10, "04:30", "05:40", 60), S(11, "05:00", "06:30", 90), S(14, "00:00", "18:00", 200)],
+    "eng_d": [S(6, "06:00", "18:00", 11, 12), S(13, "23:00", "02:00", 45, 14)],
+    "inf7_1": [S(20, "03:52", "04:30", 63), S(21, "03:20", "05:40", 210)],
+    "g460_9": [S(6, "03:47", "04:05", 120)], "g462_10": [S(6, "03:50", "04:03", 90), S(6, "04:18", "04:19", 30)],
+    "g460_12": [S(6, "09:30", "17:00", 40), S(10, "04:30", "10:00", 38)], "g460_1011": [S(6, "03:50", "21:30", 30), S(8, "04:00", "12:00", 39)],
+    "g460_2": [S(7, "06:00", "20:00", 30), S(9, "08:30", "10:00", 69), S(11, "06:00", "18:00", 41), S(13, "02:30", "12:00", 47)],
+    "g461_1": [S(6, "17:05", "18:40", 50), S(7, "06:00", "20:00", 30), S(8, "04:00", "09:00", 40), S(9, "06:00", "20:00", 60), S(10, "04:30", "06:00", 40),
+               S(11, "04:32", "05:20", 100), S(12, "15:00", "23:20", 12), S(13, "02:30", "06:00", 20), S(15, "06:00", "20:00", 30)],
+    "g461_2": [S(6, "17:15", "20:30", 41), S(7, "06:00", "20:00", 25), S(8, "04:00", "06:00", 110), S(9, "06:00", "20:00", 60), S(10, "04:30", "05:20", 40),
+               S(11, "05:00", "07:00", 20), S(12, "16:30", "18:30", 50), S(13, "02:30", "06:00", 30), S(15, "06:00", "20:00", 25)],
+    "g462": [S(9, "06:00", "20:00", 80), S(10, "06:00", "20:00", 60), S(11, "12:00", "18:00", 70), S(12, "17:45", "18:30", 63), S(13, "02:30", "06:00", 57), S(15, "06:00", "20:00", 20)],
+    "g109": [S(9, "06:00", "20:00", 54), S(10, "06:00", "20:00", 184), S(11, "05:55", "07:00", 49), S(12, "13:00", "20:00", 56), S(13, "02:30", "05:20", 250)],
+    "g40_2": [S(10, "01:20", "05:20", 250), S(11, "05:05", "05:40", 280)],
+    "g40_1": [S(11, "11:00", "12:00", 120), S(12, "03:15", "05:01", 75), S(12, "16:32", "16:50", 75), S(13, "02:30", "04:30", 47)],
+    "g110_2": [S(11, "14:00", "15:30", 120), S(12, "03:15", "05:01", 75), S(12, "16:32", "16:50", 75), S(13, "02:30", "05:00", 120)],
+    "g398_out": [S(6, "17:30", "19:50", 60), S(7, "06:00", "20:00", 27)], "g398_3": [S(6, "17:00", "23:00", 30), S(7, "06:00", "20:00", 30)],
+    "g398_1": [S(6, "17:00", "23:00", 21)], "g47_1": [S(6, "20:14", "20:40", 40)], "g6g_2": [S(7, "23:30", "23:59", 40)],
+    "g273": [S(3, "16:00", "16:40", 300), S(6, "03:55", "08:15", 418)], "g_jager": [S(6, "11:00", "15:00", 150)], "g20": [S(9, "03:45", "04:30", 89)],
+    "g_rav": [S(11, "06:00", "06:30", 250)], "g347_1": [S(25, "17:30", "19:45", 440)],
+}
+def lost(ids, day): return sum(n for id in ids for t0, _, n in LOSS.get(id, []) if t0.startswith(D(day, "")))
+MARINES = [r[0] for r in OOB if r[0].startswith("m")]
+assert lost(MARINES, 6) + 73 + 10 == 1087, "the brigade's 31 officers and 1,056 men on 6 June: the 45th Company's 73 fall on the 7th, the 8th MG Company's 10 are not drawn"
+assert lost(["m5_17", "m5_49", "m5_66", "m5_67"], 6) == 332, "1/5's 14 officers and 318 men"
+assert lost(["m6_82", "m6_83", "m6_8497"], 6) + lost(["m6_82", "m6_83", "m6_8497"], 7) + lost(["m6_82", "m6_83", "m6_8497"], 8) == 400, "3/6, nearly 400 by 8 June"
+assert lost(MARINES, 14) == 700, "700 gas cases in 24 hours"
+G237 = ["g460_9", "g460_1011", "g460_12", "g460_2", "g461_1", "g461_2", "g462", "g462_10"]
+for day, n in ((6, 401), (7, 85), (8, 189), (9, 269), (10, 178), (11, 231), (12, 125), (13, 154), (15, 75)): assert lost(G237, day) == n, ("the 237th Division", day)
+for day, n in ((9, 54), (10, 434), (11, 569), (12, 356), (13, 417)): assert lost(["g40_1", "g40_2", "g110_2", "g109"], day) == n, ("the 28th Division", day)
+for day, n in ((6, 151), (7, 97)): assert lost(["g398_out", "g398_3", "g398_1", "g47_1", "g6g_2", "g6g_3"], day) == n, ("the 10th Division", day)
+def pose(id, t):  # where a unit is at time t between its keys
+    ks = KEYS[id]; a = max((k for k in ks if sec(k["t"]) <= sec(t)), key=lambda k: sec(k["t"])); b = next((k for k in ks if sec(k["t"]) > sec(t)), None)
+    if b is None: return (a["x"], a["y"])
+    f = (sec(t) - sec(a["t"])) / (sec(b["t"]) - sec(a["t"])); return (a["x"] + f * (b["x"] - a["x"]), a["y"] + f * (b["y"] - a["y"]))
+def state_at(id, t): return next((k["state"] for k in reversed(KEYS[id]) if sec(k["t"]) <= sec(t) and "state" in k), None)
+def curve(pts, base):  # strength at a time, falling linearly through each span of losses
+    def f(s):
+        if s <= pts[0][0]: return base
+        for (s0, v0), (s1, v1) in zip(pts, pts[1:]):
+            if s0 <= s <= s1: return v1 if s1 == s0 else round(v0 + (s - s0) / (s1 - s0) * (v1 - v0))
+        return pts[-1][1]
+    return f
+for id, spans in LOSS.items():
+    cur, pts = BASE[id][6], []
+    for t0, t1, n in spans:
+        assert state_at(id, t0) not in (None, "hidden") and state_at(id, t1) not in (None, "hidden"), (id, t0, t1, "losses while off the map")
+        pts += [(sec(t0), cur), (sec(t1), cur - n)]; cur -= n
+    assert cur >= 0, (id, cur)
+    s_at = curve(pts, BASE[id][6])
+    have = {k["t"] for k in KEYS[id]}
+    for s, _ in pts:
+        t = fmt(s)
+        if t not in have: KEYS[id].append(K(t, pose(id, t))); have.add(t)
+    KEYS[id].sort(key=lambda k: sec(k["t"]))
+    for k in KEYS[id]: k["strength"] = s_at(sec(k["t"]))
+def strength(ids, t): return sum(next(k["strength"] for k in reversed(KEYS[id]) if sec(k["t"]) <= sec(t)) for id in ids)
+T13 = D(13, "12:00")
+assert strength(["g460_9", "g460_1011", "g460_12", "g460_2"], T13) == 596, "the 460th's 21 officers and 575 men on 13 June"
+assert strength(["g461_1", "g461_2"], T13) == 441, "the 461st's 12 officers and 429 men"
+assert strength(["g462", "g462_10"], T13) == 492, "the 462nd's 14 officers and 478 men"
+assert strength(["m5_17", "m5_49", "m5_66", "m5_67"], D(6, "03:00")) == 975, "1/5's 22 officers and 953 men"
 
 assert set(KEYS) == set(BASE), set(KEYS) ^ set(BASE)
 for id in KEYS:
@@ -314,7 +710,7 @@ for id, side, short, name, commander, type, strength, extra in OOB:
         assert state == "hidden" or (on_land((k["x"], k["y"])) and max(abs(k["x"]), abs(k["y"])) < HALF_EXTENT), (id, k["t"], (k["x"], k["y"]), "off the map")
     units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength, keys=ks, **extra))
 
-events, TINTS = [], []
+events = []
 SOURCES = ["Woods, roads and places from OpenStreetMap (ODbL).", "Terrain: " + T["source"] + ", 30 m, sampled to 17.5 m."]
 
 battle = dict(
