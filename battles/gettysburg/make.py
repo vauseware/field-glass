@@ -22,9 +22,19 @@ COLS, SP = T["cols"], T["spacing"]; HALF = COLS * SP / 2
 def cell(x, y): return int((HALF - y) / SP), int((x + HALF) / SP)
 def centre(r, c): return (-HALF + (c + 0.5) * SP, HALF - (r + 0.5) * SP)
 QUARRY = (1600, -1150, 2070, -760)  # x0, y0, x1, y1: the pit falls to 68 m beside Rock Creek, which runs at 130 m
-LAKE = (3300, -1300, 4700, 450)     # Lake Heritage's flat surface at 144.9 m lies along this valley
+# Lake Heritage: the cells of its flat 144.9 m surface in the 3DEP file, as (row, first column, last column). Kept here,
+# not found by height each run, so a second run fills the same cells and changes nothing.
+LAKE_ROWS = [(183, 386, 387), (184, 385, 387), (185, 384, 386), (186, 383, 385), (187, 383, 385), (188, 382, 384), (189, 382, 384), (190, 381, 383),
+             (191, 380, 383), (192, 379, 382), (193, 379, 381), (194, 378, 380), (195, 377, 380), (196, 376, 379), (197, 374, 378), (198, 373, 378),
+             (199, 372, 377), (200, 371, 375), (201, 370, 375), (202, 370, 374), (203, 369, 374), (204, 369, 372), (205, 368, 372), (206, 363, 372),
+             (207, 364, 373), (208, 364, 377), (209, 365, 373), (210, 366, 371), (211, 365, 371), (212, 364, 371), (213, 364, 373), (214, 357, 369),
+             (215, 360, 368), (216, 361, 367), (217, 361, 367), (218, 361, 367), (219, 360, 367), (220, 358, 370), (221, 356, 365), (222, 356, 364),
+             (223, 356, 363), (224, 354, 362), (225, 352, 362), (226, 348, 361), (227, 349, 360), (228, 349, 360), (229, 348, 361), (230, 347, 363),
+             (231, 347, 359), (232, 347, 358), (233, 346, 358), (234, 344, 357), (235, 344, 357), (236, 344, 356), (237, 343, 356), (238, 342, 356),
+             (239, 340, 355), (240, 342, 354), (241, 343, 354), (242, 345, 354), (243, 346, 355), (244, 348, 356), (245, 350, 352)]
 def fill(mask):
-    Z = T["z"]; v = {rc: Z[rc[0] * COLS + rc[1]] for rc in mask}
+    Z = T["z"]; rim = [Z[(r + dr) * COLS + c + dc] for r, c in mask for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)) if (r + dr, c + dc) not in mask]
+    v = {rc: sum(rim) / len(rim) for rc in mask}  # from the rim's mean, whatever the cells hold now
     get = lambda r, c: v.get((r, c), Z[r * COLS + c])
     for _ in range(4000):  # over-relaxed Gauss-Seidel; the result depends only on the rim, so a second run changes nothing
         worst = 0
@@ -37,8 +47,7 @@ def box(x0, y0, x1, y1):
     return {(r, c) for r in range(r0, r1 + 1) for c in range(c0, c1 + 1)}
 before = list(T["z"])
 fill(box(*QUARRY))
-flat = {rc for rc in box(*LAKE) if 144.6 < T["z"][rc[0] * COLS + rc[1]] < 145.3}
-fill({(r + dr, c + dc) for r, c in flat for dr in (-1, 0, 1) for dc in (-1, 0, 1)})  # the shore cells too
+fill({(r + dr, c + dc) for r, a, b in LAKE_ROWS for c in range(a, b + 1) for dr in (-1, 0, 1) for dc in (-1, 0, 1)})  # the shore cells too
 assert min(T["z"]) > 0.1, min(T["z"])  # the page draws exactly 0 as missing data
 assert min(T["z"][r * COLS + c] for r, c in box(*QUARRY)) > 115, "the quarry is filled"
 if T["z"] != before: json.dump(T, open(HERE + "terrain.json", "w"), separators=(",", ":"))
@@ -364,26 +373,26 @@ features = [
     dict(type="works", name="stone wall", pts=LANE_WALL, **label_on(*LANE_WALL, -40)),
     dict(type="works", pts=WHEAT_WALL),
     dict(type="works", pts=CEMETERY_WALL),
-    dict(type="works", name="lunettes", pts=LUNETTES, **{"from": f"{D1} 17:00"}, at=[780, 1000]),
+    dict(type="works", pts=LUNETTES, **{"from": f"{D1} 17:00"}),
     dict(type="works", name="breastworks", pts=CULPS_WORKS, **{"from": f"{D2} 08:00"}, at=[1480, 560]),
     dict(type="works", pts=II_WORKS, **{"from": f"{D3} 05:00"}),
     dict(type="works", pts=BRT_WALL, **{"from": f"{D3} 02:00"}),
     dict(type="camp", poly=TOWN),
     dict(type="smoke", at=list(P['bliss']), rate=1.2, spread=30, **{"from": f"{D3} 10:00", "until": f"{D3} 15:00"}),
     dict(name="Gettysburg", at=[DIAMOND[0] + 120, DIAMOND[1] + 90]),
-    lbl("Lutheran Seminary", 'seminary', -60, -70), lbl("Lee's headquarters", 'lee_hq', 40, 70), lbl("McPherson farm", 'mcpherson', 0, -70),
-    lbl("Herbst's (Reynolds's) Woods", 'herbst_woods', 0, -150), lbl("Herr Ridge", 'herr_ridge', -150, 0), lbl("Herr Tavern", 'herr_tavern', 0, 60),
+    lbl("Lutheran Seminary", 'seminary', -60, -70), lbl("Lee's headquarters", 'lee_hq', -100, -110), lbl("McPherson farm", 'mcpherson', -90, -70),
+    lbl("Reynolds's Woods", 'herbst_woods', -100, -170), lbl("Herr Ridge", 'herr_ridge', -150, 0), lbl("Herr Tavern", 'herr_tavern', 0, 60),
     lbl("Oak Hill", 'rodes_tab', 120, 90), lbl("Oak Ridge", 'iverson_pits', -220, -40), lbl("Barlow's Knoll", 'barlow_knoll', 150, 60),
     lbl("Almshouse", 'almshouse', 120, -40), lbl("Pennsylvania College", 'college', -40, 70), lbl("Kuhn's brickyard", 'brickyard', 110, -50),
-    lbl("Cemetery Hill", 'cemetery_hill', -200, 60), lbl("Evergreen Cemetery", 'gatehouse', 150, -60), lbl("East Cemetery Hill", 'east_cemetery_hill', 230, 40),
+    lbl("Cemetery Hill", 'cemetery_hill', -300, -15), lbl("East Cemetery Hill", 'east_cemetery_hill', 110, 160),
     lbl("Culp's Hill", 'culps_hill', 130, 90), lbl("Spangler's Spring", 'spangler_spring', 160, -40), lbl("McAllister's Mill", 'mcallister', 170, -40),
     lbl("Benner's Hill", 'benners_hill', 120, 60), lbl("Wolf Hill", 'wolf_hill', 0, 90), lbl("Power's Hill", 'powers_hill', 80, -90),
-    lbl("Leister house, Meade's headquarters", 'leister', 300, 30), lbl("Ziegler's Grove", 'ziegler', 120, 60), lbl("Bryan house", 'bryan', -150, 40),
+    lbl("Meade's headquarters", 'leister', 420, -40), lbl("Ziegler's Grove", 'ziegler', 120, 60), lbl("Bryan house", 'bryan', -400, 20),
     lbl("Copse of Trees", 'copse', 140, -50), lbl("Codori farm", 'codori', -130, -40), lbl("Bliss farm (about here)", 'bliss', -40, 70),
-    lbl("Hummelbaugh house", 'hummelbaugh', 170, -40), lbl("Trostle farm", 'trostle', 90, -60), lbl("G. Weikert house", 'g_weikert', 110, -40),
-    lbl("Sherfy farm", 'sherfy', -130, 40), lbl("Peach Orchard", 'peach_orchard', -100, -90), lbl("Wentz house", 'wentz', -120, -50),
+    lbl("Trostle farm", 'trostle', 90, -60), lbl("G. Weikert house", 'g_weikert', 230, -60),
+    lbl("Sherfy farm", 'sherfy', -130, 40), lbl("Peach Orchard", 'peach_orchard', -150, 100),
     lbl("Warfield house", 'warfield', -130, 40), lbl("Rose farm", 'rose', -120, -40), lbl("Wheatfield", 'wheatfield', 0, 40),
-    lbl("Stony Hill", 'stony_hill', -60, 70), lbl("Houck's Ridge", 'houcks_ridge', 90, -40), lbl("Devil's Den", 'devils_den', -120, -40),
+    lbl("Stony Hill", 'stony_hill', -130, 140), lbl("Houck's Ridge", 'houcks_ridge', 90, -40), lbl("Devil's Den", 'devils_den', -120, -40),
     lbl("Little Round Top", 'little_round_top', 230, 20), lbl("Big Round Top", 'big_round_top', 0, -110), lbl("Slyder farm", 'slyder', -90, -50),
     lbl("Bushman farm", 'bushman', -110, -50), lbl("Spangler's Woods", 'spangler_woods', -150, 60), lbl("H. Spangler farm", 'h_spangler', -140, -40),
     lbl("Pitzer's Woods", 'pitzer_woods', -100, 120), lbl("Pitzer farm", 'pitzer', -110, -50), lbl("Black Horse Tavern", 'black_horse', 0, 70),
@@ -392,6 +401,14 @@ features = [
 ]
 for f in features:
     if "at" in f: assert on_map(f["at"], 50), (f.get("name"), "a label off the map")
+# The skin bakes labels into the map layer at a size fixed for the whole 10 km sheet: about 43 m a letter and 80 m high,
+# measured on the shots; the check allows 48 m and 90 m.
+# Level labels must not overlap one another.
+def label_box(f): w = len(f["name"]) * 24; return (f["at"][0] - w, f["at"][1] - 45, f["at"][0] + w, f["at"][1] + 45)
+FLAT = [f for f in features if f.get("name") and "at" in f and "rot" not in f and f.get("type") != "smoke"]
+CLASH = [(a["name"], b["name"]) for i, a in enumerate(FLAT) for b in FLAT[i + 1:]
+         if (lambda p, q: p[0] < q[2] and q[0] < p[2] and p[1] < q[3] and q[1] < p[3])(label_box(a), label_box(b))]
+assert not CLASH, ("labels on labels", CLASH)
 
 # ---- order of battle: (id, side, short, name, commander, type, strength, extra) ----
 # Brigades, and artillery by corps brigade and battalion. Strengths are the note's: the Stone Sentinels tables, the
@@ -466,13 +483,13 @@ OOB = [
     ("greene", "union", "Greene", "Greene's brigade: 60th, 78th, 102nd, 137th, 149th New York", "Greene", "infantry", 1425, {}),
     ("xii_art", "union", "XII Corps guns", "XII Corps artillery: 1st New York M, Pennsylvania E, 4th U.S. F, 5th U.S. K, 20 guns", "Muhlenberg", "artillery", 390, G(4)),
     # Cavalry Corps: Pleasonton
-    ("gamble", "union", "Gamble", "Gamble's brigade of Buford's division: 8th, 12th Illinois, 3rd Indiana, 8th New York", "Gamble", "cavalry", 1600, {}),
-    ("devin", "union", "Devin", "Devin's brigade of Buford's division: 6th, 9th New York, 17th Pennsylvania, 3rd West Virginia", "Devin", "cavalry", 1150, {}),
-    ("merritt", "union", "Merritt", "Merritt's Reserve Brigade: 6th Pennsylvania, 1st, 2nd, 5th, 6th U.S.", "Merritt", "cavalry", 1320, {}),
-    ("mcintosh", "union", "McIntosh", "McIntosh's brigade of Gregg's division: 1st Maryland, Purnell Legion, 1st Massachusetts, 1st New Jersey, 1st, 3rd Pennsylvania", "McIntosh", "cavalry", 1310, {}),
-    ("jigregg", "union", "J. I. Gregg", "J. I. Gregg's brigade of Gregg's division: 1st Maine, 10th New York, 4th, 16th Pennsylvania", "J. I. Gregg", "cavalry", 1265, {}),
-    ("farnsworth", "union", "Farnsworth", "Farnsworth's brigade of Kilpatrick's division: 5th New York, 18th Pennsylvania, 1st Vermont, 1st West Virginia", "Farnsworth (killed), then Richmond", "cavalry", 1925, {}),
-    ("custer", "union", "Custer", "Custer's brigade of Kilpatrick's division: 1st, 5th, 6th, 7th Michigan", "Custer", "cavalry", 1934, {}),
+    ("gamble", "union", "Gamble", "Gamble's brigade of Buford's division: 8th, 12th Illinois, 3rd Indiana, 8th New York", "Gamble", "cavalry", 1600, dict(ranks=4)),
+    ("devin", "union", "Devin", "Devin's brigade of Buford's division: 6th, 9th New York, 17th Pennsylvania, 3rd West Virginia", "Devin", "cavalry", 1150, dict(ranks=4)),
+    ("merritt", "union", "Merritt", "Merritt's Reserve Brigade: 6th Pennsylvania, 1st, 2nd, 5th, 6th U.S.", "Merritt", "cavalry", 1320, dict(ranks=4)),
+    ("mcintosh", "union", "McIntosh", "McIntosh's brigade of Gregg's division: 1st Maryland, Purnell Legion, 1st Massachusetts, 1st New Jersey, 1st, 3rd Pennsylvania", "McIntosh", "cavalry", 1310, dict(ranks=4)),
+    ("jigregg", "union", "J. I. Gregg", "J. I. Gregg's brigade of Gregg's division: 1st Maine, 10th New York, 4th, 16th Pennsylvania", "J. I. Gregg", "cavalry", 1265, dict(ranks=4)),
+    ("farnsworth", "union", "Farnsworth", "Farnsworth's brigade of Kilpatrick's division: 5th New York, 18th Pennsylvania, 1st Vermont, 1st West Virginia", "Farnsworth (killed), then Richmond", "cavalry", 1925, dict(ranks=4)),
+    ("custer", "union", "Custer", "Custer's brigade of Kilpatrick's division: 1st, 5th, 6th, 7th Michigan", "Custer", "cavalry", 1934, dict(ranks=4)),
     ("tidball", "union", "Tidball's guns", "Tidball's horse artillery, with Calef's 2nd U.S. A", "Tidball", "artillery", 270, G(3)),
     ("hrobertson", "union", "Robertson's guns", "Robertson's horse artillery", "Robertson", "artillery", 490, G(6)),
     # Artillery Reserve: Tyler, 21 batteries; the note gives each brigade's men, and the batteries are shared by them
@@ -633,7 +650,7 @@ for id in BASE:
     else: appear(id, START, (0, 0), 0, state="hidden")
 # Buford's vedettes fire on Heth's advance at Marsh Creek, "7:30 a.m."; Gamble's dismounted line and Calef's guns hold
 # McPherson's Ridge on both sides of the Pike "for more than two hours", Devin's brigade north of the railroad.
-stand("gamble", A("07:30"), state="skirmish"); stand("devin", A("08:00"), state="skirmish"); stand("tidball", A("08:15"), state="firing")
+stand("gamble", A("07:30"), state="firing"); stand("devin", A("08:00"), state="firing"); stand("tidball", A("08:15"), state="firing")
 # Heth's division left Cashtown at five, Archer and Davis leading on the Pike, Pegram's battalion behind the advance.
 for id, t in (("archer", "07:10"), ("pegram", "07:20"), ("davis", "07:30"), ("mcintosh_bn", "07:40"), ("pettigrew", "07:55"), ("brockenbrough", "08:10"), ("garnett_bn", "08:25")):
     enter(id, A(t), W_PIKE, 120)
@@ -644,7 +661,7 @@ walk("mcintosh_bn", A("07:40"), *DOWN_PIKE, (-2450, 2700), h=90, kmh=4, state="f
 walk("pettigrew", A("07:55"), *DOWN_PIKE, (-2550, 2700), (-2400, 2150), h=90, kmh=3.5)
 walk("brockenbrough", A("08:10"), *DOWN_PIKE, (-2600, 2950), h=90, kmh=3.5)
 walk("garnett_bn", A("08:25"), *DOWN_PIKE, (-2650, 2500), h=90, kmh=3.5)
-fight("archer", A("08:15"), A("09:30"), 20, state="skirmish")
+fight("archer", A("08:15"), A("09:30"), 20, state="firing")
 # Wadsworth's division, "the first Union infantry on the field": up the Emmitsburg Road and over the fields to the Seminary
 for id, t0 in (("cutler", "07:55"), ("meredith", "08:05"), ("i_art", "08:30")): enter(id, A(t0), S_EMM, 30)
 mv("cutler", A("07:55"), A("09:45"), *UP_EMM, *TO_SEMINARY, (-1350, 2980), h=270)
@@ -691,7 +708,7 @@ walk("oneal", A("10:50"), *UP_CARLISLE, (-560, 3950), h=180, kmh=3.5)
 walk("carter", A("10:55"), *UP_CARLISLE, (-720, 4020), h=170, kmh=3.5)
 walk("ramseur", A("11:15"), *UP_CARLISLE, (-650, 4250), h=180, kmh=3.5)
 walk("doles", A("11:05"), *UP_CARLISLE, (-150, 3800), h=170, kmh=3.5)  # in the valley east of Oak Hill "around 1 P.M."
-mv("devin", A("12:40"), A("13:20"), (1300, 3000), h=20, state="skirmish")
+mv("devin", A("12:40"), A("13:20"), (1300, 3000), h=20, state="firing")
 # Early's division by the Harrisburg Road, "about noon within two miles of Gettysburg"; it forms across the road north of
 # Rock Creek, Jones's battalion on a knoll east of the creek
 for id, t0 in (("gordon", "11:30"), ("jones_bn", "11:40"), ("hays", "11:45"), ("hoke", "11:55"), ("wsmith", "12:05")): enter(id, A(t0), N_HARR, 200)
@@ -944,15 +961,15 @@ for id, p in (("mahone", (-1250, 700)), ("posey", (-1300, 450)), ("wright", (-14
     walk(id, B("08:30"), (-2100, 1500), p, h=90, kmh=3)
 # Wilcox's 10th and 11th Alabama take the right "after a severe skirmish with the Union outpost": Berdan's sharpshooters
 # in Pitzer's Woods, "late in the forenoon"
-walk("wilcox", B("09:00"), (-2100, 1300), (-2050, 0), (-1900, -250), h=90, kmh=3, state="skirmish")
-fight("wilcox", B("11:15"), B("11:45"), 20, state="skirmish")
+walk("wilcox", B("09:00"), (-2100, 1300), (-2050, 0), (-1900, -250), h=90, kmh=3, state="firing")
+fight("wilcox", B("11:15"), B("11:45"), 20, state="firing")
 mv("wilcox", B("11:45"), B("12:00"), (-1650, -480), h=90)
 # Gregg's two cavalry brigades on the Hanover Road, J. I. Gregg "about 11 A.M." two miles from the town, McIntosh about noon
 for id, t0 in (("jigregg", "10:30"), ("hrobertson", "11:00"), ("mcintosh", "11:30")): enter(id, B(t0), E_HAN, 270)
 walk("jigregg", B("10:30"), *road('hanover', E_HAN, (3550, 1100)), h=280, kmh=6)
 walk("hrobertson", B("11:00"), *road('hanover', E_HAN, (4500, 850)), h=290, kmh=5.5)
 walk("mcintosh", B("11:30"), *road('hanover', E_HAN, (4700, 780)), h=290, kmh=6)
-walk("walker", B("05:00"), (3100, 1700), (3700, 1400), h=110, kmh=3, state="skirmish")
+walk("walker", B("05:00"), (3100, 1700), (3700, 1400), h=110, kmh=3, state="firing")
 # Longstreet: McLaws's division comes toward the town, turns right at the Black Horse Tavern, crosses Willoughby Run
 # farther downstream and forms on Warfield Ridge: Barksdale "about 3 P.M.", Kershaw 3:30, Semmes 3:30, Wofford 4 P.M.;
 # Hood's four brigades "about 4 P.M." south of them to the Emmitsburg Road. Law's brigade has rejoined from New
@@ -1111,8 +1128,8 @@ fight("harrow", B("18:50"), B("19:05"), 330); fight("wilcox", B("18:40"), B("19:
 back("harrow", B("19:05"), B("19:20"), P['harrow'], h=270)
 back("wilcox", B("19:00"), B("19:30"), (-1650, -480), h=90, loss=100)
 back("perry", B("19:00"), B("19:30"), (-1561, -210), h=90, loss=50)
-mv("posey", B("18:15"), B("18:40"), (-700, 480), h=90, state="skirmish")
-fight("posey", B("18:40"), B("19:30"), 80, state="skirmish")
+mv("posey", B("18:15"), B("18:40"), (-700, 480), h=90, state="firing")
+fight("posey", B("18:40"), B("19:30"), 80, state="firing")
 back("posey", B("19:30"), B("20:00"), (-1300, 450), h=90)
 # Willard's brigade "at 7 P.M." from Ziegler's Grove to the Plum Run swale charges Barksdale's 13th, 17th and 18th
 # Mississippi up toward the Emmitsburg Road; Willard is killed and Barksdale mortally wounded
@@ -1164,8 +1181,8 @@ charge("steuart", B("19:30"), B("20:00"), (1420, 300), h=290); fight("steuart", 
 mv("meredith", B("19:30"), B("19:50"), (1220, 760), h=90, state="firing"); fight("meredith", B("19:50"), B("21:00"), 30)
 mv("cutler", B("19:40"), B("20:00"), (1200, 870), h=60, state="firing"); fight("cutler", B("20:00"), B("21:00"), 30)
 # Walker's Stonewall Brigade holds off Gregg's cavalry on Brinkerhoff's Ridge, then crosses after dark
-mv("mcintosh", B("18:30"), B("19:00"), (4350, 980), h=290, state="skirmish"); fight("mcintosh", B("19:00"), B("22:00"), 30, state="skirmish")
-fight("walker", B("18:45"), B("22:00"), 20, state="skirmish")
+mv("mcintosh", B("18:30"), B("19:00"), (4350, 980), h=290, state="firing"); fight("mcintosh", B("19:00"), B("22:00"), 30, state="firing")
+fight("walker", B("18:45"), B("22:00"), 20, state="firing")
 fight("hrobertson", B("18:40"), B("21:00"), 5)
 hide("hrobertson", plus(walk("hrobertson", B("22:00"), E_HAN, kmh=5), 1))  # its batteries go with Gregg and Kilpatrick on the 3rd
 back("mcintosh", B("22:00"), B("22:30"), (4750, 760), h=290)
@@ -1287,17 +1304,17 @@ back("wilcox", C("16:10"), C("16:40"), (-1650, -480), h=90, loss=50); back("perr
 mv("wright", C("15:45"), C("16:05"), (-830, 120), h=90, state="firing"); back("wright", C("16:30"), C("17:00"), (-1380, 120), h=90)
 # Merritt's brigade "at noon marched four miles on the road to Gettysburg" and fights along the Emmitsburg Road "for four
 # hours"; G. T. Anderson's brigade meets it there. Farnsworth arrives "about 1 P.M." on the Union left south of Bushman's.
-enter("merritt", C("12:45"), S_EMM, 30); walk("merritt", C("12:45"), (-2700, -4500), h=30, kmh=6, state="skirmish")
+enter("merritt", C("12:45"), S_EMM, 30); walk("merritt", C("12:45"), (-2700, -4500), h=30, kmh=6, state="firing")
 mv("gtanderson", C("12:30"), C("13:30"), (-1500, -2700), (-2150, -3500), h=210)
-fight("merritt", C("13:30"), C("15:30"), 40, state="skirmish"); fight("gtanderson", C("13:30"), C("17:30"), 60)
-mv("merritt", C("15:30"), C("16:30"), (-2450, -3900), h=30, state="skirmish"); fight("merritt", C("16:30"), C("17:50"), 30, state="skirmish")
-enter("farnsworth", C("12:40"), (-1100, -4940), 0); walk("farnsworth", C("12:40"), (-1150, -3650), h=0, kmh=6, state="skirmish")
+fight("merritt", C("13:30"), C("15:30"), 40, state="firing"); fight("gtanderson", C("13:30"), C("17:30"), 60)
+mv("merritt", C("15:30"), C("16:30"), (-2450, -3900), h=30, state="firing"); fight("merritt", C("16:30"), C("17:50"), 30, state="firing")
+enter("farnsworth", C("12:40"), (-1100, -4940), 0); walk("farnsworth", C("12:40"), (-1150, -3650), h=0, kmh=6, state="firing")
 enter("hrobertson", C("12:50"), (-1100, -4940), 0)
 walk("hrobertson", C("12:50"), (-1300, -3800), h=20, kmh=5, state="firing")
 fight("hrobertson", C("13:30"), C("17:45"), 5)
 # Farnsworth's 18th Pennsylvania, 1st Vermont and 1st West Virginia charge "at 5:30 P.M." through woods and past stone
 # fences into the Plum Run valley south of Devil's Den; Law's and Robertson's men repulse them, and Farnsworth is killed.
-fight("farnsworth", C("13:15"), C("17:25"), 20, state="skirmish")
+fight("farnsworth", C("13:15"), C("17:25"), 20, state="firing")
 charge("farnsworth", C("17:30"), C("17:42"), (-950, -3100), (-800, -2750), h=15)
 fight("law", C("17:35"), C("17:55"), 10); fight("robertson", C("17:35"), C("17:55"), 10)
 back("farnsworth", C("17:45"), C("18:05"), (-1150, -3650), h=15, loss=100)
@@ -1335,10 +1352,10 @@ for n, (id, p) in enumerate((("hays", (-1000, 1950)), ("hoke", (-1050, 1750)), (
     walk(id, plus(E("02:00"), n * 8), (500, 1700), DIAMOND, (-150, 1990), p, h=100, kmh=3)
 # Slocum's reconnaissance "toward Gettysburg" finds no enemy; Schurz's detachment enters the town and takes "over 300
 # Confederates"; Day's regulars force in the pickets on the Confederate right
-mv("colgrove", E("06:00"), E("07:00"), (1550, 300), (1500, 1300), h=0, state="skirmish")
-mv("mcdougall", E("06:10"), E("07:10"), (1400, 400), (1250, 1400), h=0, state="skirmish")
-mv("krzyzanowski", E("06:00"), E("06:45"), FOOT, (420, 1600), (380, 1900), h=0, state="skirmish")
-mv("day", E("07:00"), E("07:45"), (-450, -2250), (-750, -2350), h=250, state="skirmish")
+mv("colgrove", E("06:00"), E("07:00"), (1550, 300), (1500, 1300), h=0, state="firing")
+mv("mcdougall", E("06:10"), E("07:10"), (1400, 400), (1250, 1400), h=0, state="firing")
+mv("krzyzanowski", E("06:00"), E("06:45"), FOOT, (420, 1600), (380, 1900), h=0, state="firing")
+mv("day", E("07:00"), E("07:45"), (-450, -2250), (-750, -2350), h=250, state="firing")
 
 for id in KEYS:
     if sec(KEYS[id][-1]["t"]) < sec(END): keys(id, [K(END, last(id))])
@@ -1407,7 +1424,7 @@ for e in events:  # without `when` the card speaks the nearest hour (app.js chap
 
 battle = dict(
     id="gettysburg", name="Gettysburg", date="1863-07-01", dateText="1 to 3 July 1863", place="Gettysburg, Pennsylvania",
-    origin=dict(lat=LAT0, lon=LON0), extent=2 * EDGE, start=START, end=END, sunrise="04:35", sunset="19:32", speed=60, lapse=7200, menPerDot=30,
+    origin=dict(lat=LAT0, lon=LON0), extent=2 * EDGE, start=START, end=END, sunrise="04:35", sunset="19:32", speed=60, lapse=7200, menPerDot=20,
     terrainExaggeration=2, contourInterval=10, smoke=1.2, trees=dict(density=0.0004), fields=FIELDS, wind=dict(x=0.5, y=0.3), view=dict(x=300, y=-300, width=9000),
     # Bachelder's convention, Union blue and Confederate red
     sides=dict(union=dict(name="Union (Meade)", color="#2c4f96", light="#6f8fca", dark="#16294f"),
