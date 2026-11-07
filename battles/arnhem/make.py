@@ -110,7 +110,7 @@ DREIJENSEWEG = ll((52.00653, 5.84563), (52.00601, 5.84536), (52.00261, 5.84473),
 STATIONSWEG = [P['hoog']] + ll((51.99346, 5.84044), (51.99189, 5.84013), (51.99084, 5.83954), (51.98969, 5.83888), (51.98881, 5.83843)) + [P['schoonoord']]
 PIETERSBERGSEWEG = [P['schoonoord']] + ll((51.98634, 5.83745), (51.98429, 5.83682), (51.98306, 5.8366), (51.9825, 5.83618), (51.98219, 5.83462))
 # South of the Nijmeegseweg's first stretch the road is drawn straight through Elden toward Elst [DERIVED].
-NIJMEGEN_RD = [P['bridge'], M(51.97144, 5.90832), P['elden'], M(51.92370, 5.85900)]
+NIJMEGEN_RD = [P['ramp'], P['bridge'], M(51.97144, 5.90832), P['elden'], M(51.92370, 5.85900)]
 # The railway's line between its stations and bridges; west of Wolfheze it is drawn straight toward Ede [DERIVED].
 RAIL = [M(52.02170, 5.70328), P['wolfheze'], P['crossing'], P['hoog'], M(51.98754, 5.86372), P['centraal'], M(51.98557, 5.9107), M(51.98487, 5.92086), M(51.98222, 5.93156)]
 RAIL_NIJMEGEN = ll((51.98482, 5.86575), (51.97924, 5.86021), (51.97778, 5.85925)) + [P['railbridge'], M(51.9546, 5.85191), M(51.92370, 5.84700)]
@@ -158,17 +158,17 @@ features = [
     dict(type="trench", name="Spindler's blocking line", pts=SPINDLER, **{"from": D(18, "06:00"), "until": D(20, "06:00")}),
     dict(type="works", name="the perimeter, 21 September", pts=PERIMETER, **{"from": D(20, "15:00")}),
     label("ARNHEM", P['arnhem'], dy=500), label("Oosterbeek", P['oosterbeek'], dy=250), label("Wolfheze", P['wolfheze'], dx=-350, dy=150),
-    label("Heelsum", P['heelsum'], dy=-200), label("Renkum", P['renkum'], dy=250), label("Doorwerth", P['doorwerth'], dy=-150), label("Heveadorp", P['heveadorp'], dy=150),
+    label("Heelsum", P['heelsum'], dy=-200), label("Renkum", P['renkum'], dy=250), label("Doorwerth", P['doorwerth'], dy=150), label("Heveadorp", P['heveadorp'], dy=-120),
     label("Driel", P['driel'], dx=-400), label("Elden", P['elden'], dy=150), label("Deelen airfield", P['deelen'], dy=-650),
-    label("road bridge", P['bridge'], dx=420, dy=60), label("Van Limburg Stirum school", P['school'], dx=450, dy=60), label("St Elisabeth hospital", P['hospital'], dy=-120),
+    label("road bridge", P['bridge'], dx=420, dy=60), label("St Elisabeth hospital", P['hospital'], dy=-140),
     label("Municipal Museum", P['museum'], dy=110), label("Rhine Pavilion (about here)", P['pavilion'], dx=-120, dy=-140), label("Den Brink (about here)", G('723782'), dy=120),
-    label("Koepel prison", P['prison'], dy=-110), label("Hartenstein", P['hartenstein'], dx=-250, dy=60), label("Schoonoord crossroads", P['schoonoord'], dx=380, dy=60),
-    label("Tafelberg", P['tafelberg'], dx=230), label("Oosterbeek church", P['church'], dx=60, dy=-110), label("the White House (Dreyeroord)", P['dreyeroord'], dx=-200, dy=110),
+    label("Hartenstein", P['hartenstein'], dx=-330, dy=40), label("Schoonoord crossroads", P['schoonoord'], dx=500, dy=40),
+    label("Oosterbeek church", P['church'], dx=60, dy=-110), label("the White House", P['dreyeroord'], dx=-250, dy=110),
     label("Hotel Wolfheze", P['h_wolfheze'], dx=-350), label("Johannahoeve", P['johannahoeve'], dx=320, dy=-60), label("Lichtenbeek (about here)", P['koepel'], dy=150),
     label("Westerbouwing", P['westerbouwing'], dx=-350, dy=80), label("Driel ferry", P['ferry_n'], dx=-300, dy=-40), label("railway bridge", P['railbridge'], dx=380, dy=40),
-    label("pontoon bridge (about here)", P['pontoon'], dx=-350, dy=-80), label("Arnhem station", P['centraal'], dy=120), label("Oosterbeek Hoog station", P['hoog'], dx=420, dy=40),
+    label("pontoon bridge (about here)", P['pontoon'], dx=-350, dy=-80),
     label("Jonkershoeve (about here)", P['jonkershoeve'], dy=-150), label("Reijerscamp", P['reijerscamp'], dy=-150), label("Ginkel", P['ginkel'], dy=-150),
-    label("Bilderberg", P['bilderberg'], dx=-250, dy=-80), label("Koude Herberg (about here)", P['koude'], dx=-400), label("Mariëndaal", P['mariendaal'], dy=-130),
+    label("Bilderberg", P['bilderberg'], dx=-250, dy=-80), label("Koude Herberg (about here)", P['koude'], dx=-400), label("Mariëndaal", P['mariendaal'], dy=150),
     label("Renkum brickworks (about here)", P['brickworks'], dx=150, dy=200),
     label("DZ-X (about here)", P['dzx'], dy=520, until=D(18, "23:59")), label("LZ-Z (about here)", P['lzz'], dy=-470, until=D(18, "23:59")),
     label("LZ-S", (P['lz_s'][0] + 150, P['lz_s'][1] + 650), until=D(18, "23:59")), label("DZ-Y, Ginkel Heath", P['heath_y'], dy=-650, until=D(18, "23:59")),
@@ -360,7 +360,7 @@ at("recce", D(17, "16:00"), state="firing"); at("recce", D(17, "16:30"), state="
 p3_route = [(-3800, -700)] + tiger((-3625, -1567), G('685785'))
 go("p3", D(17, "15:00"), D(17, "17:00"), p3_route, h=90, state="firing")
 LION_W = [(-3800, -900), (-3046, -1405), P['doorwerth'], P['heveadorp']]
-go("p2", D(17, "15:00"), D(17, "20:00"), LION_W + lion(P['heveadorp'], RAMP), h=180, state="firing")
+go("p2", D(17, "15:00"), D(17, "20:00"), LION_W + lion(P['heveadorp'], RAMP), h=180, state="line")
 go("p2b", D(17, "15:05"), D(17, "18:30"), LION_W + lion(P['heveadorp'], (3093, -1541)) + [G('723782')], h=90, state="firing")
 go("p2c", D(17, "15:10"), D(17, "18:30"), LION_W + lion(P['heveadorp'], (2313, -1733)) + [NBANK(2420)], h=160, state="firing")
 go("p3c", D(17, "15:00"), D(17, "18:00"), p3_route[:-1] + [G('685785')], h=90, state="column")
@@ -384,9 +384,9 @@ go("p3", D(17, "20:30"), D(17, "21:30"), [HART], h=90, state="line")
 lose("p3", D(17, "17:00"), D(17, "20:30"), 40)
 # 2 Para: A Company at the ramp at eight; B Company on the Den Brink till dark, then to the pontoon bridge; C Company
 # at the railway bridge as it is blown, then into the town.
-at("p2", D(17, "20:45"), state="firing")
+fire("p2", D(17, "20:45"), D(17, "21:30"))
 at("p2c", D(17, "18:45"), state="column")
-go("p2c", D(17, "19:00"), D(17, "21:30"), lion(NBANK(2420), P['pavilion']) + [(5300, -1200)], h=90, state="firing")
+go("p2c", D(17, "19:00"), D(17, "21:30"), lion(NBANK(2420), P['pavilion']) + [(5300, -1200)], h=90, state="line"); fire("p2c", D(17, "21:30"), D(17, "22:30"))
 at("p2b", D(17, "19:30"), state="line"); go("p2b", D(17, "21:00"), D(17, "23:30"), lion(G('723782'), P['pontoon']), h=120, state="line")
 lose("p2b", D(17, "17:30"), D(17, "19:30"), 50)
 # The rest of the airlanding brigade digs in round the zones; the Germans gather west of Arnhem.
@@ -420,14 +420,15 @@ go("sp_t", D(18, "05:00"), D(18, "06:00"), [(3950, -1250)], h=260, state="line")
 fire("sp_t", D(18, "07:00"), D(18, "17:00")); fire("sp_t", D(18, "20:30"), D(18, "21:30"))
 # Gräbner's charge over the bridge at 09:30: twelve of 22 vehicles lost in two hours
 appear("grabner", D(18, "09:20"), (6100, -3000), 20, "column")
-go("grabner", D(18, "09:21"), D(18, "09:30"), [BRIDGE_S], h=0, state="charge", moving="column")
-go("grabner", D(18, "09:30"), D(18, "09:40"), [RAMP, off(RAMP, -100, 300)], h=0, state="charge", moving="charge")
-fire("p2", D(18, "09:30"), D(18, "11:30"), state="firing")
+go("grabner", D(18, "09:21"), D(18, "09:30"), [BRIDGE_S], h=0, state="column", moving="column")
+go("grabner", D(18, "09:30"), D(18, "09:40"), [RAMP, off(RAMP, -100, 300)], h=0, state="column", moving="column")
+at("grabner", D(18, "09:41"), state="firing")
+fire("p2", D(18, "00:30"), D(18, "02:00")); fire("p2", D(18, "09:30"), D(18, "11:30"))
 lose("grabner", D(18, "09:35"), D(18, "11:30"), 12)
 go("grabner", D(18, "11:30"), D(18, "11:45"), [RAMP, BRIDGE_S, (6100, -3000)], h=200, state="retreat", moving="retreat"); hide("grabner", D(18, "11:46"))
-fire("brinkmann", D(18, "00:30"), D(18, "06:00"), state="firing")
+fire("brinkmann", D(18, "00:30"), D(18, "02:00"))
 appear("knaust", D(18, "21:00"), (6300, -1200), 180); appear("knaust_pz", D(18, "21:00"), (6100, -1150), 180)
-fire("knaust", D(18, "22:00"), D(19, "02:00"), state="firing"); fire("knaust_pz", D(18, "22:00"), D(19, "02:00"), state="firing")
+fire("knaust", D(18, "22:00"), D(18, "23:30")); fire("knaust_pz", D(18, "22:00"), D(18, "23:30")); fire("p2", D(18, "22:00"), D(18, "23:30"))
 lose("p2", D(18, "09:30"), D(18, "23:00"), 150)
 # The airlanding brigade on the zones: B Company 1 Border shelled at Renkum, D Company attacked at Heelsum, the KOSB on
 # Ginkel Heath from nine; D Company KOSB cut off at Ginkel at ten. The Me 109s on LZ-Z at eleven.
@@ -530,7 +531,7 @@ move("kosb", D(19, "15:15"), [(400, 1000), off(P['crossing'], 200, 100)], h=180,
 move("p156", D(19, "16:00"), [G('673804')], h=270, state="firing")
 lose("p156", D(19, "16:30"), D(19, "17:30"), 131)
 move("p156", D(19, "17:30"), [P['crossing'], (-700, 450)], h=90)
-move("krafft", D(19, "15:00"), [(200, 900), (-500, 1000)], h=250, state="firing")
+move("krafft", D(19, "15:00"), [(200, 900), (-500, 1000)], h=250, state="line", moving="charge")
 lose("kosb", D(19, "17:00"), D(19, "17:30"), 155)
 move("kosb", D(19, "17:00"), [G('674792'), HART], h=0)
 move("kosb", D(19, "19:00"), [off(P['dreyeroord'], 0, -100)], h=0)
@@ -550,8 +551,10 @@ move("divhq", D(19, "09:00"), [off(HART, 0, 30)], h=90)
 move("pf_z", D(19, "16:00"), [off(HART, 250, 500)], h=30)
 lose("st1", D(19, "15:00"), D(19, "23:00"), 0)
 # The Germans at the bridge: the Tigers fire into the perimeter in the evening; the houses burn
-appear("tigers", D(19, "17:00"), (6900, -1300), 230, "column"); go("tigers", D(19, "17:01"), D(19, "17:30"), [(6550, -1650)], h=230, state="firing")
-fire("brinkmann", D(19, "17:00"), D(20, "18:00"), state="line"); fire("knaust", D(19, "08:00"), D(20, "18:00"), state="line"); fire("knaust_pz", D(19, "08:00"), D(19, "12:00"))
+appear("tigers", D(19, "17:00"), (6900, -1300), 230, "column"); go("tigers", D(19, "17:01"), D(19, "17:30"), [(6550, -1650)], h=230, state="firing"); at("tigers", D(19, "19:30"), state="line")
+fire("knaust", D(19, "08:00"), D(19, "10:00")); fire("knaust_pz", D(19, "08:00"), D(19, "10:00")); fire("p2", D(19, "08:00"), D(19, "10:00"))
+fire("brinkmann", D(19, "17:30"), D(19, "19:30")); fire("p2", D(19, "17:30"), D(19, "19:30"))
+for id in ("brinkmann", "knaust", "tigers", "p2"): fire(id, D(20, "13:00"), D(20, "16:00"))
 lose("p2", D(19, "08:00"), D(19, "23:00"), 200)
 smoke(off(RAMP, 50, 150), D(19, "18:00"), D(21, "06:00"), rate=14, spread=300)
 strike("Fw 190s over the gun area", G('663793'), D(19, "07:00"), D(19, "07:15"), 500)
@@ -573,14 +576,14 @@ move("p10", D(20, "07:00"), [off(G('682786'), 200, 200)], h=90, state="firing")
 move("p10", D(20, "12:00"), [SCHOON], h=90, state="line"); lose("p10", D(20, "07:00"), D(20, "13:10"), 230)
 move("p156", D(20, "12:30"), [G('684793')], h=90, state="firing")
 lose("p156", D(20, "13:00"), D(20, "17:00"), 38)
-move("p156", D(20, "17:00"), [G('697787')], h=90, state="charge", moving="charge")
+move("p156", D(20, "17:00"), [G('697787')], h=90, state="line", moving="charge")
 move("helle", D(20, "09:00"), [off(G('684793'), -600, 300)], h=110, state="firing"); at("helle", D(20, "17:30"), state="line")
 move("schiff", D(20, "06:00"), [(-1100, -100)], h=90, state="line")
 lose("helle", D(20, "09:00"), D(20, "17:30"), 100)
 # The KOSB on the north face, the White House; 1 Border attacked on the west face; C Company by flame-thrower tanks at three
 fire("kosb", D(20, "09:00"), D(20, "13:00")); lose("kosb", D(20, "07:00"), D(20, "08:00"), 120)
 move("sp_n", D(20, "06:00"), [(1500, 600)], h=200)
-move("krafft", D(20, "06:00"), [(800, 500)], h=190, state="firing"); at("krafft", D(20, "13:00"), state="line")
+move("krafft", D(20, "06:00"), [(800, 500)], h=190); fire("krafft", D(20, "09:00"), D(20, "11:00"))
 fire("sp_n", D(20, "09:00"), D(20, "13:00"))
 fire("border_a", D(20, "10:00"), D(20, "11:00")); move("lippert3", D(20, "08:00"), [off(G('6878'), -900, 400)], h=80, state="firing"); at("lippert3", D(20, "11:00"), state="line")
 appear("pz224", D(20, "14:30"), (-1800, -1100), 80, "column")
@@ -599,7 +602,6 @@ move("p11", D(20, "18:31"), lion(P['outpost'], CHURCH) + [off(CHURCH, 300, -50)]
 move("p1", D(20, "18:00"), [off(CHURCH, 350, 100)], h=80)
 smoke(off(P['outpost'], 200, 0), D(20, "18:00"), D(20, "20:00"), rate=8, spread=200)
 # The bridge: Frost wounded at 15:45; the last houses burn; the truce for the wounded
-fire("p2", D(20, "06:00"), D(20, "21:00"))
 lose("p2", D(20, "06:00"), D(21, "00:00"), 250)
 move("p2", D(20, "21:00"), [off(RAMP, -150, 250)], h=90)
 # The supply drops: SDP 685783 at 14:06, 17:15; the division's close perimeter at 15:05
@@ -803,6 +805,65 @@ for id, side, short, name, commander, type, strength0, extra in OOB:
 for f in features:
     if f.get("type") in ("smoke", "airstrike"): assert on_land(f["at"]), (f.get("name"), f["at"])
 
+# ---- chapters: (time, title, text, camera centre, metres across, playback speed, when) ----
+# `when` holds the clock time the sources record, on the British clock.
+BRIDGE_VIEW = (6150, -1950)
+CHAPTERS = [
+    (D(17, "12:40"), "The pathfinders", "Sunday 17 September 1944. Operation Market Garden lands airborne divisions to take the bridges on XXX Corps's road north: the American 82nd and 101st to the south, and the British 1st Airborne Division, Maj. Gen. R. E. Urquhart, here at the far end, for the road bridge over the Rhine at Arnhem. Its zones are heath and fields six to eight miles west of the bridge. At 12:40 the 21st Independent Parachute Company, 186 pathfinders from twelve Stirlings, jumps a platoon to each of LZ-S, LZ-Z and DZ-X and sets out the beacons. The flight over was quiet, with virtually no flak.", [-3300, 1300], 6500, 60, "12:40 PM"),
+    (D(17, "13:00"), "The gliders", "From one o'clock the gliders come down. The 1st Airlanding Brigade's 153 land on LZ-S, north of the railway; 19 are missing. The 1st Border is down at 1:15 'under light flak and small-arms fire'. From 1:19 another 167 land on LZ-Z, south of the railway, with Division HQ, the Reconnaissance Squadron's jeeps, two batteries of the Light Regiment and the parachute brigade's guns; 17 are missing.", [-2550, 1400], 3600, 60, "1:00 PM"),
+    (D(17, "13:50"), "1st Parachute Brigade", "From 1:50 to 2:08 the 1st Parachute Brigade jumps on DZ-X, 2,283 men in this lift. 'The bn dropped at the right time and in the right place,' the 1st Battalion's diary says. The brigade is to take the bridge, some eight miles off by road. At 2:15 Division HQ opens on LZ-Z.", [-3700, 450], 2800, 60, "1:50 PM"),
+    (D(17, "15:00"), "Three roads to Arnhem", "At three the battalions march. Lt. Col. J. Frost's 2nd takes the river road through Heveadorp and Oosterbeek ('Lion'); Lt. Col. J. Fitch's 3rd the Utrechtseweg ('Tiger'); Lt. Col. D. Dobie's 1st the Amsterdamseweg ('Leopard'). The airlanding brigade stays to hold the zones for tomorrow's second lift: the 1st Border round Renkum and Heelsum, half of the 2nd South Staffords at Jonkershoeve, and the 7th KOSB off to Ginkel Heath, DZ-Y.", [-500, 0], 11000, 300, "3:00 PM"),
+    (D(17, "16:00"), "Krafft's line", "SS-Sturmbannführer Krafft's training battalion, 435 men in two companies, was in the woods east of Wolfheze when the gliders landed. From about three it holds a blocking line centred on the Hotel Wolfheze, from the railway to the Utrechtseweg. At four the Reconnaissance Squadron's Tac HQ is mortared at Wolfheze station, and Krafft's outposts stop its jeeps east of it, eight men and two jeeps lost. The 1st Battalion, at the station, meets infantry along the railway and tanks up the road. At five its R Company attacks astride the Amsterdamseweg against Kampfgruppe Weber, and 3 Battery's first shoot is at a hotel at Wolfheze.", [-1300, 600], 4000, 120, "4:00 PM"),
+    (D(17, "20:00"), "Frost at the bridge", "An hour after sunset Frost's A Company takes the north end of the road bridge: eight o'clock by the battalion's diary, the sources ranging from 7:30 to ten. Gräbner's reconnaissance battalion of the 9th SS had crossed it southward for Nijmegen at dusk. C Company saw the railway bridge blown as it began to cross; B Company has fought on the Den Brink till dark. At 8:45 a platoon's attempt on the south end is stopped by a pill-box and an armoured car, and a flame-thrower sets the huts and the bridge's paint alight. At 5:30 Bittrich of II SS Panzer Corps had ordered the 9th SS to take Arnhem and destroy the division, the 10th SS to Nijmegen; Spindler's men are forming a blocking line west of the town.", BRIDGE_VIEW, 2400, 300, "8:00 PM"),
+    (D(18, "07:00"), "Toward the town", "In the night the 1st Battalion turned south for the town. At seven it joins 3 Para's HQ Company under mortar fire at the railway bridge, and attacks the factory and houses beyond. 3 Para, off from the Hartenstein onto the river road at 4:30, has a company in Arnhem about a mile short of the bridge. At the bridge B Company 2 Para, about 70 men, got in at 5:30, and some 740 men now hold the north end. Urquhart is missing with Brig. Lathbury; at 9:15 Brig. Hicks takes command of the division.", [3900, -1400], 3800, 120, "7:00 AM"),
+    (D(18, "09:30"), "Gräbner's charge", "At half past nine Gräbner's battalion comes back from the south: 22 armoured cars and half-tracks charge north over the bridge. In two hours twelve are destroyed and about 70 of its 400 men killed, Gräbner among them.", (6200, -2100), 1600, 120, "9:30 AM"),
+    (D(18, "15:09"), "Ginkel Heath", "Fog over the English airfields has held the second lift back four hours. From 3:09 Brig. Hackett's 4th Parachute Brigade jumps on DZ-Y under fire, 1,914 men in nine minutes; 32 are killed on the drop. The KOSB have held the heath against Helle's SS battalion since nine, and their D Company was cut off at Ginkel at ten; Maj. Hill is killed. 273 gliders land on LZ-S and LZ-X with the South Staffords' second half, 2 Battery and the Oban anti-tank battery.", (-6000, 3900), 3800, 120, "3:09 PM"),
+    (D(18, "20:00"), "The Staffords and 11 Para", "Sent for Arnhem at 9:45 by Wolfheze and the Koude Herberg, the Staffords' first half was stopped by machine guns on the high ground about one; at eight it arrives intact behind the 1st Battalion, which crossed the road under smoke at five to just west of the hospital with about 100 men left. The Staffords' second half is fired on below Mariëndaal and falls back. 11 Para, off from DZ-Y at 5:30, will pass through Oosterbeek toward the bridge about ten. Division HQ has moved into the Hartenstein.", [2700, -1050], 4800, 300, "8:00 PM"),
+    (D(19, "04:00"), "The last attempt", "A report that the bridge had fallen was corrected at 2:30. At four the 1st Battalion crosses its start line on the river road; the Staffords go in on the Utrechtseweg at 4:45, and 11 Para comes up behind them. At five the 1st is attacked by tanks. At six: 'Position desperate; R Coy 6 men, S Coy 15, T Coy 8, Bn HQ about 10.' Dobie breaks off at 6:30 with 39 fit men and is taken at 7:30. At 7:30 Fitch orders 3 Para's remnant back to the Rhine Pavilion and is killed.", [4500, -1250], 2600, 120, "4:00 AM"),
+    (D(19, "08:30"), "The Dreijenseweg", "North of the railway the 4th Parachute Brigade attacks Spindler's blocking line on the Dreijenseweg. At 8:30 156 Battalion's A Company goes in along the track and is halted by self-propelled guns and armoured cars; B Company at nine loses its commander; S Company and HQ counter-attack at 9:30 and about 30 reach the road. 10 Para, sent for the Lichtenbeek at five, is held on the Amsterdamseweg. About half of 156 is lost this morning.", [1350, 900], 3000, 120, "8:30 AM"),
+    (D(19, "11:00"), "The Museum", "Tanks have been against the Staffords at the Monastery, the Municipal Museum, since nine. At eleven the PIATs are out and the battalion is split; A Company is overrun in the Museum, and Lt. Col. McCardie is captured by noon. Some 200 of the 1st Battalion, gathered under Lt. Williams, attack to within 100 yards east of the hospital. Division HQ has halted 11 Para.", [4600, -1200], 2200, 120, "11:00 AM"),
+    (D(19, "14:00"), "The Polish gliders", "Ground fog in England again. At two 30 of 43 Polish gliders land on LZ-L, 'greeted by very heavy flak', into the fight on the zone: 93 men with ten 6-pounders, nine of them killed and three guns left serviceable. The Polish parachute battalions have not taken off. The 4th Parachute Brigade, half its men gone, is pulling back with Krafft's men behind it.", (850, 950), 3000, 60, "2:00 PM"),
+    (D(19, "15:00"), "Back over the railway", "At 3:15 the division orders the 4th Parachute Brigade south of the railway, the KOSB to cover the zone. The KOSB break off for the Wolfheze crossing, lose A Company crossing at five, and reach Division HQ at seven. North of the railway 156's S Company and half of B and C are overrun. At 4:30, 164 aircraft drop supplies on a zone the Germans hold; 13 are shot down, and Flt. Lt. Lord wins the Victoria Cross. In Arnhem at 2:30 Spindler cornered 11 Para: Lt. Col. Lea is captured and about 150 escape. By night Cain's force at Oosterbeek Laag counts Staffords 100, 1st Battalion 116, 3rd 40, 11th 150 and glider pilots 30.", [-300, 700], 4400, 300, "3:00 PM"),
+    (D(20, "08:30"), "The perimeter forms", "Wednesday. Mortar fire over the whole area from seven, Nebelwerfers every 45 minutes; at 8:30 a direct hit on 1st Airlanding Brigade HQ kills four officers. The KOSB, about 270 men, hold the north face by the White House; the 1st Border the west, from the Bilderberg to the river; the remnants of four battalions under Maj. R. Lonsdale the east by the church. 156 and 10 Para fight toward the perimeter through the woods.", [700, -1000], 4600, 120, "8:30 AM"),
+    (D(20, "13:10"), "Hackett's hollow", "At 1:10 about 60 men of 10 Para rush through the enemy's fire into the perimeter at the crossroads. 156, covering them, is encircled in a hollow some 400 m west of the perimeter, about 150 men with Hackett. At five he breaks out; about 70 get in, and by 6:30 three officers and 50 men hold the road oblong. At 3:05 the division drew into a close perimeter round the Hartenstein.", [800, -300], 2400, 120, "1:10 PM"),
+    (D(20, "15:45"), "Frost wounded", "At the bridge the Germans are levelling the buildings with artillery. Frost is wounded at 3:45 and Gough takes command. By six the garrison reports 400 Germans killed, 140 taken and six tanks destroyed. After dark the last houses burn, and in a two-hour truce about 280 wounded are brought out. At midnight the division hears that the Nijmegen bridge has been taken intact.", BRIDGE_VIEW, 1800, 300, "3:45 PM"),
+    (D(21, "05:00"), "The bridge falls", "Before dawn the last men try to retake positions and are rounded up: 'By morning we were no longer a fighting force.' Resistance at the bridge is over by five. Of about 740 men there, 81 died and the rest were taken. Knaust's battle group goes south over the bridge for Elst, and the 10th SS follows at night.", BRIDGE_VIEW, 2400, 120, "by 5:00 AM"),
+    (D(21, "09:00"), "The Westerbouwing", "At nine Bataillon Worrowski, with four captured French tanks, attacks B Company 1st Border on the Westerbouwing. Three tanks are destroyed, but a platoon is forced off the high ground and the survivors fall back to the Hemelsche Berg. With the heights goes the Driel ferry: the ferryman scuttles it. At nine the division's signallers raise XXX Corps's guns, and the 64th Medium Regiment fires for it from across the river.", (0, -2000), 2200, 300, "9:00 AM"),
+    (D(21, "16:30"), "The White House", "At 4:30 an SS company attacks the KOSB at the White House, the Dreyeroord hotel, and is destroyed by two bayonet charges: about 100 German dead. Cochran is killed. At three tanks attacked the Light Regiment's B Troop by the church; at four Lonsdale took over the force there from the wounded Lt. Col. Thompson.", (1150, -50), 1500, 60, "4:30 PM"),
+    (D(21, "17:15"), "The Poles at Driel", "From 5:15 the 1st Polish Independent Parachute Brigade, Maj. Gen. S. Sosabowski, drops on DZ-K south of the river: about 1,000 men from 72 aircraft; 41 have turned back. Fire from the north bank kills five and wounds 25 on the drop. They make for Driel, and at nine their patrols find the ferry sunk. Zwolanski swims the Rhine with Urquhart's message, and at 9:44 the division signals 'Relief within 24 hours vital.'", (700, -4000), 4200, 120, "5:15 PM"),
+    (D(22, "08:45"), "XXX Corps at Driel", "Friday. At 8:45 a reconnaissance platoon of XXX Corps, the Household Cavalry's armoured cars, reaches the Poles at Driel. Through the morning the Germans attack Driel from the south-east and the west with armoured vehicles, about a battalion. North of the river the Border's area is shelled from 5:45, and at four D Company is almost surrounded, two officers and 35 men. At eight in the evening the 43rd Division's advance guard comes up, the 5th DCLI with the 4th/7th Dragoon Guards' tanks.", (300, -4300), 4400, 300, "8:45 AM"),
+    (D(22, "23:00"), "Six rubber boats", "At eleven the Poles' 8th Company starts across on six rubber boats and a cable, under German flares. 52 are over before dawn, about 15% lost on the south bank, and 35 reach the perimeter.", (900, -2250), 2000, 300, "11:00 PM"),
+    (D(24, "03:00"), "153 men", "Saturday was rain and cold, and its resupply failed. In the small hours of Sunday twelve boats arrive, and at three the second crossing begins under mortar fire and flares. It ends at dawn, 5:05: 153 Poles reach the north bank, 95 of the 3rd Battalion, 44 of the anti-tank battery and 14 of Brigade HQ. They go into the eastern face of the perimeter.", (900, -2250), 2000, 120, "3:00 AM"),
+    (D(24, "15:00"), "The truce", "From three to five a truce: about 250 stretcher cases leave in German vehicles and 200 walking wounded are marched to St Elisabeth hospital. The Germans then hold the Schoonoord crossroads, the main dressing station. Typhoons came over at 2:15 and the mortaring stopped. At 7:30 the Polish 1st Battalion, dropped near Grave on the 23rd, reaches Driel.", (1200, -900), 2600, 300, "3:00 PM"),
+    (D(25, "01:00"), "The Dorsets", "At one the 4th Dorsets' first assault boats leave the south bank: 17 officers and 298 men are over by 2:15, onto the bank below the Westerbouwing, which the Germans hold. Most are taken; about 75 reach the perimeter. At six comes word that the Second Army no longer intends a bridgehead west of Arnhem, and Thomas's letter: withdraw at a time of your choosing. At 8:08 Urquhart tells the 43rd Division that 'Berlin', the withdrawal, must be tonight.", (0, -2400), 2400, 300, "1:00 AM"),
+    (D(25, "10:00"), "Tigers at the church", "Monday, the worst mortaring yet. At ten three Tigers overrun A Troop of 1 Battery, and 2 Battery is overrun; the regiment's headquarters is surrounded. Kampfgruppen Allworden and Harder break into the gun area by the church and are broken up by the 64th Medium's fire from across the river. Soon after noon the Staffords' sector is attacked. At four D Company 1st Border, on the west face, is overwhelmed.", (1400, -1750), 1800, 120, "10:00 AM"),
+    (D(25, "21:45"), "Operation Berlin", "In heavy rain the withdrawal starts at 9:45, the KOSB first from the north, in groups of fourteen down to the flats by the church. XXX Corps's guns fire round the perimeter from eight to eleven. From ten the 23rd Field Company RCE's twelve storm boats and the 260th Field Company's assault boats ferry the men over. The 1st Border's C Company is the rearguard from 11:10.", (900, -1600), 3200, 120, "9:45 PM"),
+    (D(26, "05:30"), "The last boats", "Ferrying ends at 5:30, before first light; about 300 men are left on the north bank, and the last swim for it. 2,398 came out: 1,741 of the division, 422 glider pilots, 160 Poles and 75 Dorsets. About 10,600 had fought north of the river; 1,485 died, and 6,525 were missing or taken. The Germans counted at least 3,300 of their own killed and wounded. At nine the Polish brigade marches for Nijmegen.", (900, -2300), 5000, 120, "5:30 AM"),
+]
+events = [dict(t=t, title=a, text=b, at=list(at_), view=v, speed=s, **({"when": w} if w else {})) for t, a, b, at_, v, s, w in CHAPTERS]
+for e in events:  # without `when` the card speaks the nearest hour (app.js chapterWhen), so it must be near the frame's clock
+    s = sec(e["t"]) % 86400; hh = [n % 12 or 12 for n in (int(s // 3600), int(s // 3600) + 1)]; num = re.search(r"\d+", e.get("when", ""))
+    assert not num or int(num[0]) in hh, (e["t"], e["when"], "the card's hour is not the frame's")
+    assert "when" in e or abs(s - math.floor(s / 3600 + 0.5) * 3600) <= 15 * 60, (e["t"], e["title"], "give it a when")
+    assert e["speed"] in (1, 2, 5, 10, 20, 30, 60, 120, 300, 600, 1800, 3600, 7200), (e["title"], e["speed"], "not a speed the menu offers (sim.js SPEEDS)")
+assert [sec(e["t"]) for e in events] == sorted(sec(e["t"]) for e in events)
+
+OUTCOME = {"result": "German victory: the road bridge retaken on 21 September and the division withdrawn over the Rhine on the night of 25 September", "losses": [
+    ["british", "The 1st Airborne Division with its glider pilots: 1,393 died (1,174 of the division, 219 glider pilots) and 6,414 missing or taken (5,903 and 511), by Middlebrook's count. About 10,600 fought north of the river and 2,398 came back, 1,741 of the division and 422 glider pilots among them. The 4th Dorsets: 13 died and about 200 were taken. Two of three brigadiers and eight of nine battalion commanders did not return."],
+    ["polish", "92 died and 111 missing or taken (Middlebrook); MacDonald gives 378 casualties. 160 of the Poles north of the river came back; the brigade counted 1,283 on 26 September."],
+    ["german", "A German signal of about 27 September gave 3,300 (1,300 killed, 2,000 wounded), which Kershaw calls highly conservative; Hey identified 1,725 German dead. Krafft's battalion lost 65 killed, 161 wounded and 94 missing; Gräbner's 200 of 400; Knaust's about 100; the SS NCO school 130 killed and 350 wounded; Helle's battalion 300."]],
+    "note": "About 453 Dutch civilians were killed in the battle. Clock times are the British clock, an hour behind the Dutch and German one."}
+SOURCES = [
+    "1st Airborne Division HQ war diary and annexes, September 1944 (The National Archives WO 171/393), transcribed at <a href='https://www.pegasusarchive.org/arnhem/war_divhq.htm' target='_blank'>the Pegasus Archive</a>: the division's clock times, the strengths in Cain's force, the crossings and Berlin.",
+    "The battalions' and units' war diaries at <a href='https://www.pegasusarchive.org/arnhem/war.htm' target='_blank'>the Pegasus Archive</a>: 1st, 2nd, 3rd, 10th, 11th and 156th Parachute Battalions, 1st Border, 7th KOSB, 2nd South Staffords, the Reconnaissance Squadron, the Light Regiment RA, the 21st Independent Parachute Company, the Polish Brigade HQ and the 4th Dorsets: grid references, times and strengths.",
+    "Mark Hickman, <a href='https://www.pegasusarchive.org/arnhem/' target='_blank'>The Pegasus Archive: Arnhem</a>, its narrative of each lift, day and sector, and its orders of battle for the 1st Airborne Division, the Polish brigade, II SS Panzer Corps and Kampfgruppe von Tettau.",
+    "Charles B. MacDonald, <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-Siegfried/USA-E-Siegfried-7.html' target='_blank'><i>The Siegfried Line Campaign</i></a> (US Army in World War II, 1963), chapters VI to VIII: the lifts, XXX Corps and the losses.",
+    "Wikipedia, 'Battle of Arnhem' and 'Operation Market Garden' (read 6 November 2026), for Middlebrook's and Kershaw's casualty figures and the German units' names. Martin Middlebrook, <i>Arnhem 1944</i>, and Robert Kershaw, <i>It Never Snows in September</i>, were not consulted directly.",
+    "Places: OpenStreetMap contributors (ODbL) for the bridges, churches, hotels, stations, roads and memorials; the diaries' six-figure references on sheet 'Ginkel 388' converted by an affine fit to seven of them (good to about 100 m). The zones' outlines (DZ-X, LZ-Z and LZ-L to 300 or 400 m), the railway between its stations, and the Amsterdamseweg west of Wolfheze are drawn from the text and are approximate. Sunrise 6:14 and sunset 6:47 PM for 17 September from the NOAA formulae, on the British clock.",
+    "Terrain: " + T["source"] + ", 30 m, sampled to 32 m. A surface model: the woods stand 15 to 20 m above the ground, and the modern towns, the A50 and Papendal on LZ-L show. The Rhine is the model's own flat water, flattened below the water level; the flooded pits on the banks are kept as land.",
+    "Placed by inference, not from the sources: B and C Companies 2 Para and the KOSB's D Company drawn as 120 to 150 men; the split of Spindler's 1,400 between the Dreijenseweg and the town; Kampfgruppen Weber's, Brinkmann's and Worrowski's strengths and the German battalion at Driel; where von Tettau's battalions, the glider pilots, the Reconnaissance Squadron and the 21st Independent Company stood round the perimeter; the routes between recorded places; when the Staffords' and the 1st Battalion's strengths fell between the diaries' figures; the 1st Battalion's rise from 39 to about 200 as stragglers came in on the 19th; the crossing places on the nights of 22 and 23 September; and the order in which each unit crossed on the Berlin night. Tanks against the Staffords on the 19th are not drawn, since their unit is not recorded.",
+]
+
 battle = dict(
     id="arnhem", name="Arnhem", date="1944-09-17", dateText="17 to 26 September 1944", place="Arnhem and Oosterbeek, Gelderland, the Netherlands",
     origin=dict(lat=LAT0, lon=LON0), extent=2 * HALF_EXTENT, start=START, end=END, sunrise="06:14", sunset="18:47", speed=300, lapse=14400, menPerDot=10,
@@ -811,7 +872,19 @@ battle = dict(
     sides=dict(british=dict(name="British (1st Airborne Division, Urquhart; XXX Corps)", color="#3a5f9e", light="#7d9bd0", dark="#1d3561"),
                polish=dict(name="Poles (1st Independent Parachute Brigade, Sosabowski)", color="#5d7f86", light="#97b4ba", dark="#2e4246"),
                german=dict(name="Germans (II SS Panzer Corps, Bittrich; Kampfgruppe von Tettau)", color="#b8322a", light="#de5d50", dark="#5c1712")),
-    features=features, units=units, events=[], tints=TINTS,
+    features=features, units=units, events=events, tints=TINTS,
+    outcome=OUTCOME, sources=SOURCES,
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1, ensure_ascii=False)
-print(len(units), "units,", len(features), "features,", len(channel), "river cells, river from", RIVER[0], "to", RIVER[-1])
+print(len(units), "units,", len(events), "chapters,", len(features), "features,", len(channel), "river cells, river from", RIVER[0], "to", RIVER[-1])
+# Which units each chapter's frame holds at its moment, so a caption never names a unit the camera leaves out.
+def where(u, t):
+    ks = [k for k in u["keys"] if sec(k["t"]) <= sec(t)]
+    if not ks or next((k["state"] for k in reversed(ks) if "state" in k), None) == "hidden": return None
+    k = ks[-1]; nxt = [k2 for k2 in u["keys"] if sec(k2["t"]) > sec(t)]
+    if nxt and (k["x"], k["y"]) != (nxt[0]["x"], nxt[0]["y"]):
+        f = (sec(t) - sec(k["t"])) / (sec(nxt[0]["t"]) - sec(k["t"])); return (k["x"] + f * (nxt[0]["x"] - k["x"]), k["y"] + f * (nxt[0]["y"] - k["y"]))
+    return (k["x"], k["y"])
+for e in events:
+    r = e["view"] / 2; inside = [u["id"] for u in units if (p := where(u, e["t"])) and abs(p[0] - e["at"][0]) <= r and abs(p[1] - e["at"][1]) <= r]
+    print(f"{e['t']} {e['title']}: {' '.join(inside)}")
