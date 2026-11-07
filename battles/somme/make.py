@@ -533,7 +533,7 @@ FRONTAGE = {  # division: (north end, south end, files north to south)
     '34': ((-1900, -3700), (-760, -5650), [['nf20', 'nf23'], ['nf21', 'nf22'], ['linc10', 'suff11'], ['rs15', 'rs16']]),
     '21': ((-700, -5700), (-470, -6200), [['koyli9', 'dli15'], ['koyli10', 'ey1'], ['mx4', 'yl10'], ['som8', 'linc8']]),
     '17': ((-400, -6330), (150, -6950), [['wy10', 'gh7'], ['ey7', 'dorset6']]),
-    '7': ((200, -6990), (2100, -7210), [['man20', 'rirish2'], ['rwf1', 'rwar2'], ['devon9', 'devon8'], ['gordon2', 'border2'], ['man22', 'queens2'], ['sst1', 'man21']]),
+    '7': ((200, -6990), (2100, -7210), [['man20', 'rirish2'], ['rwf1', 'rwar2'], ['devon9', 'devon8'], ['gordon2', 'border2'], ['sst1', 'man21'], ['man22', 'queens2']]),
     '18': ((2200, -7215), (3700, -7270), [['rf11', 'northants6'], ['beds7', 'mx12'], ['norfolk8', 'essex10'], ['berks6', 'suff8'], ['queens7', 'rwk7'], ['buffs7'], ['esurrey8']]),
     '30': ((3800, -7290), (5700, -7900), [['kings18', 'gh2'], ['man19', 'wilts2'], ['kings17', 'kings19'], ['kings20', 'beds2']]),
 }
@@ -558,8 +558,8 @@ GSECTOR = {  # regiment: (north end, south end on the German front line, the sup
     'r121': ((-4045, 5307), (-4357, 3970), (-3500, 4400)), 'r119': ((-4495, 3584), (-3500, 2050), P['beaumont']),
     'r99': ((-2863, 1163), (-2046, 377), DER['stuff']), 'i180': ((-2345, -511), (-1574, -2534), P['mouquet']),
     'r110': ((-1457, -2769), (-740, -4974), P['contalmaison']), 'r111': ((-342, -5952), (391, -6795), centre(WOODS['r6631874'])),
-    'r109': ((639, -6969), (2931, -7124), P['mametz']), 'i62': ((3359, -7069), (4646, -7013), P['montauban']),
-    'b6': ((5003, -7013), (6504, -8349), DER['briqueterie']), 'i23': ((6600, -8900), (7148, -10019), (8300, -9300)),
+    'r109': ((639, -6969), (2931, -7124), P['mametz']), 'i62': ((3359, -7069), (4646, -7013), DER['briqueterie']),
+    'b6': ((5003, -7013), (6504, -8349), (6600, -6400)), 'i23': ((6600, -8900), (7148, -10019), (8300, -9300)),
 }
 for g, (a, b, sup) in GSECTOR.items():
     for k, p in enumerate(stretch(GL, a, b, 2)): POS[f"{g}_{k + 1}"] = tuple(round(v) for v in step(p, toward(p, BL), -80))
@@ -596,6 +596,394 @@ def facing(id): return heading(POS[id], on_line(BL if BASE[id][1] == "german" el
 
 for id in BASE:
     appear(id, START, POS[id], state="hidden" if id in HIDDEN_AT_START else "line", h=facing(id))
+
+def run(id, t0, legs, **kw0):  # from where it stands at t0 through timed legs: (time, place, fields)
+    if sec(t0) - sec(KEYS[id][-1]["t"]) > 60: at(id, plus(t0, -1))
+    keys(id, [K(t0, last(id), **kw0)] + [K(t, p, **kw) for t, p, kw in legs])
+def go(id, t0, t1, p, state="line", moving="charge", **kw):  # from where it stands at t0 to p at t1
+    run(id, t0, [(t1, p, dict(state=state, h=kw.pop("h", heading(last(id), p)), **kw))], state=moving, h=heading(last(id), p))
+def walk_to(id, t0, pts, state="line", moving="column", kmh=PACE, h=None):  # at a pace from t0 along pts; returns the arrival time
+    if sec(t0) - sec(KEYS[id][-1]["t"]) > 60: at(id, plus(t0, -1))
+    ks = walk(t0, [last(id)] + pts, moving, kmh); ks[-1]["state"] = state
+    if h is not None: ks[-1]["h"] = h
+    keys(id, ks); return ks[-1]["t"]
+def lose(id, t0, t1, n): at(id, t0); at(id, t1, strength=n)  # strength falls to n between t0 and t1, in place
+def fire(id, t0, t1, after="line", **kw): at(id, t0, state="firing"); at(id, t1, state=after, **kw)
+def surrender(id, t0, t1, n, gone): at(id, t0, state="firing"); at(id, t1, state="surrender", strength=n); hide(id, gone)
+def Gp(id): return on_line(GL, POS[id])  # the German front line opposite a British battalion's place
+def via(id, f): s, g = POS[id], Gp(id); return (s[0] + f * (g[0] - s[0]), s[1] + f * (g[1] - s[1]))  # f of the way across no man's land
+def beyond(id, d): return step(Gp(id), unit(POS[id], Gp(id)), d)  # d metres past the German front line
+def gfwd(id, d): return step(POS[id], toward(POS[id], BL), d)  # a German battalion d metres toward the British
+def off(p, dx, dy): return (p[0] + dx, p[1] + dy)
+def dusk(id, t, kmh=2): return walk_to(id, t, [POS[id]], moving="retreat", kmh=kmh, h=facing(id))  # back to its own trench after dark
+def stopped(id, t0, f, n, t_back, kmh=2.5):  # over the top at t0, shot down f of the way across, n left, back after dark
+    p = via(id, f); t1 = fmt(sec(t0) + max(120, math.dist(last(id), p) / (kmh / 3.6)))
+    go(id, t0, t1, p, strength=n); dusk(id, t_back)
+# Places the note names without a position, put where its text sets them (inferred, within 200 to 400 m).
+INF = {
+    'sunken_road': (200, -4900), 'red_cottage': (-60, -5700), 'fricourt_spur': (-250, -4800), 'hindenburg': off(P['leipzig'], 230, 60),
+    'white_trench': (3800, -5450), 'loop': (2750, -6150), 'train_alley': (4000, -6550), 'beetle_alley': (3300, -5900), 'fritz': (1900, -5450),
+    'bunny': (1650, -5650), 'shrine': (1450, -6450), 'hidden_lane': (1100, -6500), 'battery_valley': (-1350, 1750), 'b_line': (-2350, 1100),
+    'c_line': (-1900, 1500), 'mouquet_switch': (-1700, 950), 'wonderwork': (-2200, -350), 'nordwerk': (-2050, -1250), 'alt_trench': (4100, -6900),
+    'serre_edge': off(P['serre'], -250, 0), 'contal_edge': off(P['contalmaison'], -350, -150), 'curlu_edge': off(P['curlu'], -350, 150),
+    'montauban_n': off(P['montauban'], 100, 350), 'longueval_s': off(P['longueval'], -300, -600),
+}
+DARK = A("21:30")  # the men out in no man's land lay there until dark
+
+# ---- VII Corps at Gommecourt ----
+# The 56th: the leading companies out to tapes in no man's land under smoke at 7.25, up at 7.30 and through the first two
+# German trenches, the third after bombing; the supports across by nine; the counter-attack from 8.45 takes back the
+# second trench by four and the first by six; the last 75 come back from Ferret Trench at 9.30 p.m.
+LOSS56 = {'ls': 134, 'rangers': 286, 'qvr': 290, 'lrb': 196, 'kens': 424, 'l4': 410, 'qwr': 247}
+for k, id in enumerate(('ls', 'rangers', 'qvr', 'lrb')):
+    go(id, A("07:25"), A("07:29"), via(id, 0.4), moving="column")
+    go(id, ZERO, A("07:38"), off(Gp(id), 0, 0), state="firing", strength=680)
+    go(id, A("07:45"), A("07:52"), beyond(id, 150), state="firing", strength=620)
+    go(id, A("08:00"), A("08:10"), beyond(id, 300), state="firing", strength=560)
+    go(id, A("13:30"), A("13:45"), beyond(id, 150), state="firing", strength=420, moving="retreat")
+    go(id, A("16:00"), A("16:20"), Gp(id), state="firing", strength=300, moving="retreat")
+    go(id, A("18:00"), A("18:20"), via(id, 0.6), state="line", strength=LOSS56[id] + 40, moving="retreat")
+    at(id, DARK, strength=LOSS56[id]); dusk(id, A("21:31"))
+for id in ('kens', 'l4', 'qwr'):
+    go(id, A("07:50"), A("08:30"), off(Gp(id), 0, 0), state="firing", strength=560)
+    go(id, A("16:00"), A("16:20"), via(id, 0.7), strength=LOSS56[id] + 60, moving="retreat")
+    at(id, DARK, strength=LOSS56[id]); dusk(id, A("21:31"))
+go('l2', A("14:00"), A("14:08"), via('l2', 0.25), strength=560); dusk('l2', DARK)
+# The 46th: the Staffords shot down at uncut wire, three waves of the 1/5th and 1/7th Sherwood Foresters into the German
+# front trench and some the second, cut off when the position is restored at eleven; the third wave raked in the
+# communication trenches; the renewed attack set for 12.15, 1.15, 2.45 and 3.30 never goes in.
+for id, n in (('ns6', 440), ('ss6', 531)): stopped(id, ZERO, 0.85, n, DARK)
+for id, n in (('sf5', 331), ('sf7', 341)):
+    go(id, A("07:26"), A("07:40"), Gp(id), state="firing", strength=520)
+    go(id, A("07:45"), A("07:52"), beyond(id, 120), state="firing", strength=450)
+    go(id, A("10:30"), A("11:00"), Gp(id), state="line", strength=n + 30, moving="retreat")
+    at(id, DARK, strength=n); dusk(id, A("21:31"))
+go('sf6', A("07:40"), A("07:50"), via('sf6', 0.05), strength=650)
+fire('r91_1', ZERO, A("11:00")); fire('r91_2', ZERO, A("10:14"), after="firing"); fire('r55_1', ZERO, A("09:00"))
+go('r91_2', A("10:15"), A("10:50"), gfwd('r91_2', 80), state="firing"); at('r91_2', A("11:30"), state="line")
+# The Germans in the 56th's front: overrun, then the counter-attack organised at 8.45 with two companies of R.I.R. 15.
+for id in ('i170_1', 'i170_2'):
+    fire(id, ZERO, A("07:40"), after="retreat", strength=380); go(id, A("07:41"), A("08:00"), gfwd(id, -450), state="line", moving="retreat")
+appear('r15', A("08:15"), (-3900, 9050), state="column", h=240)
+for id, p in (('i170_1', 'qvr'), ('i170_2', 'lrb'), ('i170_3', 'rangers'), ('r15', 'qvr')):
+    go(id, A("08:45"), A("09:30"), beyond(p, 380), state="firing", moving="charge")
+    go(id, A("13:30"), A("13:50"), beyond(p, 170), state="firing")
+    go(id, A("16:00"), A("16:30"), beyond(p, 40), state="firing")
+    go(id, A("18:00"), A("19:00"), off(Gp(p), 30, 30), state="firing", strength=carried(id, "strength") - 120); at(id, A("21:45"), state="line")
+go('r55_2', A("08:45"), A("09:30"), beyond('ls', 250), state="firing")
+go('r55_2', A("16:00"), A("16:30"), off(Gp('ls'), 40, 40), state="firing", strength=400); at('r55_2', A("21:45"), state="line")
+
+# ---- VIII Corps: Serre, Redan Ridge, Beaumont-Hamel ----
+# The 31st: four waves into the fire; the Leeds and Sheffield battalions wiped out in no man's land, the Accringtons'
+# right company into the German line and 80 to 100 men seen entering Serre; by 4.07 Serre is empty but for small parties.
+stopped('yl12', ZERO, 0.6, 160, DARK); stopped('wy15', ZERO, 0.55, 150, DARK)
+stopped('wy16', A("07:35"), 0.35, 260, DARK); stopped('yl13', A("07:40"), 0.25, 420, DARK); stopped('yl14', A("07:45"), 0.15, 500, DARK)
+stopped('wy18', A("07:50"), 0.12, 520, DARK)
+go('el11', ZERO, A("07:42"), Gp('el11'), state="firing", strength=260)
+go('el11', A("08:15"), A("08:40"), INF['serre_edge'], state="firing", strength=110)
+lose('el11', A("09:15"), A("16:00"), 30); at('el11', A("16:07"), state="surrender"); hide('el11', A("16:30"))
+fire('i169_1', ZERO, A("09:30")); fire('i169_2', ZERO, A("09:30")); fire('i169_3', A("08:30"), A("16:00"))
+# The 4th: the 1st Rifle Brigade and the 1/8th Warwicks into the Quadrilateral, the 1st East Lancs stopped at the wire;
+# the supports from 7.40, the Somersets forced left into the Quadrilateral; at 9.30 the 10th and 12th Brigades, too late to
+# stop, the Seaforths and Lancashire Fusiliers to Munich Trench, Essex and King's Own to Munich Trench and Pendant Copse;
+# bombed back by eleven, the survivors in the Quadrilateral by noon.
+Q = DER['quadrilateral']
+go('rw18', ZERO, A("07:37"), Gp('rw18'), state="firing", strength=560); go('rw18', A("07:40"), A("07:50"), off(Q, 60, 90), state="firing", strength=480)
+go('rb1', ZERO, A("07:38"), Gp('rb1'), state="firing", strength=540); go('rb1', A("07:41"), A("07:52"), off(Q, -40, -100), state="firing", strength=460)
+stopped('el1', ZERO, 0.8, 300, DARK)
+go('som1', A("07:40"), A("08:05"), off(Q, -120, 60), state="firing", strength=380)
+stopped('hants1', A("07:40"), 0.6, 360, DARK); stopped('rw16', A("07:40"), 0.55, 380, DARK)
+go('sea2', A("09:30"), A("10:05"), P['munich'], state="firing", strength=430, moving="charge")
+go('lf2', A("09:30"), A("10:05"), off(P['munich'], -60, 160), state="firing", strength=480)
+go('essex2', A("09:30"), A("10:10"), off(P['munich'], 200, 250), state="firing", strength=430)
+go('ko1', A("09:30"), A("10:15"), DER['pendant'], state="firing", strength=420)
+stopped('rdf2', A("09:30"), 0.55, 380, DARK)
+for id, p, n in (('sea2', off(Q, 150, -60), 300), ('lf2', off(Q, 40, 160), 380), ('essex2', off(Q, 220, 100), 300), ('ko1', off(Q, 140, 240), 300)):
+    go(id, A("11:00"), A("11:50"), p, state="firing", strength=n, moving="retreat")
+for id in ('rw18', 'rb1', 'som1', 'sea2', 'lf2', 'essex2', 'ko1'): at(id, A("15:00"), state="line")
+go('r121_1', A("07:37"), A("07:55"), gfwd('r121_1', -500), state="line", moving="retreat", strength=380)
+fire('r121_2', ZERO, A("11:00")); fire('r121_3', A("10:00"), A("11:30"))
+go('r121_3', A("23:00"), B("00:30"), off(Q, 450, 200), state="firing", moving="charge")
+# The 29th: the Hawthorn mine at 7.20 warns the Germans. Two platoons of the 2nd Royal Fusiliers reach the crater's near
+# lip; the 1st Lancashire Fusiliers mown down leaving the Sunken Lane; the 2nd South Wales Borderers destroyed by 7.35, the
+# 1st Inniskillings killed at the wire of Y Ravine; the following battalions shot down in their own wire.
+H_LIP = off(centre(CRATERS['w117441411']), -60, 0)
+go('rf2', ZERO, A("07:36"), H_LIP, state="firing", strength=500)
+go('rf2', A("08:30"), A("08:45"), via('rf2', 0.3), strength=330, moving="retreat"); dusk('rf2', DARK)
+go('lf1', A("06:30"), A("06:55"), P['sunken_lane'], moving="column", h=95)
+go('lf1', ZERO, A("07:36"), off(P['sunken_lane'], 120, -20), strength=270); dusk('lf1', DARK)
+stopped('swb2', ZERO, 0.4, 170, DARK); stopped('innis1', ZERO, 0.9, 250, DARK)
+for id, f, n in (('rdf1', 0.15, 420), ('mx16', 0.2, 400), ('kosb1', 0.15, 380), ('border1', 0.2, 370)): stopped(id, A("07:40"), f, n, DARK)
+lose('r119_1', A("07:20"), A("07:21"), 450); fire('r119_1', A("07:21"), A("08:09"), after="firing"); fire('r119_2', ZERO, A("10:00"))
+go('r119_1', A("08:10"), A("08:30"), off(centre(CRATERS['w117441411']), 60, 40), state="firing"); at('r119_1', A("11:00"), state="line")
+# 9.05: the Newfoundlanders advance alone from St John's Road over the open; most dead within fifteen minutes.
+DANGER = (lambda b, g: (b[0] + 0.45 * (g[0] - b[0]), b[1] + 0.45 * (g[1] - b[1])))(on_line(BL, P['newfoundland']), on_line(GL, P['newfoundland']))
+go('nfld', A("09:05"), A("09:12"), on_line(BL, P['newfoundland']), state="charge", moving="charge", strength=600)
+go('nfld', A("09:12"), A("09:20"), DANGER, strength=120); at('nfld', DARK, strength=91); dusk('nfld', A("21:31"))
+go('essex1', A("09:30"), A("09:45"), off(on_line(BL, P['newfoundland']), -60, 80), strength=600)
+fire('b143', A("07:20"), A("08:00"))
+
+# ---- X Corps: the Schwaben Redoubt, Thiepval, the Leipzig Salient ----
+# The 36th: out of Thiepval Wood at 7.15 to 100 yards from the German line; at 7.30 the buglers; the B Line at 7.48, the
+# Schwaben's front face at eight, the C Line at 8.48; the 107th through at 9.15 to within 100 yards of the second position
+# at ten, where the corps' halt order never reaches it; counter-attacks from two, B.R.I.R. 8 at four, I.R. 185 at 6.30
+# and ten; the redoubt abandoned at 10.30 and the division back in its own trenches by 11.30.
+SCH = DER['schwaben']
+for id, d in (('innis9', 40), ('innis10', -40), ('rir11', 80), ('rir13', -80)):
+    go(id, A("07:15"), A("07:25"), step(Gp(id), unit(Gp(id), POS[id]), 90), moving="column")
+for id, p1, p2, p3 in (('innis9', off(INF['b_line'], 0, -100), off(SCH, -80, -60), off(INF['c_line'], 0, -150)),
+                       ('innis10', off(INF['b_line'], 150, -250), off(SCH, 120, -140), off(INF['c_line'], 150, -300)),
+                       ('rir11', off(INF['b_line'], -150, 100), off(SCH, -150, 80), off(INF['c_line'], -200, 0)),
+                       ('rir13', off(INF['b_line'], -50, 0), off(SCH, 0, 0), INF['mouquet_switch'])):
+    go(id, ZERO, A("07:35"), Gp(id), state="firing", strength=640)
+    go(id, A("07:36"), A("07:48"), p1, state="firing", strength=580)
+    go(id, A("07:49"), A("08:00"), p2, state="firing", strength=540)
+    go(id, A("08:30"), A("08:48"), p3, state="firing", strength=480)
+for id, p in (('innis11', off(INF['b_line'], 50, -180)), ('rir14', off(SCH, -60, 160))):
+    go(id, A("07:45"), A("08:10"), Gp(id), state="firing", strength=600); go(id, A("08:11"), A("08:40"), p, state="firing", strength=520)
+for id, p in (('rir8', off(INF['battery_valley'], 0, 100)), ('rir9', off(DER['stuff'], -90, -60)), ('rir10', off(DER['stuff'], -120, -150)), ('rir15', INF['battery_valley'])):
+    go(id, A("09:15"), A("09:45"), SCH, state="charge", strength=640, moving="charge")
+    go(id, A("09:46"), A("10:00"), p, state="firing", strength=500)
+    go(id, A("10:10"), A("10:40"), off(SCH, 150, 120), state="firing", strength=380, moving="retreat")
+# The afternoon and evening: pushed back on the redoubt from two, out of the ground by St Pierre Divion by six, the redoubt
+# held until ten, then back across no man's land to their own line.
+for id in ('innis9', 'innis10', 'rir11', 'rir13', 'innis11', 'rir14', 'rir8', 'rir9', 'rir10', 'rir15'):
+    n = sum(map(ord, id)); p = off(SCH, (n % 7 - 3) * 60, (n // 7 % 7 - 3) * 50)
+    go(id, A("16:00"), A("17:30"), p, state="firing", strength=carried(id, "strength") - 80, moving="retreat")
+    go(id, A("22:00"), A("22:40"), Gp(id) if id in ('innis9', 'innis10', 'rir11', 'rir13', 'innis11', 'rir14') else on_line(GL, POS['rir11']), state="line", strength=carried(id, "strength") - 60, moving="retreat")
+    go(id, A("22:41"), A("23:30"), POS[id], state="line", moving="retreat", strength=carried(id, "strength") - 40)
+for id in ('rif9', 'rir12'): stopped(id, ZERO, 0.75, 330, DARK)
+surrender('r99_2', ZERO, A("08:00"), 120, A("08:30"))
+fire('r99_1', ZERO, A("07:40"), after="retreat", strength=250); go('r99_1', A("07:41"), A("08:05"), off(DER['stuff'], 250, 250), moving="retreat")
+fire('r99_3', A("09:50"), A("16:00"))
+for id, p0, t in (('b8_1', (-450, 2900), "14:00"), ('b8_2', (-300, 3200), "14:10")):
+    appear(id, A(t), p0, state="column", h=230)
+    go(id, A("15:30"), A("16:10"), off(DER['stuff'], 100, 0), moving="column")
+    go(id, A("16:11"), A("17:40"), off(SCH, 300, 150), state="firing")
+    go(id, A("17:41"), A("18:00"), off(DER['st_pierre'], 300, 100), state="firing")
+appear('i180r', A("15:00"), (-500, -200), state="column", h=300)
+go('i180r', A("15:30"), A("16:30"), off(SCH, 250, -250), state="firing")
+for id, t0, t1 in (('i185_1', "16:45", "18:30"), ('i185_2', "20:15", "22:00")):
+    appear(id, A(t0), P['irles'], state="column", h=230)
+    walk_to(id, plus(A(t0), 1), [(1000, 3600), (-500, 2600), off(SCH, 500, 300)], state="line")
+for id in ('b8_1', 'b8_2', 'i180r', 'i185_1'): fire(id, A("19:00"), A("19:30"), after="firing")
+for id, p in (('i185_2', off(SCH, 80, 60)), ('b8_1', off(SCH, -120, 100)), ('b8_2', off(SCH, 150, -100)), ('i185_1', off(SCH, 40, 220))):
+    go(id, A("22:01"), A("22:30"), p, state="line")
+# The 32nd: the 17th HLI out to within 40 yards of the Leipzig Redoubt at 7.23, into it at 7.30, on to Hindenburg Trench
+# and back; the 16th HLI and the 2nd KOYLI held at the Wonderwork's wire; the 16th Northumberland Fusiliers and the
+# Salford Pals cut down before Thiepval. From 8.30 the Lonsdales, then the Dorsets and the 19th Lancashire Fusiliers,
+# out of Authuille Wood into the Nordwerk's fire; at 1.45 two companies of the 2nd Manchesters reach the redoubt.
+LEIP = P['leipzig']
+go('hli17', A("07:23"), A("07:28"), step(LEIP, unit(LEIP, POS['hli17']), 40), moving="column")
+go('hli17', ZERO, A("07:32"), LEIP, state="firing", strength=640)
+go('hli17', A("07:33"), A("07:45"), INF['hindenburg'], state="firing", strength=560)
+go('hli17', A("07:50"), A("08:05"), off(LEIP, 40, 30), state="firing", strength=450, moving="retreat")
+for id, n in (('hli16', 320), ('koyli2', 380)): stopped(id, ZERO, 0.85, n, DARK)
+stopped('nf16', ZERO, 0.5, 220, DARK); stopped('lf15', ZERO, 0.6, 230, DARK)
+for id, t0, n in (('border11', "08:30", 260), ('dorset1', "08:45", 240), ('lf19', "08:50", 250)):
+    p = step(LEIP, unit(LEIP, POS[id]), 60)
+    go(id, A(t0), plus(A(t0), 25), (POS[id][0] + 0.7 * (p[0] - POS[id][0]), POS[id][1] + 0.7 * (p[1] - POS[id][1])), strength=n + 60)
+    at(id, plus(A(t0), 26), strength=n); dusk(id, DARK)
+go('lf16', A("09:15"), A("09:25"), via('lf16', 0.3), strength=330); dusk('lf16', DARK)
+go('innis2', A("13:30"), A("13:38"), via('innis2', 0.3), strength=560); dusk('innis2', A("14:30"))
+go('man2', A("13:45"), A("14:20"), off(LEIP, -50, -60), state="firing", strength=640)
+fire('hli17', A("13:45"), A("16:10"), after="firing"); fire('man2', A("14:21"), A("16:10"), after="firing")
+fire('i180_1', ZERO, A("07:31"), after="retreat", strength=420)
+go('i180_1', A("07:32"), A("07:45"), off(INF['hindenburg'], 200, 40), state="firing", moving="retreat")
+go('i180_1', A("13:45"), A("16:10"), off(LEIP, 140, 40), state="firing", strength=330)
+fire('i180_2', ZERO, A("12:00")); fire('i180_2', A("14:30"), A("15:30"))
+# The 49th crosses the Ancre: the 147th from 10.55, the 146th through the swamp to Thiepval Wood from 11.35; the 146th's
+# attack on Thiepval at four is shot down; soon after 5.30 its battalions move to help at the Schwaben, and a battalion and a
+# half leave the wood about nine. The 148th goes to the 32nd at 5.10.
+T_WOOD = centre(WOODS['w119243607'])
+walk_to('b147', A("10:55"), [P['authuille'], off(T_WOOD, 150, -250)], kmh=3)
+walk_to('b146', A("11:35"), [(-3400, 300), off(T_WOOD, -100, 100)], kmh=2.5)
+go('b146', A("15:50"), A("16:05"), off(on_line(GL, P['thiepval']), -250, 0), state="firing", strength=2500, moving="charge")
+go('b146', A("16:30"), A("17:00"), off(T_WOOD, 200, 200), strength=2400, moving="retreat")
+go('b146', A("21:00"), A("21:45"), off(on_line(BL, SCH), 60, 0), strength=2350)
+walk_to('b148', A("17:10"), [off(DER['authuille_wood'], -300, 100)], kmh=3)
+
+# ---- III Corps: Ovillers and La Boisselle ----
+# The 8th: the 23rd Brigade across 750 yards of Mash Valley, about 200 into the German second trench; parties of the 2nd
+# Lincolns in the German front trench at 7.50 holding 300 yards of it for two hours; the 70th Brigade's leading battalions
+# to the third trench and cut off; bomb fighting still seen at 2.30.
+go('mx2', ZERO, A("07:50"), beyond('mx2', 120), state="firing", strength=200); lose('mx2', A("09:00"), A("15:00"), 60); dusk('mx2', DARK)
+stopped('devon2', ZERO, 0.75, 260, DARK)
+go('linc2', ZERO, A("07:50"), Gp('linc2'), state="firing", strength=330)
+go('linc2', A("09:45"), A("10:00"), via('linc2', 0.6), strength=250, moving="retreat"); dusk('linc2', DARK)
+stopped('berks2', ZERO, 0.7, 280, DARK)
+for id in ('koyli8', 'yl8'):
+    go(id, ZERO, A("07:45"), Gp(id), state="firing", strength=520); go(id, A("07:46"), A("07:58"), beyond(id, 300), state="firing", strength=300)
+    lose(id, A("08:30"), A("14:30"), 90); dusk(id, DARK)
+for id, t0, f, n in (('yl9', "07:40", 0.35, 360), ('rir1', "07:45", 0.3, 400), ('wy2', "08:25", 0.4, 450)): stopped(id, A(t0), f, n, DARK)
+fire('r110_1', ZERO, A("12:00"))
+# The 34th: four columns. The Royal Scots drift right over the Fricourt spur by 7.48, leaving Sausage Redoubt behind them;
+# the Grimsby Chums and 11th Suffolks held in no man's land, parties into the Lochnagar crater; the 21st and 22nd
+# Northumberland Fusiliers over the Schwabenhöhe and down Sausage Valley, fifty of them at the edge of Contalmaison
+# about nine; the 20th and 23rd shot down in Mash Valley; the Tyneside Irish from the Tara-Usna line a mile back.
+for id, p, n in (('rs15', INF['fricourt_spur'], 237), ('rs16', off(INF['fricourt_spur'], 200, -250), 284)):
+    go(id, ZERO, A("07:36"), Gp(id), state="firing", strength=560); go(id, A("07:37"), A("07:48"), p, state="firing", strength=n + 120)
+    lose(id, A("08:00"), A("20:00"), n)
+LOCH = P['lochnagar']
+go('linc10', ZERO, A("07:42"), off(LOCH, -60, 20), state="firing", strength=330); lose('linc10', A("08:00"), A("12:59"), 300)
+stopped('suff11', ZERO, 0.6, 260, A("12:50"))
+go('suff11', A("13:00"), A("13:15"), off(LOCH, -40, -70), state="firing", strength=223)
+fire('linc10', A("13:00"), A("15:20"), strength=273); fire('suff11', A("13:15"), A("15:20"))
+go('nf21', ZERO, A("07:40"), Gp('nf21'), state="charge", strength=520)
+go('nf21', A("07:40"), A("08:15"), P['sausage_v'], state="charge", strength=260)
+go('nf21', A("08:15"), A("09:00"), INF['contal_edge'], state="firing", strength=50)
+at('nf21', A("09:30"), state="surrender"); hide('nf21', A("09:45"))
+go('nf22', ZERO, A("07:40"), Gp('nf22'), state="charge", strength=480)
+go('nf22', A("07:40"), A("08:20"), off(P['sausage_v'], 300, -250), state="firing", strength=200); lose('nf22', A("08:30"), A("20:00"), 150)
+stopped('nf20', ZERO, 0.3, 190, DARK); stopped('nf23', ZERO, 0.35, 170, DARK)
+for k, id in enumerate(('nf27', 'nf26', 'nf25', 'nf24')):
+    go(id, ZERO, A("07:58"), back(on_line(BL, POS[id]), 30), strength=225)
+lose('r110_2', A("07:28"), A("07:29"), 450); fire('r110_2', A("07:29"), A("12:00"))
+go('r110_3', A("11:15"), A("12:00"), off(LOCH, 180, 60), state="firing")
+fire('r110_3', A("13:00"), A("15:20"), after="firing")
+# The 19th: the 56th Brigade to the 8th at 12.15, the 5 p.m. assault on Ovillers cancelled at 4.15; the division up
+# from Albert after dark to relieve the 34th.
+appear('b56', A("12:15"), P['albert'], state="column", h=40); walk_to('b56', A("12:16"), [(-3200, -2900)], kmh=3)
+for id, t, p in (('b57', "21:30", off(TARA_USNA[1], -150, 0)), ('b58', "21:45", off(TARA_USNA[0], -150, 0))):
+    appear(id, A(t), P['albert'], state="column", h=40); walk_to(id, plus(A(t), 1), [p], kmh=3)
+
+# ---- XV Corps: Fricourt and Mametz ----
+# The 21st: the 64th Brigade creeps up in the last five minutes, takes the front and support trenches in ten and the Sunken
+# Road, a mile on, at eight; the 1st East Yorks in Round Wood at 9.45, lost to a counter-attack; the 63rd's 4th Middlesex
+# holds the German front trench with 104 men; its supports forward at 8.40; the 62nd up after 5.30.
+SR = INF['sunken_road']
+for id, p in (('koyli9', off(SR, -150, 100)), ('koyli10', off(SR, 50, -60))):
+    go(id, A("07:25"), A("07:29"), via(id, 0.45), moving="column")
+    go(id, ZERO, A("07:40"), beyond(id, 100), state="firing", strength=560)
+    go(id, A("07:41"), A("08:00"), p, state="firing", strength=430)
+go('dli15', A("07:40"), A("08:20"), off(SR, -250, 0), state="firing", strength=480)
+go('ey1', A("07:45"), A("08:30"), off(SR, 100, -150), strength=560)
+go('ey1', A("09:30"), A("09:45"), DER['round_wood'], state="firing", strength=480)
+go('ey1', A("10:00"), A("10:15"), off(SR, 100, -150), state="line", strength=420, moving="retreat")
+go('mx4', ZERO, A("07:40"), Gp('mx4'), state="firing", strength=104)
+stopped('som8', ZERO, 0.7, 290, DARK)
+for id in ('yl10', 'linc8'): go(id, A("08:40"), A("09:05"), Gp(id), state="firing", strength=480)
+walk_to('b62', A("17:30"), [off(SR, -900, -300)], kmh=3)
+fire('r111_1', ZERO, A("07:40"), after="retreat", strength=380); go('r111_1', A("07:41"), A("08:00"), off(DER['round_wood'], 300, 100), moving="retreat")
+go('r111_1', A("09:40"), A("09:55"), off(DER['round_wood'], 60, 30), state="firing", moving="charge"); go('r111_1', A("10:20"), A("10:40"), off(DER['round_wood'], 300, 100), moving="retreat")
+lose('r110_2', A("12:01"), A("12:02"), 400)
+# The 50th Brigade before Fricourt: two companies of the 10th West Yorks through to Red Cottage, the rest annihilated by the
+# Tambour's guns; a company of the 7th Green Howards destroyed at 7.45; at 2.30 the 7th Green Howards and 7th East Yorks
+# attack from Wing Corner to the Tambour, 351 casualties in three minutes. The 51st Brigade relieves the 50th before dusk.
+go('wy10', ZERO, A("07:38"), Gp('wy10'), state="charge", strength=120); go('wy10', A("07:38"), A("07:50"), INF['red_cottage'], state="firing", strength=40)
+at('wy10', A("09:00"), state="line")
+go('gh7', A("07:45"), A("07:50"), via('gh7', 0.25), strength=600); go('gh7', A("08:10"), A("08:20"), POS['gh7'], moving="retreat")
+go('gh7', A("14:30"), A("14:33"), via('gh7', 0.35), strength=250); dusk('gh7', DARK)
+stopped('ey7', A("14:30"), 0.3, 520, DARK)
+fire('r111_2', ZERO, A("09:00")); fire('r111_2', A("14:30"), A("14:45"))
+appear('b51', A("19:30"), (-1500, -7300), state="column", h=60); walk_to('b51', A("19:31"), [off(POS['ey7'], -150, -100)], kmh=3)
+for id in ('gh7', 'ey7', 'dorset6'): hide(id, plus(walk_to(id, B("04:00"), [off(POS[id], -1100, -400)], kmh=3), 1))
+for id, t in (('r111_1', "23:30"), ('r111_2', "23:40"), ('r111_3', "23:50")):  # Below's order: R.I.R. 111 out of Fricourt in the night
+    hide(id, plus(walk_to(id, A(t), [off(P['contalmaison'], 300, 300)], kmh=3), 1))
+# The 7th: the 22nd Manchesters and 1st South Staffords 700 yards on by 7.45, into Bucket Trench and Mametz by eight; the
+# 9th Devons stopped at Mansel Copse; the 2nd Gordons in Shrine Alley at 7.55; the 2nd Queen's and 21st Manchesters forward
+# soon after 9.30; Danzig Alley East soon after one, Bright Alley at 1.40; the 22nd Brigade's attack at 2.30; at 3.30 the
+# 2nd Warwicks and 8th Devons after half an hour's bombardment, and 200 Germans surrender from the Shrine and the village;
+# the whole of Mametz by 4.05; Fritz Trench cleared by 6.30.
+go('man22', ZERO, A("07:45"), off(P['mametz'], -150, -350), state="firing", strength=560)
+go('man22', A("07:46"), A("08:00"), off(P['mametz'], 0, -150), state="firing", strength=500)
+go('sst1', ZERO, A("07:45"), off(P['mametz'], -450, -400), state="firing", strength=560)
+go('sst1', A("07:46"), A("08:05"), off(P['mametz'], -350, -150), state="firing", strength=500)
+stopped('devon9', ZERO, 0.45, 290, DARK)
+go('gordon2', ZERO, A("07:55"), beyond('gordon2', 200), state="firing", strength=520)
+go('border2', A("08:30"), A("09:30"), INF['hidden_lane'], state="firing", strength=520)
+go('queens2', A("09:35"), A("10:10"), off(P['mametz'], 150, -100), state="firing", strength=640)
+go('man21', A("09:35"), A("10:10"), off(P['mametz'], -100, -50), state="firing", strength=640)
+go('man22', A("12:45"), A("13:05"), off(P['dantzig'], 0, -20), state="firing", strength=420)
+go('man21', A("13:20"), A("13:40"), off(P['dantzig'], 300, 150), state="firing", strength=560)
+go('sst1', A("13:10"), A("13:30"), off(P['dantzig'], -400, -60), state="firing", strength=440)
+go('queens2', A("14:40"), A("15:00"), off(INF['fritz'], 150, -50), state="firing", strength=560)
+go('queens2', A("18:00"), A("18:30"), INF['fritz'], state="firing", strength=520); at('queens2', A("19:30"), state="line")
+go('man20', A("14:30"), A("14:45"), beyond('man20', 150), state="firing", strength=520)
+go('rwf1', A("14:30"), A("14:45"), beyond('rwf1', 150), state="firing", strength=560)
+go('man20', A("15:00"), A("16:00"), off(P['mametz'], -800, -350), state="firing", strength=470)
+go('devon8', A("15:30"), A("16:00"), INF['shrine'], state="firing", strength=520)
+go('rwar2', A("15:30"), A("16:05"), off(P['mametz'], -300, -300), state="firing", strength=640)
+for id in ('man22', 'sst1', 'gordon2', 'border2', 'man21', 'man20', 'rwf1', 'devon8', 'rwar2'): at(id, A("17:00"), state="line")
+fire('r109_1', ZERO, A("07:45"), after="retreat", strength=300); go('r109_1', A("07:46"), A("08:05"), P['mametz'], state="firing", moving="retreat")
+fire('r109_3', A("08:00"), A("15:00")); at('r109_3', A("15:01"), strength=200)
+surrender('r109_1', A("15:00"), A("15:45"), 120, A("16:30")); surrender('r109_3', A("15:20"), A("16:05"), 90, A("16:40"))
+
+# ---- XIII Corps: the Montauban ridge ----
+# The 18th: Kasino Point fired late at 7.27 as the first wave starts; Pommiers Trench at 7.50; the frontal attack on
+# Pommiers Redoubt at 8.30 fails and the flank attack takes it at 9.30; the 8th East Surreys held before Train Alley at
+# 8.37; the Carnoy craters cleared by the 7th Buffs at 9.30; Beetle Alley at 10.15, the Loop at 10.20; White Trench by four;
+# the Berkshires and Norfolks meet there at 5.40.
+for id, p in (('rf11', off(DER['pommiers'], -350, -100)), ('beds7', off(DER['pommiers'], -150, -200)), ('norfolk8', off(DER['pommiers'], 100, -250)), ('berks6', off(DER['pommiers'], 300, -200))):
+    go(id, A("07:27"), A("07:37"), Gp(id), state="charge", strength=640); go(id, A("07:38"), A("07:50"), p, state="firing", strength=580)
+go('berks6', A("08:30"), A("08:40"), off(DER['pommiers'], 220, -80), state="firing", strength=540); go('berks6', A("09:20"), A("09:30"), DER['pommiers'], state="firing", strength=520)
+go('norfolk8', A("09:50"), A("10:20"), INF['loop'], state="firing", strength=520)
+for id, p in (('beds7', off(INF['beetle_alley'], 100, 0)), ('rf11', off(INF['beetle_alley'], -150, 50))):
+    go(id, A("09:50"), A("10:15"), p, state="firing", strength=520)
+    go(id, A("15:30"), A("16:00"), off(INF['white_trench'], -400 if id == 'rf11' else -200, 0), state="firing", strength=480)
+go('essex10', A("08:00"), A("08:40"), Gp('essex10'), strength=680); go('essex10', A("14:30"), A("15:30"), INF['white_trench'], state="firing", strength=600)
+go('berks6', A("17:10"), A("17:40"), off(INF['white_trench'], 200, 50), state="firing", strength=480)
+go('norfolk8', A("17:10"), A("17:40"), off(INF['white_trench'], 50, -60), state="firing", strength=470)
+for id in ('suff8', 'northants6', 'mx12'): go(id, A("08:00"), A("08:40"), beyond(id, 120), strength=680)
+go('esurrey8', A("07:27"), A("07:40"), Gp('esurrey8'), state="charge", strength=600); go('esurrey8', A("07:41"), A("08:37"), off(INF['train_alley'], -150, -150), state="firing", strength=420)
+go('buffs7', A("07:27"), A("07:40"), Gp('buffs7'), state="firing", strength=600); go('buffs7', A("09:00"), A("09:30"), off(DER['kasino'], 80, 100), state="firing", strength=560)
+go('queens7', A("07:27"), A("07:45"), beyond('queens7', 200), state="firing", strength=560); go('queens7', A("09:40"), A("10:00"), INF['train_alley'], state="firing", strength=500)
+go('rwk7', A("09:45"), A("10:30"), off(INF['train_alley'], 150, 150), state="firing", strength=680)
+for id, p in (('queens7', (3700, -5650)), ('esurrey8', (3950, -5600)), ('buffs7', (4150, -5650)), ('rwk7', (4300, -5550))):
+    go(id, A("15:00"), A("15:30"), p, state="line", strength=carried(id, "strength") - 40)
+for id in ('rf11', 'beds7', 'essex10', 'berks6', 'norfolk8'): at(id, A("18:00"), state="line")
+# The 30th: the 89th across 500 yards, Dublin Trench found empty at 8.30 with the French in Dublin Redoubt beside it; the
+# 21st Brigade in Alt Trench at 7.45 and on Glatz Redoubt at 8.35; the 90th through at 8.30, into Montauban at 10.05 and
+# Montauban Alley at eleven; La Briqueterie rushed at 12.34 and I.R. 62's commander taken; the German guns on Montauban
+# from 1.45; the 12th Division's counter-attack at three in the morning fails.
+DUB = DER['dublin']
+go('kings17', ZERO, A("07:45"), Gp('kings17'), state="charge", strength=680); go('kings17', A("07:46"), A("08:30"), off(DUB, -350, 80), state="firing", strength=640)
+go('kings20', ZERO, A("07:45"), Gp('kings20'), state="charge", strength=680); go('kings20', A("07:46"), A("08:30"), off(DUB, -100, 0), state="firing", strength=640)
+go('kings20', A("12:15"), A("12:34"), DER['briqueterie'], state="firing", strength=600); at('kings20', A("13:00"), state="line")
+go('kings18', ZERO, A("07:45"), INF['alt_trench'], state="firing", strength=640); go('kings18', A("08:00"), A("08:35"), off(DER['glatz'], -100, 0), state="firing", strength=600)
+go('man19', ZERO, A("07:45"), off(INF['alt_trench'], 250, -50), state="firing", strength=640); go('man19', A("08:00"), A("08:35"), off(DER['glatz'], 150, -50), state="firing", strength=600)
+stopped('gh2', A("07:35"), 0.5, 550, A("09:00"))
+for id in ('wilts2', 'kings19', 'beds2'): go(id, A("08:00"), A("08:40"), beyond(id, 150), strength=680)
+for id, p in (('man16', off(INF['montauban_n'], -300, 0)), ('man17', off(INF['montauban_n'], 300, -50)), ('rsf2', off(P['montauban'], 0, -150)), ('man18', off(P['montauban'], -150, -450))):
+    walk_to(id, A("08:30"), [off(DER['glatz'], 300, 250), off(P['montauban'], 0, -500)], state="line", kmh=3)
+    go(id, A("09:50"), A("10:05"), off(P['montauban'], 0, 0) if id != 'man18' else p, state="firing", strength=640)
+for id, p in (('man16', off(MONTAUBAN_ALLEY[0], 100, 0)), ('man17', off(MONTAUBAN_ALLEY[1], -300, 0)), ('rsf2', off(P['montauban'], 0, -150))):
+    go(id, A("10:40"), A("11:00"), p, state="firing", strength=600)
+for id in ('i62_1', 'i62_2'):
+    fire(id, ZERO, A("07:45"), after="retreat", strength=300); go(id, A("07:46"), A("08:30"), off(P['montauban'], 0, 100), state="firing", moving="retreat")
+    go(id, A("09:30"), A("10:00"), off(P['montauban'], 500, 1100), state="line", moving="retreat", strength=220)
+surrender('i62_3', A("12:15"), A("12:34"), 150, A("13:00"))
+for id in ('b6_1', 'b6_2'): surrender(id, ZERO, A("08:30"), 120, A("09:00"))
+surrender('b6_3', A("08:00"), A("14:00"), 150, A("14:30"))
+fire('r109_2', ZERO, A("07:45"), after="retreat", strength=250); surrender('r109_2', A("07:46"), A("08:00"), 150, A("08:30"))
+appear('bi16', A("14:00"), INF['longueval_s'], state="column", h=200)
+go('bi16', A("15:00"), A("15:40"), off(MONTAUBAN_ALLEY[0], 200, 350), state="firing", moving="charge")
+go('bi16', A("16:20"), A("17:00"), INF['longueval_s'], strength=420, moving="retreat"); hide('bi16', A("18:00"))
+for id in ('man16', 'man17'): fire(id, A("15:20"), A("16:20"), after="line")
+for id in ('man16', 'man17', 'rsf2', 'man18'): lose(id, A("16:21"), A("21:00"), carried(id, "strength") - 80)
+# The 12th Reserve Division's regiments from Bapaume at 6.45 p.m. to the Bazentin ridge, and the counter-attack at 3 a.m.
+for k, id in enumerate(('r51', 'r38', 'r23')):
+    appear(id, A("18:50"), (9600 - 200 * k, 5000 - 200 * k), state="column", h=225)
+    walk_to(id, A("18:51"), [(6500, 1500), (5500 - 600 * k, -2600)], state="line")
+    go(id, B("03:00"), B("03:40"), off(MONTAUBAN_ALLEY[0], 600 * k - 400, 300), state="firing", strength=480)
+    go(id, B("04:00"), B("04:40"), (5500 - 600 * k, -2600), strength=400, moving="retreat")
+for id in ('man16', 'man17', 'rsf2'): fire(id, B("03:00"), B("04:00"))
+appear('b27', A("22:00"), P['billon'], state="column", h=0); walk_to('b27', A("22:01"), [off(P['carnoy'], 0, 200)], kmh=3)
+
+# ---- the French XX Corps ----
+# The 39th Division takes Bois Y and Bois Favière 'like clockwork' at 7.30; the 153rd's 3rd Battalion in Dublin Redoubt
+# at 8.30. The 11th Division's drumfire on Curlu from six and its first assault at nine.
+go('fr39b', ZERO, A("07:55"), DER['favieres'], state="firing", strength=2300)
+go('fr153', ZERO, A("08:30"), off(DUB, 250, -100), state="firing", strength=2350)
+for id, p in (('fr11a', off(INF['curlu_edge'], 0, 400)), ('fr11b', INF['curlu_edge'])):
+    go(id, A("09:00"), A("09:40"), p, state="firing", strength=2350)
+for id in ('i23_1', 'i23_2'): fire(id, A("09:00"), A("12:00"))
+for id in ('fr39b', 'fr153', 'fr11a', 'fr11b'): at(id, A("12:00"), state="line")
+
+# ---- 2 July: the 8th Division relieved and withdrawn at 5.40 ----
+for id in ('mx2', 'devon2', 'wy2', 'scr2', 'berks2', 'linc2', 'rir1', 'rb2', 'koyli8', 'yl8', 'yl9', 'sf11'):
+    hide(id, plus(walk_to(id, B("05:00"), [off(POS[id], -900, 0)], kmh=3), 1))
+
 for id in KEYS:
     if carried(id, "state") != "hidden" and sec(KEYS[id][-1]["t"]) < sec(END): at(id, END)
 
