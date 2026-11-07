@@ -1,15 +1,21 @@
 ---
 name: verify-field-glass
-description: Drive the real Field Glass web page (the start screen's war timeline, battle playback, screenshot links) in headless Chrome on this headless Mac mini and capture proof. Use before claiming a UI or battle change works, for PR screenshots, or when a change touches app.js, splash.js, index.html, themes/ or a battle's data.
+description: Drive the real Field Glass web page in headless Chrome on this Mac mini and capture proof. Poteto Feature/Bug-fix step "verify on the matching surface" means this skill (fg.sh), not IDE browser tools. Use before claiming a UI or battle change works, for PR screenshots, or when a change touches app.js, splash.js, index.html, themes/ or a battle's data.
 ---
 
 # Verify Field Glass
+
+## Under poteto
+
+When `/poteto-mode` reaches "Verify on the matching surface" for Field Glass UI, run **this skill** (`fg.sh` journeys and shots). That is poteto's **Prove It Works** on the real page. Do not substitute Cursor IDE browser, computer-use, or Claude for Chrome. For the ADR-0009 opening-landing property (not a journey), also run **formal-verify-opening-landing** (`node tools/formal/opening-landing.mjs`).
+
+## Contract
 
 Field Glass is a static web page: `index.html` loads `app.js`, `splash.js` and the skins in `themes/`, and fetches `battles/index.json` plus each battle's `battle.json` and `terrain.json`. There is no backend, database or login. The only surface is the browser page, drawn on a canvas with HTML panels over it.
 
 All commands below run from the repo root. The harness is `.claude/skills/verify-field-glass/fg.sh`; call it with `bash`. Every command takes a run folder `<dir>`: make it a new folder in your session scratchpad, one per run. It holds the server's pid, port and log, and all evidence.
 
-This machine is headless. Never use `file://` (blocked), the Claude for Chrome tools (need a display) or bare `node` (use `fg.sh drive`, which runs node through `npx`).
+This machine is headless. Never use `file://` (blocked), interactive browser tools (Claude for Chrome, Cursor IDE browser, computer-use — they need a display or drive the wrong surface), or bare `node` (use `fg.sh drive`, which runs node through `npx`). `fg.sh` is the only allowed driver.
 
 ## Launch
 
@@ -59,7 +65,7 @@ Everything goes in `<dir>`: the journey logs, `start-screen-*.png`, `playback-<b
 - for a battle data change, show the moment it affects, with a `shot` link at that time, and run `npm run check`, which validates every battle and rewrites the running times in `battles/index.json`.
 - look at the screenshots. A `PASS` from a blank canvas is not proof.
 
-To show the user, send the PNGs with SendUserFile. For a PR, use `bash ~/bin/pr-shot.sh <pr#> <png>...` with a desktop shot and a phone shot (390x844).
+To show the user, put the PNG paths in chat (Cursor: attach or Read the files; Claude Code: SendUserFile). For a PR, use `bash ~/bin/pr-shot.sh <pr#> <png>...` with a desktop shot and a phone shot (390x844).
 
 ## Cleanup
 
@@ -71,4 +77,4 @@ Stops only the server whose pid is in `<dir>`, and only if it is still our `http
 
 ## Feature map
 
-`features/README.md` indexes the user-facing features with their entry points and proof. Read it before driving, and keep it current with `/pstack:maintain-verification-skill` when the page changes.
+`features/README.md` indexes the user-facing features with their entry points and proof. Read it before driving, and keep it current with `/maintain-verification-skill` (Claude Code: `/pstack:maintain-verification-skill`) when the page changes. This skill lives at `.claude/skills/verify-field-glass/` for both Cursor and Claude Code; pstack's maintain step that looks under `.cursor/skills/verify-*` should accept this path too.
