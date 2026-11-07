@@ -1,0 +1,2734 @@
+{
+ "id": "arnhem",
+ "name": "Arnhem",
+ "date": "1944-09-17",
+ "dateText": "17 to 26 September 1944",
+ "place": "Arnhem and Oosterbeek, Gelderland, the Netherlands",
+ "origin": {
+  "lat": 51.995,
+  "lon": 5.82
+ },
+ "extent": 16000,
+ "start": "1944-09-17 12:30",
+ "end": "1944-09-26 06:00",
+ "sunrise": "06:14",
+ "sunset": "18:47",
+ "speed": 300,
+ "lapse": 14400,
+ "menPerDot": 10,
+ "water": 6.0,
+ "terrainExaggeration": 1.5,
+ "contourInterval": 5,
+ "trees": {
+  "density": 0.00035,
+  "clear": [
+   [
+    [
+     3500,
+     -500
+    ],
+    [
+     4500,
+     300
+    ],
+    [
+     7900,
+     300
+    ],
+    [
+     7900,
+     -2600
+    ],
+    [
+     6300,
+     -2250
+    ],
+    [
+     5300,
+     -1550
+    ],
+    [
+     4200,
+     -1350
+    ],
+    [
+     3400,
+     -1300
+    ]
+   ],
+   [
+    [
+     500,
+     -300
+    ],
+    [
+     1500,
+     0
+    ],
+    [
+     2500,
+     -600
+    ],
+    [
+     2900,
+     -1300
+    ],
+    [
+     2300,
+     -1800
+    ],
+    [
+     1300,
+     -1950
+    ],
+    [
+     400,
+     -1900
+    ],
+    [
+     200,
+     -900
+    ]
+   ],
+   [
+    [
+     -2269,
+     646
+    ],
+    [
+     -1569,
+     646
+    ],
+    [
+     -1569,
+     1246
+    ],
+    [
+     -2269,
+     1246
+    ]
+   ],
+   [
+    [
+     -5029,
+     -1664
+    ],
+    [
+     -3829,
+     -1664
+    ],
+    [
+     -3829,
+     -964
+    ],
+    [
+     -5029,
+     -964
+    ]
+   ],
+   [
+    [
+     -6458,
+     -2454
+    ],
+    [
+     -5058,
+     -2454
+    ],
+    [
+     -5058,
+     -1554
+    ],
+    [
+     -6458,
+     -1554
+    ]
+   ],
+   [
+    [
+     -1539,
+     -2096
+    ],
+    [
+     -539,
+     -2096
+    ],
+    [
+     -539,
+     -1496
+    ],
+    [
+     -1539,
+     -1496
+    ]
+   ],
+   [
+    [
+     -1042,
+     -2342
+    ],
+    [
+     -442,
+     -2342
+    ],
+    [
+     -442,
+     -1942
+    ],
+    [
+     -1042,
+     -1942
+    ]
+   ]
+  ]
+ },
+ "fields": [
+  [
+   [
+    -4724,
+    -231
+   ],
+   [
+    -3345,
+    12
+   ],
+   [
+    -3502,
+    899
+   ],
+   [
+    -4881,
+    656
+   ]
+  ],
+  [
+   [
+    -3187,
+    -42
+   ],
+   [
+    -1906,
+    184
+   ],
+   [
+    -2045,
+    972
+   ],
+   [
+    -3326,
+    746
+   ]
+  ],
+  [
+   [
+    -2604,
+    1555
+   ],
+   [
+    -1251,
+    1917
+   ],
+   [
+    -1510,
+    2883
+   ],
+   [
+    -2863,
+    2521
+   ]
+  ],
+  [
+   [
+    -7647,
+    3146
+   ],
+   [
+    -5579,
+    3898
+   ],
+   [
+    -5955,
+    4932
+   ],
+   [
+    -8023,
+    4180
+   ]
+  ],
+  [
+   [
+    840,
+    443
+   ],
+   [
+    1656,
+    823
+   ],
+   [
+    1360,
+    1457
+   ],
+   [
+    544,
+    1077
+   ]
+  ],
+  [
+   [
+    192,
+    -3448
+   ],
+   [
+    1400,
+    -3888
+   ],
+   [
+    1495,
+    -5513
+   ],
+   [
+    -220,
+    -5713
+   ]
+  ],
+  [
+   [
+    -8000,
+    -8000
+   ],
+   [
+    -7984,
+    -3482
+   ],
+   [
+    -7728,
+    -3418
+   ],
+   [
+    -7472,
+    -3386
+   ],
+   [
+    -7216,
+    -3386
+   ],
+   [
+    -6960,
+    -3402
+   ],
+   [
+    -6704,
+    -3306
+   ],
+   [
+    -6448,
+    -3146
+   ],
+   [
+    -6192,
+    -2906
+   ],
+   [
+    -5936,
+    -2810
+   ],
+   [
+    -5680,
+    -2714
+   ],
+   [
+    -5424,
+    -2618
+   ],
+   [
+    -5168,
+    -2602
+   ],
+   [
+    -4912,
+    -2650
+   ],
+   [
+    -4656,
+    -2826
+   ],
+   [
+    -4400,
+    -3082
+   ],
+   [
+    -4144,
+    -3226
+   ],
+   [
+    -3888,
+    -3386
+   ],
+   [
+    -3632,
+    -3546
+   ],
+   [
+    -3376,
+    -3690
+   ],
+   [
+    -3120,
+    -3786
+   ],
+   [
+    -2864,
+    -3850
+   ],
+   [
+    -2608,
+    -3866
+   ],
+   [
+    -2352,
+    -3770
+   ],
+   [
+    -2096,
+    -3530
+   ],
+   [
+    -1840,
+    -3514
+   ],
+   [
+    -1584,
+    -3546
+   ],
+   [
+    -1328,
+    -3402
+   ],
+   [
+    -1072,
+    -3226
+   ],
+   [
+    -816,
+    -2826
+   ],
+   [
+    -560,
+    -2682
+   ],
+   [
+    -304,
+    -2538
+   ],
+   [
+    -48,
+    -2394
+   ],
+   [
+    208,
+    -2314
+   ],
+   [
+    464,
+    -2282
+   ],
+   [
+    720,
+    -2266
+   ],
+   [
+    976,
+    -2250
+   ],
+   [
+    1232,
+    -2250
+   ],
+   [
+    1488,
+    -2298
+   ],
+   [
+    1744,
+    -2378
+   ],
+   [
+    2000,
+    -2490
+   ],
+   [
+    2256,
+    -2618
+   ],
+   [
+    2512,
+    -2698
+   ],
+   [
+    2768,
+    -2714
+   ],
+   [
+    3024,
+    -2730
+   ],
+   [
+    3280,
+    -2362
+   ],
+   [
+    3536,
+    -2010
+   ],
+   [
+    3792,
+    -1626
+   ],
+   [
+    4048,
+    -1434
+   ],
+   [
+    4304,
+    -1274
+   ],
+   [
+    4560,
+    -1194
+   ],
+   [
+    4816,
+    -1178
+   ],
+   [
+    5072,
+    -1242
+   ],
+   [
+    5328,
+    -1450
+   ],
+   [
+    5584,
+    -1690
+   ],
+   [
+    5840,
+    -1850
+   ],
+   [
+    6096,
+    -1994
+   ],
+   [
+    6352,
+    -2170
+   ],
+   [
+    6608,
+    -2426
+   ],
+   [
+    6864,
+    -2538
+   ],
+   [
+    7120,
+    -2666
+   ],
+   [
+    7376,
+    -2698
+   ],
+   [
+    7632,
+    -2602
+   ],
+   [
+    7888,
+    -2906
+   ],
+   [
+    8000,
+    -8000
+   ]
+  ],
+  [
+   [
+    1074,
+    117
+   ],
+   [
+    1980,
+    539
+   ],
+   [
+    1726,
+    1083
+   ],
+   [
+    820,
+    661
+   ]
+  ],
+  [
+   [
+    -3889,
+    907
+   ],
+   [
+    -2730,
+    1217
+   ],
+   [
+    -2911,
+    1893
+   ],
+   [
+    -4070,
+    1583
+   ]
+  ]
+ ],
+ "wind": {
+  "x": 0.5,
+  "y": 0.2
+ },
+ "view": {
+  "x": 0,
+  "y": 0,
+  "width": 16000
+ },
+ "sides": {
+  "british": {
+   "name": "British (1st Airborne Division, Urquhart; XXX Corps)",
+   "color": "#3a5f9e",
+   "light": "#7d9bd0",
+   "dark": "#1d3561"
+  },
+  "polish": {
+   "name": "Poles (1st Independent Parachute Brigade, Sosabowski)",
+   "color": "#5d7f86",
+   "light": "#97b4ba",
+   "dark": "#2e4246"
+  },
+  "german": {
+   "name": "Germans (II SS Panzer Corps, Bittrich; Kampfgruppe von Tettau)",
+   "color": "#b8322a",
+   "light": "#de5d50",
+   "dark": "#5c1712"
+  }
+ },
+ "features": [
+  {
+   "type": "road",
+   "name": "Utrechtseweg",
+   "pts": [
+    [
+     -5847,
+     -2436
+    ],
+    [
+     -5510,
+     -2322
+    ],
+    [
+     -5142,
+     -2089
+    ],
+    [
+     -4749,
+     -1841
+    ],
+    [
+     -4393,
+     -1616
+    ],
+    [
+     -4110,
+     -1458
+    ],
+    [
+     -3625,
+     -1567
+    ],
+    [
+     -3316,
+     -1495
+    ],
+    [
+     -3046,
+     -1405
+    ],
+    [
+     -2699,
+     -1270
+    ],
+    [
+     -2447,
+     -1143
+    ],
+    [
+     -2020,
+     -1078
+    ],
+    [
+     -916,
+     -810
+    ],
+    [
+     -480,
+     -790
+    ],
+    [
+     28,
+     -882
+    ],
+    [
+     462,
+     -849
+    ],
+    [
+     727,
+     -771
+    ],
+    [
+     1065,
+     -770
+    ],
+    [
+     1240,
+     -803
+    ],
+    [
+     1476,
+     -832
+    ],
+    [
+     1954,
+     -931
+    ],
+    [
+     2533,
+     -1042
+    ],
+    [
+     3001,
+     -1098
+    ],
+    [
+     3400,
+     -1270
+    ],
+    [
+     3997,
+     -1291
+    ],
+    [
+     4448,
+     -1199
+    ],
+    [
+     4760,
+     -1095
+    ],
+    [
+     4981,
+     -1107
+    ]
+   ],
+   "at": [
+    -3000,
+    -1250
+   ],
+   "rot": -12
+  },
+  {
+   "type": "road",
+   "name": "Amsterdamseweg",
+   "pts": [
+    [
+     -7985,
+     5455
+    ],
+    [
+     -5891,
+     4668
+    ],
+    [
+     -1165,
+     2960
+    ],
+    [
+     -608,
+     2491
+    ],
+    [
+     60,
+     2147
+    ],
+    [
+     920,
+     1722
+    ],
+    [
+     1695,
+     1324
+    ],
+    [
+     2233,
+     1052
+    ],
+    [
+     2732,
+     712
+    ],
+    [
+     3296,
+     289
+    ],
+    [
+     3736,
+     19
+    ],
+    [
+     4130,
+     -267
+    ],
+    [
+     4688,
+     -527
+    ],
+    [
+     5117,
+     -784
+    ],
+    [
+     5440,
+     -1019
+    ],
+    [
+     5814,
+     -1097
+    ]
+   ],
+   "at": [
+    -1600,
+    3230
+   ],
+   "rot": 20
+  },
+  {
+   "type": "road",
+   "name": "the river road",
+   "pts": [
+    [
+     -742,
+     -2142
+    ],
+    [
+     43,
+     -2024
+    ],
+    [
+     247,
+     -2027
+    ],
+    [
+     420,
+     -1971
+    ],
+    [
+     823,
+     -1856
+    ],
+    [
+     1160,
+     -1838
+    ],
+    [
+     1279,
+     -1867
+    ],
+    [
+     1564,
+     -1823
+    ],
+    [
+     1820,
+     -1756
+    ],
+    [
+     2313,
+     -1733
+    ],
+    [
+     2740,
+     -1750
+    ],
+    [
+     3024,
+     -1684
+    ],
+    [
+     3093,
+     -1541
+    ],
+    [
+     3379,
+     -1580
+    ],
+    [
+     3675,
+     -1493
+    ],
+    [
+     3901,
+     -1361
+    ],
+    [
+     4305,
+     -1253
+    ],
+    [
+     4534,
+     -1216
+    ],
+    [
+     4838,
+     -1194
+    ],
+    [
+     5187,
+     -1325
+    ],
+    [
+     5393,
+     -1448
+    ],
+    [
+     5653,
+     -1739
+    ],
+    [
+     5755,
+     -1840
+    ],
+    [
+     6033,
+     -2024
+    ],
+    [
+     6237,
+     -2071
+    ]
+   ],
+   "at": [
+    2900,
+    -1640
+   ],
+   "rot": 10
+  },
+  {
+   "type": "road",
+   "name": "Wolfhezerweg",
+   "pts": [
+    [
+     -891,
+     2651
+    ],
+    [
+     -1165,
+     2406
+    ],
+    [
+     -1316,
+     2061
+    ],
+    [
+     -1741,
+     1474
+    ],
+    [
+     -1821,
+     1361
+    ],
+    [
+     -1935,
+     1166
+    ],
+    [
+     -1767,
+     850
+    ],
+    [
+     -1578,
+     510
+    ],
+    [
+     -1377,
+     184
+    ],
+    [
+     -1211,
+     -57
+    ],
+    [
+     -1098,
+     -177
+    ],
+    [
+     -757,
+     -502
+    ],
+    [
+     -480,
+     -790
+    ]
+   ],
+   "at": [
+    -1450,
+    1900
+   ],
+   "rot": -60
+  },
+  {
+   "type": "road",
+   "name": "Dreijenseweg",
+   "pts": [
+    [
+     1757,
+     1284
+    ],
+    [
+     1738,
+     1226
+    ],
+    [
+     1695,
+     847
+    ],
+    [
+     1655,
+     441
+    ]
+   ],
+   "at": [
+    1980,
+    900
+   ],
+   "rot": -85
+  },
+  {
+   "type": "road",
+   "name": "Stationsweg",
+   "pts": [
+    [
+     1404,
+     -24
+    ],
+    [
+     1401,
+     -171
+    ],
+    [
+     1380,
+     -346
+    ],
+    [
+     1339,
+     -463
+    ],
+    [
+     1294,
+     -591
+    ],
+    [
+     1263,
+     -689
+    ],
+    [
+     1240,
+     -803
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     1240,
+     -803
+    ],
+    [
+     1196,
+     -964
+    ],
+    [
+     1153,
+     -1192
+    ],
+    [
+     1138,
+     -1329
+    ],
+    [
+     1109,
+     -1391
+    ],
+    [
+     1002,
+     -1426
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "road to Nijmegen",
+   "pts": [
+    [
+     6247,
+     -2303
+    ],
+    [
+     6054,
+     -2623
+    ],
+    [
+     4339,
+     -4097
+    ],
+    [
+     2673,
+     -7937
+    ]
+   ],
+   "at": [
+    4500,
+    -4500
+   ],
+   "rot": 55
+  },
+  {
+   "type": "road",
+   "name": "road to Driel",
+   "pts": [
+    [
+     303,
+     -2623
+    ],
+    [
+     103,
+     -3228
+    ],
+    [
+     -259,
+     -3990
+    ],
+    [
+     -209,
+     -4350
+    ],
+    [
+     -166,
+     -4616
+    ],
+    [
+     0,
+     -7937
+    ]
+   ],
+   "at": [
+    -180,
+    -3200
+   ],
+   "rot": 80
+  },
+  {
+   "type": "road",
+   "name": "railway to Utrecht",
+   "pts": [
+    [
+     -8000,
+     2972
+    ],
+    [
+     -1892,
+     1188
+    ],
+    [
+     -1103,
+     756
+    ],
+    [
+     1404,
+     -24
+    ],
+    [
+     2997,
+     -830
+    ],
+    [
+     5482,
+     -1105
+    ],
+    [
+     6217,
+     -1050
+    ],
+    [
+     6913,
+     -1128
+    ],
+    [
+     7647,
+     -1423
+    ]
+   ],
+   "at": [
+    -5000,
+    2300
+   ],
+   "rot": 17
+  },
+  {
+   "type": "road",
+   "name": "railway to Nijmegen",
+   "pts": [
+    [
+     3136,
+     -1133
+    ],
+    [
+     2756,
+     -1754
+    ],
+    [
+     2690,
+     -1917
+    ],
+    [
+     2459,
+     -2520
+    ],
+    [
+     2187,
+     -4497
+    ],
+    [
+     1851,
+     -7937
+    ]
+   ],
+   "at": [
+    2700,
+    -3500
+   ],
+   "rot": 80
+  },
+  {
+   "type": "trench",
+   "name": "Krafft's blocking line",
+   "pts": [
+    [
+     -1103,
+     756
+    ],
+    [
+     -1171,
+     -105
+    ],
+    [
+     -600,
+     -700
+    ]
+   ],
+   "from": "1944-09-17 15:00",
+   "until": "1944-09-17 21:30"
+  },
+  {
+   "type": "trench",
+   "name": "Spindler's blocking line",
+   "pts": [
+    [
+     1748,
+     1261
+    ],
+    [
+     1655,
+     441
+    ],
+    [
+     1404,
+     -24
+    ],
+    [
+     2900,
+     -400
+    ],
+    [
+     3400,
+     -900
+    ],
+    [
+     3999,
+     -1073
+    ],
+    [
+     4300,
+     -1500
+    ]
+   ],
+   "from": "1944-09-18 06:00",
+   "until": "1944-09-20 06:00"
+  },
+  {
+   "type": "works",
+   "name": "the perimeter, 21 September",
+   "pts": [
+    [
+     1112,
+     -56
+    ],
+    [
+     1300,
+     -150
+    ],
+    [
+     1380,
+     -346
+    ],
+    [
+     1339,
+     -463
+    ],
+    [
+     1294,
+     -591
+    ],
+    [
+     1263,
+     -689
+    ],
+    [
+     1240,
+     -803
+    ],
+    [
+     1172,
+     -1168
+    ],
+    [
+     1221,
+     -1896
+    ],
+    [
+     903,
+     -1981
+    ],
+    [
+     500,
+     -2050
+    ],
+    [
+     501,
+     -1699
+    ],
+    [
+     -300,
+     -1900
+    ],
+    [
+     50,
+     -859
+    ],
+    [
+     -150,
+     -900
+    ],
+    [
+     105,
+     0
+    ],
+    [
+     700,
+     -200
+    ],
+    [
+     1112,
+     -56
+    ]
+   ],
+   "from": "1944-09-20 15:00"
+  },
+  {
+   "name": "ARNHEM",
+   "at": [
+    6228,
+    -696
+   ]
+  },
+  {
+   "name": "Oosterbeek",
+   "at": [
+    1511,
+    -479
+   ]
+  },
+  {
+   "name": "Wolfheze",
+   "at": [
+    -2242,
+    1338
+   ]
+  },
+  {
+   "name": "Heelsum",
+   "at": [
+    -4429,
+    -1514
+   ]
+  },
+  {
+   "name": "Renkum",
+   "at": [
+    -5924,
+    -1964
+   ]
+  },
+  {
+   "name": "Doorwerth",
+   "at": [
+    -1039,
+    -1946
+   ]
+  },
+  {
+   "name": "Heveadorp",
+   "at": [
+    -742,
+    -1992
+   ]
+  },
+  {
+   "name": "Driel",
+   "at": [
+    -659,
+    -3990
+   ]
+  },
+  {
+   "name": "Elden",
+   "at": [
+    4339,
+    -3947
+   ]
+  },
+  {
+   "name": "Deelen airfield",
+   "at": [
+    4592,
+    6731
+   ]
+  },
+  {
+   "name": "road bridge",
+   "at": [
+    6667,
+    -2243
+   ]
+  },
+  {
+   "name": "Van Limburg Stirum school",
+   "at": [
+    6931,
+    -1949
+   ]
+  },
+  {
+   "name": "St Elisabeth hospital",
+   "at": [
+    4526,
+    -1233
+   ]
+  },
+  {
+   "name": "Municipal Museum",
+   "at": [
+    4949,
+    -949
+   ]
+  },
+  {
+   "name": "Rhine Pavilion (about here)",
+   "at": [
+    4986,
+    -1442
+   ]
+  },
+  {
+   "name": "Den Brink (about here)",
+   "at": [
+    3931,
+    -770
+   ]
+  },
+  {
+   "name": "Koepel prison",
+   "at": [
+    3999,
+    -1183
+   ]
+  },
+  {
+   "name": "Hartenstein",
+   "at": [
+    616,
+    -754
+   ]
+  },
+  {
+   "name": "Schoonoord crossroads",
+   "at": [
+    1620,
+    -743
+   ]
+  },
+  {
+   "name": "Tafelberg",
+   "at": [
+    1402,
+    -1168
+   ]
+  },
+  {
+   "name": "Oosterbeek church",
+   "at": [
+    1281,
+    -2006
+   ]
+  },
+  {
+   "name": "the White House (Dreyeroord)",
+   "at": [
+    912,
+    54
+   ]
+  },
+  {
+   "name": "Hotel Wolfheze",
+   "at": [
+    -1521,
+    -105
+   ]
+  },
+  {
+   "name": "Johannahoeve",
+   "at": [
+    1614,
+    344
+   ]
+  },
+  {
+   "name": "Lichtenbeek (about here)",
+   "at": [
+    2832,
+    215
+   ]
+  },
+  {
+   "name": "Westerbouwing",
+   "at": [
+    -147,
+    -2087
+   ]
+  },
+  {
+   "name": "Driel ferry",
+   "at": [
+    -59,
+    -2423
+   ]
+  },
+  {
+   "name": "railway bridge",
+   "at": [
+    2839,
+    -2480
+   ]
+  },
+  {
+   "name": "pontoon bridge (about here)",
+   "at": [
+    5406,
+    -1919
+   ]
+  },
+  {
+   "name": "Arnhem station",
+   "at": [
+    5482,
+    -985
+   ]
+  },
+  {
+   "name": "Oosterbeek Hoog station",
+   "at": [
+    1824,
+    16
+   ]
+  },
+  {
+   "name": "Jonkershoeve (about here)",
+   "at": [
+    -4016,
+    -298
+   ]
+  },
+  {
+   "name": "Reijerscamp",
+   "at": [
+    -2696,
+    2084
+   ]
+  },
+  {
+   "name": "Ginkel",
+   "at": [
+    -5326,
+    3623
+   ]
+  },
+  {
+   "name": "Bilderberg",
+   "at": [
+    -145,
+    -80
+   ]
+  },
+  {
+   "name": "Koude Herberg (about here)",
+   "at": [
+    -350,
+    -859
+   ]
+  },
+  {
+   "name": "Mariëndaal",
+   "at": [
+    2956,
+    -1204
+   ]
+  },
+  {
+   "name": "Renkum brickworks (about here)",
+   "at": [
+    -5608,
+    -2694
+   ]
+  },
+  {
+   "name": "DZ-X (about here)",
+   "at": [
+    -4113,
+    854
+   ],
+   "until": "1944-09-18 23:59"
+  },
+  {
+   "name": "LZ-Z (about here)",
+   "at": [
+    -2616,
+    -5
+   ],
+   "until": "1944-09-18 23:59"
+  },
+  {
+   "name": "LZ-S",
+   "at": [
+    -2057,
+    2769
+   ],
+   "until": "1944-09-18 23:59"
+  },
+  {
+   "name": "DZ-Y, Ginkel Heath",
+   "at": [
+    -6801,
+    3389
+   ],
+   "until": "1944-09-18 23:59"
+  },
+  {
+   "name": "LZ-L (about here)",
+   "at": [
+    1100,
+    1370
+   ],
+   "until": "1944-09-19 23:59"
+  },
+  {
+   "name": "DZ-K",
+   "at": [
+    891,
+    -4546
+   ],
+   "until": "1944-09-21 23:59"
+  }
+ ],
+ "units": [
+  {
+   "id": "pf_z",
+   "side": "british",
+   "name": "21st Independent Parachute Company, the pathfinders: 186 men from twelve Stirlings at 12:40, a platoon to each zone; this platoon marked LZ-Z",
+   "short": "21 Ind Coy",
+   "commander": "Maj. B. Wilson",
+   "type": "infantry",
+   "strength": 62,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "pf_s",
+   "side": "british",
+   "name": "21st Independent Parachute Company: the platoon that marked LZ-S",
+   "short": "21 Ind Coy",
+   "commander": "Maj. B. Wilson",
+   "type": "infantry",
+   "strength": 62,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "pf_x",
+   "side": "british",
+   "name": "21st Independent Parachute Company: the platoon that marked DZ-X",
+   "short": "21 Ind Coy",
+   "commander": "Maj. B. Wilson",
+   "type": "infantry",
+   "strength": 62,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "divhq",
+   "side": "british",
+   "name": "1st Airborne Division headquarters and defence platoon, with the signals, provost, REME and RAOC",
+   "short": "Div HQ",
+   "commander": "Maj. Gen. R. E. Urquhart",
+   "type": "infantry",
+   "strength": 140,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "recce",
+   "side": "british",
+   "name": "1st Airborne Reconnaissance Squadron, jeeps by glider to LZ-Z and men by parachute to DZ-X",
+   "short": "Recce Sqn",
+   "commander": "Maj. F. Gough",
+   "type": "infantry",
+   "strength": 180,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p1",
+   "side": "british",
+   "name": "1st Parachute Battalion, the northern route along the Amsterdamseweg ('Leopard')",
+   "short": "1 Para",
+   "commander": "Lt. Col. D. Dobie (captured 19 Sep)",
+   "type": "infantry",
+   "strength": 548,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p2",
+   "side": "british",
+   "name": "A and HQ Companies, 2nd Parachute Battalion, with 1st Parachute Brigade HQ, 1st Parachute Squadron RE, RASC, a detachment of 1st Airlanding Anti-Tank Battery, 8 of the Reconnaissance Squadron and 12 glider pilots: the force at the bridge",
+   "short": "2 Para",
+   "commander": "Lt. Col. J. Frost (wounded 20 Sep), then Maj. F. Gough",
+   "type": "infantry",
+   "strength": 625,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p2b",
+   "side": "british",
+   "name": "B Company, 2nd Parachute Battalion (the company's strength is not in the sources read; drawn as 120)",
+   "short": "B/2 Para",
+   "commander": "",
+   "type": "infantry",
+   "strength": 120,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p2c",
+   "side": "british",
+   "name": "C Company, 2nd Parachute Battalion, sent for the railway bridge (drawn as 120)",
+   "short": "C/2 Para",
+   "commander": "",
+   "type": "infantry",
+   "strength": 120,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p3",
+   "side": "british",
+   "name": "3rd Parachute Battalion, the middle route along the Utrechtseweg ('Tiger')",
+   "short": "3 Para",
+   "commander": "Lt. Col. J. Fitch (killed 19 Sep)",
+   "type": "infantry",
+   "strength": 543,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p3c",
+   "side": "british",
+   "name": "Maj. Lewis's party of C Company, 3rd Parachute Battalion, sent along the railway: the 45 who reached the bridge",
+   "short": "C/3 Para",
+   "commander": "Maj. P. Lewis",
+   "type": "infantry",
+   "strength": 45,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "border_hq",
+   "side": "british",
+   "name": "1st Battalion, The Border Regiment: headquarters and support (788 went in; the four rifle companies are drawn as 150 each)",
+   "short": "1 Border HQ",
+   "commander": "Maj. S. Cousens, for Lt. Col. T. Haddon",
+   "type": "infantry",
+   "strength": 188,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "border_a",
+   "side": "british",
+   "name": "A Company, 1st Border",
+   "short": "A/1 Border",
+   "commander": "",
+   "type": "infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "border_b",
+   "side": "british",
+   "name": "B Company, 1st Border",
+   "short": "B/1 Border",
+   "commander": "",
+   "type": "infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "border_c",
+   "side": "british",
+   "name": "C Company, 1st Border",
+   "short": "C/1 Border",
+   "commander": "",
+   "type": "infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "border_d",
+   "side": "british",
+   "name": "D Company, 1st Border",
+   "short": "D/1 Border",
+   "commander": "",
+   "type": "infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "st1",
+   "side": "british",
+   "name": "2nd South Staffords, the half that came on the first lift",
+   "short": "2 S Staffords",
+   "commander": "Lt. Col. D. McCardie (captured 19 Sep), then Maj. R. Cain",
+   "type": "infantry",
+   "strength": 380,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "st2",
+   "side": "british",
+   "name": "2nd South Staffords, the half that came on the second lift",
+   "short": "2 S Staffords",
+   "commander": "Lt. Col. D. McCardie",
+   "type": "infantry",
+   "strength": 380,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "kosb",
+   "side": "british",
+   "name": "7th King's Own Scottish Borderers, which held DZ-Y for the second lift and LZ-L for the third",
+   "short": "7 KOSB",
+   "commander": "Lt. Col. R. Payton-Reid",
+   "type": "infantry",
+   "strength": 615,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "kosb_d",
+   "side": "british",
+   "name": "D Company, 7th KOSB, cut off at Ginkel on 18 September (drawn as 150 of the battalion's 765)",
+   "short": "D/7 KOSB",
+   "commander": "",
+   "type": "infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "gp1",
+   "side": "british",
+   "name": "Glider Pilot Regiment, the pilots of the first lift (1,262 pilots in all, drawn as two bodies of 600)",
+   "short": "Glider pilots",
+   "commander": "Lt. Col. I. Murray",
+   "type": "infantry",
+   "strength": 600,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "gp2",
+   "side": "british",
+   "name": "Glider Pilot Regiment, the pilots of the second lift",
+   "short": "Glider pilots",
+   "commander": "",
+   "type": "infantry",
+   "strength": 600,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "bty1",
+   "side": "british",
+   "name": "1 Battery, 1st Airlanding Light Regiment RA, 75 mm pack howitzers",
+   "short": "1 Bty RA",
+   "commander": "Lt. Col. W. Thompson (wounded 21 Sep), regiment",
+   "type": "artillery",
+   "strength": 124,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 8
+  },
+  {
+   "id": "bty2",
+   "side": "british",
+   "name": "2 Battery and RHQ, 1st Airlanding Light Regiment RA, on the second lift",
+   "short": "2 Bty RA",
+   "commander": "Lt. Col. W. Thompson",
+   "type": "artillery",
+   "strength": 124,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 7
+  },
+  {
+   "id": "bty3",
+   "side": "british",
+   "name": "3 Battery, 1st Airlanding Light Regiment RA",
+   "short": "3 Bty RA",
+   "commander": "Lt. Col. W. Thompson",
+   "type": "artillery",
+   "strength": 124,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 6
+  },
+  {
+   "id": "p156",
+   "side": "british",
+   "name": "156th Parachute Battalion, 4th Parachute Brigade",
+   "short": "156 Para",
+   "commander": "Lt. Col. Sir R. des Voeux (killed 20 Sep)",
+   "type": "infantry",
+   "strength": 621,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p10",
+   "side": "british",
+   "name": "10th Parachute Battalion, 4th Parachute Brigade",
+   "short": "10 Para",
+   "commander": "Lt. Col. K. Smyth (mortally wounded 21 Sep)",
+   "type": "infantry",
+   "strength": 582,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p11",
+   "side": "british",
+   "name": "11th Parachute Battalion, 4th Parachute Brigade, sent on to Arnhem",
+   "short": "11 Para",
+   "commander": "Lt. Col. G. Lea (captured 19 Sep), then Maj. R. Lonsdale",
+   "type": "infantry",
+   "strength": 571,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "pol_gl",
+   "side": "polish",
+   "name": "The Polish glider element: 93 men with ten 6-pounders on LZ-L; nine killed and three guns serviceable",
+   "short": "Polish A/Tk",
+   "commander": "Capt. J. Wardzala",
+   "type": "artillery",
+   "strength": 93,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 3
+  },
+  {
+   "id": "pol_hq",
+   "side": "polish",
+   "name": "Polish Brigade HQ, engineers, signals and medical, dropped at Driel (the drop's 1,000 are drawn as this and two battalions)",
+   "short": "Polish HQ",
+   "commander": "Maj. Gen. S. Sosabowski",
+   "type": "infantry",
+   "strength": 350,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "pol2",
+   "side": "polish",
+   "name": "2nd Battalion, 1st Polish Independent Parachute Brigade",
+   "short": "2 Polish Bn",
+   "commander": "Maj. W. Ploszewski",
+   "type": "infantry",
+   "strength": 351,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "pol3",
+   "side": "polish",
+   "name": "3rd Battalion, 1st Polish Independent Parachute Brigade, the part that dropped at Driel (drawn as 300)",
+   "short": "3 Polish Bn",
+   "commander": "Capt. W. Sobocinski",
+   "type": "infantry",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "pol1",
+   "side": "polish",
+   "name": "1st Battalion and the rest of the 3rd: 551 men dropped near Grave on 23 September",
+   "short": "1 Polish Bn",
+   "commander": "Maj. M. Tonn",
+   "type": "infantry",
+   "strength": 551,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "pol_n",
+   "side": "polish",
+   "name": "The Poles who crossed the Rhine into the perimeter: 52 rowed over on the night of 22 September, 35 reaching it; 153 more on the 24th",
+   "short": "Poles",
+   "commander": "",
+   "type": "infantry",
+   "strength": 188,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "hcr",
+   "side": "british",
+   "name": "2nd Household Cavalry Regiment's armoured cars, the first of XXX Corps to reach Driel (drawn as two cars)",
+   "short": "Household Cavalry",
+   "commander": "",
+   "type": "armor",
+   "strength": 2,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "rdg",
+   "side": "british",
+   "name": "4th/7th Royal Dragoon Guards, 43rd (Wessex) Division's tanks (drawn as ten)",
+   "short": "4/7 RDG",
+   "commander": "",
+   "type": "armor",
+   "strength": 10,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "dcli",
+   "side": "british",
+   "name": "5th Duke of Cornwall's Light Infantry, 130th Brigade, 43rd (Wessex) Division (drawn as 400)",
+   "short": "5 DCLI",
+   "commander": "",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "dorsets",
+   "side": "british",
+   "name": "4th Dorsets, 130th Brigade, which crossed on the night of 24 September",
+   "short": "4 Dorsets",
+   "commander": "Lt. Col. G. Tilly",
+   "type": "infantry",
+   "strength": 315,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "krafft",
+   "side": "german",
+   "name": "SS Panzergrenadier Ausbildungs- und Ersatz-Bataillon 16 (Bataillon Krafft), two companies",
+   "short": "Krafft",
+   "commander": "SS-Sturmbannführer S. Krafft",
+   "type": "infantry",
+   "strength": 435,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "weber",
+   "side": "german",
+   "name": "Kampfgruppe Weber, Luftwaffe signals troops from Deelen with armoured vehicles (strength not recorded; drawn as 200)",
+   "short": "KG Weber",
+   "commander": "",
+   "type": "infantry",
+   "strength": 200,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "sp_n",
+   "side": "german",
+   "name": "Sperrverband Spindler, its northern half on the Dreijenseweg: the 9th SS artillery regiment as infantry (1,400 in all, with Allworden, Harder, Bruhn and Möller; which kampfgruppe held which stretch is not recorded)",
+   "short": "Spindler",
+   "commander": "SS-Sturmbannführer L. Spindler",
+   "type": "infantry",
+   "strength": 700,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "sp_t",
+   "side": "german",
+   "name": "Sperrverband Spindler, its southern half in the streets west of the hospital, the Den Brink and the river road",
+   "short": "Spindler",
+   "commander": "SS-Sturmbannführer L. Spindler",
+   "type": "infantry",
+   "strength": 700,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "grabner",
+   "side": "german",
+   "name": "SS Aufklärungs-Abteilung 9, armoured cars and half-tracks: 400 men, 22 vehicles in the charge",
+   "short": "Gräbner",
+   "commander": "SS-Hauptsturmführer V. Gräbner (killed 18 Sep)",
+   "type": "armor",
+   "strength": 22,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "brinkmann",
+   "side": "german",
+   "name": "Kampfgruppe Brinkmann, the 10th SS reconnaissance battalion under the 9th SS (strength not recorded; drawn as 300)",
+   "short": "Brinkmann",
+   "commander": "SS-Sturmbannführer H. Brinkmann",
+   "type": "infantry",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "knaust",
+   "side": "german",
+   "name": "Kampfgruppe Knaust, Panzergrenadier Ersatz-Bataillon Bocholt (200 to 300 men)",
+   "short": "Knaust",
+   "commander": "Maj. H. Knaust",
+   "type": "infantry",
+   "strength": 250,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "knaust_pz",
+   "side": "german",
+   "name": "Kampfgruppe Knaust's eight Mark III and IV training tanks",
+   "short": "Knaust tanks",
+   "commander": "Maj. H. Knaust",
+   "type": "armor",
+   "strength": 8,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "tigers",
+   "side": "german",
+   "name": "schwere Panzer-Kompanie Hummel: Tigers, three of them drawn",
+   "short": "Tigers",
+   "commander": "",
+   "type": "armor",
+   "strength": 3,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "helle",
+   "side": "german",
+   "name": "SS Wach-Bataillon 3, Kampfgruppe von Tettau",
+   "short": "Helle",
+   "commander": "Helle",
+   "type": "infantry",
+   "strength": 600,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "flieger",
+   "side": "german",
+   "name": "Fliegerhorst-Bataillon from Soesterberg, Kampfgruppe von Tettau (600)",
+   "short": "Fliegerhorst",
+   "commander": "",
+   "type": "infantry",
+   "strength": 600,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "lippert1",
+   "side": "german",
+   "name": "SS NCO School Arnhem, a battalion (the school's 3,000 are drawn as three of 1,000), Kampfgruppe von Tettau",
+   "short": "SS NCO School",
+   "commander": "Lippert",
+   "type": "infantry",
+   "strength": 1000,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "lippert2",
+   "side": "german",
+   "name": "SS NCO School Arnhem, a battalion",
+   "short": "SS NCO School",
+   "commander": "Lippert",
+   "type": "infantry",
+   "strength": 1000,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "lippert3",
+   "side": "german",
+   "name": "SS NCO School Arnhem, a battalion",
+   "short": "SS NCO School",
+   "commander": "Lippert",
+   "type": "infantry",
+   "strength": 1000,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "schiff",
+   "side": "german",
+   "name": "Schiffstammabteilung 10, naval troops as infantry, Kampfgruppe von Tettau",
+   "short": "Schiffstamm 10",
+   "commander": "",
+   "type": "infantry",
+   "strength": 600,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "worrowski",
+   "side": "german",
+   "name": "Bataillon Worrowski of the Hermann Göring Schule Regiment (strength not recorded; drawn as 600)",
+   "short": "Worrowski",
+   "commander": "Worrowski",
+   "type": "infantry",
+   "strength": 600,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pz224",
+   "side": "german",
+   "name": "Panzer-Abteilung 224, captured French tanks (17 in all; four drawn)",
+   "short": "Pz Abt 224",
+   "commander": "",
+   "type": "armor",
+   "strength": 4,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "ss10",
+   "side": "german",
+   "name": "A column of the 10th SS Panzer Division Frundsberg with Brinkmann's half-tracks, over the bridge for Elst (its make-up is not recorded; drawn as twelve vehicles)",
+   "short": "10th SS",
+   "commander": "SS-Brigadeführer H. Harmel",
+   "type": "armor",
+   "strength": 12,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "driel_kg",
+   "side": "german",
+   "name": "German infantry with armoured vehicles against Driel, about a battalion (unit not recorded; drawn as 600)",
+   "short": "Germans",
+   "commander": "",
+   "type": "infantry",
+   "strength": 600,
+   "keys": [
+    {
+     "t": "1944-09-17 12:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  }
+ ],
+ "events": []
+}
