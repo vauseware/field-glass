@@ -584,13 +584,761 @@ def path_from(id, pts):
 def stand(id, t, **kw): keys(id, [K(t, last(id), **kw)])
 def hide(id, t): stand(id, t, state="hidden")
 
-# ---- 1 July, five in the morning ----
-# Buford's two brigades hold the ridge east of Willoughby Run between the Mummasburg and Fairfield Roads, Calef's guns
-# astride the Pike; every other unit is on the march and hidden until it reaches the map.
-AT_START = {"gamble": ((-1600, 2550), 270), "devin": ((-1350, 3300), 300), "tidball": ((-1650, 2850), 270)}
+def mv(id, t0, t1, *pts, h=None, state="line", moving="column", loss=0, **kw):  # from where it stands at t0 to the last point at t1, times spread by distance
+    if loss: kw["strength"] = carried(id, "strength") - loss
+    pts = path_from(id, pts)
+    if len(pts) < 2: return stand(id, t1, state=state, **({"h": h} if h is not None else {}), **kw)
+    d = [0]
+    for a, b in zip(pts, pts[1:]): d.append(d[-1] + math.dist(a, b))
+    ks = [K(t0, pts[0], h=heading(pts[0], pts[1]), state=moving)]
+    for i in range(1, len(pts) - 1): ks.append(K(fmt(sec(t0) + (sec(t1) - sec(t0)) * d[i] / d[-1]), pts[i], h=heading(pts[i], pts[i + 1])))
+    ks.append(K(t1, pts[-1], h=heading(pts[-2], pts[-1]) if h is None else h, state=state, **kw))
+    keys(id, ks)
+def walk(id, t0, *pts, h=None, state="line", kmh=3.5, **kw):  # at a marching pace from t0; returns the arrival time
+    pts = path_from(id, pts); t = sec(t0)
+    ks = [K(t0, pts[0], h=heading(pts[0], pts[1]), state="column")]
+    for i in range(1, len(pts)):
+        t += math.dist(pts[i - 1], pts[i]) / (kmh / 3.6)
+        ks.append(K(fmt(t), pts[i], h=heading(pts[i], pts[i + 1]) if i + 1 < len(pts) else (h if h is not None else heading(pts[i - 1], pts[i]))))
+    ks[-1].update(state=state, **kw); keys(id, ks); return ks[-1]["t"]
+def fight(id, t0, t1, loss=0, h=None, after="line", state="firing"):  # firing from t0, or its arrival if later, to t1 where it stands, losing `loss` men
+    t0 = max(t0, KEYS[id][-1]["t"], key=sec)
+    stand(id, t0, state=state, **({"h": h} if h is not None else {})); stand(id, t1, state=after, strength=carried(id, "strength") - loss)
+def charge(id, t0, t1, *pts, h=None, loss=0, state="firing"): mv(id, t0, t1, *pts, h=h, state=state, moving="charge", loss=loss)
+def back(id, t0, t1, *pts, h=None, loss=0, state="line", moving="retreat"): mv(id, t0, t1, *pts, h=h, state=state, moving=moving, loss=loss)
+def enter(id, t, at, h=0): appear(id, t, at, h, state="column")
+def road(name, a, b): return along(ROAD[name], a, b)[1:]
+
+# ---- where the roads come onto the map ----
+W_PIKE, W_FAIR, S_EMM, S_TANEY = edge(ROAD['chambersburg']), edge(ROAD['fairfield']), edge(EMM), edge(ROAD['taneytown'])
+SE_PIKE, E_HAN, N_CARL, N_HARR, E_LOW_DUTCH = edge(ROAD['baltimore']), edge(ROAD['hanover']), edge(ROAD['carlisle']), edge(ROAD['harrisburg']), edge(ROAD['low_dutch'])
+HERR_PIKE = (-2420, 3357)   # the Pike on Herr Ridge
+EMM_CODORI = (-449, -181)   # the Emmitsburg Road by the Codori farm, where Wadsworth's column turned off across the fields
+GRANITE_W, GRANITE_E = ROAD['granite'][0], ROAD['granite'][-1]  # Granite Schoolhouse Lane, from the Taneytown Road to the Baltimore Pike
+TO_SEMINARY = [EMM_CODORI, (-800, 1300), (-830, 2050)]  # over the fields to the Seminary
+UP_EMM = road('emmitsburg', S_EMM, EMM_CODORI)
+UP_TANEY = road('taneytown', S_TANEY, ROAD['taneytown'][-2])
+DOWN_PIKE = road('chambersburg', W_PIKE, HERR_PIKE)
+IN_PIKE = road('baltimore', SE_PIKE, GRANITE_E)       # the Baltimore Pike from the south-east edge to Granite Schoolhouse Lane
+PIKE_BRIDGE = (2250, -1000)                              # the Pike over Rock Creek
+THROUGH_TOWN = [(-150, 1950), DIAMOND, (420, 1600), FOOT]  # Chambersburg Street, the Diamond, Baltimore Street
+NORTH_OF_TOWN = [DIAMOND, (330, 2700)]
+UP_CARLISLE = road('carlisle', N_CARL, (-150, 4700)) + [(-450, 4300)]
+DOWN_HARRISBURG = road('harrisburg', N_HARR, (1250, 3900))
+
+# ======== 1 July ========
+AT_START = {"gamble": ((-1620, 2650), 270), "devin": ((-1350, 3300), 300), "tidball": ((-1650, 2880), 270)}
 for id in BASE:
     if id in AT_START: p, h = AT_START[id]; appear(id, START, p, h)
     else: appear(id, START, (0, 0), 0, state="hidden")
+# Buford's vedettes fire on Heth's advance at Marsh Creek, "7:30 a.m."; Gamble's dismounted line and Calef's guns hold
+# McPherson's Ridge on both sides of the Pike "for more than two hours", Devin's brigade north of the railroad.
+stand("gamble", A("07:30"), state="skirmish"); stand("devin", A("08:00"), state="skirmish"); stand("tidball", A("08:15"), state="firing")
+# Heth's division left Cashtown at five, Archer and Davis leading on the Pike, Pegram's battalion behind the advance.
+for id, t in (("archer", "07:10"), ("pegram", "07:20"), ("davis", "07:30"), ("mcintosh_bn", "07:40"), ("pettigrew", "07:55"), ("brockenbrough", "08:10"), ("garnett_bn", "08:25")):
+    enter(id, A(t), W_PIKE, 120)
+walk("archer", A("07:10"), *DOWN_PIKE, (-2380, 2450), h=90, kmh=3.8)
+walk("pegram", A("07:20"), *DOWN_PIKE, (-2450, 2950), h=95, kmh=4, state="firing")
+walk("davis", A("07:30"), *DOWN_PIKE[:-1], (-2650, 3600), h=110, kmh=3.6)
+walk("mcintosh_bn", A("07:40"), *DOWN_PIKE, (-2450, 2700), h=90, kmh=4, state="firing")
+walk("pettigrew", A("07:55"), *DOWN_PIKE, (-2550, 2700), (-2400, 2150), h=90, kmh=3.5)
+walk("brockenbrough", A("08:10"), *DOWN_PIKE, (-2600, 2950), h=90, kmh=3.5)
+walk("garnett_bn", A("08:25"), *DOWN_PIKE, (-2650, 2500), h=90, kmh=3.5)
+fight("archer", A("08:15"), A("09:30"), 20, state="skirmish")
+# Wadsworth's division, "the first Union infantry on the field": up the Emmitsburg Road and over the fields to the Seminary
+for id, t0 in (("cutler", "07:55"), ("meredith", "08:05"), ("i_art", "08:30")): enter(id, A(t0), S_EMM, 30)
+mv("cutler", A("07:55"), A("09:45"), *UP_EMM, *TO_SEMINARY, (-1350, 2980), h=270)
+mv("meredith", A("08:05"), A("09:55"), *UP_EMM, *TO_SEMINARY, h=270)
+mv("i_art", A("08:30"), A("10:40"), *UP_EMM, *TO_SEMINARY, (-1420, 2800), h=270, state="firing")
+# About ten Archer is over the run into Reynolds's Woods; the Iron Brigade charges him, drives him back over the run and
+# takes Archer prisoner. Davis forms west of Herr's Tavern at ten and crosses the run north of the Pike.
+mv("archer", A("09:30"), A("10:05"), (-1950, 2250), h=90, state="firing")
+charge("meredith", A("10:00"), A("10:15"), (-1720, 2230), h=270)
+fight("archer", A("10:05"), A("10:30"), 150); fight("meredith", A("10:15"), A("10:30"), 100)
+back("archer", A("10:30"), A("10:55"), (-2350, 2000), h=90, loss=200, state="line")
+charge("meredith", A("10:30"), A("10:45"), (-1800, 2200), h=270, state="line")
+mv("davis", A("09:45"), A("10:00"), (-2480, 3280), h=120)
+charge("davis", A("10:00"), A("10:30"), (-1650, 3080), h=110)
+fight("cutler", A("10:15"), A("10:40"), 300, h=290)
+back("cutler", A("10:40"), A("10:55"), (-1050, 3100), h=270, loss=100)
+# Davis wheels into the railroad cut, "too deep and steep for defense", and loses many prisoners and a stand of colors to
+# the 6th Wisconsin and the 84th and 95th New York; "around 11 a.m."
+mv("davis", A("10:30"), A("10:55"), (-1150, 2830), h=180, state="firing")
+charge("cutler", A("10:55"), A("11:10"), (-1150, 2950), h=200)
+fight("davis", A("10:55"), A("11:15"), 450)
+back("davis", A("11:15"), A("11:45"), (-2400, 3150), h=110, loss=150)
+fight("meredith", A("10:45"), A("11:00"), 0, state="firing")
+stand("cutler", A("11:30"), state="line")
+fight("i_art", A("10:40"), A("11:40"), 10)
+# Buford's men are relieved and draw off to the flanks: Gamble south of the Fairfield Road, Devin north of the town
+mv("gamble", A("10:20"), A("11:00"), (-1300, 2300), (-1050, 1500), h=270)
+mv("tidball", A("10:30"), A("11:00"), (-1100, 1700), h=270)
+mv("devin", A("11:00"), A("11:40"), (-600, 3500), (400, 3700), h=0)
+fight("pegram", A("08:15"), A("11:30"), 10); fight("mcintosh_bn", A("08:30"), A("11:30"), 10)
+# Rowley's division, about eleven: Biddle on the left of Reynolds's Woods facing west, Stone at the McPherson buildings
+for id, t0 in (("biddle", "09:30"), ("stone", "09:40")): enter(id, A(t0), S_EMM, 30)
+mv("biddle", A("09:30"), A("11:30"), *UP_EMM, *TO_SEMINARY[:-1], (-900, 1950), (-1650, 1950), h=270)
+mv("stone", A("09:40"), A("11:30"), *UP_EMM, *TO_SEMINARY, (-1451, 2730), h=290)
+# Robinson's division reaches the Seminary about noon and builds breastworks there
+for id, t0 in (("baxter", "10:10"), ("paul", "10:20")): enter(id, A(t0), S_EMM, 30)
+mv("baxter", A("10:10"), A("12:00"), *UP_EMM, *TO_SEMINARY[:-1], (-760, 2150), h=270)
+mv("paul", A("10:20"), A("12:10"), *UP_EMM, *TO_SEMINARY[:-1], (-760, 1980), h=270)
+# Rodes's division down the Carlisle Road to Oak Hill, "at about noon"; Carter's guns on the hill
+for id, t0 in (("daniel", "10:30"), ("iverson", "10:40"), ("oneal", "10:50"), ("carter", "10:55"), ("doles", "11:05"), ("ramseur", "11:15")): enter(id, A(t0), N_CARL, 200)
+walk("daniel", A("10:30"), *UP_CARLISLE, (-1050, 3800), h=170, kmh=3.5)
+walk("iverson", A("10:40"), *UP_CARLISLE, (-880, 3850), h=150, kmh=3.5)
+walk("oneal", A("10:50"), *UP_CARLISLE, (-560, 3950), h=180, kmh=3.5)
+walk("carter", A("10:55"), *UP_CARLISLE, (-720, 4020), h=170, kmh=3.5)
+walk("ramseur", A("11:15"), *UP_CARLISLE, (-650, 4250), h=180, kmh=3.5)
+walk("doles", A("11:05"), *UP_CARLISLE, (-150, 3800), h=170, kmh=3.5)  # in the valley east of Oak Hill "around 1 P.M."
+mv("devin", A("12:40"), A("13:20"), (1300, 3000), h=20, state="skirmish")
+# Early's division by the Harrisburg Road, "about noon within two miles of Gettysburg"; it forms across the road north of
+# Rock Creek, Jones's battalion on a knoll east of the creek
+for id, t0 in (("gordon", "11:30"), ("jones_bn", "11:40"), ("hays", "11:45"), ("hoke", "11:55"), ("wsmith", "12:05")): enter(id, A(t0), N_HARR, 200)
+walk("gordon", A("11:30"), *DOWN_HARRISBURG, (1200, 3950), h=225, kmh=3.5)
+walk("jones_bn", A("11:40"), *DOWN_HARRISBURG, P['jones_knoll'], h=250, kmh=3.5)
+walk("hays", A("11:45"), *DOWN_HARRISBURG, (1500, 3800), h=225, kmh=3.5)
+walk("hoke", A("11:55"), *DOWN_HARRISBURG, (1700, 3650), h=235, kmh=3.5)
+walk("wsmith", A("12:05"), *DOWN_HARRISBURG, (1550, 4350), h=200, kmh=3.5)
+# The XI Corps through the town: Barlow's two brigades to the knoll about noon, Schurz's about one to the right of the
+# I Corps, von Steinwehr's to Cemetery Hill about two, Wiedrich's battery left there
+for id, t0 in (("vongilsa", "10:20"), ("ames", "10:30"), ("xi_art", "10:45")): enter(id, A(t0), S_TANEY, 0)
+for id, t0 in (("schimmelfennig", "10:50"), ("krzyzanowski", "11:00")): enter(id, A(t0), S_EMM, 30)
+for id, t0 in (("osmith", "12:00"), ("coster", "12:10")): enter(id, A(t0), S_TANEY, 0)
+mv("vongilsa", A("10:20"), A("13:15"), *UP_TANEY, FOOT, (420, 1600), *road('harrisburg', (561, 2675), (950, 3360)), (780, 3640), h=20)
+mv("ames", A("10:30"), A("13:20"), *UP_TANEY, FOOT, (420, 1600), *road('harrisburg', (561, 2675), (900, 3280)), (650, 3420), h=10)
+mv("xi_art", A("10:45"), A("13:10"), *UP_TANEY, FOOT, (420, 1600), DIAMOND, (330, 3000), (300, 3150), h=10, state="firing")
+mv("schimmelfennig", A("10:50"), A("13:10"), *UP_EMM[:-1], (-172, 319), FOOT, (420, 1600), DIAMOND, (330, 2800), (80, 3250), h=0)
+mv("krzyzanowski", A("11:00"), A("13:15"), *UP_EMM[:-1], (-172, 319), FOOT, (420, 1600), DIAMOND, (330, 2900), (450, 3350), h=10)
+mv("osmith", A("12:00"), A("14:00"), *UP_TANEY, (330, 1000), (420, 1060), h=330)
+mv("coster", A("12:10"), A("14:00"), *UP_TANEY, (450, 1000), (560, 1060), h=0)
+# Heth's other brigades and Pender's division on Herr Ridge "by 12:30 pm"
+for id, t0 in (("scales", "10:40"), ("perrin", "10:55"), ("lane", "11:10"), ("thomas", "11:25"), ("poague", "11:35")): enter(id, A(t0), W_PIKE, 120)
+walk("scales", A("10:40"), *DOWN_PIKE, (-2600, 3050), (-2550, 2900), h=90, kmh=3.5)
+walk("perrin", A("10:55"), *DOWN_PIKE, (-2650, 2450), h=90, kmh=3.5)
+walk("lane", A("11:10"), *DOWN_PIKE, (-2700, 2400), (-2600, 1950), h=90, kmh=3.5)
+walk("thomas", A("11:25"), *DOWN_PIKE, (-2800, 2700), h=90, kmh=3.5)
+walk("poague", A("11:35"), *DOWN_PIKE, (-2550, 2250), h=90, kmh=3.5, state="firing")
+mv("davis", A("12:00"), A("12:20"), (-2500, 3250), h=110)
+# Robinson's brigades go to the right along the Mummasburg Road; Cutler moves to Oak Ridge at two
+mv("baxter", A("12:50"), A("13:30"), (-650, 2900), (-620, 3400), h=315)
+mv("cutler", A("13:30"), A("14:00"), (-860, 3200), h=300)
+# "At 2 P.M., both sides were reinforced and the fighting resumed." The guns on Oak Hill open; O'Neal's three regiments
+# and then Iverson's four attack Baxter behind the stone wall east of Forney's field. Iverson's brigade is "nearly
+# destroyed": "1,000 prisoners and three stands of colors" taken by Baxter and Cutler.
+fight("carter", A("13:50"), A("16:00"), 15)
+for id in ("pegram", "mcintosh_bn", "garnett_bn", "poague"): fight(id, A("14:00"), A("16:00"), 10)
+mv("i_art", A("13:40"), A("14:00"), (-1380, 2780), h=270, state="firing")
+back("i_art", A("14:30"), A("14:50"), (-820, 2230), h=270, state="firing")
+fight("i_art", A("14:50"), A("16:10"), 40)
+charge("oneal", A("14:00"), A("14:20"), (-600, 3580), h=165)
+fight("oneal", A("14:20"), A("14:35"), 400)
+back("oneal", A("14:35"), A("14:55"), (-560, 3950), h=180, loss=100)
+mv("iverson", A("14:15"), A("14:35"), (-790, 3500), h=150, state="firing")
+fight("iverson", A("14:35"), A("14:50"), 750)
+back("iverson", A("14:50"), A("15:10"), (-880, 3850), h=150, loss=150, moving="rout")
+fight("baxter", A("14:00"), A("15:50"), 450, h=320)
+fight("cutler", A("14:05"), A("15:50"), 300, h=300)
+mv("paul", A("14:15"), A("14:40"), (-700, 3170), h=290)
+fight("paul", A("14:40"), A("16:00"), 880)
+# Daniel's brigade, diverted to the right, fights Stone at the railroad cuts
+mv("daniel", A("14:00"), A("14:30"), (-1250, 3000), h=190, state="firing")
+stand("stone", A("14:20"), h=0, state="firing")
+fight("daniel", A("14:30"), A("15:30"), 600); fight("stone", A("14:30"), A("15:40"), 605, h=0)
+mv("daniel", A("15:30"), A("15:50"), (-1300, 2850), h=150, state="firing")
+# Pettigrew and Brockenbrough cross Willoughby Run at two and drive the Iron Brigade and Biddle from Reynolds's Woods
+mv("pettigrew", A("14:00"), A("14:25"), (-1950, 2150), h=90, state="firing")
+charge("pettigrew", A("14:25"), A("14:45"), (-1830, 2160), h=85)
+mv("brockenbrough", A("14:00"), A("14:35"), (-1850, 2600), (-1700, 2620), h=80, state="firing")
+fight("pettigrew", A("14:45"), A("15:30"), 850); fight("meredith", A("14:30"), A("15:40"), 770, h=270)
+fight("brockenbrough", A("14:35"), A("15:40"), 150)
+stand("biddle", A("14:30"), state="firing"); fight("biddle", A("14:30"), A("15:40"), 680)
+mv("biddle", A("15:40"), A("16:00"), (-880, 1950), h=270, state="firing", moving="retreat")
+back("meredith", A("15:40"), A("16:00"), (-860, 2150), h=270, loss=100, state="firing")
+back("stone", A("15:40"), A("16:00"), (-870, 2380), h=270, loss=150, state="firing")
+mv("pettigrew", A("15:30"), A("15:50"), (-1750, 2150), h=90)
+mv("brockenbrough", A("15:40"), A("16:00"), (-1600, 2550), h=80)
+# Gordon "about 3 P.M. crossed the creek to support Rodes' left" and charges Barlow's Knoll; Hays and Hoke, "at 3 P.M.",
+# advance on the flank of the XI Corps; Doles comes in from the west. The line collapses "by 4:00 p.m."
+charge("gordon", A("15:00"), A("15:20"), (850, 3780), h=225)
+fight("gordon", A("15:20"), A("15:40"), 350)
+stand("vongilsa", A("15:00"), state="firing")
+fight("vongilsa", A("15:05"), A("15:35"), 300)
+back("vongilsa", A("15:35"), A("15:50"), P['almshouse'], h=0, state="firing")
+fight("ames", A("15:10"), A("15:50"), 500, h=20)
+back("ames", A("15:50"), A("16:05"), (620, 3150), h=10, state="firing")
+fight("jones_bn", A("14:30"), A("16:00"), 15)
+charge("hays", A("15:00"), A("15:40"), (1100, 3250), (900, 2850), h=215)
+charge("hoke", A("15:00"), A("15:45"), (1250, 3100), (1000, 2700), h=220)
+mv("gordon", A("15:40"), A("16:10"), (720, 3250), h=200)
+charge("doles", A("15:00"), A("15:30"), (230, 3420), h=150)
+fight("doles", A("15:30"), A("16:00"), 200)
+fight("schimmelfennig", A("15:00"), A("16:00"), 550, h=0); fight("krzyzanowski", A("15:00"), A("15:55"), 520, h=10)
+fight("xi_art", A("13:20"), A("16:00"), 40)
+# Coster's brigade, "about 3:30 P.M.", through the town to the brickyard, holds Hays and Hoke off the line of retreat
+# and retires about half past four.
+mv("coster", A("15:30"), A("15:55"), (420, 1600), (560, 2100), P['brickyard'], h=30, state="firing")
+fight("coster", A("16:00"), A("16:30"), 500, h=30)
+fight("hays", A("15:45"), A("16:25"), 80); fight("hoke", A("15:50"), A("16:25"), 120)
+# Ramseur turns Robinson's flank with O'Neal's 3rd Alabama
+charge("ramseur", A("15:00"), A("15:30"), (-520, 3600), h=170)
+fight("ramseur", A("15:30"), A("16:00"), 200)
+# Perrin, Lane and Scales cross Willoughby Run about half past three and relieve Heth's line; Scales charges the
+# Seminary Ridge line and loses "all but one field officer"; Perrin breaks it and pursues into the town; Lane fights
+# the cavalry at the stone wall south of the Fairfield Road.
+mv("scales", A("15:20"), A("15:50"), (-1750, 2500), h=95)
+mv("perrin", A("15:20"), A("15:50"), (-1800, 2250), h=90)
+mv("lane", A("15:20"), A("15:50"), (-1900, 1800), h=85)
+charge("scales", A("15:55"), A("16:15"), (-950, 2300), h=95, loss=500)
+charge("perrin", A("15:55"), A("16:15"), (-950, 2030), h=90, loss=450)
+charge("lane", A("16:00"), A("16:20"), (-1050, 1600), h=85)
+fight("lane", A("16:20"), A("16:40"), 80)
+fight("gamble", A("16:00"), A("16:20"), 50, h=270)
+for id, loss in (("meredith", 150), ("stone", 100), ("biddle", 200), ("i_art", 20)): fight(id, A("16:00"), A("16:20"), loss)
+# "At 4 P.M. the Confederates advanced in superior numbers and enveloped both flanks": the I Corps falls back through
+# the town to Cemetery Hill, Wadsworth's division to the north slope of Culp's Hill, Robinson's and Rowley's south of the
+# cemetery facing the Emmitsburg Road. The XI Corps fights until past four and goes back through the streets.
+OUT_W = [(-300, 1950), (150, 1700), (330, 1350)]  # from the Seminary through the town's west side
+back("meredith", A("16:20"), A("16:55"), *OUT_W, FOOT, (900, 1000), (1050, 960), h=30)
+back("cutler", A("16:00"), A("16:40"), (-300, 2300), *OUT_W[1:], FOOT, (950, 1080), (1150, 1050), h=30, loss=150)
+back("stone", A("16:20"), A("16:55"), *OUT_W, FOOT, (330, 700), h=250)
+back("biddle", A("16:20"), A("16:55"), *OUT_W, FOOT, (200, 860), h=250)
+back("i_art", A("16:20"), A("16:50"), *OUT_W, FOOT, (513, 909), h=0, state="firing")
+back("baxter", A("15:50"), A("16:30"), (-300, 2700), (100, 2000), (330, 1350), FOOT, (300, 1120), (260, 1000), h=250)
+back("paul", A("16:00"), A("16:45"), (-300, 2600), (50, 2000), (330, 1350), FOOT, (400, 560), h=250, loss=150)
+back("vongilsa", A("16:00"), A("16:35"), (560, 2600), (420, 1600), FOOT, (640, 1000), h=0, moving="rout", loss=150)
+back("ames", A("16:05"), A("16:40"), (500, 2600), DIAMOND, (420, 1600), FOOT, (760, 1090), h=20, moving="rout", loss=250)
+back("schimmelfennig", A("16:00"), A("16:45"), (200, 2500), DIAMOND, (420, 1600), FOOT, (360, 1090), h=330, moving="rout", loss=450)
+back("krzyzanowski", A("15:55"), A("16:35"), (330, 2700), DIAMOND, (420, 1600), FOOT, (470, 1150), h=0, moving="rout", loss=150)
+back("xi_art", A("16:00"), A("16:35"), (330, 2700), DIAMOND, (420, 1600), FOOT, (590, 1020), h=0, state="firing")
+back("coster", A("16:30"), A("16:55"), (420, 1600), FOOT, (600, 1120), h=0, loss=100)
+back("gamble", A("16:20"), A("16:50"), (-500, 1000), (-300, 650), h=270)
+back("tidball", A("16:20"), A("16:50"), (-500, 1050), (-250, 760), h=270)
+back("devin", A("15:30"), A("16:00"), (900, 2600), (700, 1700), h=200)
+mv("devin", A("16:10"), A("16:40"), (600, 1300), (-350, 450), h=270)
+# The pursuit: Perrin into the town; Hays and Hoke halt on East High Street; Doles to the town's southern edge
+mv("perrin", A("16:20"), A("16:50"), (-300, 1980), (-100, 1900), h=100)
+mv("scales", A("16:15"), A("16:45"), (-900, 2250), h=95)
+mv("ramseur", A("16:05"), A("16:50"), (-300, 2600), (-50, 2050), h=150)
+mv("doles", A("16:00"), A("16:50"), (330, 2700), (250, 1700), h=170, state="firing")
+mv("iverson", A("16:00"), A("16:40"), (-650, 3200), h=150)
+mv("oneal", A("16:00"), A("16:40"), (-450, 3300), h=160)
+mv("daniel", A("16:00"), A("16:40"), (-700, 2650), h=130)
+mv("hays", A("16:30"), A("17:00"), (650, 2200), (520, 1820), h=190)
+mv("hoke", A("16:30"), A("17:00"), (850, 2200), (720, 1880), h=190)
+mv("gordon", A("16:20"), A("17:00"), (1100, 2900), (1450, 2620), h=200)
+walk("wsmith", A("15:30"), (1750, 3600), (2150, 3000), h=60, kmh=3)  # on the York Pike, guarding the left
+mv("brockenbrough", A("16:00"), A("16:40"), (-1300, 2450), h=90)
+mv("pettigrew", A("15:50"), A("16:30"), (-1500, 2100), h=90)
+walk("thomas", A("16:20"), (-1300, 1750), h=90, kmh=3.5)
+walk("archer", A("16:00"), (-2100, 1750), h=90, kmh=3)
+walk("davis", A("16:00"), (-1700, 2950), h=110, kmh=3)
+for id, p in (("pegram", (-1150, 2400)), ("mcintosh_bn", (-1100, 2650)), ("garnett_bn", (-1700, 2350)), ("poague", (-1300, 1950))):
+    walk(id, A("16:40"), p, h=100, kmh=3)
+walk("carter", A("17:00"), (-700, 3300), h=150, kmh=3)
+walk("jones_bn", A("17:00"), (1350, 2700), h=210, kmh=3)
+# Geary's division "on the Baltimore Pike ... at about 5 P.M.": Candy and Greene from Cemetery Ridge toward Little Round
+# Top, Kane on the Pike. Williams's division turns toward Wolf Hill, finds it held and draws back at sunset east of
+# Rock Creek.
+for id, t0 in (("greene", "15:50"), ("candy", "16:00"), ("kane", "16:10"), ("mcdougall", "16:00"), ("colgrove", "16:10"), ("xii_art", "16:20")): enter(id, A(t0), SE_PIKE, 300)
+mv("greene", A("15:50"), A("17:10"), *IN_PIKE, GRANITE_W, (100, -900), (0, -1000), h=270)
+mv("candy", A("16:00"), A("17:20"), *IN_PIKE, GRANITE_W, (50, -1500), (-60, -1750), h=250)
+mv("kane", A("16:10"), A("17:00"), *road('baltimore', SE_PIKE, (1100, -100)), h=300)
+mv("mcdougall", A("16:00"), A("17:30"), *road('baltimore', SE_PIKE, PIKE_BRIDGE), (2600, -400), (2650, 0), h=330)
+mv("colgrove", A("16:10"), A("17:35"), *road('baltimore', SE_PIKE, (2600, -1250)), (2900, -500), (2950, -200), h=320)
+mv("xii_art", A("16:20"), A("17:30"), *road('baltimore', SE_PIKE, (2500, -1200)), h=320)
+mv("mcdougall", A("19:20"), A("19:50"), (2600, -800), h=320); mv("colgrove", A("19:25"), A("19:55"), (2850, -1000), h=320)
+# Birney's division from Emmitsburg: Graham "between 5 and 6 P.M.", Ward "after sunset"; Stannard "at dusk"
+for id, t0 in (("graham", "16:30"), ("iii_art", "16:45"), ("ward", "18:30"), ("stannard", "18:10")): enter(id, A(t0), S_EMM, 30)
+mv("graham", A("16:30"), A("18:00"), *UP_EMM[:-1], (-600, -800), (-60, -650), h=270)
+mv("iii_art", A("16:45"), A("18:15"), *UP_EMM[:-1], (-600, -900), (60, -800), h=270)
+mv("ward", A("18:30"), A("20:00"), *UP_EMM[:-1], (-600, -1000), (-50, -1150), h=270)
+mv("stannard", A("18:10"), A("19:40"), *UP_EMM, (250, -250), h=270)
+# Johnson's division "reached the field too late" and moves in the night by the town to the Hanover Road east of Rock
+# Creek; Steuart about nightfall a mile east of the creek
+for id, t0 in (("jmjones", "17:30"), ("nicholls", "17:45"), ("latimer", "17:55"), ("walker", "18:05"), ("steuart", "18:20")): enter(id, A(t0), W_PIKE, 120)
+BY_TOWN_E = [*road('chambersburg', W_PIKE, (-150, 1990)), DIAMOND, *road('hanover', DIAMOND, P['rock_hanover'])]
+walk("jmjones", A("17:30"), *BY_TOWN_E, (1750, 2300), h=200, kmh=3.8)
+walk("nicholls", A("17:45"), *BY_TOWN_E, (1950, 2500), h=200, kmh=3.8)
+walk("latimer", A("17:55"), *BY_TOWN_E, (1650, 2550), h=200, kmh=3.8)
+walk("walker", A("18:05"), *BY_TOWN_E, (2300, 2650), h=200, kmh=3.8)
+walk("steuart", A("18:20"), *BY_TOWN_E, (2700, 2050), h=200, kmh=3.8)
+# Anderson's division "around dark" into Heth's old position west of the run
+for id, t0 in (("wilcox", "17:45"), ("wright", "17:55"), ("perry", "18:05"), ("posey", "18:15"), ("mahone", "18:25"), ("cutts", "18:35")): enter(id, A(t0), W_PIKE, 120)
+for id, p in (("wilcox", (-2400, 1800)), ("wright", (-2450, 2100)), ("perry", (-2650, 2250)), ("posey", (-2350, 2450)), ("mahone", (-2700, 2000)), ("cutts", (-2650, 2650))):
+    walk(id, plus(KEYS[id][-1]["t"], 0), *DOWN_PIKE, p, h=90, kmh=3.5)
+# Ewell's reserve guns; the evening's dispositions
+for id, at, t0 in (("dance", N_CARL, "13:00"), ("nelson", N_HARR, "18:00")): enter(id, A(t0), at, 200)
+walk("dance", A("13:00"), *UP_CARLISLE[:-1], (-400, 4200), h=180, kmh=3.5)
+walk("nelson", A("18:00"), *DOWN_HARRISBURG, (1550, 3300), h=200, kmh=3.5)
+mv("gamble", A("19:30"), A("20:15"), (-350, -1300), (-330, -2000), h=250)
+mv("devin", A("19:30"), A("20:15"), (-300, -1100), (-250, -1750), h=250)
+mv("tidball", A("19:40"), A("20:20"), (-250, -1300), (-150, -1900), h=250)
+mv("scales", A("19:00"), A("19:30"), (-1150, 2150), h=95)
+mv("perrin", A("19:00"), A("19:40"), (-650, 1750), h=110)
+mv("lane", A("19:00"), A("19:30"), (-1150, 1450), h=90)
+# Humphreys's division by a road two miles west of the Emmitsburg Road, on the ridge at one in the morning
+for id, t0 in (("carr", "22:45"), ("brewster", "23:00")): enter(id, A(t0), (-3600, -4940), 30)
+mv("carr", A("22:45"), B("01:00"), (-3000, -1900), *road('wheatfield', (-2665, -1378), (-1106, -1485)), (-350, -900), (-150, -600), h=270)
+mv("brewster", A("23:00"), B("01:10"), (-3000, -1900), *road('wheatfield', (-2665, -1378), (-1106, -1485)), (-350, -1000), (-100, -860), h=270)
+
+# ======== 2 July ========
+# The XII Corps to Culp's Hill: Greene "at 6 A.M." on the right of the I Corps, Candy behind him, Kane on his right;
+# McDougall and Colgrove cross Rock Creek "at 8 A.M." to Culp's Hill and McAllister's Woods; Lockwood arrives at eight.
+# All build breastworks.
+mv("greene", B("05:20"), B("06:00"), GRANITE_W, (900, -300), (1323, 597), h=90)
+mv("candy", B("05:30"), B("06:30"), (100, -1200), GRANITE_W, (900, -200), (1200, 520), h=90)
+mv("kane", B("05:50"), B("06:30"), (1356, 390), h=90)
+mv("mcdougall", B("07:30"), B("08:00"), PIKE_BRIDGE, (1700, -350), (1480, 150), h=80)
+mv("colgrove", B("07:20"), B("08:00"), PIKE_BRIDGE, (1720, -300), h=70)
+mv("xii_art", B("07:30"), B("08:00"), (1600, -800), (1200, -760), h=60)
+enter("lockwood", B("07:00"), SE_PIKE, 300); mv("lockwood", B("07:00"), B("08:10"), *road('baltimore', SE_PIKE, PIKE_BRIDGE), (1600, -620), h=80)
+# The II Corps "arrived between 6 and 8 A.M. on the Taneytown Road": Gibbon's division six to seven, Caldwell's about
+# seven on the left, Hays's about eight relieving Robinson
+for id, t0 in (("harrow", "05:00"), ("webb", "05:10"), ("hall", "05:20"), ("ii_art", "05:30"), ("cross", "05:45"), ("kelly", "05:55"), ("zook", "06:05"),
+               ("brooke", "06:15"), ("smyth", "06:45"), ("willard", "06:55"), ("carroll", "07:05")): enter(id, B(t0), S_TANEY, 0)
+for id, t0, t1, p, h in (("harrow", "05:00", "06:30", P['harrow'], 270), ("webb", "05:10", "06:40", (-40, 20), 270), ("hall", "05:20", "06:50", (-60, -130), 270),
+                         ("ii_art", "05:30", "07:00", (40, -60), 270), ("cross", "05:45", "07:00", (100, -950), 270), ("kelly", "05:55", "07:10", (40, -800), 270),
+                         ("zook", "06:05", "07:20", (180, -820), 270), ("brooke", "06:15", "07:30", (200, -1000), 270),
+                         ("smyth", "06:45", "08:00", (-30, 150), 270), ("willard", "06:55", "08:10", (120, 260), 270), ("carroll", "07:05", "08:15", (90, 420), 270)):
+    mv(id, B(t0), B(t1), *UP_TANEY[:-2], (330, -300), p, h=h)
+for id, p in (("baxter", (330, 350)), ("paul", (420, 500))): mv(id, B("11:50"), B("12:20"), p, h=270)  # Robinson relieved "about noon", to reserve
+mv("stone", B("07:00"), B("07:40"), (230, -500), h=270); mv("biddle", B("07:10"), B("07:50"), (180, -350), h=270)
+mv("meredith", B("08:00"), B("08:20"), (1080, 1000), h=40)
+# Birney "about 7 a.m." relieves Geary on the left near Little Round Top; de Trobriand at ten, Burling nine to ten
+mv("graham", B("06:40"), B("07:10"), (-20, -1300), h=270)
+mv("ward", B("06:30"), B("07:10"), (-100, -1850), h=250)
+for id, t0 in (("burling", "08:10"), ("detrobriand", "08:40")): enter(id, B(t0), S_EMM, 30)
+mv("burling", B("08:10"), B("09:40"), *UP_EMM, (60, -1050), h=270)
+mv("detrobriand", B("08:40"), B("10:00"), *UP_EMM[:-1], (-600, -1100), (-80, -1550), h=260)
+mv("iii_art", B("06:00"), B("06:30"), (100, -1150), h=270)
+# Buford's two brigades, relieved by the III Corps, march to Taneytown
+for id, t0 in (("gamble", "09:30"), ("devin", "09:40"), ("tidball", "09:50")):
+    hide(id, plus(walk(id, B(t0), (250, -2000), *road('taneytown', (250, -2000), S_TANEY), kmh=5.5), 1))
+# The V Corps "early in the morning lay on the Baltimore Pike near Rock Creek"
+V = [("sweitzer", (2450, -1150)), ("tilton", (2600, -1250)), ("vincent", (2450, -1350)), ("day", (2700, -1500)), ("burbank", (2850, -1450)),
+     ("weed", (2600, -1650)), ("v_art", (2350, -1500)), ("mccandless", (2850, -1700)), ("fisher", (3000, -1800))]
+for n, (id, p) in enumerate(V):
+    enter(id, B(fmt(sec(B("05:30")) + n * 480)[11:]), SE_PIKE, 300)
+    walk(id, KEYS[id][-1]["t"], *road('baltimore', SE_PIKE, (2700, -1250)), p, h=300, kmh=3.5)
+# The Artillery Reserve parks by the Taneytown Road; Huntington's and Taft's brigades go up to Cemetery Hill
+for id, t0, p in (("ransom", "07:30", (480, -560)), ("mcgilvery", "07:40", (560, -700)), ("taft", "07:50", (620, -460)), ("huntington", "08:00", (680, -620)), ("fitzhugh", "08:10", (720, -780))):
+    enter(id, B(t0), S_TANEY, 0); mv(id, B(t0), plus(B(t0), 70), *UP_TANEY[:-2], p, h=270)
+mv("huntington", B("10:00"), B("10:30"), (380, 400), (430, 1000), h=330)
+mv("taft", B("10:10"), B("10:40"), (330, 400), (330, 950), h=300)
+mv("fitzhugh", B("10:00"), B("10:20"), (1050, -900), h=60)
+# Ewell's line: Hays and Hoke "early in the morning" into the low ground south-east of the town, Gordon in reserve between
+# the town and Rock Creek, Rodes's brigades in the town; Johnson's division east of Rock Creek
+mv("hays", B("04:00"), B("04:30"), (600, 1450), h=170); mv("hoke", B("04:00"), B("04:30"), (820, 1500), h=190)
+mv("gordon", B("04:10"), B("04:50"), (1050, 1850), h=190)
+for id, p in (("doles", (250, 1650)), ("ramseur", (0, 1850)), ("oneal", (-150, 2250)), ("iverson", (-350, 2500)), ("daniel", (-500, 2350))):
+    mv(id, B("04:30"), B("05:20"), p, h=180)
+for id, p in (("jmjones", (1700, 1700)), ("nicholls", (1950, 1450)), ("steuart", (2250, 1150)), ("latimer", (1950, 1850))): mv(id, B("05:00"), B("05:40"), p, h=230)
+# Pender's division on Seminary Ridge, its left on the Fairfield Road, Perrin supporting the guns south of the road;
+# Heth's relieved by Anderson and in reserve; Anderson's division forms "a new battle line extending farther right"
+for id, p in (("perrin", (-950, 1450)), ("thomas", (-950, 1250)), ("lane", (-1000, 1050)), ("scales", (-1050, 850))): mv(id, B("05:00"), B("05:50"), p, h=100)
+for id, p in (("pettigrew", (-1400, 700)), ("brockenbrough", (-1350, 950)), ("archer", (-1450, 450)), ("davis", (-1500, 1150))): mv(id, B("06:00"), B("07:00"), p, h=100)
+for id, p in (("pegram", (-1050, 1150)), ("mcintosh_bn", (-1050, 1350)), ("poague", (-1100, 650)), ("garnett_bn", (-1200, 300)), ("dance", (-950, 1700)), ("nelson", (-950, 1850)), ("carter", (-750, 2600))):
+    walk(id, B("05:00"), p, h=100, kmh=3)
+for id, p in (("mahone", (-1250, 700)), ("posey", (-1300, 450)), ("wright", (-1400, 150)), ("perry", (-1561, -210)), ("cutts", (-1350, -60))):
+    walk(id, B("08:30"), (-2100, 1500), p, h=90, kmh=3)
+# Wilcox's 10th and 11th Alabama take the right "after a severe skirmish with the Union outpost": Berdan's sharpshooters
+# in Pitzer's Woods, "late in the forenoon"
+walk("wilcox", B("09:00"), (-2100, 1300), (-2050, 0), (-1900, -250), h=90, kmh=3, state="skirmish")
+fight("wilcox", B("11:15"), B("11:45"), 20, state="skirmish")
+mv("wilcox", B("11:45"), B("12:00"), (-1650, -480), h=90)
+# Gregg's two cavalry brigades on the Hanover Road, J. I. Gregg "about 11 A.M." two miles from the town, McIntosh about noon
+for id, t0 in (("jigregg", "10:30"), ("hrobertson", "11:00"), ("mcintosh", "11:30")): enter(id, B(t0), E_HAN, 270)
+walk("jigregg", B("10:30"), *road('hanover', E_HAN, (3550, 1100)), h=280, kmh=6)
+walk("hrobertson", B("11:00"), *road('hanover', E_HAN, (4500, 850)), h=290, kmh=5.5)
+walk("mcintosh", B("11:30"), *road('hanover', E_HAN, (4700, 780)), h=290, kmh=6)
+walk("walker", B("05:00"), (3100, 1700), (3700, 1400), h=110, kmh=3, state="skirmish")
+# Longstreet: McLaws's division comes toward the town, turns right at the Black Horse Tavern, crosses Willoughby Run
+# farther downstream and forms on Warfield Ridge: Barksdale "about 3 P.M.", Kershaw 3:30, Semmes 3:30, Wofford 4 P.M.;
+# Hood's four brigades "about 4 P.M." south of them to the Emmitsburg Road. Law's brigade has rejoined from New
+# Guilford after a march of 25 miles. The route between the tavern and the ridge is inferred.
+COUNTERMARCH = [*road('fairfield', W_FAIR, P['black_horse']), (-3500, 300), (-2900, -600), P['pitzer']]
+for id, t0, end, h in (("barksdale", "12:30", (-1560, -1050), 90), ("wofford", "13:15", (-1850, -1150), 90), ("kershaw", "12:50", (-1780, -1500), 85),
+                       ("semmes", "13:00", (-2000, -1600), 85), ("cabell", "13:20", (-1680, -1760), 85), ("alexander", "13:30", (-1450, -950), 80),
+                       ("eshleman", "13:40", (-1350, -380), 80),
+                       ("robertson", "12:40", (-1656, -2517), 75), ("law", "12:55", (-1637, -2866), 70), ("gtanderson", "13:05", (-1900, -2300), 75),
+                       ("benning", "13:20", (-1900, -2650), 75), ("henry", "13:35", (-1500, -2450), 75)):
+    enter(id, B(t0), W_FAIR, 90)
+    walk(id, B(t0), *COUNTERMARCH, (-2000, -1300) if end[1] > -2000 else (-2100, -2000), end, h=h, kmh=2.2)
+# Sickles's advance: "shortly after 2 p.m." Birney's division wheels left onto the high ground from Plum Run to the Peach
+# Orchard and along the Emmitsburg Road to the Sherfy house, Ward on the left, de Trobriand in the centre, Graham at the
+# Peach Orchard; Humphreys "between 2 and 3 P.M." to the Emmitsburg Road, Carr forward, Brewster behind, Burling split
+# among the batteries. Little Round Top is left empty.
+mv("ward", B("14:00"), B("14:40"), (-640, -2180), h=250)
+mv("detrobriand", B("14:05"), B("14:45"), P['detrobriand'], h=225)
+mv("graham", B("14:10"), B("14:50"), (-1120, -1300), h=255)
+mv("iii_art", B("14:20"), B("15:00"), (-930, -1420), h=215, state="firing")
+mv("carr", B("14:30"), B("15:00"), (-780, -650), h=270)
+mv("brewster", B("14:35"), B("15:05"), (-560, -850), h=270)
+mv("burling", B("14:40"), B("15:10"), (-760, -1120), h=255)
+fight("iii_art", B("15:00"), B("16:00"), 10)
+# The Artillery Reserve's guns to the Wheatfield Road "around 3:30 p.m."
+mv("mcgilvery", B("15:15"), B("15:40"), (-780, -1330), h=215, state="firing")
+mv("ransom", B("14:40"), B("15:10"), P['ransom'], h=270)
+# The V Corps to the left: Sweitzer "after 2 P.M.", Ayres "about 3 P.M.", Tilton "after 4 P.M."
+mv("sweitzer", B("14:20"), B("15:10"), (1200, -1000), (350, -1250), h=250)
+mv("day", B("15:00"), B("15:50"), (1200, -1150), (400, -1550), h=250)
+mv("burbank", B("15:05"), B("15:55"), (1200, -1200), (500, -1650), h=250)
+mv("weed", B("15:10"), B("16:00"), (1200, -1250), (450, -1800), h=250)
+mv("vincent", B("15:15"), B("16:05"), (1200, -1100), (330, -1400), h=250)
+mv("v_art", B("15:20"), B("16:05"), (1200, -1150), (420, -1300), h=250)
+mv("tilton", B("16:00"), B("16:50"), (1200, -1050), (300, -1150), h=250)
+mv("mccandless", B("16:30"), B("17:30"), (1200, -1200), (300, -1650), h=250)
+mv("fisher", B("16:40"), B("17:40"), (1200, -1250), (350, -1800), h=250)
+# The VI Corps after "a march of over 30 miles": Newton "about 2 P.M.", Wright "about 4 P.M.", Howe "5 P.M."
+VI = [("shaler", "13:00", (2650, -1950)), ("eustis", "13:10", (2800, -2000)), ("nevin", "13:20", (2950, -2050)), ("vi_art", "14:30", (2500, -2150)),
+      ("torbert", "15:00", (3100, -1900)), ("bartlett", "15:10", (3250, -1950)), ("russell", "15:20", (3400, -2000)),
+      ("grant", "16:00", (3050, -2250)), ("neill", "16:10", (3250, -2300))]
+for id, t0, p in VI:
+    enter(id, B(t0), SE_PIKE, 300); walk(id, B(t0), *road('baltimore', SE_PIKE, (3300, -1800)), p, h=300, kmh=3.5)
+
+# ---- 2 July, the attack ----
+# "At about 4 P.M. the batteries opened fire. Soon after, the division advanced." Ewell's guns open from Benner's Hill.
+for id in ("cabell", "alexander", "henry", "eshleman"): fight(id, B("16:00"), B("18:00"), 15)
+fight("mcgilvery", B("15:40"), B("18:00"), 40); fight("iii_art", B("16:00"), B("18:00"), 60)
+mv("latimer", B("15:40"), B("16:00"), P['benners_hill'], h=230, state="firing")
+fight("latimer", B("16:00"), B("18:30"), 50)
+back("latimer", B("18:30"), B("19:00"), (2250, 1950), h=230)
+for id in ("i_art", "xi_art", "huntington", "taft"): fight(id, B("16:00"), B("18:30"), 15)
+# Robertson's 1st Texas and 3rd Arkansas and Law's 44th and 48th Alabama into Devil's Den and the Triangular Field,
+# taking three of Smith's guns; the 4th and 5th Texas and the 4th, 15th and 47th Alabama against Little Round Top
+# "until dark"; Benning in support. Hood is wounded on Slyder's lane.
+charge("robertson", B("16:15"), B("16:45"), (-1000, -2500), (-720, -2380), h=80)
+fight("robertson", B("16:45"), B("18:30"), 600)
+charge("law", B("16:15"), B("16:55"), (-1000, -2800), (-500, -2780), (-250, -2620), h=40)
+fight("law", B("16:55"), B("19:30"), 700)
+back("law", B("19:30"), B("20:00"), (-560, -2830), h=60)
+fight("ward", B("16:15"), B("17:45"), 550, h=250)
+back("ward", B("17:45"), B("18:10"), (-330, -1950), (-150, -1700), h=250, loss=230)
+mv("benning", B("16:30"), B("17:10"), (-1050, -2500), (-760, -2320), h=70, state="firing")
+fight("benning", B("17:10"), B("18:30"), 400)
+# Vincent's brigade takes Little Round Top "ten minutes before the Confederates", the 20th Maine on the left; Weed's
+# brigade to the summit "in time for the 140th New York"; Hazlett's battery on the summit. Vincent, Weed, O'Rorke and
+# Hazlett fall.
+mv("vincent", B("16:20"), B("16:45"), (-60, -2200), (-100, -2520), h=220, state="firing")
+fight("vincent", B("16:55"), B("19:30"), 350)
+mv("v_art", B("16:40"), B("17:05"), (-30, -2380), h=240, state="firing")
+fight("v_art", B("17:05"), B("19:30"), 40)
+mv("weed", B("17:00"), B("17:20"), (-50, -2300), (-110, -2380), h=250, state="firing")
+fight("weed", B("17:20"), B("19:30"), 400)
+# Kershaw "advanced about 4:30" against the Peach Orchard's south face and the Loop; G. T. Anderson's Georgians into Rose
+# Woods against de Trobriand at the Wheatfield wall; Tilton and Sweitzer at the Rose Woods edge attacked and drawn back
+# across the Wheatfield Road, "the first break in Birney's line"
+charge("kershaw", B("16:30"), B("17:00"), P['rose'], h=90)
+charge("kershaw", B("17:00"), B("17:20"), (-880, -1730), h=80)
+fight("kershaw", B("17:20"), B("18:30"), 450)
+charge("gtanderson", B("16:45"), B("17:20"), (-1300, -2150), (-920, -1960), h=60)
+fight("gtanderson", B("17:20"), B("17:50"), 250)
+back("gtanderson", B("17:50"), B("18:05"), (-1150, -2050), h=60)
+fight("detrobriand", B("17:00"), B("18:00"), 490)
+back("detrobriand", B("18:00"), B("18:20"), (-350, -1450), h=230)
+mv("tilton", B("16:50"), B("17:15"), (-850, -1810), h=230, state="firing")
+mv("sweitzer", B("16:45"), B("17:15"), (-780, -1700), h=230, state="firing")
+fight("tilton", B("17:15"), B("17:40"), 100); fight("sweitzer", B("17:15"), B("17:40"), 100)
+back("tilton", B("17:40"), B("18:00"), (-620, -1350), h=230); back("sweitzer", B("17:40"), B("18:00"), (-520, -1450), h=230)
+charge("semmes", B("17:00"), B("17:35"), (-1200, -1900), (-950, -1870), h=70)
+fight("semmes", B("17:35"), B("19:00"), 400)
+# Barksdale advances "at 5 P.M." by his tablet; the tablets disagree by up to 90 minutes, and the replay starts him at
+# half past five. Graham's brigade is broken at the Sherfy house "about 6:30 p.m."; Graham is captured.
+charge("barksdale", B("17:30"), B("18:00"), (-1180, -1150), h=80)
+fight("barksdale", B("18:00"), B("18:30"), 250)
+fight("graham", B("16:00"), B("18:30"), 540, h=250)
+back("graham", B("18:30"), B("19:00"), (-500, -1000), (-100, -820), h=250, loss=200, moving="rout")
+fight("burling", B("17:00"), B("18:30"), 410)
+back("burling", B("18:30"), B("19:00"), (60, -1050), h=270, loss=100)
+back("mcgilvery", B("18:00"), B("18:15"), (-570, -1170), h=230, state="firing")
+back("mcgilvery", B("18:30"), B("18:50"), (-250, -1050), h=250, state="firing")
+fight("mcgilvery", B("18:50"), B("20:00"), 50)
+back("iii_art", B("18:00"), B("18:30"), (-300, -1150), h=250, loss=30)
+# Caldwell's division "between 5 and 6 P.M." to the Wheatfield: Cross and Kelly along the stone wall east of the field,
+# Zook on the right, Brooke in reserve and then "across a marsh to the crest of a wooded hill"; Cross and Zook killed;
+# then flanked by Wofford, Semmes and Kershaw and drawn back to the corps line
+charge("cross", B("17:30"), B("17:55"), (-300, -1500), (-580, -1830), h=230)
+charge("kelly", B("17:35"), B("18:00"), (-400, -1450), (-930, -1700), h=230)
+charge("zook", B("17:40"), B("18:05"), (-450, -1400), (-800, -1600), h=230)
+fight("cross", B("17:55"), B("18:40"), 300); fight("kelly", B("18:00"), B("18:40"), 180); fight("zook", B("18:05"), B("18:40"), 320)
+charge("brooke", B("18:00"), B("18:20"), (-700, -1900), P['brooke'], h=230)
+fight("brooke", B("18:20"), B("18:40"), 350)
+for id in ("cross", "kelly", "zook", "brooke"): back(id, B("18:40"), B("19:10"), (-300, -1400), (60, -950) if id != "brooke" else (150, -1050), h=270, loss=40)
+# Sweitzer goes into the Wheatfield again; Ayres's regulars cross Plum Run to Houck's Ridge facing the Wheatfield and are
+# driven back "about sunset" to Little Round Top by Wofford's Georgians, half of them lost
+charge("sweitzer", B("18:30"), B("18:45"), (-650, -1780), h=230)
+fight("sweitzer", B("18:45"), B("19:00"), 320)
+back("sweitzer", B("19:00"), B("19:20"), (-250, -1450), h=230)
+mv("day", B("17:40"), B("18:10"), (-200, -1900), (-450, -1960), h=290, state="firing")
+mv("burbank", B("17:45"), B("18:15"), (-250, -2050), (-470, -2100), h=280, state="firing")
+fight("day", B("18:10"), B("19:00"), 250); fight("burbank", B("18:15"), B("19:00"), 300)
+back("day", B("19:00"), B("19:20"), (-150, -2150), h=280, loss=130)
+back("burbank", B("19:00"), B("19:20"), (-250, -2020), h=280, loss=150)
+# Wofford "ordered forward about 6 P.M." along the Wheatfield Road, flanks the Loop, reaches the foot of Little Round Top
+# and "fell back at sunset to the grove west of the Wheatfield"
+charge("wofford", B("18:00"), B("18:30"), *road('wheatfield', (-1300, -1400), (-850, -1580)), (-700, -1700), h=100)
+charge("wofford", B("18:35"), B("18:55"), (-350, -1950), h=110)
+fight("wofford", B("18:55"), B("19:15"), 250)
+back("wofford", B("19:15"), B("19:45"), (-1000, -1650), h=90)
+mv("kershaw", B("18:30"), B("18:50"), (-700, -1720), h=90, state="firing")
+fight("kershaw", B("18:50"), B("19:15"), 100)
+back("kershaw", B("19:15"), B("19:45"), (-1150, -1750), h=90)
+mv("gtanderson", B("18:10"), B("18:30"), (-850, -1950), h=60, state="firing")
+fight("gtanderson", B("18:30"), B("19:00"), 220)
+back("gtanderson", B("19:00"), B("19:30"), (-1000, -2050), h=60)
+# Barksdale's 21st Mississippi past the Trostle house takes Bigelow's and Watson's guns; the other three regiments angle
+# toward Plum Run. Humphreys's division changes front and falls back across Plum Run to Cemetery Ridge.
+charge("barksdale", B("18:30"), B("19:00"), (-650, -1200), (-420, -880), h=60)
+fight("carr", B("18:00"), B("18:40"), 540, h=230); fight("brewster", B("18:15"), B("18:45"), 530, h=230)
+back("carr", B("18:40"), B("19:10"), (-450, -700), (-150, -600), h=260, loss=250)
+back("brewster", B("18:45"), B("19:15"), (-350, -850), (-100, -760), h=260, loss=250)
+# Anderson's division: Wilcox "at 6 P.M." breaks the line on the Emmitsburg Road, takes two guns, pushes to Plum Run, is met
+# by "heavy artillery and fresh infantry" and falls back; Perry's Floridians likewise; Wright drives the 15th Massachusetts
+# and 82nd New York from near the Codori house, breaks through the wall south of the Angle and reaches the crest, is struck
+# on both flanks and fights its way out. Posey's regiments go in as skirmishers; Mahone does not move.
+charge("wilcox", B("18:00"), B("18:20"), (-760, -720), h=90)
+charge("wilcox", B("18:25"), B("18:40"), (-380, -680), h=90)
+charge("perry", B("18:05"), B("18:40"), (-650, -480), (-420, -520), h=90)
+charge("wright", B("18:00"), B("18:25"), (-480, -150), h=90)
+fight("harrow", B("18:00"), B("18:25"), 30, h=270)
+charge("wright", B("18:30"), B("18:45"), (-120, -110), (-30, -140), h=90)
+fight("wright", B("18:45"), B("19:00"), 350); fight("webb", B("18:30"), B("19:00"), 50); fight("hall", B("18:30"), B("19:00"), 80)
+back("wright", B("19:00"), B("19:30"), (-480, -150), (-1380, 120), h=90, loss=300)
+# The 1st Minnesota's 262 men charge Wilcox; 215 fall
+charge("harrow", B("18:40"), B("18:50"), (-300, -600), h=250)
+fight("harrow", B("18:50"), B("19:05"), 330); fight("wilcox", B("18:40"), B("19:00"), 400); fight("perry", B("18:40"), B("19:00"), 150)
+back("harrow", B("19:05"), B("19:20"), P['harrow'], h=270)
+back("wilcox", B("19:00"), B("19:30"), (-1650, -480), h=90, loss=100)
+back("perry", B("19:00"), B("19:30"), (-1561, -210), h=90, loss=50)
+mv("posey", B("18:15"), B("18:40"), (-700, 480), h=90, state="skirmish")
+fight("posey", B("18:40"), B("19:30"), 80, state="skirmish")
+back("posey", B("19:30"), B("20:00"), (-1300, 450), h=90)
+# Willard's brigade "at 7 P.M." from Ziegler's Grove to the Plum Run swale charges Barksdale's 13th, 17th and 18th
+# Mississippi up toward the Emmitsburg Road; Willard is killed and Barksdale mortally wounded
+charge("willard", B("18:55"), B("19:15"), (-250, -500), (-350, -820), h=240)
+fight("barksdale", B("19:00"), B("19:20"), 650)
+charge("willard", B("19:15"), B("19:25"), (-560, -960), h=240)
+fight("willard", B("19:25"), B("19:35"), 380)
+back("barksdale", B("19:20"), B("19:45"), (-1150, -1080), h=80, loss=100)
+back("willard", B("19:35"), B("20:00"), (-250, -600), (100, 200), h=270)
+# Lockwood and Williams's division come over "late in the day"; the 150th New York brings off three of Bigelow's guns.
+# Stannard's and Rowley's brigades go out at sunset to the Emmitsburg Road, "80 prisoners and 4 guns".
+mv("lockwood", B("18:30"), B("19:10"), GRANITE_E, GRANITE_W, (-150, -1100), h=250, state="firing")
+mv("mcdougall", B("18:30"), B("19:15"), (1500, -300), (600, -900), (80, -1000), h=250)
+mv("colgrove", B("18:35"), B("19:20"), (1500, -500), (600, -950), (180, -820), h=250)
+charge("stannard", B("19:15"), B("19:40"), (-420, -560), h=250); fight("stannard", B("19:40"), B("20:00"), 50)
+charge("biddle", B("19:15"), B("19:40"), (-350, -400), h=250); fight("biddle", B("19:40"), B("20:00"), 20)
+back("stannard", B("20:15"), B("20:40"), (-150, -400), h=270); back("biddle", B("20:15"), B("20:40"), (100, -300), h=270)
+# Crawford's Reserves to Little Round Top "late in the day"; after sunset McCandless, with Nevin's VI Corps brigade,
+# charges from the north slope across "Plum Run marsh and beyond the stone wall into the Wheatfield"; Fisher's 5th and
+# 12th Reserves and the 20th Maine onto Big Round Top. Bartlett's and Nevin's brigades come up "about sunset on the
+# left-center"; Russell and Torbert "to the extreme left, east of Round Top"; Grant's Vermonters "at dark".
+mv("mccandless", B("18:30"), B("19:00"), (-150, -2000), h=250)
+mv("nevin", B("17:40"), B("19:10"), *road('baltimore', (2950, -2050), GRANITE_E), GRANITE_W, (-50, -1850), h=250)
+charge("mccandless", B("19:30"), B("19:50"), P['plum_wheatfield'], (-600, -1830), h=260)
+charge("nevin", B("19:35"), B("19:55"), (-238, -1809), (-420, -1780), h=260)
+fight("mccandless", B("19:50"), B("20:10"), 100)
+mv("fisher", B("19:30"), B("20:30"), (-100, -2250), (-377, -2880), h=240)
+mv("vincent", B("20:30"), B("21:00"), (-200, -2700), h=220)
+mv("bartlett", B("18:00"), B("19:30"), *road('baltimore', (3250, -1950), GRANITE_E), GRANITE_W, P['vi_corps'], h=250)
+mv("russell", B("18:10"), B("20:00"), (2800, -2800), (1500, -2700), (300, -2900), h=250)
+mv("torbert", B("18:20"), B("20:10"), (2900, -3000), (1500, -3000), (450, -3200), h=250)
+mv("grant", B("19:00"), B("20:30"), (2900, -3200), (1500, -3300), (380, -3550), h=250)
+mv("neill", B("17:30"), B("18:00"), (1300, -850), h=60)
+mv("shaler", B("18:30"), B("19:30"), *road('baltimore', (2650, -1950), GRANITE_E), (600, -950), h=270)
+mv("eustis", B("18:40"), B("19:40"), *road('baltimore', (2800, -2000), GRANITE_E), (500, -1250), h=270)
+mv("vi_art", B("18:30"), B("19:30"), *road('baltimore', (2500, -2150), GRANITE_E), (700, -1100), h=270)
+# Culp's Hill: Geary's Candy and Kane go off down the Pike with Williams's division and the hill is left to Greene.
+# Jones's brigade "at 6 P.M. crossed Rock Creek" and charges the main summit's works "until dark", Nicholls on its left
+# "about 100 yards from their breastworks"; Steuart crosses at six and his 3rd North Carolina and 1st Maryland take the
+# works on "the lesser summit". Greene's 1,400 hold "four distinct charges", with "about 750 men from the First and
+# Eleventh Corps".
+mv("candy", B("18:40"), B("19:20"), (1100, -300), PIKE_BRIDGE, h=120); mv("kane", B("18:50"), B("19:20"), (1100, -300), (1600, -800), h=120)
+mv("jmjones", B("16:00"), B("16:20"), (1650, 1350), h=220)
+charge("jmjones", B("18:00"), B("18:40"), (1820, 950), (1460, 760), h=250)
+charge("nicholls", B("18:00"), B("18:50"), (1900, 650), (1500, 520), h=260)
+charge("steuart", B("18:00"), B("19:00"), (1900, 400), (1500, 260), h=280)
+fight("jmjones", B("18:40"), B("21:30"), 300); fight("nicholls", B("18:50"), B("21:30"), 200); fight("greene", B("18:40"), B("22:00"), 200, h=90)
+charge("steuart", B("19:30"), B("20:00"), (1420, 300), h=290); fight("steuart", B("20:00"), B("21:00"), 150)
+mv("meredith", B("19:30"), B("19:50"), (1220, 760), h=90, state="firing"); fight("meredith", B("19:50"), B("21:00"), 30)
+mv("cutler", B("19:40"), B("20:00"), (1200, 870), h=60, state="firing"); fight("cutler", B("20:00"), B("21:00"), 30)
+# Walker's Stonewall Brigade holds off Gregg's cavalry on Brinkerhoff's Ridge, then crosses after dark
+mv("mcintosh", B("18:30"), B("19:00"), (4350, 980), h=290, state="skirmish"); fight("mcintosh", B("19:00"), B("22:00"), 30, state="skirmish")
+fight("walker", B("18:45"), B("22:00"), 20, state="skirmish")
+fight("hrobertson", B("18:40"), B("21:00"), 5)
+hide("hrobertson", plus(walk("hrobertson", B("22:00"), E_HAN, kmh=5), 1))  # its batteries go with Gregg and Kilpatrick on the 3rd
+back("mcintosh", B("22:00"), B("22:30"), (4750, 760), h=290)
+walk("walker", B("22:10"), (2300, 900), (1800, 450), h=280, kmh=3)
+# East Cemetery Hill: Hays and Hoke "at 8 P.M." charge from the low ground and plant their colors on the lunettes; the
+# cannoneers fight "with handspikes, rammers, and stones"; Carroll's brigade from Ziegler's Grove and Krzyzanowski's
+# regiments retake the guns; repulsed "between 9 and 10 P.M." Avery is mortally wounded; Gordon is halted in support.
+charge("hays", B("20:00"), B("20:25"), (620, 990), h=180); charge("hoke", B("20:00"), B("20:25"), (730, 940), h=200)
+fight("hays", B("20:25"), B("21:00"), 200); fight("hoke", B("20:25"), B("21:00"), 280)
+for id in ("ames", "vongilsa", "xi_art", "i_art", "huntington"): fight(id, B("20:00"), B("21:00"), 30 if id in ("ames", "vongilsa") else 10)
+charge("carroll", B("20:30"), B("20:55"), (400, 800), (600, 1040), h=20); fight("carroll", B("20:55"), B("21:30"), 60)
+charge("krzyzanowski", B("20:35"), B("20:55"), (650, 1100), h=20); fight("krzyzanowski", B("20:55"), B("21:20"), 30)
+back("krzyzanowski", B("21:30"), B("21:50"), (470, 1150), h=0)
+back("hays", B("21:00"), B("21:30"), (600, 1450), h=170, loss=40); back("hoke", B("21:00"), B("21:30"), (820, 1500), h=190, loss=40)
+mv("gordon", B("20:10"), B("20:40"), (900, 1650), h=200); mv("gordon", B("21:30"), B("22:00"), (1050, 1850), h=190)
+# Williams's and Geary's brigades come back "at midnight" to find Johnson in the works, and form a line facing them;
+# Kane "nearly at right angles" to Greene. Perrin and Thomas occupy Long Lane at ten, Ramseur, Doles and Iverson on
+# their left.
+mv("candy", B("23:20"), C("00:00"), (1100, -300), (1220, 450), h=60)
+mv("kane", B("23:30"), C("00:10"), (1100, -300), (1330, 260), h=120)
+mv("mcdougall", B("23:00"), C("00:10"), (600, -900), (1300, -350), (1430, -170), h=40)
+mv("colgrove", B("23:10"), C("00:20"), (600, -950), (1400, -500), (1600, -280), h=20)
+mv("lockwood", B("23:00"), C("00:00"), GRANITE_W, GRANITE_E, (1150, 520), h=80)
+mv("thomas", B("21:40"), B("22:00"), (-450, 700), h=100); mv("perrin", B("21:40"), B("22:00"), (-300, 1000), h=100)
+mv("doles", B("21:30"), B("22:00"), (-80, 1430), h=170); mv("ramseur", B("21:30"), B("22:00"), (-200, 1220), h=150); mv("iverson", B("21:30"), B("22:00"), (50, 1560), h=180)
+
+# ======== 3 July ========
+# Daniel's brigade leaves the town "about 1:30 A.M." and reaches Culp's Hill "about 4 A.M."; O'Neal's "at 2 A.M.",
+# arriving at daybreak; Smith's brigade from the York Pike at daylight. Robertson's 1st Texas and 3rd Arkansas "at 2 A.M."
+# to the spur of Big Round Top.
+mv("daniel", C("01:30"), C("04:00"), (-150, 2000), DIAMOND, *road('hanover', DIAMOND, P['rock_hanover']), (1900, 1100), (1780, 720), h=260)
+mv("oneal", C("02:00"), C("04:30"), (0, 2050), DIAMOND, *road('hanover', DIAMOND, P['rock_hanover']), (1950, 900), (1760, 520), h=270)
+mv("wsmith", C("02:30"), C("04:30"), (2000, 2500), (2000, 1200), (1950, 600), (1720, 220), h=270)
+mv("hoke", C("03:00"), C("03:40"), (900, 2000), h=180)  # "to the railroad cut", about here
+mv("robertson", C("02:00"), C("02:40"), (-650, -2720), h=60)
+mv("walker", C("03:30"), C("04:00"), (1650, 520), h=270)
+# The XII Corps guns on the Baltimore Pike, Power's Hill and McAllister's Hill, placed "before 1 A.M."; "at daylight 26
+# guns opened ... for about 15 minutes", and again "at 5:30 a.m."
+mv("xii_art", C("00:30"), C("01:00"), P['powers_hill'], h=40, state="firing"); mv("fitzhugh", C("00:30"), C("01:00"), (1450, -650), h=40, state="firing")
+for id in ("xii_art", "fitzhugh"):
+    fight(id, C("04:30"), C("04:45"), 5); fight(id, C("05:30"), C("10:30"), 15)
+# "A fierce engagement lasted seven hours." Steuart's and Nicholls's fire from dawn; O'Neal "not actively engaged until
+# 8 A.M."; Walker's and Daniel's brigades strike Greene from the east "around 10 a.m." while Steuart advances against
+# Candy and Kane; Colgrove's 2nd Massachusetts and 27th Indiana charge across the swale at Spangler's Spring "about 10
+# o'clock" and are repulsed by Smith's Virginians behind the stone wall.
+for id, loss in (("steuart", 350), ("nicholls", 150), ("jmjones", 120), ("walker", 100), ("daniel", 100), ("wsmith", 40)): fight(id, C("04:30"), C("09:55"), loss)
+for id, loss in (("greene", 103), ("candy", 120), ("kane", 80), ("lockwood", 100), ("mcdougall", 60)): fight(id, C("04:30"), C("10:30"), loss)
+mv("oneal", C("07:40"), C("08:00"), (1560, 470), h=270, state="firing"); fight("oneal", C("08:00"), C("10:30"), 250)
+mv("shaler", C("07:30"), C("08:00"), GRANITE_W, (1000, 300), h=80)
+mv("paul", C("08:30"), C("09:00"), (900, 650), h=80); mv("baxter", C("08:40"), C("09:10"), (1000, 780), h=80)
+charge("walker", C("09:55"), C("10:10"), (1470, 600), h=270); charge("daniel", C("09:55"), C("10:10"), (1480, 700), h=260)
+charge("steuart", C("09:55"), C("10:10"), (1350, 330), h=270)
+for id, loss in (("walker", 220), ("daniel", 200), ("steuart", 330)): fight(id, C("10:10"), C("10:30"), loss)
+charge("colgrove", C("09:55"), C("10:10"), (1540, 140), h=20); fight("colgrove", C("10:10"), C("10:20"), 250); fight("wsmith", C("10:00"), C("10:20"), 100)
+back("colgrove", C("10:20"), C("10:35"), (1600, -280), h=20)
+# "At 10:30 A.M. the Confederate forces withdrew" to the base of the hill and across Rock Creek; "by 11 o'clock" the
+# works are reoccupied
+for id, p in (("jmjones", (1950, 1150)), ("nicholls", (2050, 950)), ("steuart", (2150, 700)), ("walker", (2100, 1300)), ("daniel", (1950, 1450)), ("oneal", (2200, 1150)), ("wsmith", (2250, 450))):
+    back(id, C("10:30"), C("11:15"), p, h=250)
+mv("shaler", C("11:30"), C("12:10"), GRANITE_W, (300, -300), h=270)
+# Hazard's batteries open on the Confederate guns "at 8 A.M.", until nine. Hays burns the Bliss barn.
+fight("ii_art", C("08:00"), C("09:00"), 10)
+# Pickett "reached the field about 9 A.M.", "near 12 noon took position beyond the crest of the hill where the artillery
+# was placed", and "about 1:30 P.M. formed in an open field east of Spangler's Woods, its right near a barn", Garnett and
+# Kemper in front, Armistead behind. The road from the west is inferred.
+TO_SPANGLER = [*road('fairfield', W_FAIR, (-2400, 1200)), (-2300, 300), (-1800, -150)]
+for id, t0, p in (("kemper", "07:50", (-1750, -350)), ("garnett", "08:00", (-1700, -100)), ("armistead", "08:10", (-1850, -250)), ("dearing", "08:20", (-1650, -600))):
+    enter(id, C(t0), W_FAIR, 90); walk(id, C(t0), *TO_SPANGLER, p, h=80, kmh=3.5)
+for id, p in (("kemper", (-1300, -480)), ("garnett", (-1280, -200)), ("armistead", (-1430, -320))): mv(id, C("13:00"), C("13:30"), p, h=70)
+mv("dearing", C("11:30"), C("12:00"), (-1050, -560), h=75, state="firing")
+# Pettigrew's division "returned to the position it had held the day before"; Lane's and Scales's brigades under Trimble
+# behind its right. Kershaw goes forward from the Peach Orchard at noon and back "at 1 P.M." to Warfield Ridge.
+for id, p in (("brockenbrough", (-1080, 880)), ("davis", (-1090, 640)), ("pettigrew", (-1110, 400)), ("archer", (-1160, 180)),
+              ("lane", (-1380, 330)), ("scales", (-1380, 130))): mv(id, C("10:30"), C("11:30"), p, h=95)
+mv("kershaw", C("12:00"), C("12:20"), (-1050, -1500), h=80); mv("kershaw", C("13:00"), C("13:30"), (-1780, -1500), h=80)
+mv("semmes", C("15:30"), C("16:00"), (-1950, -1650), h=80)
+# The cannonade: "At 1 P.M., Confederates concentrated fire from over 100 guns" for "two hours"; about 150 to 170
+# Confederate guns from the Peach Orchard north along Seminary Ridge, about 80 Union guns in reply
+for id, p, h in (("alexander", (-1150, -1150), 60), ("cabell", (-1280, -1450), 50), ("henry", (-1350, -1750), 40), ("eshleman", (-1000, -820), 70),
+                 ("cutts", (-1250, -60), 80), ("garnett_bn", (-1150, 280), 90), ("poague", (-1050, 520), 95), ("pegram", (-1050, 1050), 100),
+                 ("mcintosh_bn", (-1000, 1250), 110), ("dance", (-900, 1550), 120), ("nelson", (-850, 1750), 125)):
+    mv(id, C("10:00"), C("11:00"), p, h=h, state="line")
+for id in ("alexander", "cabell", "henry", "eshleman", "cutts", "garnett_bn", "poague", "pegram", "mcintosh_bn", "dance", "nelson", "dearing"): fight(id, C("13:00"), C("15:00"), 10)
+mv("mcgilvery", C("05:00"), C("05:30"), P['mcgilvery'], h=260); mv("ransom", C("05:00"), C("05:30"), (-20, -560), h=260)
+for id in ("ii_art", "mcgilvery", "ransom", "huntington", "taft", "xi_art", "i_art", "v_art"): fight(id, C("13:00"), C("14:30"), 30 if id == "ii_art" else 10)
+# Robinson's brigades go to the II Corps' right; Stannard's Vermonters lie forward of the line on its left
+mv("baxter", C("13:40"), C("14:10"), (180, 420), h=270); mv("paul", C("14:30"), C("15:00"), (280, 560), h=270)
+mv("stannard", C("09:00"), C("09:30"), (-150, -450), h=260)
+# "At 3 P.M. it advanced to assault across roughly three-quarters of a mile of open ground." Garnett's and Kemper's lines
+# break at the Emmitsburg Road fences, re-form and reach the wall; Armistead's men go over it into the Angle. Pettigrew's
+# four brigades on the left: Fry's to the wall at the Angle, Marshall's nearly to the wall north of it, Davis's to the
+# wall south of the Bryan barn; Brockenbrough's, on the flank, is struck by the 8th Ohio and falls back first.
+mv("garnett", C("15:00"), C("15:20"), (-470, -120), h=75); charge("garnett", C("15:22"), C("15:32"), (-120, -20), h=70)
+mv("kemper", C("15:00"), C("15:20"), (-500, -330), h=60); charge("kemper", C("15:22"), C("15:32"), (-100, -130), h=55)
+mv("armistead", C("15:02"), C("15:24"), (-520, -200), h=70); charge("armistead", C("15:26"), C("15:36"), (-150, 10), (-60, 40), h=70)
+mv("archer", C("15:00"), C("15:24"), (-500, 120), h=95); charge("archer", C("15:24"), C("15:34"), (-140, 80), h=95)
+mv("pettigrew", C("15:00"), C("15:24"), (-480, 280), h=95); charge("pettigrew", C("15:24"), C("15:34"), (-110, 190), h=95)
+mv("davis", C("15:00"), C("15:24"), (-450, 450), h=95); charge("davis", C("15:24"), C("15:35"), (-80, 300), h=100)
+mv("brockenbrough", C("15:00"), C("15:20"), (-560, 640), h=100, state="firing"); fight("brockenbrough", C("15:20"), C("15:30"), 150)
+back("brockenbrough", C("15:30"), C("15:55"), (-1080, 880), h=100, loss=100, moving="rout")
+mv("lane", C("15:05"), C("15:30"), (-450, 300), h=95); charge("lane", C("15:30"), C("15:38"), (-200, 230), h=95)
+mv("scales", C("15:05"), C("15:30"), (-460, 150), h=90); charge("scales", C("15:30"), C("15:38"), (-230, 120), h=90)
+# Stannard's 13th and 16th Vermont change front and strike Pickett's right
+mv("stannard", C("15:20"), C("15:25"), (-180, -380), h=330, state="firing")
+for id, loss in (("garnett", 900), ("kemper", 350), ("armistead", 1180), ("archer", 270), ("pettigrew", 550), ("davis", 700), ("lane", 400), ("scales", 300)):
+    fight(id, C("15:32"), C("15:45") if id not in ("lane", "scales") else C("15:50"), loss)
+for id, loss in (("webb", 450), ("hall", 350), ("harrow", 420), ("smyth", 350), ("willard", 330), ("stannard", 300), ("ii_art", 60), ("carroll", 20)):
+    fight(id, C("15:15"), C("15:50"), loss)
+for id, p in (("garnett", (-1300, -200)), ("kemper", (-1350, -450)), ("armistead", (-1420, -300)), ("archer", (-1160, 180)), ("pettigrew", (-1110, 400)), ("davis", (-1090, 640))):
+    back(id, C("15:45"), C("16:15"), (-480, (p[1] + 100) / 2), p, h=80, moving="rout", loss=50 if id != "kemper" else 125)
+for id, p in (("lane", (-1380, 330)), ("scales", (-1380, 130))): back(id, C("15:50"), C("16:20"), p, h=95, loss=100 if id == "lane" else 85)
+for id in ("webb", "hall", "harrow", "smyth", "willard"): stand(id, C("16:00"), state="line")
+# Wilcox and Perry advance "after 3:30 P.M." straight ahead in the smoke and are withdrawn; the 16th and 14th Vermont
+# turn on them. Wright's brigade "advanced 600 yards to cover the retreat."
+mv("wilcox", C("15:35"), C("15:55"), (-850, -720), h=90, state="firing"); mv("perry", C("15:35"), C("15:55"), (-800, -520), h=90, state="firing")
+fight("wilcox", C("15:55"), C("16:10"), 150); fight("perry", C("15:55"), C("16:10"), 160)
+mv("stannard", C("15:50"), C("15:55"), (-200, -420), h=230, state="firing"); fight("stannard", C("15:55"), C("16:15"), 20)
+back("wilcox", C("16:10"), C("16:40"), (-1650, -480), h=90, loss=50); back("perry", C("16:10"), C("16:40"), (-1561, -210), h=90, loss=100)
+mv("wright", C("15:45"), C("16:05"), (-830, 120), h=90, state="firing"); back("wright", C("16:30"), C("17:00"), (-1380, 120), h=90)
+# Merritt's brigade "at noon marched four miles on the road to Gettysburg" and fights along the Emmitsburg Road "for four
+# hours"; G. T. Anderson's brigade meets it there. Farnsworth arrives "about 1 P.M." on the Union left south of Bushman's.
+enter("merritt", C("12:45"), S_EMM, 30); walk("merritt", C("12:45"), (-2700, -4500), h=30, kmh=6, state="skirmish")
+mv("gtanderson", C("12:30"), C("13:30"), (-1500, -2700), (-2150, -3500), h=210)
+fight("merritt", C("13:30"), C("15:30"), 40, state="skirmish"); fight("gtanderson", C("13:30"), C("17:30"), 60)
+mv("merritt", C("15:30"), C("16:30"), (-2450, -3900), h=30, state="skirmish"); fight("merritt", C("16:30"), C("17:50"), 30, state="skirmish")
+enter("farnsworth", C("12:40"), (-1100, -4940), 0); walk("farnsworth", C("12:40"), (-1150, -3650), h=0, kmh=6, state="skirmish")
+enter("hrobertson", C("12:50"), (-1100, -4940), 0)
+walk("hrobertson", C("12:50"), (-1300, -3800), h=20, kmh=5, state="firing")
+fight("hrobertson", C("13:30"), C("17:45"), 5)
+# Farnsworth's 18th Pennsylvania, 1st Vermont and 1st West Virginia charge "at 5:30 P.M." through woods and past stone
+# fences into the Plum Run valley south of Devil's Den; Law's and Robertson's men repulse them, and Farnsworth is killed.
+fight("farnsworth", C("13:15"), C("17:25"), 20, state="skirmish")
+charge("farnsworth", C("17:30"), C("17:42"), (-950, -3100), (-800, -2750), h=15)
+fight("law", C("17:35"), C("17:55"), 10); fight("robertson", C("17:35"), C("17:55"), 10)
+back("farnsworth", C("17:45"), C("18:05"), (-1150, -3650), h=15, loss=100)
+# McCandless, with Nevin 200 yards behind, "about 5 P.M." sweeps the Wheatfield and the woods south and west of it, takes
+# 200 prisoners and the 15th Georgia's colors from Benning's brigade
+charge("mccandless", C("17:00"), C("17:40"), (-750, -1800), (-950, -1950), h=240)
+mv("nevin", C("17:05"), C("17:45"), (-650, -1760), h=240)
+fight("benning", C("17:20"), C("17:40"), 100); fight("mccandless", C("17:40"), C("17:50"), 20)
+back("mccandless", C("18:30"), C("19:00"), (-600, -1830), h=250, state="line", moving="column")
+mv("nevin", C("18:30"), C("19:00"), (-300, -1800), h=250)
+# Merritt's fight ends when "heavy rain brought operations to a close"
+hide("merritt", plus(walk("merritt", C("18:00"), S_EMM, kmh=6), 1))
+hide("farnsworth", plus(walk("farnsworth", C("18:30"), (-1100, -4940), kmh=6), 1))
+hide("hrobertson", plus(walk("hrobertson", C("18:30"), (-1100, -4940), kmh=5), 1))
+# East Cavalry Field, off the map's east edge: Custer goes to Gregg on the Hanover Road at eight; McIntosh, J. I. Gregg
+# and Custer turn back Stuart there between one and four. The road from Two Taverns is inferred.
+enter("custer", C("07:30"), (4380, -2700), 20)
+walk("custer", C("07:30"), *road('low_dutch', (4380, -2700), E_LOW_DUTCH), (4900, -800), kmh=8)
+hide("custer", C("08:00"))
+for id in ("mcintosh", "jigregg"): hide(id, plus(walk(id, C("09:00"), (4900, 900), kmh=6), 1))
+# The night of the 3rd: Johnson's division "held it until 10 P.M., when it pulled back to the ridge northwest of town",
+# Rodes's brigades likewise; Thomas "after dark retired to this Ridge"; Benning "late evening" to the Emmitsburg Road
+WEST = [P['rock_hanover'], DIAMOND, (-150, 1990)]
+for n, (id, p) in enumerate((("jmjones", (-850, 2950)), ("nicholls", (-950, 3150)), ("steuart", (-750, 3350)), ("walker", (-1050, 2800)),
+                             ("daniel", (-900, 2550)), ("oneal", (-800, 2750)), ("wsmith", (-1150, 2650)))):
+    walk(id, plus(C("22:00"), n * 6), *WEST, p, h=110, kmh=3)
+for n, (id, p) in enumerate((("doles", (-1000, 2350)), ("ramseur", (-1050, 2150)), ("iverson", (-950, 2700)))):
+    walk(id, plus(C("21:30"), n * 6), (-350, 1700), p, h=110, kmh=3)
+walk("thomas", C("21:00"), (-1050, 900), h=100, kmh=3); walk("perrin", C("21:10"), (-1050, 1150), h=100, kmh=3)
+walk("benning", C("21:00"), (-1600, -2450), h=80, kmh=3)
+
+# ======== 4 July ========
+# Hays and Hoke "at 2 A.M. moved to Seminary Ridge", Gordon "to the Cashtown Road"
+for n, (id, p) in enumerate((("hays", (-1000, 1950)), ("hoke", (-1050, 1750)), ("gordon", (-1200, 2600)))):
+    walk(id, plus(E("02:00"), n * 8), (500, 1700), DIAMOND, (-150, 1990), p, h=100, kmh=3)
+# Slocum's reconnaissance "toward Gettysburg" finds no enemy; Schurz's detachment enters the town and takes "over 300
+# Confederates"; Day's regulars force in the pickets on the Confederate right
+mv("colgrove", E("06:00"), E("07:00"), (1550, 300), (1500, 1300), h=0, state="skirmish")
+mv("mcdougall", E("06:10"), E("07:10"), (1400, 400), (1250, 1400), h=0, state="skirmish")
+mv("krzyzanowski", E("06:00"), E("06:45"), FOOT, (420, 1600), (380, 1900), h=0, state="skirmish")
+mv("day", E("07:00"), E("07:45"), (-450, -2250), (-750, -2350), h=250, state="skirmish")
 
 for id in KEYS:
     if sec(KEYS[id][-1]["t"]) < sec(END): keys(id, [K(END, last(id))])
