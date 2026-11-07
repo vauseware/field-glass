@@ -119,6 +119,13 @@
   "runtime": 925
  },
  {
+  "id": "somme",
+  "name": "The Somme, 1 Jul 1916",
+  "date": "1916-07-01",
+  "war": "World War I",
+  "runtime": 2910
+ },
+ {
   "id": "cantigny",
   "name": "Cantigny, 28–31 May 1918",
   "date": "1918-05-28",
