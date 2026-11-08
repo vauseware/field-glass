@@ -1,4 +1,4 @@
-import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, eventAt, actionBox, advance, defaultSpeed, fmtTime, parseTime, mod } from './sim.js';
+import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, dropAt, eventAt, actionBox, advance, defaultSpeed, fmtTime, parseTime, mod } from './sim.js';
 import { themeFor } from './themes.js';
 import { WARS, showSplash } from './splash.js';
 import { isStatic, canvas as newCanvas } from './themes/paint.js';
@@ -332,7 +332,7 @@ function draw() {
   drawNight(); // the ground darkens; the regiments stay readable above it
   const labels = drawUnits();
   drawSmoke(); drawLabels(labels);
-  for (const f of B.features ?? []) if (f.type === 'airstrike' && t >= f.from && t < f.until) skin.air?.(ctx, V, f, airClock);
+  for (const f of B.features ?? []) if (skin.air && f.air && t >= f.air[0] && t < f.air[1]) skin.air(ctx, V, f, airClock, f.type === 'drop' ? dropAt(f, t, airClock) : null);
   skin.over?.(ctx, V);
   drawPops();
 }
@@ -345,7 +345,7 @@ function drawFeatures() {
     if ((f.from != null && t < f.from) || (f.until != null && t >= f.until)) continue;
     const pts = f.pts ?? f.poly;
     if (pts && !isStatic(f)) skin.feature(ctx, f.type, pts.map(([x, y]) => [w2sx(x), w2sy(y)]), k, !!f.poly);
-    if (f.name && f.at && f.type !== 'airstrike') { // an air strike's name is for the data, not the map
+    if (f.name && f.at && !f.air) {
       const x = w2sx(f.at[0]), y = w2sy(f.at[1]);
       if (x < -300 || x > W + 300 || y < -60 || y > H + 60) continue;
       const w = skin.placeName(ctx, f, x, y) + 6;
@@ -601,6 +601,7 @@ const LEGEND_TEXT = {
   artillery: () => 'Artillery, with its guns.',
   armor: () => 'Armor: a mark for each vehicle.',
   airstrike: () => 'Air attack: bombs bursting round the target.',
+  drop: b => `Airborne landing: aircraft over the zone, a canopy for every ${b.menPerDot} men or a glider each, and the men making for their unit.`,
   skirmish: () => 'Skirmishers and open order: one thin, spread-out rank.',
   rout: () => 'Broken and running: faded.',
   surrender: () => 'Surrendered: grey.',
@@ -669,6 +670,7 @@ function buildLegend(b) {
       [swatch(g => skin.feature(g, k, FEATURE_SWATCH[k], 0.8, ['redoubt', 'camp', 'ship'].includes(k))), say(k)]),
     (b.water != null || feats.has('water')) && [swatch(g => L.swatch.water(g, sheet)), say('water')],
     feats.has('airstrike') && L.swatch.airstrike && [swatch(g => L.swatch.airstrike(g, sheet)), say('airstrike')],
+    feats.has('drop') && L.swatch.drop && [swatch(g => L.swatch.drop(g, sheet)), say('drop')],
     b.fields?.length && [swatch(g => L.swatch.field(g, sheet)), say('field')],
     b.trees?.density && [swatch(g => L.swatch.woods(g, sheet)), say('woods')],
     [swatch(g => L.swatch.contours(g, sheet)), say('contours')],
