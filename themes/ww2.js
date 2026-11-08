@@ -338,9 +338,72 @@ function plane(ctx, s, grow = 0) {
   line(0.12, 0, -0.78, 0, 0.82);
   line(0.08, -0.3, 0.74, 0.3, 0.74);
 }
+const DAKOTA = [[0.12, -1, 0.04, -0.3, -0.1, 0.3, -0.1, 1, 0.04], [0.12, 0, -0.6, 0, 0.75], [0.08, -0.32, 0.68, 0.32, 0.68], [0.09, -0.28, -0.3, -0.28, -0.08], [0.09, 0.28, -0.3, 0.28, -0.08]];
+const HORSA = [[0.15, -1, -0.12, 1, -0.12], [0.13, 0, -0.62, 0, 0.74], [0.09, -0.3, 0.66, 0.3, 0.66]];
+const PASS = [{ stroke: 'rgba(0,0,0,0.28)', grow: 0, throwX: 22, throwY: 30 }, { stroke: 'rgba(236,235,226,0.55)', grow: 2.5, throwX: 0, throwY: 0 }, { stroke: '#262925', grow: 0, throwX: 0, throwY: 0 }];
+const XYH = 3, XYH_ALT = 4;
+function fleet(ctx, V, sh, buf, n, st, s, pass) {
+  const k = s / 2;
+  ctx.strokeStyle = pass.stroke;
+  for (let j = 0; j < sh.length; j++) {
+    const p = sh[j];
+    ctx.lineWidth = p[0] * s + pass.grow; ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const o = i * st, up = st === XYH_ALT ? 0.06 + buf[o + 3] : 1, a = (buf[o + 2] * Math.PI) / 180, c = Math.cos(a), sn = Math.sin(a);
+      const x = V.sx(buf[o]) + pass.throwX * up, y = V.sy(buf[o + 1]) + pass.throwY * up;
+      for (let q = 1; q < p.length; q += 2) { const u = p[q] * k, v = p[q + 1] * k; (q > 1 ? ctx.lineTo : ctx.moveTo).call(ctx, x + u * c - v * sn, y + u * sn + v * c); }
+    }
+    ctx.stroke();
+  }
+}
+const WING = new Float32Array(27), TOW = new Float32Array(27);
+function drop(ctx, V, D) {
+  const night = V.dark > 0.5, sx = V.sx, sy = V.sy, rc = Math.max(3, 5 * V.z), first = night ? 1 : 0;
+  ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  if (D.nChute) {
+    const w = V.B.wind, wl = Math.hypot(w?.x ?? 0, w?.y ?? 0), l = Math.max(4, 7 * V.z), dx = wl ? (w.x / wl) * l : l, dy = wl ? (-w.y / wl) * l : 0;
+    ctx.beginPath();
+    for (let i = 0; i < D.nChute; i++) { const x = sx(D.chutes[2 * i]), y = sy(D.chutes[2 * i + 1]); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); }
+    ctx.lineWidth = Math.max(2, 3 * V.z); ctx.strokeStyle = 'rgba(236,235,226,0.55)'; ctx.stroke();
+  }
+  for (let p = first; p < 3 && D.nGlider; p++) fleet(ctx, V, HORSA, D.gliders, D.nGlider, XYH_ALT, P.clamp(27 * V.z, 9, 30), PASS[p]);
+  if (D.nMen) {
+    const d = Math.max(2.2, 1.8 * V.z); ctx.fillStyle = night ? 'rgba(214,218,200,0.75)' : 'rgba(18,20,14,0.85)';
+    for (let i = 0; i < D.nMen; i++) ctx.fillRect(sx(D.men[2 * i]) - d / 2, sy(D.men[2 * i + 1]) - d / 2, d, d);
+  }
+  for (let p = first; p < 2 && D.nCanopy; p++) {
+    const ox = p ? 0 : 14, oy = p ? 0 : 18;
+    ctx.beginPath();
+    for (let i = 0; i < D.nCanopy; i++) { const o = 3 * i, a = D.canopies[o + 2], r = rc * (1 + 0.6 * a), x = sx(D.canopies[o]) + ox * a, y = sy(D.canopies[o + 1]) + oy * a; ctx.moveTo(x + r, y); ctx.arc(x, y, r, 0, 7); }
+    if (!p) { ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.fill(); continue; }
+    ctx.fillStyle = 'rgba(240,238,228,0.95)'; ctx.fill(); ctx.lineWidth = 0.8; ctx.strokeStyle = '#262925'; ctx.stroke();
+  }
+  if (D.nCraft) {
+    const k = 1 / V.z, glider = D.kind === 'glider';
+    let n = 0;
+    for (let i = 0; i < D.nCraft; i++) {
+      const o = 3 * i, a = (D.craft[o + 2] * Math.PI) / 180, ux = Math.sin(a), uy = Math.cos(a);
+      for (let w = -1; w <= 1; w++) {
+        const back = Math.abs(w) * 30 * k, out = w * 38 * k, q = 3 * n++;
+        WING[q] = D.craft[o] - ux * back + uy * out; WING[q + 1] = D.craft[o + 1] - uy * back - ux * out; WING[q + 2] = TOW[q + 2] = D.craft[o + 2];
+        TOW[q] = WING[q] - ux * 46 * k; TOW[q + 1] = WING[q + 1] - uy * 46 * k;
+      }
+    }
+    if (glider) {
+      ctx.beginPath();
+      for (let q = 0; q < 3 * n; q += 3) { ctx.moveTo(sx(WING[q]), sy(WING[q + 1])); ctx.lineTo(sx(TOW[q]), sy(TOW[q + 1])); }
+      ctx.lineWidth = 0.8; ctx.strokeStyle = '#262925'; ctx.stroke();
+      for (let p = first; p < 3; p++) fleet(ctx, V, HORSA, TOW, n, XYH, 26, PASS[p]);
+    }
+    for (let p = first; p < 3; p++) fleet(ctx, V, DAKOTA, WING, n, XYH, 34, PASS[p]);
+  }
+  ctx.restore();
+}
+
 // An air strike: a flight of three diving across the target on the strike's heading, round and round while it lasts, each
 // with its shadow thrown down and right on the ground below. The app drops the bombs. `clock` is real seconds of play.
-function air(ctx, V, f, clock) {
+function air(ctx, V, f, clock, D) {
+  if (D) return drop(ctx, V, D);
   const h = ((f.h ?? 0) * Math.PI) / 180, dx = Math.sin(h), dy = -Math.cos(h), R = Math.max(280, (f.spread ?? 150) * 8 * V.z);
   const cx = V.sx(f.at[0]), cy = V.sy(f.at[1]);
   ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -430,6 +493,7 @@ export default {
       artillery: () => 'Artillery: guns in their pits.',
       armor: () => 'Armor: a tank for each vehicle, and a tank on its counter.',
       airstrike: () => 'Air attack: dive bombers over the target, and their bombs bursting.',
+      drop: b => `Airborne landing: Dakotas over the zone, a parachute for every ${b.menPerDot} men or a Horsa glider, and the men making for their unit.`,
       rout: () => 'Broken and running: faded.',
       surrender: () => 'Surrendered: grey.',
       fallen: b => `Where men fell: a small cross for every ${b.menPerDot} men a unit lost, in that side’s chinagraph.`,
@@ -448,6 +512,13 @@ export default {
         g.drawImage(sheet.flash, 34, 6, 22, 22); g.drawImage(sheet.smoke.sprites[0], 38, 4, 20, 20);
         g.lineCap = 'round'; g.lineJoin = 'round'; g.translate(20, 13); g.rotate(1.2);
         g.strokeStyle = 'rgba(236,235,226,0.55)'; plane(g, 22, 2); g.strokeStyle = '#262925'; plane(g, 22);
+      },
+      drop: g => {
+        g.lineCap = 'round'; g.lineJoin = 'round';
+        for (const [x, y, r] of [[40, 8, 4.5], [53, 15, 3.6]]) { g.fillStyle = 'rgba(0,0,0,0.25)'; g.beginPath(); g.arc(x + 5, y + 6, r, 0, 7); g.fill(); g.fillStyle = 'rgba(240,238,228,0.95)'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); g.lineWidth = 0.8; g.strokeStyle = '#262925'; g.stroke(); }
+        g.fillStyle = 'rgba(18,20,14,0.85)'; for (const [x, y] of [[36, 23], [44, 25], [50, 22], [58, 24]]) g.fillRect(x - 1.1, y - 1.1, 2.2, 2.2);
+        const at = { sx: x => x, sy: y => y }, craft = Float32Array.of(17, 14, 70);
+        for (let p = 1; p < 3; p++) fleet(g, at, DAKOTA, craft, 1, XYH, 26, PASS[p]);
       },
     },
     extra: (b, sheet) => [

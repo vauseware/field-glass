@@ -78,6 +78,7 @@ export function normalizeBattle(b) {
       a.turnFirst = (a.x !== c.x || a.y !== c.y) && angleGap(c.h, m) < angleGap(a.h, m);
     }
   }
+  planAir(b);
   b.events = (b.events ?? []).map(e => ({ ...e, t: parseTime(e.t) })).sort((p, q) => p.t - q.t);
   b.fallen = fallenMarkers(b);
   b.active = activeSpans(b);
@@ -100,6 +101,7 @@ function activeSpans(b, lead = 90) {
     if (k.length && busy(k[k.length - 1].state)) raw.push([k[k.length - 1].t, b.endT]);
   }
   for (const f of [...(b.features ?? []), ...(b.tints ?? [])]) { if (f.from != null) raw.push([f.from, f.from + 300]); if (f.until != null) raw.push([f.until, f.until + 300]); }
+  for (const f of b.features ?? []) { const P = PLANS.get(f); if (P?.men) raw.push([P.t0, P.formed]); }
   raw.sort((p, q) => p[0] - q[0]);
   const out = [];
   for (const [s, e] of raw) {
@@ -235,7 +237,186 @@ export function fallenMarkers(b) {
       }
     }
   }
+  out.push(...dropFallen(b));
   return out.sort((p, q) => p.t - q.t);
+}
+
+function dropFallen(b) {
+  const out = [];
+  for (const f of b.features ?? []) {
+    const P = PLANS.get(f), m = P?.men;
+    if (m) for (const g of P.groups) for (let i = g.i0; i < g.i1; i++) {
+      const o = i * MAN.stride;
+      if (m[o + MAN.lost]) out.push({ t: m[o + MAN.downAt], x: m[o + MAN.landX], y: m[o + MAN.landY], side: g.side });
+    }
+  }
+  return out;
+}
+
+// A drop is cosmetic: its units' keys alone say where and when each one has formed (docs/adr/0011-airborne-drops.md).
+const CANOPY_FALL_S = 90;
+const GLIDER_APPROACH_S = 90, GLIDER_APPROACH_M = 1500;
+const GLIDER_ROLL_M = 80, GLIDER_ROLL_S = 15;
+const GLIDER_STOP_TO_EXIT_S = 30;
+const GATHER_MIN_S = 90, GATHER_MAX_S = 240;
+const WALK_M_PER_S = 1.2;
+const DRIFT_DOWNWIND_M = 150, THROW_ALONG_TRACK_M = 60;
+const STICK_LENGTH_M = 600;
+const STREAM = { vicsAtOnce: 3, realSecondsPerPass: 9, reachInZoneRadii: 1.8 };
+const MAN = Object.freeze({ landX: 0, landY: 1, releaseX: 2, releaseY: 3, placeX: 4, placeY: 5, downAt: 6, setOffAt: 7, arriveAt: 8, formedAt: 9, lost: 10, stride: 11 });
+const GLIDER = Object.freeze({ approachX: 0, approachY: 1, touchX: 2, touchY: 3, stopX: 4, stopY: 5, touchAt: 6, heading: 7, stride: 8 });
+const PLANS = new WeakMap();
+
+const inZone = (z, x, y) => {
+  let c = false;
+  for (let i = 0, j = z.length - 1; i < z.length; j = i++) { const [xi, yi] = z[i], [xj, yj] = z[j]; if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c; }
+  return c;
+};
+const smooth01 = x => x * x * (3 - 2 * x);
+const arrival = (setOffAt, formedAt, walkM, r) =>
+  Math.max(setOffAt + 1, Math.min(formedAt, setOffAt + Math.max(walkM / WALK_M_PER_S, (formedAt - setOffAt) * (0.4 + 0.6 * r))));
+
+function planAir(b) {
+  const byId = new Map(b.units.map(u => [u.id, u])), taken = new Map(), half = b.extent / 2;
+  for (const f of b.features ?? []) {
+    if (f.type === 'airstrike') f.air = [f.from, f.until];
+    if (f.type !== 'drop') continue;
+    const name = f.name ?? '', P = { problems: [] }, z = f.zone, para = f.kind === 'para', bad = s => P.problems.push(`drop ${name}${s}`);
+    PLANS.set(f, P);
+    if (!(z?.length >= 3)) bad(' needs a zone of three or more corners');
+    else if (b.extent != null) for (const [x, y] of z) if (Math.abs(x) > half || Math.abs(y) > half) bad(`: zone corner off map (${x}, ${y})`);
+    if (!para && f.kind !== 'glider') bad(': kind must be para or glider');
+    if (!(f.from < f.until)) bad(' needs from before until');
+    if (!(f.craft >= 1)) bad(' needs craft');
+    if (P.problems.length) continue;
+
+    const groups = [];
+    for (const id of f.units ?? []) {
+      const u = byId.get(id);
+      if (!u) { bad(`: no unit ${id}`); continue; }
+      if (taken.has(id)) { bad(`: ${id} is already in drop ${taken.get(id)}`); continue; }
+      taken.set(id, name);
+      const k = u.keys, at = k.findLastIndex(q => q.t <= f.from), ri = k.findIndex(q => q.t > f.from && q.state !== 'hidden');
+      if (at >= 0 && k[at].state !== 'hidden') { bad(`: ${id} is on the map when the drop starts`); continue; }
+      if (ri < 0) { bad(`: ${id} never forms up`); continue; }
+      if (k[ri].t < f.until) { bad(`: ${id} forms up at ${fmtTime(k[ri].t)}, before the last of the drop is down at ${fmtTime(f.until)}`); continue; }
+      const pose = unitAt(u, k[ri].t), m = perDot(u, b.menPerDot), dot = dots(u, pose, b.menPerDot);
+      const lost = Math.max(0, Math.floor((ri ? k[ri - 1].strength : u.strength) / m) - Math.floor(pose.strength / m));
+      groups.push({ side: u.side, tu: k[ri].t, dot, lost, n: dot.length / 2 + lost, i0: 0, i1: 0 });
+    }
+
+    const h = ((f.h ?? 0) * Math.PI) / 180, alongX = Math.sin(h), alongY = Math.cos(h), acrossX = alongY, acrossY = -alongX;
+    const ox = z.reduce((s, p) => s + p[0], 0) / z.length, oy = z.reduce((s, p) => s + p[1], 0) / z.length;
+    let aLo = Infinity, aHi = -Infinity, cLo = Infinity, cHi = -Infinity, x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity, spread = 0;
+    for (const [x, y] of z) {
+      const a = (x - ox) * alongX + (y - oy) * alongY, c = (x - ox) * acrossX + (y - oy) * acrossY;
+      aLo = Math.min(aLo, a); aHi = Math.max(aHi, a); cLo = Math.min(cLo, c); cHi = Math.max(cHi, c);
+      x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); spread = Math.max(spread, Math.hypot(x - ox, y - oy));
+    }
+    const rnd = mulberry32(hash(`${name}|${f.from}`)), wl = Math.hypot(b.wind?.x ?? 0, b.wind?.y ?? 0), wx = wl && b.wind.x / wl, wy = wl && b.wind.y / wl;
+    const pointInZone = propose => {
+      for (let i = 0; i < 64; i++) { const p = i < 32 ? propose() : [x0 + rnd() * (x1 - x0), y0 + rnd() * (y1 - y0)]; if (inZone(z, p[0], p[1])) return p; }
+      return [ox, oy];
+    };
+    const nl = Math.max(1, Math.min(f.craft, Math.round((cHi - cLo) / 120))), lanes = Float64Array.from({ length: nl }, (_, i) => 0.8 * (cLo + ((cHi - cLo) * (i + 0.5)) / nl));
+    const K = para ? 0 : f.craft, gl = new Float64Array(K * GLIDER.stride);
+    for (let g = 0; g < K; g++) {
+      const tk = f.from + ((g + rnd()) / K) * (f.until - f.from), [lx, ly] = pointInZone(() => [x0 + rnd() * (x1 - x0), y0 + rnd() * (y1 - y0)]);
+      const gh = h + (rnd() - 0.5) * 0.7, gx = Math.sin(gh), gy = Math.cos(gh), side = (rnd() - 0.5) * 200, o = g * GLIDER.stride;
+      gl[o + GLIDER.approachX] = lx - gx * GLIDER_APPROACH_M + acrossX * side; gl[o + GLIDER.approachY] = ly - gy * GLIDER_APPROACH_M + acrossY * side;
+      gl[o + GLIDER.touchX] = lx; gl[o + GLIDER.touchY] = ly;
+      gl[o + GLIDER.stopX] = lx + gx * GLIDER_ROLL_M; gl[o + GLIDER.stopY] = ly + gy * GLIDER_ROLL_M;
+      gl[o + GLIDER.touchAt] = tk; gl[o + GLIDER.heading] = (gh * 180) / Math.PI;
+    }
+    const len = Math.min(STICK_LENGTH_M, aHi - aLo), sticks = Float64Array.from({ length: para ? f.craft : 0 }, () => aLo + rnd() * (aHi - aLo - len));
+    const N = groups.reduce((s, g) => s + g.n, 0), men = new Float64Array(N * MAN.stride);
+    let s = 0;
+    for (const g of groups) {
+      g.i0 = s;
+      for (let j = 0, d = 0; j < g.n; j++, s++) {
+        const slot = (s + rnd()) / N, lost = Math.floor(((j + 1) * g.lost) / g.n) > Math.floor((j * g.lost) / g.n);
+        let lx, ly, rx, ry, tl;
+        if (para) {
+          const k = slot * f.craft, st = Math.floor(k), lane = lanes[st % nl] + (rnd() - 0.5) * 50, a0 = sticks[st] + (k - st) * len + (rnd() - 0.5) * 40;
+          let tries = 0;
+          [lx, ly] = pointInZone(() => { const a = tries++ ? aLo + rnd() * (aHi - aLo) : a0; return [ox + alongX * a + acrossX * lane, oy + alongY * a + acrossY * lane]; });
+          tl = f.from + slot * (f.until - f.from);
+          rx = lx - wx * DRIFT_DOWNWIND_M - alongX * THROW_ALONG_TRACK_M; ry = ly - wy * DRIFT_DOWNWIND_M - alongY * THROW_ALONG_TRACK_M;
+        } else {
+          const o = Math.floor(slot * K) * GLIDER.stride;
+          lx = rx = gl[o + GLIDER.stopX] + (rnd() - 0.5) * 30; ly = ry = gl[o + GLIDER.stopY] + (rnd() - 0.5) * 30;
+          tl = gl[o + GLIDER.touchAt] + GLIDER_ROLL_S + GLIDER_STOP_TO_EXIT_S + rnd() * 60;
+        }
+        const dx = lost ? lx : g.dot[2 * d], dy = lost ? ly : g.dot[2 * d + 1];
+        if (!lost) d++;
+        const tg = Math.max(tl, Math.min(tl + GATHER_MIN_S + rnd() * (GATHER_MAX_S - GATHER_MIN_S), (tl + g.tu) / 2));
+        const ta = arrival(tg, g.tu, Math.hypot(dx - lx, dy - ly), rnd()), o = s * MAN.stride;
+        men[o + MAN.landX] = lx; men[o + MAN.landY] = ly; men[o + MAN.releaseX] = rx; men[o + MAN.releaseY] = ry;
+        men[o + MAN.placeX] = dx; men[o + MAN.placeY] = dy;
+        men[o + MAN.downAt] = tl; men[o + MAN.setOffAt] = tg; men[o + MAN.arriveAt] = ta; men[o + MAN.formedAt] = g.tu; men[o + MAN.lost] = +lost;
+      }
+      g.i1 = s;
+    }
+    const formed = Math.max(f.until, ...groups.map(g => g.tu));
+    Object.assign(P, { para, until: f.until, t0: f.from - (para ? CANOPY_FALL_S : GLIDER_APPROACH_S), formed, ox, oy, alongX, alongY, acrossX, acrossY, h: f.h ?? 0,
+      reach: spread * STREAM.reachInZoneRadii, lanes, nl, gl, k: K, men, groups,
+      out: { kind: f.kind, craft: new Float32Array(STREAM.vicsAtOnce * 3), nCraft: 0, canopies: new Float32Array(N * 3), nCanopy: 0, chutes: new Float32Array(N * 2), nChute: 0,
+        gliders: new Float32Array(K * 4), nGlider: 0, men: new Float32Array(N * 2), nMen: 0 } });
+    f.air = [P.t0, formed];
+  }
+}
+
+/**
+ * Drop `f` at battle time t, in world metres, or null outside f.air. Everything on or over the ground is pure in t; only
+ * the transports fly on `clock` (real seconds of play), as an air strike's aircraft do. Writes into the plan's own frame
+ * and returns it: read it before the next call for the same drop.
+ * @typedef {{ kind: 'para'|'glider',
+ *   craft: Float32Array, nCraft: number,       // [x, y, h] the lead aircraft of each vic, while the drop lasts
+ *   canopies: Float32Array, nCanopy: number,   // [x, y, alt] a canopy in the air for each dot's men, alt 1 at release, 0 down
+ *   chutes: Float32Array, nChute: number,      // [x, y] a canopy on the ground where its men came down
+ *   gliders: Float32Array, nGlider: number,    // [x, y, h, alt] a glider on its final approach (alt > 0), rolling out or standing
+ *   men: Float32Array, nMen: number }} DropFrame // [x, y] a dot's men on the ground, from where they came down to their place
+ * @returns {DropFrame | null}
+ */
+export function dropAt(f, t, clock) {
+  const P = PLANS.get(f);
+  if (!P?.out || t < P.t0 || t >= P.formed) return null;
+  const D = P.out, m = P.men, gl = P.gl, { vicsAtOnce, realSecondsPerPass } = STREAM;
+  D.nCraft = D.nCanopy = D.nChute = D.nGlider = D.nMen = 0;
+  if (t < P.until) for (let v = 0; v < vicsAtOnce; v++) {
+    const d = (((clock / realSecondsPerPass + v / vicsAtOnce) % 1) * 2 - 1) * P.reach, c = P.lanes[Math.floor(((v + 0.5) / vicsAtOnce) * P.nl)], w = D.nCraft++ * 3;
+    D.craft[w] = P.ox + P.alongX * d + P.acrossX * c; D.craft[w + 1] = P.oy + P.alongY * d + P.acrossY * c; D.craft[w + 2] = P.h;
+  }
+  for (let g = 0; g < P.k; g++) {
+    const o = g * GLIDER.stride, tk = gl[o + GLIDER.touchAt];
+    if (t < tk - GLIDER_APPROACH_S) continue;
+    const alt = t < tk ? (tk - t) / GLIDER_APPROACH_S : 0, e = t < tk ? 0 : Math.min(1, (t - tk) / GLIDER_ROLL_S), w = D.nGlider++ * 4;
+    const tx = gl[o + GLIDER.touchX], ty = gl[o + GLIDER.touchY];
+    D.gliders[w] = alt ? tx + (gl[o + GLIDER.approachX] - tx) * alt : tx + (gl[o + GLIDER.stopX] - tx) * e;
+    D.gliders[w + 1] = alt ? ty + (gl[o + GLIDER.approachY] - ty) * alt : ty + (gl[o + GLIDER.stopY] - ty) * e;
+    D.gliders[w + 2] = gl[o + GLIDER.heading]; D.gliders[w + 3] = alt;
+  }
+  for (let gi = 0; gi < P.groups.length; gi++) {
+    const g = P.groups[gi];
+    if (!P.para && t >= g.tu) continue;
+    for (let i = g.i0; i < g.i1; i++) {
+      const o = i * MAN.stride, tl = m[o + MAN.downAt], lx = m[o + MAN.landX], ly = m[o + MAN.landY];
+      if (P.para) {
+        if (t < tl - CANOPY_FALL_S) continue;
+        if (t < tl) {
+          const alt = (tl - t) / CANOPY_FALL_S, w = D.nCanopy++ * 3;
+          D.canopies[w] = lx + (m[o + MAN.releaseX] - lx) * alt; D.canopies[w + 1] = ly + (m[o + MAN.releaseY] - ly) * alt; D.canopies[w + 2] = alt;
+          continue;
+        }
+        const w = D.nChute++ * 2;
+        D.chutes[w] = lx; D.chutes[w + 1] = ly;
+      } else if (t < tl) continue;
+      if (m[o + MAN.lost] || t >= m[o + MAN.formedAt]) continue;
+      const tg = m[o + MAN.setOffAt], ta = m[o + MAN.arriveAt], e = t <= tg ? 0 : t >= ta ? 1 : smooth01((t - tg) / (ta - tg)), w = D.nMen++ * 2;
+      D.men[w] = lx + (m[o + MAN.placeX] - lx) * e; D.men[w + 1] = ly + (m[o + MAN.placeY] - ly) * e;
+    }
+  }
+  return D;
 }
 
 // Where a unit went, as runs of [t, x, y] vertices: positions are straight lines between keys, so the keys are the
@@ -283,6 +464,7 @@ export function validate(b, terrain) {
     }
     if (f.type === 'smoke' && !(f.at && f.rate > 0)) p.push(`smoke feature ${f.name ?? ''} needs at and rate`);
     if (f.type === 'airstrike' && !(f.at && f.from != null && f.until != null)) p.push(`airstrike ${f.name ?? ''} needs at, from and until`);
+    if (f.type === 'drop') p.push(...(PLANS.get(f)?.problems ?? []));
   }
   for (const e of b.events) {
     if (e.t < b.startT || e.t > b.endT) p.push(`event "${e.title}": outside battle clock`);

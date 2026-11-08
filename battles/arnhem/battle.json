@@ -1646,6 +1646,201 @@
    "until": "1944-09-21 23:59"
   },
   {
+   "type": "drop",
+   "kind": "para",
+   "name": "21st Independent Parachute Company on LZ-Z",
+   "zone": [
+    [
+     -3187,
+     -42
+    ],
+    [
+     -1906,
+     184
+    ],
+    [
+     -2045,
+     972
+    ],
+    [
+     -3326,
+     746
+    ]
+   ],
+   "h": 40,
+   "craft": 4,
+   "units": [
+    "pf_z"
+   ],
+   "from": "1944-09-17 12:40",
+   "until": "1944-09-17 12:42"
+  },
+  {
+   "type": "drop",
+   "kind": "para",
+   "name": "21st Independent Parachute Company on LZ-S",
+   "zone": [
+    [
+     -2604,
+     1555
+    ],
+    [
+     -1251,
+     1917
+    ],
+    [
+     -1510,
+     2883
+    ],
+    [
+     -2863,
+     2521
+    ]
+   ],
+   "h": 40,
+   "craft": 4,
+   "units": [
+    "pf_s"
+   ],
+   "from": "1944-09-17 12:40",
+   "until": "1944-09-17 12:42"
+  },
+  {
+   "type": "drop",
+   "kind": "para",
+   "name": "21st Independent Parachute Company on DZ-X",
+   "zone": [
+    [
+     -4724,
+     -231
+    ],
+    [
+     -3345,
+     12
+    ],
+    [
+     -3502,
+     899
+    ],
+    [
+     -4881,
+     656
+    ]
+   ],
+   "h": 40,
+   "craft": 4,
+   "units": [
+    "pf_x"
+   ],
+   "from": "1944-09-17 12:40",
+   "until": "1944-09-17 12:42"
+  },
+  {
+   "type": "drop",
+   "kind": "glider",
+   "name": "1st Airlanding Brigade on LZ-S",
+   "zone": [
+    [
+     -2604,
+     1555
+    ],
+    [
+     -1251,
+     1917
+    ],
+    [
+     -1510,
+     2883
+    ],
+    [
+     -2863,
+     2521
+    ]
+   ],
+   "h": 40,
+   "craft": 132,
+   "units": [
+    "st1",
+    "border_hq",
+    "border_a",
+    "border_b",
+    "border_c",
+    "border_d",
+    "gp1",
+    "kosb"
+   ],
+   "from": "1944-09-17 13:00",
+   "until": "1944-09-17 13:35"
+  },
+  {
+   "type": "drop",
+   "kind": "glider",
+   "name": "Division HQ, the Reconnaissance Squadron and the Light Regiment on LZ-Z",
+   "zone": [
+    [
+     -3187,
+     -42
+    ],
+    [
+     -1906,
+     184
+    ],
+    [
+     -2045,
+     972
+    ],
+    [
+     -3326,
+     746
+    ]
+   ],
+   "h": 40,
+   "craft": 143,
+   "units": [
+    "bty1",
+    "divhq",
+    "recce",
+    "bty3"
+   ],
+   "from": "1944-09-17 13:19",
+   "until": "1944-09-17 13:45"
+  },
+  {
+   "type": "drop",
+   "kind": "para",
+   "name": "1st Parachute Brigade on DZ-X",
+   "zone": [
+    [
+     -4724,
+     -231
+    ],
+    [
+     -3345,
+     12
+    ],
+    [
+     -3502,
+     899
+    ],
+    [
+     -4881,
+     656
+    ]
+   ],
+   "h": 40,
+   "craft": 143,
+   "units": [
+    "p2",
+    "p2b",
+    "p2c",
+    "p3",
+    "p3c",
+    "p1"
+   ],
+   "from": "1944-09-17 13:50",
+   "until": "1944-09-17 14:08"
+  },
+  {
    "type": "airstrike",
    "name": "Me 109s over LZ-Z",
    "at": [
@@ -1656,6 +1851,129 @@
    "h": 250,
    "from": "1944-09-18 11:00",
    "until": "1944-09-18 11:20"
+  },
+  {
+   "type": "drop",
+   "kind": "para",
+   "name": "4th Parachute Brigade on DZ-Y",
+   "zone": [
+    [
+     -7647,
+     3146
+    ],
+    [
+     -5579,
+     3898
+    ],
+    [
+     -5955,
+     4932
+    ],
+    [
+     -7950,
+     4180
+    ]
+   ],
+   "h": 90,
+   "craft": 124,
+   "units": [
+    "p156",
+    "p10",
+    "p11"
+   ],
+   "from": "1944-09-18 15:09",
+   "until": "1944-09-18 15:18"
+  },
+  {
+   "type": "drop",
+   "kind": "glider",
+   "name": "2nd South Staffords' second half on LZ-S",
+   "zone": [
+    [
+     -2604,
+     1555
+    ],
+    [
+     -1251,
+     1917
+    ],
+    [
+     -1510,
+     2883
+    ],
+    [
+     -2863,
+     2521
+    ]
+   ],
+   "h": 40,
+   "craft": 69,
+   "units": [
+    "st2"
+   ],
+   "from": "1944-09-18 15:00",
+   "until": "1944-09-18 15:30"
+  },
+  {
+   "type": "drop",
+   "kind": "glider",
+   "name": "The second lift's gliders on LZ-X",
+   "zone": [
+    [
+     -4724,
+     -231
+    ],
+    [
+     -3345,
+     12
+    ],
+    [
+     -3502,
+     899
+    ],
+    [
+     -4881,
+     656
+    ]
+   ],
+   "h": 40,
+   "craft": 204,
+   "units": [
+    "gp2",
+    "bty2"
+   ],
+   "from": "1944-09-18 15:00",
+   "until": "1944-09-18 15:30"
+  },
+  {
+   "type": "drop",
+   "kind": "glider",
+   "name": "Polish gliders on LZ-L",
+   "zone": [
+    [
+     840,
+     443
+    ],
+    [
+     1656,
+     823
+    ],
+    [
+     1360,
+     1457
+    ],
+    [
+     544,
+     1077
+    ]
+   ],
+   "h": 40,
+   "craft": 30,
+   "units": [
+    "pol_gl"
+   ],
+   "from": "1944-09-19 14:00",
+   "until": "1944-09-19 14:10"
   },
   {
    "type": "smoke",
@@ -1690,6 +2008,38 @@
    "spread": 200,
    "from": "1944-09-20 18:00",
    "until": "1944-09-20 20:00"
+  },
+  {
+   "type": "drop",
+   "kind": "para",
+   "name": "1st Polish Independent Parachute Brigade on DZ-K",
+   "zone": [
+    [
+     192,
+     -3448
+    ],
+    [
+     1400,
+     -3888
+    ],
+    [
+     1495,
+     -5513
+    ],
+    [
+     -220,
+     -5713
+    ]
+   ],
+   "h": 60,
+   "craft": 72,
+   "units": [
+    "pol2",
+    "pol3",
+    "pol_hq"
+   ],
+   "from": "1944-09-21 17:15",
+   "until": "1944-09-21 17:25"
   },
   {
    "type": "smoke",
@@ -1805,7 +2155,7 @@
      "strength": 62
     },
     {
-     "t": "1944-09-17 12:40",
+     "t": "1944-09-17 12:55",
      "x": -2616,
      "y": 465,
      "h": 90,
@@ -2034,7 +2384,7 @@
      "state": "hidden"
     },
     {
-     "t": "1944-09-17 12:40",
+     "t": "1944-09-17 12:55",
      "x": -2057,
      "y": 2219,
      "h": 90,
@@ -2102,7 +2452,7 @@
      "state": "hidden"
     },
     {
-     "t": "1944-09-17 12:40",
+     "t": "1944-09-17 12:55",
      "x": -4113,
      "y": 334,
      "h": 90,
@@ -2168,18 +2518,6 @@
      "y": 0,
      "h": 0,
      "state": "hidden"
-    },
-    {
-     "t": "1944-09-17 13:19",
-     "x": -2516,
-     "y": 565,
-     "h": 90,
-     "state": "line"
-    },
-    {
-     "t": "1944-09-17 13:59",
-     "x": -2516,
-     "y": 565
     },
     {
      "t": "1944-09-17 14:00",
@@ -2375,7 +2713,7 @@
      "state": "hidden"
     },
     {
-     "t": "1944-09-17 13:40",
+     "t": "1944-09-17 15:30",
      "x": -2766,
      "y": 665,
      "h": 90,
@@ -2640,49 +2978,7 @@
      "strength": 548
     },
     {
-     "t": "1944-09-17 14:03",
-     "x": -4113,
-     "y": 584,
-     "h": 90,
-     "state": "line",
-     "strength": 548
-    },
-    {
-     "t": "1944-09-17 14:29",
-     "x": -4113,
-     "y": 584,
-     "strength": 548
-    },
-    {
-     "t": "1944-09-17 14:30",
-     "x": -4113,
-     "y": 584,
-     "state": "column",
-     "strength": 548
-    },
-    {
-     "t": "1944-09-17 14:34",
-     "x": -4113,
-     "y": 584,
-     "strength": 548
-    },
-    {
-     "t": "1944-09-17 14:35",
-     "x": -4113,
-     "y": 584,
-     "h": 77,
-     "state": "column",
-     "strength": 548
-    },
-    {
-     "t": "1944-09-17 14:45:52",
-     "x": -3406,
-     "y": 742,
-     "h": 77,
-     "strength": 548
-    },
-    {
-     "t": "1944-09-17 14:56:43",
+     "t": "1944-09-17 14:45",
      "x": -2700,
      "y": 900,
      "h": 60,
@@ -3224,23 +3520,10 @@
      "strength": 625
     },
     {
-     "t": "1944-09-17 13:55",
+     "t": "1944-09-17 14:45",
      "x": -4313,
      "y": 134,
      "h": 120,
-     "state": "line",
-     "strength": 625
-    },
-    {
-     "t": "1944-09-17 14:29",
-     "x": -4313,
-     "y": 134,
-     "strength": 625
-    },
-    {
-     "t": "1944-09-17 14:30",
-     "x": -4313,
-     "y": 134,
      "state": "column",
      "strength": 625
     },
@@ -3768,23 +4051,10 @@
      "strength": 120
     },
     {
-     "t": "1944-09-17 13:56",
+     "t": "1944-09-17 14:45",
      "x": -4563,
      "y": 284,
      "h": 120,
-     "state": "line",
-     "strength": 120
-    },
-    {
-     "t": "1944-09-17 14:29",
-     "x": -4563,
-     "y": 284,
-     "strength": 120
-    },
-    {
-     "t": "1944-09-17 14:30",
-     "x": -4563,
-     "y": 284,
      "state": "column",
      "strength": 120
     },
@@ -4083,23 +4353,10 @@
      "strength": 120
     },
     {
-     "t": "1944-09-17 13:57",
+     "t": "1944-09-17 14:45",
      "x": -4163,
      "y": -16,
      "h": 120,
-     "state": "line",
-     "strength": 120
-    },
-    {
-     "t": "1944-09-17 14:29",
-     "x": -4163,
-     "y": -16,
-     "strength": 120
-    },
-    {
-     "t": "1944-09-17 14:30",
-     "x": -4163,
-     "y": -16,
      "state": "column",
      "strength": 120
     },
@@ -4395,23 +4652,10 @@
      "strength": 543
     },
     {
-     "t": "1944-09-17 14:00",
+     "t": "1944-09-17 14:45",
      "x": -3813,
      "y": 334,
      "h": 90,
-     "state": "line",
-     "strength": 543
-    },
-    {
-     "t": "1944-09-17 14:29",
-     "x": -3813,
-     "y": 334,
-     "strength": 543
-    },
-    {
-     "t": "1944-09-17 14:30",
-     "x": -3813,
-     "y": 334,
      "state": "column",
      "strength": 543
     },
@@ -4933,21 +5177,10 @@
      "state": "hidden"
     },
     {
-     "t": "1944-09-17 14:01",
+     "t": "1944-09-17 14:45",
      "x": -3613,
      "y": 534,
      "h": 90,
-     "state": "line"
-    },
-    {
-     "t": "1944-09-17 14:29",
-     "x": -3613,
-     "y": 534
-    },
-    {
-     "t": "1944-09-17 14:30",
-     "x": -3613,
-     "y": 534,
      "state": "column"
     },
     {
@@ -5129,18 +5362,6 @@
      "state": "hidden"
     },
     {
-     "t": "1944-09-17 13:15",
-     "x": -1857,
-     "y": 2069,
-     "h": 200,
-     "state": "line"
-    },
-    {
-     "t": "1944-09-17 13:39",
-     "x": -1857,
-     "y": 2069
-    },
-    {
      "t": "1944-09-17 13:40",
      "x": -1857,
      "y": 2069,
@@ -5269,20 +5490,6 @@
      "y": 0,
      "h": 0,
      "state": "hidden",
-     "strength": 150
-    },
-    {
-     "t": "1944-09-17 13:15",
-     "x": -1657,
-     "y": 2319,
-     "h": 200,
-     "state": "line",
-     "strength": 150
-    },
-    {
-     "t": "1944-09-17 13:39",
-     "x": -1657,
-     "y": 2319,
      "strength": 150
     },
     {
@@ -5624,20 +5831,6 @@
      "strength": 150
     },
     {
-     "t": "1944-09-17 13:16",
-     "x": -2457,
-     "y": 2119,
-     "h": 200,
-     "state": "line",
-     "strength": 150
-    },
-    {
-     "t": "1944-09-17 13:39",
-     "x": -2457,
-     "y": 2119,
-     "strength": 150
-    },
-    {
      "t": "1944-09-17 13:40",
      "x": -2457,
      "y": 2119,
@@ -5936,20 +6129,6 @@
      "y": 0,
      "h": 0,
      "state": "hidden",
-     "strength": 150
-    },
-    {
-     "t": "1944-09-17 13:17",
-     "x": -2057,
-     "y": 1919,
-     "h": 200,
-     "state": "line",
-     "strength": 150
-    },
-    {
-     "t": "1944-09-17 13:39",
-     "x": -2057,
-     "y": 1919,
      "strength": 150
     },
     {
@@ -6274,20 +6453,6 @@
      "y": 0,
      "h": 0,
      "state": "hidden",
-     "strength": 150
-    },
-    {
-     "t": "1944-09-17 13:18",
-     "x": -2357,
-     "y": 2519,
-     "h": 200,
-     "state": "line",
-     "strength": 150
-    },
-    {
-     "t": "1944-09-17 13:39",
-     "x": -2357,
-     "y": 2519,
      "strength": 150
     },
     {
@@ -6617,20 +6782,6 @@
      "y": 0,
      "h": 0,
      "state": "hidden",
-     "strength": 380
-    },
-    {
-     "t": "1944-09-17 13:00",
-     "x": -2257,
-     "y": 2369,
-     "h": 120,
-     "state": "line",
-     "strength": 380
-    },
-    {
-     "t": "1944-09-17 13:39",
-     "x": -2257,
-     "y": 2369,
      "strength": 380
     },
     {
@@ -7156,7 +7307,7 @@
      "strength": 380
     },
     {
-     "t": "1944-09-18 15:10",
+     "t": "1944-09-18 16:00",
      "x": -1757,
      "y": 2219,
      "h": 120,
@@ -7545,7 +7696,7 @@
      "strength": 615
     },
     {
-     "t": "1944-09-17 13:30",
+     "t": "1944-09-17 14:30",
      "x": -1757,
      "y": 2569,
      "h": 300,
@@ -8182,18 +8333,6 @@
      "state": "hidden"
     },
     {
-     "t": "1944-09-17 13:20",
-     "x": -2157,
-     "y": 2619,
-     "h": 180,
-     "state": "line"
-    },
-    {
-     "t": "1944-09-17 13:59",
-     "x": -2157,
-     "y": 2619
-    },
-    {
      "t": "1944-09-17 14:00",
      "x": -2157,
      "y": 2619,
@@ -8384,18 +8523,6 @@
      "state": "hidden"
     },
     {
-     "t": "1944-09-18 15:12",
-     "x": -3913,
-     "y": 134,
-     "h": 90,
-     "state": "line"
-    },
-    {
-     "t": "1944-09-18 15:59",
-     "x": -3913,
-     "y": 134
-    },
-    {
      "t": "1944-09-18 16:00",
      "x": -3913,
      "y": 134,
@@ -8522,20 +8649,6 @@
      "y": 0,
      "h": 0,
      "state": "hidden",
-     "strength": 124
-    },
-    {
-     "t": "1944-09-17 13:15",
-     "x": -2916,
-     "y": 365,
-     "h": 90,
-     "state": "line",
-     "strength": 124
-    },
-    {
-     "t": "1944-09-17 13:59",
-     "x": -2916,
-     "y": 365,
      "strength": 124
     },
     {
@@ -8748,20 +8861,6 @@
      "strength": 124
     },
     {
-     "t": "1944-09-18 15:14",
-     "x": -4413,
-     "y": 434,
-     "h": 90,
-     "state": "line",
-     "strength": 124
-    },
-    {
-     "t": "1944-09-18 16:59",
-     "x": -4413,
-     "y": 434,
-     "strength": 124
-    },
-    {
      "t": "1944-09-18 17:00",
      "x": -4413,
      "y": 434,
@@ -8936,26 +9035,7 @@
      "state": "hidden"
     },
     {
-     "t": "1944-09-17 13:45",
-     "x": -2316,
-     "y": 315,
-     "h": 90,
-     "state": "line"
-    },
-    {
-     "t": "1944-09-17 14:19",
-     "x": -2316,
-     "y": 315
-    },
-    {
-     "t": "1944-09-17 14:20",
-     "x": -2316,
-     "y": 315,
-     "h": 225,
-     "state": "column"
-    },
-    {
-     "t": "1944-09-17 14:22:08",
+     "t": "1944-09-17 15:00",
      "x": -2417,
      "y": 215,
      "h": 80,
@@ -9123,46 +9203,11 @@
      "strength": 621
     },
     {
-     "t": "1944-09-18 15:09",
-     "x": -6501,
-     "y": 4289,
-     "h": 90,
-     "state": "line",
-     "strength": 621
-    },
-    {
-     "t": "1944-09-18 15:20",
-     "x": -6501,
-     "y": 4289,
-     "strength": 611
-    },
-    {
-     "t": "1944-09-18 15:39",
-     "x": -6501,
-     "y": 4289,
-     "strength": 611
-    },
-    {
      "t": "1944-09-18 15:40",
-     "x": -6501,
-     "y": 4289,
-     "state": "column",
-     "strength": 611
-    },
-    {
-     "t": "1944-09-18 15:41",
-     "x": -6501,
-     "y": 4289,
-     "h": 262,
-     "state": "column",
-     "strength": 611
-    },
-    {
-     "t": "1944-09-18 15:53:44",
      "x": -7341,
      "y": 4166,
      "h": 90,
-     "state": "line",
+     "state": "column",
      "strength": 611
     },
     {
@@ -9629,46 +9674,11 @@
      "strength": 582
     },
     {
-     "t": "1944-09-18 15:11",
-     "x": -7101,
-     "y": 4039,
-     "h": 90,
-     "state": "line",
-     "strength": 582
-    },
-    {
-     "t": "1944-09-18 15:20",
-     "x": -7101,
-     "y": 4039,
-     "strength": 570
-    },
-    {
-     "t": "1944-09-18 15:39",
-     "x": -7101,
-     "y": 4039,
-     "strength": 570
-    },
-    {
      "t": "1944-09-18 15:40",
-     "x": -7101,
-     "y": 4039,
-     "state": "column",
-     "strength": 570
-    },
-    {
-     "t": "1944-09-18 15:41",
-     "x": -7101,
-     "y": 4039,
-     "h": 137,
-     "state": "column",
-     "strength": 570
-    },
-    {
-     "t": "1944-09-18 15:44:32",
      "x": -6941,
      "y": 3866,
      "h": 90,
-     "state": "line",
+     "state": "column",
      "strength": 570
     },
     {
@@ -10084,154 +10094,141 @@
      "strength": 571
     },
     {
-     "t": "1944-09-18 15:13",
-     "x": -6301,
-     "y": 3789,
+     "t": "1944-09-18 15:45",
+     "x": -5028,
+     "y": 2771,
      "h": 120,
      "state": "line",
-     "strength": 571
-    },
-    {
-     "t": "1944-09-18 15:20",
-     "x": -6301,
-     "y": 3789,
      "strength": 561
     },
     {
      "t": "1944-09-18 17:29",
-     "x": -6301,
-     "y": 3789,
+     "x": -5028,
+     "y": 2771,
      "strength": 561
     },
     {
      "t": "1944-09-18 17:30",
-     "x": -6301,
-     "y": 3789,
-     "h": 108,
+     "x": -5028,
+     "y": 2771,
+     "h": 51,
      "state": "column",
      "strength": 561
     },
     {
-     "t": "1944-09-18 17:46:15",
-     "x": -5400,
-     "y": 3494,
-     "h": 108,
-     "strength": 561
-    },
-    {
-     "t": "1944-09-18 18:02:29",
+     "t": "1944-09-18 17:41:40",
      "x": -4500,
      "y": 3200,
      "h": 121,
      "strength": 561
     },
     {
-     "t": "1944-09-18 18:22:29",
+     "t": "1944-09-18 18:01:39",
      "x": -3500,
      "y": 2600,
      "h": 121,
      "strength": 561
     },
     {
-     "t": "1944-09-18 18:42:28",
+     "t": "1944-09-18 18:21:39",
      "x": -2500,
      "y": 2000,
      "h": 143,
      "strength": 561
     },
     {
-     "t": "1944-09-18 18:59:51",
+     "t": "1944-09-18 18:39:02",
      "x": -1892,
      "y": 1188,
      "h": 151,
      "strength": 561
     },
     {
-     "t": "1944-09-18 19:12:33",
+     "t": "1944-09-18 18:51:44",
      "x": -1532,
      "y": 542,
      "h": 151,
      "strength": 561
     },
     {
-     "t": "1944-09-18 19:25:14",
+     "t": "1944-09-18 19:04:25",
      "x": -1171,
      "y": -105,
      "h": 166,
      "strength": 561
     },
     {
-     "t": "1944-09-18 19:38:01",
+     "t": "1944-09-18 19:17:11",
      "x": -995,
      "y": -829,
      "h": 76,
      "strength": 561
     },
     {
-     "t": "1944-09-18 19:39:25",
+     "t": "1944-09-18 19:18:35",
      "x": -916,
      "y": -810,
      "h": 87,
      "strength": 561
     },
     {
-     "t": "1944-09-18 19:46:53",
+     "t": "1944-09-18 19:26:04",
      "x": -480,
      "y": -790,
      "h": 100,
      "strength": 561
     },
     {
-     "t": "1944-09-18 19:55:44",
+     "t": "1944-09-18 19:34:55",
      "x": 28,
      "y": -882,
      "h": 86,
      "strength": 561
     },
     {
-     "t": "1944-09-18 20:03:12",
+     "t": "1944-09-18 19:42:23",
      "x": 462,
      "y": -849,
      "h": 74,
      "strength": 561
     },
     {
-     "t": "1944-09-18 20:07:56",
+     "t": "1944-09-18 19:47:07",
      "x": 727,
      "y": -771,
      "h": 90,
      "strength": 561
     },
     {
-     "t": "1944-09-18 20:13:44",
+     "t": "1944-09-18 19:52:55",
      "x": 1065,
      "y": -770,
      "h": 101,
      "strength": 561
     },
     {
-     "t": "1944-09-18 20:16:47",
+     "t": "1944-09-18 19:55:58",
      "x": 1240,
      "y": -803,
      "h": 97,
      "strength": 561
     },
     {
-     "t": "1944-09-18 20:20:52",
+     "t": "1944-09-18 20:00:02",
      "x": 1476,
      "y": -832,
      "h": 102,
      "strength": 561
     },
     {
-     "t": "1944-09-18 20:29:14",
+     "t": "1944-09-18 20:08:25",
      "x": 1954,
      "y": -931,
      "h": 101,
      "strength": 561
     },
     {
-     "t": "1944-09-18 20:39:20",
+     "t": "1944-09-18 20:18:31",
      "x": 2533,
      "y": -1042,
      "h": 90,
@@ -10545,29 +10542,10 @@
      "strength": 93
     },
     {
-     "t": "1944-09-19 14:00",
-     "x": 1200,
-     "y": 900,
-     "h": 90,
-     "state": "line",
-     "strength": 93
-    },
-    {
-     "t": "1944-09-19 14:10",
-     "x": 1200,
-     "y": 900,
-     "strength": 84
-    },
-    {
-     "t": "1944-09-19 14:29",
-     "x": 1200,
-     "y": 900,
-     "strength": 84
-    },
-    {
      "t": "1944-09-19 14:30",
      "x": 1200,
      "y": 900,
+     "h": 90,
      "state": "column",
      "strength": 84
     },
@@ -10699,35 +10677,10 @@
      "strength": 350
     },
     {
-     "t": "1944-09-21 17:18",
-     "x": 717,
-     "y": -4740,
-     "h": 330,
-     "state": "line",
-     "strength": 350
-    },
-    {
-     "t": "1944-09-21 17:20",
-     "x": 717,
-     "y": -4740,
-     "strength": 350
-    },
-    {
-     "t": "1944-09-21 17:45",
-     "x": 717,
-     "y": -4740,
-     "strength": 340
-    },
-    {
-     "t": "1944-09-21 17:49",
-     "x": 717,
-     "y": -4740,
-     "strength": 340
-    },
-    {
      "t": "1944-09-21 17:50",
      "x": 717,
      "y": -4740,
+     "h": 330,
      "state": "column",
      "strength": 340
     },
@@ -10895,35 +10848,10 @@
      "strength": 351
     },
     {
-     "t": "1944-09-21 17:15",
-     "x": 517,
-     "y": -4340,
-     "h": 330,
-     "state": "line",
-     "strength": 351
-    },
-    {
-     "t": "1944-09-21 17:20",
-     "x": 517,
-     "y": -4340,
-     "strength": 351
-    },
-    {
-     "t": "1944-09-21 17:45",
-     "x": 517,
-     "y": -4340,
-     "strength": 341
-    },
-    {
-     "t": "1944-09-21 17:49",
-     "x": 517,
-     "y": -4340,
-     "strength": 341
-    },
-    {
      "t": "1944-09-21 17:50",
      "x": 517,
      "y": -4340,
+     "h": 330,
      "state": "column",
      "strength": 341
     },
@@ -11058,35 +10986,10 @@
      "strength": 300
     },
     {
-     "t": "1944-09-21 17:16",
-     "x": 1117,
-     "y": -4940,
-     "h": 330,
-     "state": "line",
-     "strength": 300
-    },
-    {
-     "t": "1944-09-21 17:20",
-     "x": 1117,
-     "y": -4940,
-     "strength": 300
-    },
-    {
-     "t": "1944-09-21 17:45",
-     "x": 1117,
-     "y": -4940,
-     "strength": 290
-    },
-    {
-     "t": "1944-09-21 17:49",
-     "x": 1117,
-     "y": -4940,
-     "strength": 290
-    },
-    {
      "t": "1944-09-21 17:50",
      "x": 1117,
      "y": -4940,
+     "h": 330,
      "state": "column",
      "strength": 290
     },
@@ -15521,9 +15424,10 @@
   "The battalions' and units' war diaries at <a href='https://www.pegasusarchive.org/arnhem/war.htm' target='_blank'>the Pegasus Archive</a>: 1st, 2nd, 3rd, 10th, 11th and 156th Parachute Battalions, 1st Border, 7th KOSB, 2nd South Staffords, the Reconnaissance Squadron, the Light Regiment RA, the 21st Independent Parachute Company, the Polish Brigade HQ and the 4th Dorsets: grid references, times and strengths.",
   "Mark Hickman, <a href='https://www.pegasusarchive.org/arnhem/' target='_blank'>The Pegasus Archive: Arnhem</a>, its narrative of each lift, day and sector, and its orders of battle for the 1st Airborne Division, the Polish brigade, II SS Panzer Corps and Kampfgruppe von Tettau.",
   "Charles B. MacDonald, <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-Siegfried/USA-E-Siegfried-7.html' target='_blank'><i>The Siegfried Line Campaign</i></a> (US Army in World War II, 1963), chapters VI to VIII: the lifts, XXX Corps and the losses.",
+  "John C. Warren, <a href='https://archive.org/details/AirborneOperationsInWorldWarIIEuropeanTheater' target='_blank'><i>Airborne Operations in World War II, European Theater</i></a> (USAF Historical Study 97, 1956): the aircraft and gliders of each lift, their times over the zones and their routes. The diaries of the 1st Airlanding, 1st and 4th Parachute Brigades, the Glider Pilot Regiment's wings and the RAF squadrons at the Pegasus Archive, and the 315th Troop Carrier Group's history (315group.org): where the units rallied and when.",
   "Wikipedia, 'Battle of Arnhem' and 'Operation Market Garden' (read 6 November 2026), for Middlebrook's and Kershaw's casualty figures and the German units' names. Martin Middlebrook, <i>Arnhem 1944</i>, and Robert Kershaw, <i>It Never Snows in September</i>, were not consulted directly.",
   "Places: OpenStreetMap contributors (ODbL) for the bridges, churches, hotels, stations, roads and memorials; the diaries' six-figure references on sheet 'Ginkel 388' converted by an affine fit to seven of them (good to about 100 m). The zones' outlines (DZ-X, LZ-Z and LZ-L to 300 or 400 m), the railway between its stations, and the Amsterdamseweg west of Wolfheze are drawn from the text and are approximate. Sunrise 6:14 and sunset 6:47 PM for 17 September from the NOAA formulae, on the British clock.",
   "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m, sampled to 32 m. A surface model: the woods stand 15 to 20 m above the ground, and the modern towns, the A50 and Papendal on LZ-L show. The Rhine is the model's own flat water, flattened below the water level; the flooded pits on the banks are kept as land.",
-  "Placed by inference, not from the sources: B and C Companies 2 Para and the KOSB's D Company drawn as 120 to 150 men; the split of Spindler's 1,400 between the Dreijenseweg and the town; Kampfgruppen Weber's, Brinkmann's and Worrowski's strengths and the German battalion at Driel; where von Tettau's battalions, the glider pilots, the Reconnaissance Squadron and the 21st Independent Company stood round the perimeter; the routes between recorded places; when the Staffords' and the 1st Battalion's strengths fell between the diaries' figures; the 1st Battalion's rise from 39 to about 200 as stragglers came in on the 19th; the crossing places on the nights of 22 and 23 September; and the order in which each unit crossed on the Berlin night. Tanks against the Staffords on the 19th are not drawn, since their unit is not recorded."
+  "Placed by inference, not from the sources: B and C Companies 2 Para and the KOSB's D Company drawn as 120 to 150 men; the split of Spindler's 1,400 between the Dreijenseweg and the town; Kampfgruppen Weber's, Brinkmann's and Worrowski's strengths and the German battalion at Driel; where von Tettau's battalions, the glider pilots, the Reconnaissance Squadron and the 21st Independent Company stood round the perimeter; the routes between recorded places; when the Staffords' and the 1st Battalion's strengths fell between the diaries' figures; the 1st Battalion's rise from 39 to about 200 as stragglers came in on the 19th; the crossing places on the nights of 22 and 23 September; the order in which each unit crossed on the Berlin night; and in the drops, the run-in headings, how the pathfinders' Stirlings split between the zones, when the last glider came down, LZ-X's outline (drawn on DZ-X's ground), and when and where most units had formed. Tanks against the Staffords on the 19th are not drawn, since their unit is not recorded."
  ]
 }

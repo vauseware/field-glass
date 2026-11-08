@@ -1,7 +1,7 @@
 // Self-check for sim.js plus validation of every battle in battles/index.json. Run: npm run check
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import assert from 'node:assert/strict';
-import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime, actionBox, tracks, shape } from '../sim.js';
+import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime, actionBox, tracks, shape, dropAt } from '../sim.js';
 import { WARS } from '../splash.js';
 
 const u = { id: 'x', side: 'a', type: 'infantry', strength: 100, keys: [
@@ -48,6 +48,46 @@ assert.deepEqual([shape(tanks, unitAt(tanks, parseTime('07:00')), 20).F, shape(t
 assert.equal(tb.fallen.length, 5, 'armor: a marker per tank lost');
 assert.deepEqual(validate(normalizeBattle({ id: 'v', name: 'v', date: 'd', place: 'p', origin: {}, extent: 1000, start: '07:00', end: '08:00', sides: {}, units: [],
   features: [{ type: 'airstrike', name: 'Stukas', at: [0, 0], from: '07:10' }] })), ['airstrike Stukas needs at, from and until'], 'an air strike needs its times');
+assert.deepEqual(normalizeBattle({ start: '07:00', end: '08:00', units: [], features: [{ type: 'airstrike', at: [0, 0], from: '07:10', until: '07:20' }] }).features[0].air,
+  [parseTime('07:10'), parseTime('07:20')], 'the air hook flies an air strike from its from to its until');
+
+const T = parseTime, ZONE_RADIUS = 400, para = (keys = [{ t: '13:00', x: 0, y: 0, state: 'hidden' }, { t: '14:00', x: 200, y: 0, h: 90, strength: 80, state: 'line' }]) =>
+  ({ id: 'para', side: 'a', type: 'infantry', strength: 100, keys });
+const dropBattle = (drop = {}, units = [para()], more = []) => normalizeBattle({ id: 'd', name: 'd', date: '1944-09-17', place: 'p', origin: {}, extent: 4000,
+  start: '13:00', end: '15:00', menPerDot: 10, wind: { x: 1, y: 0 }, sides: { a: {} }, units,
+  features: [{ type: 'drop', kind: 'para', name: 'test', zone: [[0, -ZONE_RADIUS], [ZONE_RADIUS, 0], [0, ZONE_RADIUS], [-ZONE_RADIUS, 0]], h: 90, from: '13:30', until: '13:40', craft: 10, units: ['para'], ...drop }, ...more] });
+const db = dropBattle(), df = db.features[0], pu = db.units[0];
+const ground = (t, clock) => { const D = dropAt(df, T(t), clock); return [...D.canopies.slice(0, D.nCanopy * 3), ...D.chutes.slice(0, D.nChute * 2), ...D.men.slice(0, D.nMen * 2)]; };
+const toDots = (D, dd) => D.men.slice(0, D.nMen * 2).reduce((s, v, i) => s + Math.abs(v - dd[i]), 0);
+const formedDots = dots(pu, unitAt(pu, T('14:00')), 10);
+assert.deepEqual(validate(db), [], 'a well-formed drop');
+assert.equal(dropAt(df, T('13:28'), 0), null, 'nothing before the first canopy');
+assert.ok(dropAt(df, T('13:35'), 0).nCanopy > 0 && dropAt(df, T('13:35'), 0).nCraft > 0, 'canopies and transports over the zone mid-drop');
+assert.deepEqual(ground('13:38', 3), ground('13:38', 7), 'canopies, chutes and men are pure in battle time');
+assert.notDeepEqual([...dropAt(df, T('13:38'), 3).craft], [...dropAt(df, T('13:38'), 7).craft], 'only the transports fly on the clock');
+const down = dropAt(df, T('13:50'), 0);
+assert.ok(down.nChute === 10 && [...down.chutes.slice(0, 20)].every((v, i, a) => i % 2 || Math.abs(v) + Math.abs(a[i + 1]) <= ZONE_RADIUS), 'all ten dots of men come down inside the zone');
+assert.equal(down.nMen, 8, 'eight dots of men walk in: 80 of the 100 formed, two dots were lost on the drop');
+assert.ok(toDots(dropAt(df, T('13:42'), 0), formedDots) > toDots(dropAt(df, T('13:52'), 0), formedDots), 'the men close on their places in the unit');
+assert.ok(toDots(dropAt(df, T('14:00') - 0.01, 0), formedDots) < 8 * 2, 'each man is at his own dot as the unit forms');
+assert.ok(dropAt(df, T('14:00'), 0) === null && unitAt(pu, T('14:00') - 0.01) === null && unitAt(pu, T('14:00')), 'the unit takes over from its men at the rally key');
+assert.ok(db.fallen.length === 2 && db.fallen.every(m => Math.abs(m.x) + Math.abs(m.y) <= ZONE_RADIUS && m.t >= T('13:30') && m.t <= T('13:40')), 'a fallen marker where and when each lost dot came down');
+assert.deepEqual(df.air, [T('13:30') - 90, T('14:00')], 'the air hook draws from the first canopy until the unit has formed');
+assert.equal(activity(db, T('13:50'))[0], true, 'the rally is active: time-lapse waits for it');
+const gf = dropBattle({ kind: 'glider', craft: 4 }).features[0], count = (t, k) => dropAt(gf, T(t), 0)[k];
+assert.ok(count('13:35', 'nGlider') > 0 && count('13:50', 'nGlider') === 4 && count('13:50', 'nMen') === 8 && count('13:50', 'nCanopy') === 0, 'gliders come down and their men get out');
+assert.equal(dropAt(gf, T('13:59'), 0).nGlider, 4, 'the gliders stand until the unit has formed');
+const problems = (drop, units, more) => validate(dropBattle(drop, units, more));
+assert.deepEqual(problems({ units: ['para', 'nobody'] }), ['drop test: no unit nobody'], 'a drop names units that exist');
+assert.deepEqual(problems({}, [para()], [{ type: 'drop', kind: 'para', name: 'again', zone: [[0, 0], [100, 0], [0, 100]], h: 0, from: '13:30', until: '13:40', craft: 1, units: ['para'] }]),
+  ['drop again: para is already in drop test'], 'a unit is in one drop');
+assert.deepEqual(problems({}, [para([{ t: '13:00', x: 0, y: 0, state: 'line' }, { t: '14:00', x: 200, y: 0 }])]), ['drop test: para is on the map when the drop starts'], 'hidden when the drop starts');
+assert.deepEqual(problems({}, [para([{ t: '13:00', x: 0, y: 0, state: 'hidden' }])]), ['drop test: para never forms up'], 'forms up after the drop');
+assert.deepEqual(problems({}, [para([{ t: '13:00', x: 0, y: 0, state: 'hidden' }, { t: '13:35', x: 200, y: 0, state: 'line' }, { t: '13:45', state: 'hidden' }, { t: '14:00', state: 'line' }])]),
+  ['drop test: para forms up at 1:35 PM, before the last of the drop is down at 1:40 PM'], 'not on the map until the last of the drop is down');
+assert.deepEqual(problems({ zone: [[0, 0], [100, 0]] }), ['drop test needs a zone of three or more corners'], 'a zone is a polygon');
+assert.deepEqual(problems({ zone: [[0, 0], [2500, 0], [0, 100]] }), ['drop test: zone corner off map (2500, 0)'], 'a zone on the map');
+assert.deepEqual(problems({ kind: 'balloon', until: '13:20', craft: 0 }), ['drop test: kind must be para or glider', 'drop test needs from before until', 'drop test needs craft'], 'a kind, its times and its aircraft');
 console.log('sim.js: ok');
 
 let bad = 0;
