@@ -332,7 +332,7 @@ function draw() {
   drawNight(); // the ground darkens; the regiments stay readable above it
   const labels = drawUnits();
   drawSmoke(); drawLabels(labels);
-  for (const f of B.features ?? []) if (skin.air && f.air && t >= f.air[0] && t < f.air[1]) skin.air(ctx, V, f, airClock, f.type === 'drop' ? dropAt(f, t, airClock) : null);
+  for (const f of B.features ?? []) if (skin.air && f.air && t >= f.air[0] && t < f.air[1]) skin.air(ctx, V, f, airClock, f.type === 'drop' ? dropAt(f, t, airClock, lapsing ? B.lapse : speed) : null);
   skin.over?.(ctx, V);
   drawPops();
 }
