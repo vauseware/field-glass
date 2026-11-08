@@ -165,13 +165,13 @@
   "name": "Arnhem, 17–26 Sep 1944",
   "date": "1944-09-17",
   "war": "World War II",
-  "runtime": 2633
+  "runtime": 2637
  },
  {
   "id": "bastogne",
   "name": "Bastogne, 18–26 Dec 1944",
   "date": "1944-12-18",
   "war": "World War II",
-  "runtime": 2132
+  "runtime": 2139
  }
 ]

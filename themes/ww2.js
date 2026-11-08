@@ -356,7 +356,7 @@ function fleet(ctx, V, sh, buf, n, st, s, pass, i0 = 0) {
     ctx.stroke();
   }
 }
-const WING = new Float32Array(27), TOW = new Float32Array(27);
+let WING = new Float32Array(0), TOW = new Float32Array(0);
 let LANDED = new Float32Array(0);
 function drop(ctx, V, D) {
   const night = V.dark > 0.5, sx = V.sx, sy = V.sy, rc = Math.max(3, 5 * V.z), first = night ? 1 : 0;
@@ -390,6 +390,7 @@ function drop(ctx, V, D) {
   }
   if (D.nCraft) {
     const k = 1 / V.z, glider = D.kind === 'glider';
+    if (WING.length < 9 * D.nCraft) { WING = new Float32Array(9 * D.nCraft); TOW = new Float32Array(9 * D.nCraft); }
     let n = 0;
     for (let i = 0; i < D.nCraft; i++) {
       const o = 3 * i, a = (D.craft[o + 2] * Math.PI) / 180, ux = Math.sin(a), uy = Math.cos(a);
