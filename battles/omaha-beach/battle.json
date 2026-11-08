@@ -108948,8 +108948,8 @@
   {
    "name": "D-1",
    "at": [
-    -2162,
-    882
+    -1933,
+    1059
    ]
   },
   {
@@ -115475,7 +115475,6 @@
   },
   {
    "type": "smoke",
-   "name": "grass fires on the bluff",
    "at": [
     -83,
     59
@@ -115541,7 +115540,6 @@
   },
   {
    "type": "smoke",
-   "name": "LCI 91",
    "at": [
     -577,
     638
@@ -115553,7 +115551,6 @@
   },
   {
    "type": "smoke",
-   "name": "LCI 92",
    "at": [
     77,
     311
@@ -115565,7 +115562,6 @@
   },
   {
    "type": "smoke",
-   "name": "naval fire on the Vierville strongpoint",
    "at": [
     -1947,
     1243
@@ -127681,7 +127677,260 @@
    ]
   }
  ],
- "events": [],
+ "events": [
+  {
+   "t": "05:30",
+   "title": "Low water",
+   "text": "6 June 1944. V Corps is to land the 1st Infantry Division, with the 29th Division's 116th Infantry and the Rangers, on Omaha Beach: eight sectors from Charlie to Fox Red, under bluffs 100 to 170 feet high cut by five draws. Low water was at 05:25, and the tide's range today is 18 feet. Bare on 300 yards of firm sand stand the obstacles: Element C gates about 250 yards out, log ramps behind them, hedgehogs 130 yards from shore. Allied intelligence expects about a reinforced battalion in the strongpoints, WN 60 to WN 74; the 352nd Infantry Division's 916th Grenadier Regiment holds them. The Ancon, Force O's headquarters ship, anchored 23,000 yards out at 02:51.",
+   "at": [
+    300,
+    200
+   ],
+   "view": 7500,
+   "speed": 60,
+   "when": "5:30 AM"
+  },
+  {
+   "t": "05:40",
+   "title": "The DD tanks",
+   "text": "At H-50 minutes, 6,000 yards off shore, the 741st Tank Battalion launches the 32 swimming DD tanks of its B and C Companies for Easy Red and Fox Green. A north-west wind of 10 to 18 knots raises waves of 3 to 4 feet, up to 6. 27 founder on the run-in; two swim ashore, and three more are beached from an LCT.",
+   "at": [
+    3800,
+    3300
+   ],
+   "view": 3500,
+   "speed": 30,
+   "when": "5:40 AM"
+  },
+  {
+   "t": "05:50",
+   "title": "The bombardment",
+   "text": "From 05:50, H-40, the fleet fires about 600 heavy rounds on Pointe du Hoc and the D-3 strongpoints; at 05:37 guns near Port-en-Bessin put ten rounds close to the destroyer Emmons. From 05:55 to 06:14, 329 of 446 Liberators bomb about three miles inland and miss the beach. Sunrise is at 05:58, under a partial overcast and a slight mist.",
+   "at": [
+    800,
+    1400
+   ],
+   "view": 7000,
+   "speed": 30,
+   "when": "5:50 AM"
+  },
+  {
+   "t": "06:30",
+   "title": "H-Hour",
+   "text": "The 743rd Tank Battalion's B and C Companies came in on their LCTs at H-5 on Dog Green and Dog White. At 06:30 its A Company lands with the tank dozers on Easy Green and Dog Red, and the 741st's A Company astride Easy Red and Fox Green. From 06:31 the first wave, eight infantry companies, touches down; the division's report has it landed at 06:35. The current runs east at nearly 2.7 knots, and practically all the craft that land in the wrong place land east of their targets. The engineers' sixteen assault teams follow at H+3 to H+8; only five hit their sectors.",
+   "at": [
+    600,
+    300
+   ],
+   "view": 6500,
+   "speed": 30,
+   "when": "6:30 AM"
+  },
+  {
+   "t": "06:36",
+   "title": "Dog Green",
+   "text": "A Company, 116th Infantry, comes in on Dog Green in front of the Vierville draw. Its craft ground in water 4 to 6 feet deep, 30 yards short of the outer obstacles, and the company is out of action within fifteen minutes: up to two-thirds of it lost. Some men on the beach will reach the wall by staying at the edge of the water and going up the beach with the tide. WN 72's 8.8 cm casemate at the mouth of D-1 and WN 73 above it fire down the sand.",
+   "at": [
+    -1650,
+    1150
+   ],
+   "view": 1800,
+   "speed": 20,
+   "when": "6:36 AM"
+  },
+  {
+   "t": "06:45",
+   "title": "Charlie",
+   "text": "C Company of the 2nd Rangers lands at H+15 on Charlie, to the right of the Vierville draw. Of its 64 men 35 are lost, and about 30 cross the sand. They go up the cliff 300 yards west, and all are up by 07:30. Goranson's Rangers fight on the cliff top into the afternoon.",
+   "at": [
+    -2250,
+    1750
+   ],
+   "view": 1600,
+   "speed": 20,
+   "when": "6:45 AM"
+  },
+  {
+   "t": "07:00",
+   "title": "The tide in the obstacles",
+   "text": "The tide is flowing into the obstacle belt; in the next hour it will rise eight feet and be through it. The engineers have blown six complete gaps and three partial ones, four complete on Easy Red and two in the 116th's half, and only one is marked. They lose 41% of their men, most in the first half hour; Support Team F has 15 killed. At 06:55 USS Chase heard that the entire first wave had floundered. The second waves come in: B Company, 116th, scattered over a mile, the 2nd Battalion's headquarters on Dog Red, G Company, 16th, on Easy Red, K Company on Fox Green and L Company on Fox Red.",
+   "at": [
+    700,
+    150
+   ],
+   "view": 5500,
+   "speed": 30,
+   "when": "7:00 AM"
+  },
+  {
+   "t": "07:10",
+   "title": "Pointe du Hoc",
+   "text": "Beyond the map's west edge D, E and F Companies of the 2nd Ranger Battalion land under Pointe du Hoc at 07:10, 40 minutes late, and are all up the cliff by 07:40. The rest of the Ranger force, waiting offshore, has heard nothing; 15 minutes past its 07:00 time limit it turns for Dog Green. On Dog White C Company, 116th, lands 1,000 yards east of the Vierville exit and re-forms under the sea wall with five or six casualties.",
+   "at": [
+    -1600,
+    1100
+   ],
+   "view": 4000,
+   "speed": 30,
+   "when": "7:10 AM"
+  },
+  {
+   "t": "07:30",
+   "title": "Cota on Dog White",
+   "text": "By 07:30 assault units line the whole of the 116th's front. The command parties land, Col. Canham and Brig. Gen. Cota near les Moulins. The 116th's 3rd Battalion comes in 5 to 10 minutes late east of les Moulins, and the 16th's 1st Battalion on time between E-1 and E-3. About 07:35 A and B Companies of the 2nd Rangers land on Dog Green: about 35 of 65 and 27 reach the sea wall. At 07:35 the German 726th Regiment reports 100 to 200 Americans through its front.",
+   "at": [
+    -600,
+    600
+   ],
+   "view": 2600,
+   "speed": 30,
+   "when": "7:30 AM"
+  },
+  {
+   "t": "08:00",
+   "title": "The beach stopped",
+   "text": "LCI 91 and 92 are hit off Dog White and Dog Red; they are still burning at 16:00. The 5th Rangers reached the sea wall just before 08:00, losing eight men, and cross the road about 08:10. German observers on the bluff judge the landing stopped. The destroyers begin to engage targets of their own. I Company, 16th, carried almost as far east as Port-en-Bessin, lands on Fox Green. Col. Taylor lands at 08:15 with the second section of the 16th's command group; the first lost its executive officer and 35 men on the flat. At 08:30 the 7th Naval Beach Battalion suspends all vehicle landings.",
+   "at": [
+    -350,
+    500
+   ],
+   "view": 2400,
+   "speed": 30,
+   "when": "8:00 AM"
+  },
+  {
+   "t": "08:30",
+   "title": "Up the bluff",
+   "text": "Between 08:00 and 09:00 upwards of 600 men go off Dog White on a front of less than 300 yards: C Company, 116th, which Cota led up from 07:50, the 5th Rangers, and G Company's remnants, who reached Dog White about 08:30. A and B Companies of the 2nd Rangers fight up to the top at Dog Green. East of les Moulins the 116th's 3rd Battalion works up between D-3 and E-1, K Company losing 15 to 20 men. On Easy Red G Company, 16th, is on the bluff top west of E-3.",
+   "at": [
+    -200,
+    300
+   ],
+   "view": 4500,
+   "speed": 30,
+   "when": "8:30 AM"
+  },
+  {
+   "t": "09:00",
+   "title": "F-1 falls",
+   "text": "About 09:00 L Company, 16th, down to 125 men, subdues WN 60 at F-1 and takes 31 prisoners. The 3rd Battalion subdues the draw north-east of Colleville. WN 61 on Fox Green, its 8.8 cm gun knocked out by a DD tank about 07:10, is reported lost at 09:05. At 09:30 the 16th's 1st Battalion is at the crest.",
+   "at": [
+    2800,
+    -1100
+   ],
+   "view": 2400,
+   "speed": 60,
+   "when": "9:00 AM"
+  },
+  {
+   "t": "10:00",
+   "title": "Spalding",
+   "text": "Mid-morning Lt. John Spalding's section of E Company, 16th, comes on WN 64 above E-1 from the rear and takes 21 prisoners without loss. About 10:00 C Company of the 149th Engineers bulldozes the first gap through the dunes just east of E-1, and the 18th's 2nd Battalion begins to land. Most of the 116th's 3rd Battalion is on the high ground. At 09:50 the destroyer McCook destroyed a gun position in WN 74 at Pointe de la Percée.",
+   "at": [
+    1200,
+    -500
+   ],
+   "view": 1800,
+   "speed": 60,
+   "when": "about 10 AM"
+  },
+  {
+   "t": "10:30",
+   "title": "The destroyers close in",
+   "text": "Between 10:00 and 11:00 two destroyers close to within 1,000 yards and fire on the strongpoints; which two is not recorded, and they are drawn here as Carmick and Doyle. On the plateau above Dog White Cota helps start the units moving inland, and with the leading men of the 116th and the Rangers he enters Vierville before 11:00.",
+   "at": [
+    300,
+    900
+   ],
+   "view": 6000,
+   "speed": 60,
+   "when": "about 10:30 AM"
+  },
+  {
+   "t": "11:00",
+   "title": "High water",
+   "text": "The tide stands at the shingle. Vierville is clear by 11:00. Col. Taylor orders all tanks to E-3; three get there, and two are knocked out going up the draw. WN 62 above E-3, the largest strongpoint, is still firing. The division's report has the 18th's 2nd Battalion landed at 11:10.",
+   "at": [
+    1700,
+    -700
+   ],
+   "view": 2600,
+   "speed": 60,
+   "when": "11:00 AM"
+  },
+  {
+   "t": "11:30",
+   "title": "E-1 opens",
+   "text": "About 11:30 the last defences in front of E-1 surrender, a pillbox of WN 65 with 20 prisoners. The mines are cleared within half an hour and E-1 becomes the main exit; the 18th's 2nd Battalion is off the beach before noon. Just before noon the 115th's three battalions land together on Easy Red near E-1, not on Dog Red and Easy Green as planned. West of Vierville C Company, 116th, and B Company of the 5th Rangers set off along the coast road toward Pointe du Hoc.",
+   "at": [
+    900,
+    -450
+   ],
+   "view": 2200,
+   "speed": 60,
+   "when": "11:30 AM"
+  },
+  {
+   "t": "12:30",
+   "title": "Colleville",
+   "text": "A little after noon a section of G Company, 16th, gets into the west edge of Colleville and is held just beyond the church; the division logs the 2nd Battalion in the town at 12:33. For two hours G Company fights on the defensive there, the nearest approach to a counter-attack in strength. II./915, Kampfgruppe Meyer's battalion split off to the 916th, comes in with an anti-tank company near Colleville in the early afternoon and is stopped. At noon LXXXIV Corps reported the landings completely smashed.",
+   "at": [
+    2300,
+    -2300
+   ],
+   "view": 2800,
+   "speed": 60,
+   "when": "12:30 PM"
+  },
+  {
+   "t": "15:00",
+   "title": "The 18th at Colleville",
+   "text": "At 15:00 the 18th's 2nd Battalion reaches Colleville, passing west of G Company. The 1st and 3rd Battalions landed about 13:00. Vehicles have been moving off the beach again since 14:00, and jam on E-1 against St-Laurent, where the 115th, inland by nearly 14:00, is fighting for the village. The Vierville strongpoint was silenced by 13:00 after an hour of naval fire. At 13:35 the 352nd Division reported the assault hurled back into the sea, with fighting only at Colleville; at 13:41 the Navy reported Dog Green, White and Red clear. The 336th Engineers set out for F-1.",
+   "at": [
+    900,
+    -1300
+   ],
+   "view": 4500,
+   "speed": 120,
+   "when": "3:00 PM"
+  },
+  {
+   "t": "17:00",
+   "title": "The exits open",
+   "text": "D-1 is open to Vierville. All the 741st's remaining tanks are ordered inland by E-1, and four attack St-Laurent before dark. The 336th Engineers reach F-1. The main Ranger force comes up on the coast road west of Vierville; at 16:35 the two Ranger battalions reported no opposition in their sector. The 7th Field Artillery fired its first mission at 16:15, four of the 58th Armored Field Artillery's guns were ashore by 16:55, and B Company, 745th Tank Battalion, landed on Fox Green at 16:30. The ebb has bared the obstacles again, and by evening the engineers have 13 gaps opened and marked.",
+   "at": [
+    100,
+    -200
+   ],
+   "view": 6500,
+   "speed": 120,
+   "when": "5:00 PM"
+  },
+  {
+   "t": "19:30",
+   "title": "The 26th lands",
+   "text": "From 19:30 the 26th Infantry comes in at E-3, and it is ashore by 21:00; at 20:10 it is ordered to move a battalion behind the 16th to clear toward St-Laurent. Maj. Gen. Huebner, the division's commander, landed on Easy Red at 19:00. B Company, 745th, is on the high ground by F-1 at 20:00. In St-Laurent the 115th's 2nd Battalion fights on until dusk, when naval fire stops its attack and it withdraws; its 3rd Battalion is on a strongpoint at the D-3 exit.",
+   "at": [
+    900,
+    -1000
+   ],
+   "view": 5000,
+   "speed": 120,
+   "when": "7:30 PM"
+  },
+  {
+   "t": "22:05",
+   "title": "Night",
+   "text": "Sunset is at 22:05, and the Moon is full. At midnight the beachhead is hardly more than a mile and a half deep at Colleville: the Rangers and C Company, 116th, west of Vierville; the 116th's 1st Battalion near Vaumicel; the 115th in and south of St-Laurent; the 18th and the 26th between St-Laurent and Colleville; the 16th's 2nd Battalion at Colleville's west end, and its 3rd at le Grand Hameau with about 100 men. Some 34,000 men are ashore. V Corps lost between two and three thousand killed, wounded and missing, the 16th and 116th about 1,000 each; the 352nd Division about 1,200. At 23:45 the 18th's 1st Battalion is committed to take over the mission of the 16th's 1st.",
+   "at": [
+    0,
+    -900
+   ],
+   "view": 7500,
+   "speed": 300,
+   "when": "10:05 PM"
+  }
+ ],
  "tints": [
   {
    "color": "rgba(196,200,206,0.28)",
@@ -127689,7 +127938,28 @@
    "until": "07:30"
   }
  ],
+ "outcome": {
+  "result": "V Corps ashore on Omaha Beach, the beachhead nowhere more than a mile and a half deep at nightfall",
+  "losses": [
+   [
+    "us",
+    "About 3,000 killed, wounded and missing in V Corps on 6 June by Omaha Beachhead, the 16th and 116th Infantry about 1,000 each; about 2,000 by Harrison, whose footnote gives 2,374 from the V Corps history. A Company, 116th, lost up to two-thirds; 27 of the 741st's 32 swimming tanks went down at sea; 26 guns were lost, and about 50 landing craft and 10 larger vessels."
+   ],
+   [
+    "german",
+    "About 1,200 killed, wounded and missing in the 352nd Infantry Division, nearly a fifth of its combat effectives (Harrison). Prisoners taken at the strongpoints: 31 at WN 60, 21 at WN 64, 20 at E-1."
+   ]
+  ],
+  "note": "Off the map, the 2nd Rangers held Pointe du Hoc until relieved on 8 June, and the airborne divisions dropped behind Utah Beach in the early hours; both are battles of their own. Clock times are GMT+2, the Allies' double summer time."
+ },
  "sources": [
-  "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m. A surface model, which sets the sea to 0: its coast is the high-water line of 1944, and the tidal flat is built seaward of it as a straight 1:50 slope 274 m wide (300 yards), from 5.5 m at the shingle to the low-water mark."
+  "<i>Omaha Beachhead (6 June to 13 June 1944)</i>, American Forces in Action (Historical Division, War Department, 1945), <a href='https://www.ibiblio.org/hyperwar/USA/USA-A-Omaha/index.html' target='_blank'>chapters 2 to 5</a> and Maps V to IX: the plan, the beach and its obstacles, the sector landings and their times, the climbs, the strongpoints' falls and the positions at midnight.",
+  "Gordon A. Harrison, <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-XChannel/USA-E-XChannel-8.html' target='_blank'><i>Cross-Channel Attack</i></a> (US Army in World War II, 1951), chapters VIII and IX: Vierville clear at 11:00, the 3rd Battalion, 16th, at le Grand Hameau, Kampfgruppe Meyer and the casualties.",
+  "1st Infantry Division G-3 after-action report, June 1944, <a href='https://www.dday-overlord.com/?p=140717' target='_blank'>transcribed at dday-overlord.com</a>: the division's timed entries. COMINCH P-006, <a href='https://www.ibiblio.org/hyperwar/USN/rep/Normandy/Cominch/Neptune4.html' target='_blank'><i>Amphibious Operations: Invasion of Northern France</i></a>, chapter IV. David F. Winkler, <a href='https://navyhistory.org/2019/06/destroyers-at-normandy/' target='_blank'>Destroyers at Normandy</a> (Naval Historical Foundation, 2019), after Kirkland: which destroyer supported which division.",
+  "The tide: Donald W. Olson, <a href='https://skyandtelescope.org/astronomy-news/astronomy-d-day-sun-moon-tides/' target='_blank'>Astronomy and D-Day</a>, <i>Sky &amp; Telescope</i> (2019), and Olson and Doescher, <i>Physics Today</i> 65(1), 2012. No tide table or harmonic constants were read: the curve is fitted to Omaha Beachhead's low water at 05:25, high water at 11:00, 18-foot range and eight feet between 07:00 and 08:00, and to Olson's computed rates; the afternoon low at 17:50 and the evening flood are inferred.",
+  "Wikipedia, 'Omaha Beach' and '916th Grenadier Regiment (Wehrmacht)' (read 7 November 2026), for the German side, WN 61's and WN 74's times and the 34,000 ashore; the Jewish Virtual Library's copy of omaha-beach.org's strongpoint list for each Widerstandsnest's weapons.",
+  "Places: OpenStreetMap contributors (ODbL) for the strongpoints, villages, churches and memorials. WN 63 to WN 71 are placed from Maps V and VI or a description, within 200 to 300 m. The sector boundaries and each company's touchdown are read from Maps V and VI, within 100 to 150 m; the midnight positions from Map IX, within 400 m. Sunrise 05:59 and sunset 22:05 from the NOAA formulae.",
+  "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m. A surface model, which sets the sea to 0: its coast is the high-water line of 1944, and the tidal flat is built seaward of it as a straight 1:50 slope 274 m wide (300 yards). The sea is drawn every five to thirty minutes at the tide's height on that slope.",
+  "Placed by inference, not from the sources: the obstacle rows' runs and gaps, drawn as rows of posts; the roads, through the villages and up the DEM's valley floors; the bocage, drawn as fields without its hedgerows; the shingle bank and the sea wall along the high-water line; the strengths of the boat sections, the follow-up battalions, the engineers, the guns and every German unit; the destroyers' stations, and Carmick and Doyle as the two that closed in; the craft drawn at each landing; the 352nd's batteries, placed toward the map's south edge; the routes between recorded places; the 916th's reserve marching from Formigny into St-Laurent; II./915's road in from the south-east; when WN 62, WN 66, WN 68 and the D-1 strongpoints stopped firing, which is not recorded; where the follow-up battalions landed beyond the beach the sources name; and L Company, 16th, standing for the 3rd Battalion's 100 men at le Grand Hameau. The tanks Taylor sent to E-3 are not drawn moving there."
  ]
 }
