@@ -1,0 +1,3774 @@
+{
+ "id": "bastogne",
+ "name": "Bastogne",
+ "date": "1944-12-18",
+ "dateText": "18 to 26 December 1944",
+ "place": "Bastogne, Province of Luxembourg, Belgium",
+ "origin": {
+  "lat": 49.99,
+  "lon": 5.737
+ },
+ "extent": 24000,
+ "start": "1944-12-18 15:30",
+ "end": "1944-12-26 20:30",
+ "sunrise": "08:33",
+ "sunset": "16:37",
+ "speed": 300,
+ "lapse": 14400,
+ "menPerDot": 20,
+ "water": 250,
+ "terrainExaggeration": 2,
+ "contourInterval": 10,
+ "trees": {
+  "density": 0.0003,
+  "clear": [
+   [
+    [
+     -2462,
+     397
+    ],
+    [
+     -662,
+     397
+    ],
+    [
+     -662,
+     1997
+    ],
+    [
+     -2462,
+     1997
+    ]
+   ],
+   [
+    [
+     1529,
+     8054
+    ],
+    [
+     2049,
+     8054
+    ],
+    [
+     2049,
+     8494
+    ],
+    [
+     1529,
+     8494
+    ]
+   ],
+   [
+    [
+     711,
+     5844
+    ],
+    [
+     1231,
+     5844
+    ],
+    [
+     1231,
+     6284
+    ],
+    [
+     711,
+     6284
+    ]
+   ],
+   [
+    [
+     -273,
+     6671
+    ],
+    [
+     247,
+     6671
+    ],
+    [
+     247,
+     7111
+    ],
+    [
+     -273,
+     7111
+    ]
+   ],
+   [
+    [
+     4854,
+     7428
+    ],
+    [
+     5374,
+     7428
+    ],
+    [
+     5374,
+     7868
+    ],
+    [
+     4854,
+     7868
+    ]
+   ],
+   [
+    [
+     873,
+     9282
+    ],
+    [
+     1393,
+     9282
+    ],
+    [
+     1393,
+     9722
+    ],
+    [
+     873,
+     9722
+    ]
+   ],
+   [
+    [
+     714,
+     7727
+    ],
+    [
+     1234,
+     7727
+    ],
+    [
+     1234,
+     8167
+    ],
+    [
+     714,
+     8167
+    ]
+   ],
+   [
+    [
+     -3677,
+     6853
+    ],
+    [
+     -3157,
+     6853
+    ],
+    [
+     -3157,
+     7293
+    ],
+    [
+     -3677,
+     7293
+    ]
+   ],
+   [
+    [
+     -2725,
+     7104
+    ],
+    [
+     -2205,
+     7104
+    ],
+    [
+     -2205,
+     7544
+    ],
+    [
+     -2725,
+     7544
+    ]
+   ],
+   [
+    [
+     -5092,
+     5229
+    ],
+    [
+     -4572,
+     5229
+    ],
+    [
+     -4572,
+     5669
+    ],
+    [
+     -5092,
+     5669
+    ]
+   ],
+   [
+    [
+     -3938,
+     3560
+    ],
+    [
+     -3418,
+     3560
+    ],
+    [
+     -3418,
+     4000
+    ],
+    [
+     -3938,
+     4000
+    ]
+   ],
+   [
+    [
+     -2516,
+     3046
+    ],
+    [
+     -1996,
+     3046
+    ],
+    [
+     -1996,
+     3486
+    ],
+    [
+     -2516,
+     3486
+    ]
+   ],
+   [
+    [
+     -7281,
+     3070
+    ],
+    [
+     -6761,
+     3070
+    ],
+    [
+     -6761,
+     3510
+    ],
+    [
+     -7281,
+     3510
+    ]
+   ],
+   [
+    [
+     -9745,
+     4654
+    ],
+    [
+     -9225,
+     4654
+    ],
+    [
+     -9225,
+     5094
+    ],
+    [
+     -9745,
+     5094
+    ]
+   ],
+   [
+    [
+     -6004,
+     903
+    ],
+    [
+     -5484,
+     903
+    ],
+    [
+     -5484,
+     1343
+    ],
+    [
+     -6004,
+     1343
+    ]
+   ],
+   [
+    [
+     -6146,
+     -1482
+    ],
+    [
+     -5626,
+     -1482
+    ],
+    [
+     -5626,
+     -1042
+    ],
+    [
+     -6146,
+     -1042
+    ]
+   ],
+   [
+    [
+     -7542,
+     -2639
+    ],
+    [
+     -7022,
+     -2639
+    ],
+    [
+     -7022,
+     -2199
+    ],
+    [
+     -7542,
+     -2199
+    ]
+   ],
+   [
+    [
+     -8664,
+     -105
+    ],
+    [
+     -8144,
+     -105
+    ],
+    [
+     -8144,
+     335
+    ],
+    [
+     -8664,
+     335
+    ]
+   ],
+   [
+    [
+     -3467,
+     -357
+    ],
+    [
+     -2947,
+     -357
+    ],
+    [
+     -2947,
+     83
+    ],
+    [
+     -3467,
+     83
+    ]
+   ],
+   [
+    [
+     -4553,
+     1308
+    ],
+    [
+     -4033,
+     1308
+    ],
+    [
+     -4033,
+     1748
+    ],
+    [
+     -4553,
+     1748
+    ]
+   ],
+   [
+    [
+     -4226,
+     -2835
+    ],
+    [
+     -3706,
+     -2835
+    ],
+    [
+     -3706,
+     -2395
+    ],
+    [
+     -4226,
+     -2395
+    ]
+   ],
+   [
+    [
+     -5266,
+     -4459
+    ],
+    [
+     -4746,
+     -4459
+    ],
+    [
+     -4746,
+     -4019
+    ],
+    [
+     -5266,
+     -4019
+    ]
+   ],
+   [
+    [
+     -3862,
+     -5365
+    ],
+    [
+     -3342,
+     -5365
+    ],
+    [
+     -3342,
+     -4925
+    ],
+    [
+     -3862,
+     -4925
+    ]
+   ],
+   [
+    [
+     -7139,
+     -6360
+    ],
+    [
+     -6619,
+     -6360
+    ],
+    [
+     -6619,
+     -5920
+    ],
+    [
+     -7139,
+     -5920
+    ]
+   ],
+   [
+    [
+     -4971,
+     -8015
+    ],
+    [
+     -4451,
+     -8015
+    ],
+    [
+     -4451,
+     -7575
+    ],
+    [
+     -4971,
+     -7575
+    ]
+   ],
+   [
+    [
+     -5683,
+     -11305
+    ],
+    [
+     -5163,
+     -11305
+    ],
+    [
+     -5163,
+     -10865
+    ],
+    [
+     -5683,
+     -10865
+    ]
+   ],
+   [
+    [
+     -1709,
+     -2881
+    ],
+    [
+     -1189,
+     -2881
+    ],
+    [
+     -1189,
+     -2441
+    ],
+    [
+     -1709,
+     -2441
+    ]
+   ],
+   [
+    [
+     -462,
+     -3676
+    ],
+    [
+     58,
+     -3676
+    ],
+    [
+     58,
+     -3236
+    ],
+    [
+     -462,
+     -3236
+    ]
+   ],
+   [
+    [
+     512,
+     -6392
+    ],
+    [
+     1032,
+     -6392
+    ],
+    [
+     1032,
+     -5952
+    ],
+    [
+     512,
+     -5952
+    ]
+   ],
+   [
+    [
+     242,
+     -832
+    ],
+    [
+     762,
+     -832
+    ],
+    [
+     762,
+     -392
+    ],
+    [
+     242,
+     -392
+    ]
+   ],
+   [
+    [
+     3228,
+     -199
+    ],
+    [
+     3748,
+     -199
+    ],
+    [
+     3748,
+     241
+    ],
+    [
+     3228,
+     241
+    ]
+   ],
+   [
+    [
+     5708,
+     -910
+    ],
+    [
+     6228,
+     -910
+    ],
+    [
+     6228,
+     -470
+    ],
+    [
+     5708,
+     -470
+    ]
+   ],
+   [
+    [
+     236,
+     1208
+    ],
+    [
+     756,
+     1208
+    ],
+    [
+     756,
+     1648
+    ],
+    [
+     236,
+     1648
+    ]
+   ],
+   [
+    [
+     1552,
+     1498
+    ],
+    [
+     2072,
+     1498
+    ],
+    [
+     2072,
+     1938
+    ],
+    [
+     1552,
+     1938
+    ]
+   ],
+   [
+    [
+     1695,
+     3072
+    ],
+    [
+     2215,
+     3072
+    ],
+    [
+     2215,
+     3512
+    ],
+    [
+     1695,
+     3512
+    ]
+   ],
+   [
+    [
+     3178,
+     2492
+    ],
+    [
+     3698,
+     2492
+    ],
+    [
+     3698,
+     2932
+    ],
+    [
+     3178,
+     2932
+    ]
+   ],
+   [
+    [
+     4870,
+     1386
+    ],
+    [
+     5390,
+     1386
+    ],
+    [
+     5390,
+     1826
+    ],
+    [
+     4870,
+     1826
+    ]
+   ],
+   [
+    [
+     7175,
+     1994
+    ],
+    [
+     7695,
+     1994
+    ],
+    [
+     7695,
+     2434
+    ],
+    [
+     7175,
+     2434
+    ]
+   ],
+   [
+    [
+     8543,
+     2535
+    ],
+    [
+     9063,
+     2535
+    ],
+    [
+     9063,
+     2975
+    ],
+    [
+     8543,
+     2975
+    ]
+   ],
+   [
+    [
+     4572,
+     3969
+    ],
+    [
+     5092,
+     3969
+    ],
+    [
+     5092,
+     4409
+    ],
+    [
+     4572,
+     4409
+    ]
+   ],
+   [
+    [
+     4190,
+     5110
+    ],
+    [
+     4710,
+     5110
+    ],
+    [
+     4710,
+     5550
+    ],
+    [
+     4190,
+     5550
+    ]
+   ],
+   [
+    [
+     6884,
+     3671
+    ],
+    [
+     7404,
+     3671
+    ],
+    [
+     7404,
+     4111
+    ],
+    [
+     6884,
+     4111
+    ]
+   ],
+   [
+    [
+     8360,
+     4382
+    ],
+    [
+     8880,
+     4382
+    ],
+    [
+     8880,
+     4822
+    ],
+    [
+     8360,
+     4822
+    ]
+   ],
+   [
+    [
+     9270,
+     4861
+    ],
+    [
+     9790,
+     4861
+    ],
+    [
+     9790,
+     5301
+    ],
+    [
+     9270,
+     5301
+    ]
+   ],
+   [
+    [
+     -791,
+     2782
+    ],
+    [
+     -271,
+     2782
+    ],
+    [
+     -271,
+     3222
+    ],
+    [
+     -791,
+     3222
+    ]
+   ],
+   [
+    [
+     -6188,
+     6632
+    ],
+    [
+     -5668,
+     6632
+    ],
+    [
+     -5668,
+     7072
+    ],
+    [
+     -6188,
+     7072
+    ]
+   ],
+   [
+    [
+     -7048,
+     7172
+    ],
+    [
+     -6528,
+     7172
+    ],
+    [
+     -6528,
+     7612
+    ],
+    [
+     -7048,
+     7612
+    ]
+   ],
+   [
+    [
+     -9217,
+     -8867
+    ],
+    [
+     -8697,
+     -8867
+    ],
+    [
+     -8697,
+     -8427
+    ],
+    [
+     -9217,
+     -8427
+    ]
+   ]
+  ]
+ },
+ "fields": [
+  [
+   [
+    422,
+    1270
+   ],
+   [
+    1817,
+    1392
+   ],
+   [
+    1778,
+    1830
+   ],
+   [
+    383,
+    1708
+   ]
+  ],
+  [
+   [
+    889,
+    7574
+   ],
+   [
+    2689,
+    7574
+   ],
+   [
+    2689,
+    8974
+   ],
+   [
+    889,
+    8974
+   ]
+  ],
+  [
+   [
+    -198,
+    -1412
+   ],
+   [
+    1202,
+    -1412
+   ],
+   [
+    1202,
+    -412
+   ],
+   [
+    -198,
+    -412
+   ]
+  ],
+  [
+   [
+    -5432,
+    4349
+   ],
+   [
+    -3632,
+    4349
+   ],
+   [
+    -3632,
+    5549
+   ],
+   [
+    -5432,
+    5549
+   ]
+  ],
+  [
+   [
+    -5378,
+    3080
+   ],
+   [
+    -3778,
+    3080
+   ],
+   [
+    -3778,
+    4480
+   ],
+   [
+    -5378,
+    4480
+   ]
+  ],
+  [
+   [
+    -1600,
+    -1400
+   ],
+   [
+    200,
+    -1400
+   ],
+   [
+    200,
+    0
+   ],
+   [
+    -1600,
+    0
+   ]
+  ],
+  [
+   [
+    -4266,
+    -2515
+   ],
+   [
+    -2866,
+    -2515
+   ],
+   [
+    -2866,
+    -1515
+   ],
+   [
+    -4266,
+    -1515
+   ]
+  ]
+ ],
+ "wind": {
+  "x": 0.5,
+  "y": 0.2
+ },
+ "view": {
+  "x": 0,
+  "y": 0,
+  "width": 24000
+ },
+ "sides": {
+  "american": {
+   "name": "Americans (101st Airborne Division, McAuliffe; CCB 10th Armored, Roberts; 4th Armored Division)",
+   "color": "#1f55c4",
+   "light": "#4a83e6",
+   "dark": "#122c66"
+  },
+  "german": {
+   "name": "Germans (XLVII Panzer Corps, Lüttwitz)",
+   "color": "#b8322a",
+   "light": "#de5d50",
+   "dark": "#5c1712"
+  }
+ },
+ "features": [
+  {
+   "type": "road",
+   "name": "Houffalize road",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     -531,
+     3002
+    ],
+    [
+     971,
+     6064
+    ],
+    [
+     1789,
+     8274
+    ],
+    [
+     2500,
+     11900
+    ]
+   ],
+   "at": [
+    1650,
+    7000
+   ],
+   "rot": 70
+  },
+  {
+   "type": "road",
+   "name": "Bourcy road",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     1568,
+     4353
+    ],
+    [
+     5114,
+     7648
+    ]
+   ],
+   "at": [
+    3700,
+    6100
+   ],
+   "rot": 45
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     1789,
+     8274
+    ],
+    [
+     5114,
+     7648
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     1789,
+     8274
+    ],
+    [
+     1133,
+     9502
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     971,
+     6064
+    ],
+    [
+     -13,
+     6891
+    ],
+    [
+     -3417,
+     7073
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     971,
+     6064
+    ],
+    [
+     1718,
+     4453
+    ],
+    [
+     1955,
+     3292
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "Longvilly road",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     496,
+     1428
+    ],
+    [
+     1812,
+     1718
+    ],
+    [
+     3438,
+     2712
+    ],
+    [
+     7144,
+     3891
+    ],
+    [
+     8620,
+     4602
+    ],
+    [
+     9530,
+     5081
+    ],
+    [
+     11900,
+     5600
+    ]
+   ],
+   "at": [
+    5300,
+    3550
+   ],
+   "rot": -12
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     83,
+     2296
+    ],
+    [
+     1955,
+     3292
+    ],
+    [
+     2577,
+     3117
+    ],
+    [
+     3438,
+     2712
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     3438,
+     2712
+    ],
+    [
+     5130,
+     1606
+    ],
+    [
+     7435,
+     2214
+    ],
+    [
+     8803,
+     2755
+    ],
+    [
+     11900,
+     2900
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     5130,
+     1606
+    ],
+    [
+     7144,
+     3891
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "Wiltz road",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     502,
+     -612
+    ],
+    [
+     1718,
+     -557
+    ],
+    [
+     5968,
+     -690
+    ],
+    [
+     11900,
+     -1500
+    ]
+   ],
+   "at": [
+    4200,
+    -870
+   ],
+   "rot": 3
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     1812,
+     1718
+    ],
+    [
+     3488,
+     21
+    ],
+    [
+     5968,
+     -690
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "Arlon road",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     -1449,
+     -2661
+    ],
+    [
+     -900,
+     -11900
+    ]
+   ],
+   "at": [
+    -1050,
+    -6500
+   ],
+   "rot": 87
+  },
+  {
+   "type": "road",
+   "name": "Neufchâteau road",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     -3207,
+     -137
+    ],
+    [
+     -7282,
+     -2419
+    ],
+    [
+     -11900,
+     -5200
+    ]
+   ],
+   "at": [
+    -9500,
+    -3700
+   ],
+   "rot": 30
+  },
+  {
+   "type": "road",
+   "name": "Marche road",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     -4293,
+     1528
+    ],
+    [
+     -7021,
+     3290
+    ],
+    [
+     -7658,
+     4453
+    ],
+    [
+     -9485,
+     4874
+    ],
+    [
+     -11900,
+     5500
+    ]
+   ],
+   "at": [
+    -10700,
+    5400
+   ],
+   "rot": 0
+  },
+  {
+   "type": "road",
+   "name": "Bertogne road",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     -2256,
+     3266
+    ],
+    [
+     -2465,
+     7324
+    ],
+    [
+     -3417,
+     7073
+    ],
+    [
+     -4700,
+     11900
+    ]
+   ],
+   "at": [
+    -4100,
+    9600
+   ],
+   "rot": 75
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     -3417,
+     7073
+    ],
+    [
+     -3901,
+     5326
+    ],
+    [
+     -4832,
+     5449
+    ],
+    [
+     -7658,
+     4453
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     -3901,
+     5326
+    ],
+    [
+     -3678,
+     3780
+    ],
+    [
+     -2256,
+     3266
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     -4293,
+     1528
+    ],
+    [
+     -5744,
+     1123
+    ],
+    [
+     -5886,
+     -1262
+    ],
+    [
+     -7282,
+     -2419
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "Assenois road",
+   "pts": [
+    [
+     -1562,
+     1197
+    ],
+    [
+     -3966,
+     -2615
+    ],
+    [
+     -5006,
+     -4239
+    ],
+    [
+     -6879,
+     -6140
+    ],
+    [
+     -8957,
+     -8647
+    ],
+    [
+     -8200,
+     -11900
+    ]
+   ],
+   "at": [
+    -7900,
+    -7300
+   ],
+   "rot": 50
+  },
+  {
+   "type": "road",
+   "name": "Chaumont road",
+   "pts": [
+    [
+     -900,
+     -11900
+    ],
+    [
+     -5423,
+     -11085
+    ],
+    [
+     -4711,
+     -7795
+    ],
+    [
+     -3602,
+     -5145
+    ],
+    [
+     -3966,
+     -2615
+    ]
+   ],
+   "at": [
+    -5000,
+    -9600
+   ],
+   "rot": 80
+  },
+  {
+   "type": "road",
+   "name": "",
+   "pts": [
+    [
+     502,
+     -612
+    ],
+    [
+     -202,
+     -3456
+    ],
+    [
+     772,
+     -6172
+    ]
+   ]
+  },
+  {
+   "type": "road",
+   "name": "railway to Gouvy",
+   "pts": [
+    [
+     -1362,
+     1497
+    ],
+    [
+     1718,
+     4453
+    ],
+    [
+     5314,
+     7848
+    ],
+    [
+     11900,
+     9800
+    ]
+   ],
+   "at": [
+    7500,
+    9000
+   ],
+   "rot": 20
+  },
+  {
+   "type": "road",
+   "name": "railway to Wiltz",
+   "pts": [
+    [
+     -1262,
+     1097
+    ],
+    [
+     1789,
+     1737
+    ],
+    [
+     5130,
+     1806
+    ],
+    [
+     11900,
+     2000
+    ]
+   ],
+   "at": [
+    8500,
+    2350
+   ],
+   "rot": 5
+  },
+  {
+   "type": "road",
+   "name": "railway to Libramont",
+   "pts": [
+    [
+     -1862,
+     997
+    ],
+    [
+     -6000,
+     -4800
+    ],
+    [
+     -11900,
+     -8600
+    ]
+   ],
+   "at": [
+    -9300,
+    -7200
+   ],
+   "rot": 35
+  },
+  {
+   "type": "creek",
+   "name": "the brook (about here)",
+   "pts": [
+    [
+     -400,
+     1800
+    ],
+    [
+     500,
+     1700
+    ],
+    [
+     1300,
+     1750
+    ],
+    [
+     2000,
+     1800
+    ],
+    [
+     2600,
+     1600
+    ],
+    [
+     3100,
+     1000
+    ],
+    [
+     3400,
+     300
+    ],
+    [
+     3600,
+     -100
+    ]
+   ],
+   "at": [
+    2950,
+    1650
+   ],
+   "rot": -40
+  },
+  {
+   "type": "fence",
+   "name": "barbed-wire fences (about here)",
+   "pts": [
+    [
+     700,
+     1450
+    ],
+    [
+     1500,
+     1520
+    ]
+   ],
+   "at": [
+    1100,
+    1300
+   ],
+   "rot": 0
+  },
+  {
+   "type": "fence",
+   "pts": [
+    [
+     700,
+     1600
+    ],
+    [
+     1500,
+     1660
+    ]
+   ]
+  },
+  {
+   "type": "fence",
+   "pts": [
+    [
+     1000,
+     1380
+    ],
+    [
+     1000,
+     1700
+    ]
+   ]
+  },
+  {
+   "name": "BASTOGNE",
+   "at": [
+    -1407,
+    2020
+   ]
+  },
+  {
+   "name": "Heintz Barracks",
+   "at": [
+    -1697,
+    2137
+   ]
+  },
+  {
+   "name": "the seminary",
+   "at": [
+    -703,
+    1919
+   ]
+  },
+  {
+   "name": "Hôtel Lebrun, CCB's CP (about here)",
+   "at": [
+    -1562,
+    937
+   ]
+  },
+  {
+   "name": "Mardasson",
+   "at": [
+    83,
+    2306
+   ]
+  },
+  {
+   "name": "Neffe château (about here)",
+   "at": [
+    1789,
+    1297
+   ]
+  },
+  {
+   "name": "Neffe station",
+   "at": [
+    2139,
+    1857
+   ]
+  },
+  {
+   "name": "Hill 510 (about here)",
+   "at": [
+    2577,
+    3287
+   ]
+  },
+  {
+   "name": "Hill 500 (about here)",
+   "at": [
+    573,
+    -1617
+   ]
+  },
+  {
+   "name": "Martaimont",
+   "at": [
+    1528,
+    -2891
+   ]
+  },
+  {
+   "name": "Halt station (about here)",
+   "at": [
+    2268,
+    4393
+   ]
+  },
+  {
+   "name": "Bois Jacques",
+   "at": [
+    1933,
+    5017
+   ]
+  },
+  {
+   "name": "Château de Rolley",
+   "at": [
+    -3901,
+    5496
+   ]
+  },
+  {
+   "name": "Noville",
+   "at": [
+    1789,
+    8534
+   ]
+  },
+  {
+   "name": "Vaux",
+   "at": [
+    1133,
+    9702
+   ]
+  },
+  {
+   "name": "Bourcy",
+   "at": [
+    5114,
+    7868
+   ]
+  },
+  {
+   "name": "Cobru",
+   "at": [
+    724,
+    8067
+   ]
+  },
+  {
+   "name": "Foy",
+   "at": [
+    751,
+    6064
+   ]
+  },
+  {
+   "name": "Recogne",
+   "at": [
+    -333,
+    6891
+   ]
+  },
+  {
+   "name": "Luzery",
+   "at": [
+    -831,
+    3002
+   ]
+  },
+  {
+   "name": "Longchamps",
+   "at": [
+    -3417,
+    7303
+   ]
+  },
+  {
+   "name": "Monaville",
+   "at": [
+    -2465,
+    7124
+   ]
+  },
+  {
+   "name": "Bizory",
+   "at": [
+    1655,
+    3372
+   ]
+  },
+  {
+   "name": "Mageret",
+   "at": [
+    3438,
+    2492
+   ]
+  },
+  {
+   "name": "Neffe",
+   "at": [
+    1812,
+    1938
+   ]
+  },
+  {
+   "name": "Mont",
+   "at": [
+    496,
+    1228
+   ]
+  },
+  {
+   "name": "Marvie",
+   "at": [
+    182,
+    -612
+   ]
+  },
+  {
+   "name": "Wardin",
+   "at": [
+    3488,
+    -199
+   ]
+  },
+  {
+   "name": "Bras",
+   "at": [
+    5968,
+    -910
+   ]
+  },
+  {
+   "name": "Benonchamps",
+   "at": [
+    5130,
+    1386
+   ]
+  },
+  {
+   "name": "Niederwampach",
+   "at": [
+    7435,
+    1994
+   ]
+  },
+  {
+   "name": "Oberwampach",
+   "at": [
+    8803,
+    2975
+   ]
+  },
+  {
+   "name": "Arloncourt",
+   "at": [
+    5132,
+    4189
+   ]
+  },
+  {
+   "name": "Oubourcy",
+   "at": [
+    4450,
+    5530
+   ]
+  },
+  {
+   "name": "Longvilly",
+   "at": [
+    7144,
+    3661
+   ]
+  },
+  {
+   "name": "Chifontaine",
+   "at": [
+    8620,
+    4382
+   ]
+  },
+  {
+   "name": "Allerborn",
+   "at": [
+    9530,
+    5301
+   ]
+  },
+  {
+   "name": "Mande-Saint-Étienne",
+   "at": [
+    -7021,
+    3060
+   ]
+  },
+  {
+   "name": "Flamierge",
+   "at": [
+    -9485,
+    5104
+   ]
+  },
+  {
+   "name": "Flamizoulle (about here)",
+   "at": [
+    -7658,
+    4683
+   ]
+  },
+  {
+   "name": "Champs",
+   "at": [
+    -4832,
+    5679
+   ]
+  },
+  {
+   "name": "Hemroulle",
+   "at": [
+    -3678,
+    3560
+   ]
+  },
+  {
+   "name": "Savy",
+   "at": [
+    -2256,
+    3066
+   ]
+  },
+  {
+   "name": "Rouette",
+   "at": [
+    -5928,
+    7052
+   ]
+  },
+  {
+   "name": "Givry",
+   "at": [
+    -6788,
+    7592
+   ]
+  },
+  {
+   "name": "Senonchamps",
+   "at": [
+    -5744,
+    1353
+   ]
+  },
+  {
+   "name": "Isle-la-Hesse",
+   "at": [
+    -4293,
+    1758
+   ]
+  },
+  {
+   "name": "Isle-le-Pré",
+   "at": [
+    -3207,
+    -337
+   ]
+  },
+  {
+   "name": "Villeroux",
+   "at": [
+    -5886,
+    -1482
+   ]
+  },
+  {
+   "name": "Chenogne",
+   "at": [
+    -8404,
+    335
+   ]
+  },
+  {
+   "name": "Sibret",
+   "at": [
+    -7282,
+    -2649
+   ]
+  },
+  {
+   "name": "Morhet",
+   "at": [
+    -10935,
+    -3320
+   ]
+  },
+  {
+   "name": "Remoifosse",
+   "at": [
+    -1029,
+    -2661
+   ]
+  },
+  {
+   "name": "Assenois",
+   "at": [
+    -3966,
+    -2845
+   ]
+  },
+  {
+   "name": "Clochimont",
+   "at": [
+    -5156,
+    -4459
+   ]
+  },
+  {
+   "name": "Hompré",
+   "at": [
+    -3602,
+    -5365
+   ]
+  },
+  {
+   "name": "Lutrebois",
+   "at": [
+    -202,
+    -3676
+   ]
+  },
+  {
+   "name": "Villers-la-Bonne-Eau",
+   "at": [
+    772,
+    -6392
+   ]
+  },
+  {
+   "name": "Remichampagne",
+   "at": [
+    -6879,
+    -6360
+   ]
+  },
+  {
+   "name": "Cobreville",
+   "at": [
+    -8957,
+    -8867
+   ]
+  },
+  {
+   "name": "Chaumont",
+   "at": [
+    -4711,
+    -8025
+   ]
+  },
+  {
+   "name": "Burnon",
+   "at": [
+    -5423,
+    -11305
+   ]
+  },
+  {
+   "name": "to Houffalize",
+   "at": [
+    2850,
+    11500
+   ],
+   "rot": 70
+  },
+  {
+   "name": "to Clervaux",
+   "at": [
+    11400,
+    5850
+   ]
+  },
+  {
+   "name": "to Wiltz",
+   "at": [
+    11400,
+    -1250
+   ]
+  },
+  {
+   "name": "to Arlon",
+   "at": [
+    -550,
+    -11400
+   ],
+   "rot": 85
+  },
+  {
+   "name": "to Neufchâteau",
+   "at": [
+    -11000,
+    -5300
+   ],
+   "rot": 25
+  },
+  {
+   "name": "to Marche",
+   "at": [
+    -11200,
+    5750
+   ]
+  }
+ ],
+ "units": [
+  {
+   "id": "p501_1",
+   "side": "american",
+   "name": "1st Battalion, 501st Parachute Infantry (about 550, TO&E)",
+   "short": "1/501",
+   "commander": "Maj. R. V. Bottomly",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p501_2",
+   "side": "american",
+   "name": "2d Battalion, 501st Parachute Infantry (about 550, TO&E)",
+   "short": "2/501",
+   "commander": "Maj. S. N. Homan",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p501_3",
+   "side": "american",
+   "name": "3d Battalion, 501st Parachute Infantry, less Company I (about 400)",
+   "short": "3/501",
+   "commander": "Lt. Col. G. M. Griswold",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p501_i",
+   "side": "american",
+   "name": "Company I, 501st Parachute Infantry, sent to Wardin (drawn as 150)",
+   "short": "I/501",
+   "commander": "",
+   "type": "infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p506_1",
+   "side": "american",
+   "name": "1st Battalion, 506th Parachute Infantry, 'in full strength when it went to Team Desobry's support' (drawn as 600)",
+   "short": "1/506",
+   "commander": "Lt. Col. J. L. LaPrade (killed 19 Dec), then Maj. R. F. Harwick",
+   "type": "infantry",
+   "strength": 600,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p506_2",
+   "side": "american",
+   "name": "2d Battalion, 506th Parachute Infantry (about 550, TO&E)",
+   "short": "2/506",
+   "commander": "Lt. Col. R. L. Strayer",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p506_3",
+   "side": "american",
+   "name": "3d Battalion, 506th Parachute Infantry (about 550, TO&E)",
+   "short": "3/506",
+   "commander": "Maj. G. M. Heilman",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p502_1",
+   "side": "american",
+   "name": "1st Battalion, 502d Parachute Infantry (about 550, TO&E)",
+   "short": "1/502",
+   "commander": "Maj. J. D. Hanlon",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p502_2",
+   "side": "american",
+   "name": "2d Battalion, 502d Parachute Infantry (about 550, TO&E)",
+   "short": "2/502",
+   "commander": "Lt. Col. T. H. Sutliffe",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "p502_3",
+   "side": "american",
+   "name": "3d Battalion, 502d Parachute Infantry (about 550, TO&E)",
+   "short": "3/502",
+   "commander": "Lt. Col. J. P. Stopka",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "g327_1",
+   "side": "american",
+   "name": "1st Battalion, 327th Glider Infantry (about 700, TO&E)",
+   "short": "1/327",
+   "commander": "Lt. Col. H. F. Salee",
+   "type": "infantry",
+   "strength": 700,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "g327_2",
+   "side": "american",
+   "name": "2d Battalion, 327th Glider Infantry (about 700, TO&E)",
+   "short": "2/327",
+   "commander": "Lt. Col. R. L. Inman (wounded 20 Dec), then Maj. R. B. Galbreaith",
+   "type": "infantry",
+   "strength": 700,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "g327_3",
+   "side": "american",
+   "name": "3d Battalion, 327th Glider Infantry, in fact the 1st Battalion, 401st Glider Infantry (about 700, TO&E)",
+   "short": "3/327",
+   "commander": "Lt. Col. R. C. Allen",
+   "type": "infantry",
+   "strength": 700,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "eng326",
+   "side": "american",
+   "name": "326th Airborne Engineer Battalion (about 400, TO&E)",
+   "short": "326 Engrs",
+   "commander": "Lt. Col. H. A. Mozley",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "pf327",
+   "side": "american",
+   "name": "The pathfinders who jumped into the 2d Bn 327th's area on 23 December to mark the supply drop (their number is not in the note; drawn as 60, a dot of 20 from each of three aircraft)",
+   "short": "Pathfinders",
+   "commander": "",
+   "type": "infantry",
+   "strength": 60,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "fa321",
+   "side": "american",
+   "name": "321st Glider Field Artillery Battalion",
+   "short": "321 GFA",
+   "commander": "Lt. Col. E. L. Carmichael",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 12
+  },
+  {
+   "id": "fa907",
+   "side": "american",
+   "name": "907th Glider Field Artillery Battalion, 105 mm M3",
+   "short": "907 GFA",
+   "commander": "Lt. Col. C. F. Nelson",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 12
+  },
+  {
+   "id": "fa377",
+   "side": "american",
+   "name": "377th Parachute Field Artillery Battalion, 75 mm pack howitzers",
+   "short": "377 PFA",
+   "commander": "Lt. Col. H. W. Elkins",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 12
+  },
+  {
+   "id": "fa463",
+   "side": "american",
+   "name": "463d Parachute Field Artillery Battalion, 75 mm pack howitzers",
+   "short": "463 PFA",
+   "commander": "Lt. Col. J. T. Cooper",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 12
+  },
+  {
+   "id": "aa81",
+   "side": "american",
+   "name": "81st Airborne Antiaircraft Battalion, 57 mm and AA batteries; D and E Batteries put twelve guns in the Marvie gap on 23 December",
+   "short": "81 AA",
+   "commander": "Lt. Col. X. B. Cox",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 12
+  },
+  {
+   "id": "desobry_t",
+   "side": "american",
+   "name": "Team Desobry's armor: B Company 3d Tank Battalion, a light tank platoon and a 609th TD platoon, fifteen tanks",
+   "short": "Desobry",
+   "commander": "Maj. W. R. Desobry (wounded 19 Dec), then Maj. C. L. Hustead",
+   "type": "armor",
+   "strength": 15,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "desobry_i",
+   "side": "american",
+   "name": "Team Desobry's infantry: the 20th Armored Infantry Battalion less A and C Companies, engineers and a cavalry platoon (drawn as 400)",
+   "short": "Desobry",
+   "commander": "Maj. W. R. Desobry",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "hyduke",
+   "side": "american",
+   "name": "Team Cherry's advance guard: four Shermans and seven light tanks of A Company 3d Tank Battalion, a cavalry platoon and tank destroyers",
+   "short": "Hyduke",
+   "commander": "Lt. E. P. Hyduke",
+   "type": "armor",
+   "strength": 11,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "ryerson_t",
+   "side": "american",
+   "name": "Team Cherry's main body, its tanks and two 105 mm assault guns (drawn as eight)",
+   "short": "Ryerson",
+   "commander": "Capt. W. F. Ryerson",
+   "type": "armor",
+   "strength": 8,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "ryerson_i",
+   "side": "american",
+   "name": "Team Cherry's main body: C Company, 20th Armored Infantry Battalion (about 250, TO&E)",
+   "short": "Ryerson",
+   "commander": "Capt. W. F. Ryerson",
+   "type": "infantry",
+   "strength": 250,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "cherry_hq",
+   "side": "american",
+   "name": "Team Cherry's headquarters at the Neffe château (drawn as 60)",
+   "short": "Cherry HQ",
+   "commander": "Lt. Col. H. T. Cherry",
+   "type": "infantry",
+   "strength": 60,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "ohara_t",
+   "side": "american",
+   "name": "Team O'Hara's mediums: C Company, 21st Tank Battalion (about 17, TO&E)",
+   "short": "O'Hara",
+   "commander": "Lt. Col. J. O'Hara",
+   "type": "armor",
+   "strength": 17,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "ohara_l",
+   "side": "american",
+   "name": "Team O'Hara's light tank platoon, five tanks",
+   "short": "O'Hara light",
+   "commander": "Wishart",
+   "type": "armor",
+   "strength": 5,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "ohara_i",
+   "side": "american",
+   "name": "Team O'Hara's infantry: the 54th Armored Infantry Battalion less A and C Companies, and engineers (drawn as 400)",
+   "short": "O'Hara",
+   "commander": "Lt. Col. J. O'Hara",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "fa420",
+   "side": "american",
+   "name": "420th Armored Field Artillery Battalion, eighteen 105 mm howitzers",
+   "short": "420 AFA",
+   "commander": "Lt. Col. B. D. Browne",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 18
+  },
+  {
+   "id": "pyle_t",
+   "side": "american",
+   "name": "Team Pyle's armor, from 21 December: 14 medium tanks, mostly from the 9th Armored",
+   "short": "Pyle",
+   "commander": "",
+   "type": "armor",
+   "strength": 14,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pyle_i",
+   "side": "american",
+   "name": "Team Pyle's infantry, 200 men, mostly from the 9th Armored",
+   "short": "Pyle",
+   "commander": "",
+   "type": "infantry",
+   "strength": 200,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "snafu",
+   "side": "american",
+   "name": "Team SNAFU, the stragglers gathered in Bastogne: about 250 on 19 December, 600 within a week",
+   "short": "SNAFU",
+   "commander": "Capt. C. Brown (110th Inf)",
+   "type": "infantry",
+   "strength": 250,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "td705a",
+   "side": "american",
+   "name": "A Company, 705th Tank Destroyer Battalion, M18s, less the platoon left at Laroche (drawn as eight)",
+   "short": "705 TD A",
+   "commander": "Lt. Col. C. D. Templeton, battalion",
+   "type": "armor",
+   "strength": 8,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "td705b",
+   "side": "american",
+   "name": "B Company, 705th Tank Destroyer Battalion, M18s (drawn as twelve)",
+   "short": "705 TD B",
+   "commander": "Lt. Col. C. D. Templeton, battalion",
+   "type": "armor",
+   "strength": 12,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "td705c",
+   "side": "american",
+   "name": "C Company, 705th Tank Destroyer Battalion, M18s (drawn as twelve)",
+   "short": "705 TD C",
+   "commander": "Lt. Col. C. D. Templeton, battalion",
+   "type": "armor",
+   "strength": 12,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "fa755",
+   "side": "american",
+   "name": "755th Field Artillery Battalion, twelve 155 mm howitzers",
+   "short": "755 FA",
+   "commander": "",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 12
+  },
+  {
+   "id": "fa969",
+   "side": "american",
+   "name": "969th Field Artillery Battalion, twelve 155 mm howitzers",
+   "short": "969 FA",
+   "commander": "",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 12
+  },
+  {
+   "id": "fa109",
+   "side": "american",
+   "name": "109th Field Artillery Battalion (28th Division), which came through as a unit and attached itself to the 907th",
+   "short": "109 FA",
+   "commander": "",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 12
+  },
+  {
+   "id": "eng158",
+   "side": "american",
+   "name": "158th Engineer Combat Battalion, outposts at Mageret, Neffe, Mont and Foy (drawn as 300)",
+   "short": "158 Engrs",
+   "commander": "",
+   "type": "infantry",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "eng35",
+   "side": "american",
+   "name": "35th Engineer Combat Battalion, 'tired, understrength' (drawn as 300)",
+   "short": "35 Engrs",
+   "commander": "",
+   "type": "infantry",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "loose": true
+  },
+  {
+   "id": "harper_t",
+   "side": "american",
+   "name": "Task Force Harper, CCR 9th Armored: the 2d Tank Battalion less a company (drawn as 30)",
+   "short": "TF Harper",
+   "commander": "Lt. Col. R. S. Harper (killed 18 Dec)",
+   "type": "armor",
+   "strength": 30,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "harper_i",
+   "side": "american",
+   "name": "Task Force Harper's infantry, two companies of the 52d Armored Infantry Battalion (drawn as 400)",
+   "short": "TF Harper",
+   "commander": "Lt. Col. R. S. Harper",
+   "type": "infantry",
+   "strength": 400,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "b8tk",
+   "side": "american",
+   "name": "CCB 4th Armored: the 8th Tank Battalion, 22 Shermans in fighting condition on the morning of 23 December",
+   "short": "8 Tk Bn",
+   "commander": "Brig. Gen. H. E. Dager, CCB",
+   "type": "armor",
+   "strength": 22,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "b10aib",
+   "side": "american",
+   "name": "CCB 4th Armored: the 10th Armored Infantry Battalion (about 700, TO&E)",
+   "short": "10 AIB",
+   "commander": "Lt. Col. H. Cohen",
+   "type": "infantry",
+   "strength": 700,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "b318",
+   "side": "american",
+   "name": "1st Battalion, 318th Infantry (80th Division), under CCB 4th Armored (about 700, TO&E)",
+   "short": "1/318",
+   "commander": "",
+   "type": "infantry",
+   "strength": 700,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "r37tk",
+   "side": "american",
+   "name": "CCR 4th Armored: the 37th Tank Battalion, 'no more than twenty Shermans in operation' (drawn as seventeen, with Dwight's three apart)",
+   "short": "37 Tk Bn",
+   "commander": "Lt. Col. C. W. Abrams Jr.",
+   "type": "armor",
+   "strength": 17,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "dwight",
+   "side": "american",
+   "name": "Capt. W. A. Dwight's light team of the 37th Tank Battalion, which went through Assenois; Lt. C. P. Boggess drove the first vehicle (drawn as three tanks)",
+   "short": "Dwight",
+   "commander": "Capt. W. A. Dwight",
+   "type": "armor",
+   "strength": 3,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "r53aib",
+   "side": "american",
+   "name": "CCR 4th Armored: the 53d Armored Infantry Battalion, 'short 230 men' (drawn as 770)",
+   "short": "53 AIB",
+   "commander": "Lt. Col. G. L. Jaques",
+   "type": "infantry",
+   "strength": 770,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "r94fa",
+   "side": "american",
+   "name": "CCR 4th Armored's artillery: the 94th Armored FA Battalion and others, three battalions of 105 mm and a battery of 155 mm (drawn as 40 guns)",
+   "short": "CCR guns",
+   "commander": "",
+   "type": "artillery",
+   "strength": 300,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 40
+  },
+  {
+   "id": "pz2_recce",
+   "side": "german",
+   "name": "2d Panzer Division's Reconnaissance Battalion, half-tracks (drawn as 500)",
+   "short": "2 Pz Recce",
+   "commander": "Col. M. von Lauchert, division",
+   "type": "infantry",
+   "strength": 500,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pz2_t1",
+   "side": "german",
+   "name": "2d Panzer Division: the tanks of the 3d Panzer Regiment on the ridge short of Vaux, fourteen",
+   "short": "3 Pz Regt",
+   "commander": "Col. M. von Lauchert, division",
+   "type": "armor",
+   "strength": 14,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pz2_t2",
+   "side": "german",
+   "name": "2d Panzer Division: the rest of the 'more than 30 tanks' seen at Noville (drawn as sixteen)",
+   "short": "2 Pz tanks",
+   "commander": "Col. M. von Lauchert, division",
+   "type": "armor",
+   "strength": 16,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pzg2_1",
+   "side": "german",
+   "name": "2d Panzergrenadier Regiment, a battalion (drawn as 550)",
+   "short": "2 PGR",
+   "commander": "",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pzg2_2",
+   "side": "german",
+   "name": "2d Panzergrenadier Regiment, a battalion (drawn as 550)",
+   "short": "2 PGR",
+   "commander": "",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pzg304_1",
+   "side": "german",
+   "name": "304th Panzergrenadier Regiment, a battalion, about Foy (drawn as 550)",
+   "short": "304 PGR",
+   "commander": "",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pzg304_2",
+   "side": "german",
+   "name": "304th Panzergrenadier Regiment, a battalion (drawn as 550)",
+   "short": "304 PGR",
+   "commander": "",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pz2_88",
+   "side": "german",
+   "name": "2d Panzer Division's 88s at the road junction below Chifontaine (drawn as four)",
+   "short": "2 Pz 88s",
+   "commander": "",
+   "type": "artillery",
+   "strength": 80,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 4
+  },
+  {
+   "id": "kg902_t",
+   "side": "german",
+   "name": "Kampfgruppe 902's Mark V tanks, Bayerlein in a lead tank: fifteen, less the three left at Mageret",
+   "short": "KG 902",
+   "commander": "Lt. Gen. F. Bayerlein",
+   "type": "armor",
+   "strength": 12,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "kg902_b",
+   "side": "german",
+   "name": "The three tanks Bayerlein left to block the road east of Mageret",
+   "short": "KG 902 block",
+   "commander": "",
+   "type": "armor",
+   "strength": 3,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "kg902_i",
+   "side": "german",
+   "name": "Kampfgruppe 902: a battalion of the 902d Panzergrenadier Regiment, 'four companies' (drawn as 550)",
+   "short": "902 PGR",
+   "commander": "",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pl901_1",
+   "side": "german",
+   "name": "901st Panzergrenadier Regiment, a battalion (drawn as 550)",
+   "short": "901 PGR",
+   "commander": "",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pl901_2",
+   "side": "german",
+   "name": "901st Panzergrenadier Regiment, a battalion (drawn as 550)",
+   "short": "901 PGR",
+   "commander": "",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pl_td",
+   "side": "german",
+   "name": "The tank destroyer battalion with the 901st, 'about twenty TDs'",
+   "short": "Lehr TDs",
+   "commander": "",
+   "type": "armor",
+   "strength": 20,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pl901_tk",
+   "side": "german",
+   "name": "The 901st's tanks against Marvie, four",
+   "short": "901 tanks",
+   "commander": "",
+   "type": "armor",
+   "strength": 4,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pl_art",
+   "side": "german",
+   "name": "Panzer Lehr's artillery battalion with the 901st (drawn as twelve guns)",
+   "short": "Lehr guns",
+   "commander": "",
+   "type": "artillery",
+   "strength": 200,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ],
+   "guns": 12
+  },
+  {
+   "id": "pl_recce",
+   "side": "german",
+   "name": "Reconnaissance Lehr Battalion 130 at Wardin (drawn as 500)",
+   "short": "Recce Lehr 130",
+   "commander": "",
+   "type": "infantry",
+   "strength": 500,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "pl_wardin_t",
+   "side": "german",
+   "name": "The seven Panzer Lehr tanks against Wardin",
+   "short": "Lehr tanks",
+   "commander": "",
+   "type": "armor",
+   "strength": 7,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "gr77_1",
+   "side": "german",
+   "name": "Grenadier Regiment 77, a battalion (drawn as 650)",
+   "short": "GR 77",
+   "commander": "Maj. Gen. H. Kokott, division",
+   "type": "infantry",
+   "strength": 650,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "gr77_2",
+   "side": "german",
+   "name": "Grenadier Regiment 77, a battalion (drawn as 650)",
+   "short": "GR 77",
+   "commander": "Maj. Gen. H. Kokott, division",
+   "type": "infantry",
+   "strength": 650,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "gr78_1",
+   "side": "german",
+   "name": "Grenadier Regiment 78, a battalion (drawn as 650)",
+   "short": "GR 78",
+   "commander": "Maj. Gen. H. Kokott, division",
+   "type": "infantry",
+   "strength": 650,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "gr78_2",
+   "side": "german",
+   "name": "Grenadier Regiment 78, a battalion (drawn as 650)",
+   "short": "GR 78",
+   "commander": "Maj. Gen. H. Kokott, division",
+   "type": "infantry",
+   "strength": 650,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "gr39_1",
+   "side": "german",
+   "name": "Grenadier Regiment 39, a battalion (drawn as 650)",
+   "short": "GR 39",
+   "commander": "Maj. Gen. H. Kokott, division",
+   "type": "infantry",
+   "strength": 650,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "gr39_2",
+   "side": "german",
+   "name": "Grenadier Regiment 39, a battalion (drawn as 650)",
+   "short": "GR 39",
+   "commander": "Maj. Gen. H. Kokott, division",
+   "type": "infantry",
+   "strength": 650,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "kunkel",
+   "side": "german",
+   "name": "Reconnaissance (Füsilier) Battalion 26, 'Kampfgruppe Kunkel' (drawn as 500)",
+   "short": "KG Kunkel",
+   "commander": "",
+   "type": "infantry",
+   "strength": 500,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "vgd_t",
+   "side": "german",
+   "name": "The seven tanks with the 77th down the railway at Halt",
+   "short": "Halt tanks",
+   "commander": "",
+   "type": "armor",
+   "strength": 7,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "arlon_t",
+   "side": "german",
+   "name": "The twelve tanks that came up the Arlon road on the night of 23 December (their unit is not in the note)",
+   "short": "Arlon tanks",
+   "commander": "",
+   "type": "armor",
+   "strength": 12,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "tigers",
+   "side": "german",
+   "name": "Five Tigers newly arrived near Kokott's CP, sent down the Clochimont road (Tiger sightings are often Mark IVs)",
+   "short": "Tigers",
+   "commander": "",
+   "type": "armor",
+   "strength": 5,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "m115_1",
+   "side": "german",
+   "name": "Kampfgruppe Maucke: the 115th Panzergrenadier Regiment's spearhead, a battalion (drawn as 550)",
+   "short": "115 PGR",
+   "commander": "Col. W. Maucke",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "m115_2",
+   "side": "german",
+   "name": "Kampfgruppe Maucke: a second spearhead battalion (drawn as 550)",
+   "short": "115 PGR",
+   "commander": "Col. W. Maucke",
+   "type": "infantry",
+   "strength": 550,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "m115_t",
+   "side": "german",
+   "name": "Kampfgruppe Maucke's armor: the eighteen tanks on the 327th's front",
+   "short": "115 Pz",
+   "commander": "Col. W. Maucke",
+   "type": "armor",
+   "strength": 18,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "fj14",
+   "side": "german",
+   "name": "A company of the 14th Parachute Regiment at Chaumont (drawn as 150)",
+   "short": "14 FJR",
+   "commander": "Col. L. Heilmann, division",
+   "type": "infantry",
+   "strength": 150,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "stug11",
+   "side": "german",
+   "name": "11th Assault Gun Brigade, 'ten to fifteen remodeled Mark III carriages with 75-mm. guns' (drawn as twelve)",
+   "short": "11 StuG Bde",
+   "commander": "",
+   "type": "armor",
+   "strength": 12,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  },
+  {
+   "id": "assenois_g",
+   "side": "german",
+   "name": "Assenois's garrison, 'a mixed group from the 5th Parachute and 26th Volks Grenadier Divisions' (drawn as 500)",
+   "short": "Assenois",
+   "commander": "",
+   "type": "infantry",
+   "strength": 500,
+   "keys": [
+    {
+     "t": "1944-12-18 15:30",
+     "x": 0,
+     "y": 0,
+     "h": 0,
+     "state": "hidden"
+    }
+   ]
+  }
+ ],
+ "events": [],
+ "tints": [],
+ "sources": [
+  "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m, sampled to 32 m."
+ ]
+}
