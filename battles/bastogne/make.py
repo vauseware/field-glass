@@ -84,7 +84,7 @@ R_CHAMPS = [P['longchamps'], P['rolley'], P['champs'], P['flamizoulle']]
 R_HEMROULLE = [P['rolley'], P['hemroulle'], P['savy']]
 R_SENON = [P['isle_hesse'], P['senonchamps'], P['villeroux'], P['sibret']]
 R_ASSENOIS = [B, P['assenois'], P['clochimont'], P['remichampagne'], P['cobreville'], EDGE_SSW]  # CCR's road north
-R_CHAUMONT = [EDGE_S, P['burnon'], P['chaumont'], P['hompre'], P['assenois']]                  # CCB's road north
+R_CHAUMONT = [(-5000, -11900), P['burnon'], P['chaumont'], P['hompre'], P['assenois']]                  # CCB's road north
 R_SOUTH = [P['marvie'], P['lutrebois'], P['villers']]
 RAIL_GOUVY = [off(B, 200, 300), P['halt'], off(P['bourcy'], 200, 200), (11900, 9800)]          # Bastogne-Gouvy, through the Bois Jacques
 RAIL_WILTZ = [off(B, 300, -100), P['neffe_stn'], off(P['benonchamps'], 0, 200), (11900, 2000)]  # Bastogne-Wiltz, razed today
@@ -122,18 +122,18 @@ features = [
     rd(R_MARCHE, "Marche road", (-10700, 5400), 0), rd(R_BERTOGNE, "Bertogne road", (-4100, 9600), 75), rd(R_CHAMPS), rd(R_HEMROULLE), rd(R_SENON),
     rd(R_ASSENOIS, "Assenois road", (-7900, -7300), 50), rd(R_CHAUMONT, "Chaumont road", (-5000, -9600), 80), rd(R_SOUTH),
     rd(RAIL_GOUVY, "railway to Gouvy", (7500, 9000), 20), rd(RAIL_WILTZ, "railway to Wiltz", (8500, 2350), 5), rd(RAIL_LIBRAMONT, "railway to Libramont", (-9300, -7200), 35),
-    dict(type="creek", name="the brook (about here)", pts=[list(p) for p in BROOK], at=[2950, 1650], rot=-40),
-    dict(type="fence", name="barbed-wire fences (about here)", pts=[[700, 1450], [1500, 1520]], at=[1100, 1300], rot=0),
+    dict(type="creek", name="the brook (about here)", pts=[list(p) for p in BROOK], at=[3550, 750], rot=-70),
+    dict(type="fence", pts=[[700, 1450], [1500, 1520]]),
     dict(type="fence", pts=[[700, 1600], [1500, 1660]]), dict(type="fence", pts=[[1000, 1380], [1000, 1700]]),
-    label("BASTOGNE", P['town'], dy=650), label("Heintz Barracks", P['barracks'], dx=-450, dy=120), label("the seminary", P['seminary'], dx=420, dy=60),
-    label("Hôtel Lebrun, CCB's CP (about here)", P['bastogne'], dy=-260),
-    label("Mardasson", P['mardasson'], dy=160), label("Neffe château (about here)", P['chateau'], dy=-150), label("Neffe station", P['neffe_stn'], dx=350, dy=120),
-    label("Hill 510 (about here)", P['hill510'], dy=170), label("Hill 500 (about here)", P['hill500'], dy=-170), label("Martaimont", P['martaimont'], dy=-200),
+    label("BASTOGNE", P['town'], dy=-50), label("Heintz Barracks", P['barracks'], dx=-600, dy=150), label("the seminary", P['seminary'], dx=500, dy=60),
+    label("CCB's CP, the Hôtel Lebrun (about here)", P['bastogne'], dy=-450),
+    label("Mardasson", P['mardasson'], dy=160), label("Neffe château (about here)", P['chateau'], dy=-150),
+    label("Hill 510 (about here)", P['hill510'], dy=-200), label("Hill 500 (about here)", P['hill500'], dy=-170), label("Martaimont", P['martaimont'], dy=-200),
     label("Halt station (about here)", P['halt'], dx=550, dy=-60), label("Bois Jacques", P['bois_jacques'], dx=200, dy=350),
     label("Château de Rolley", P['rolley'], dy=170),
     label("Noville", P['noville'], dy=260), label("Vaux", P['vaux'], dy=200), label("Bourcy", P['bourcy'], dy=220), label("Cobru", P['cobru'], dx=-250, dy=120),
     label("Foy", P['foy'], dx=-220), label("Recogne", P['recogne'], dx=-320), label("Luzery", P['luzery'], dx=-300),
-    label("Longchamps", P['longchamps'], dy=230), label("Monaville", P['monaville'], dy=-200), label("Bizory", P['bizory'], dx=-300, dy=80),
+    label("Longchamps", P['longchamps'], dy=230), label("Monaville", P['monaville'], dy=-200), label("Bizory", P['bizory'], dy=250),
     label("Mageret", P['mageret'], dy=-220), label("Neffe", P['neffe'], dy=220), label("Mont", P['mont'], dy=-200),
     label("Marvie", P['marvie'], dx=-320), label("Wardin", P['wardin'], dy=-220), label("Bras", P['bras'], dy=-220),
     label("Benonchamps", P['benonchamps'], dy=-220), label("Niederwampach", P['niederwampach'], dy=-220), label("Oberwampach", P['oberwampach'], dy=220),
@@ -246,11 +246,13 @@ OOB = [
     ("kunkel", "german", "KG Kunkel", "Reconnaissance (Füsilier) Battalion 26, 'Kampfgruppe Kunkel' (drawn as 500)", "", "infantry", 500, {}),
     ("vgd_t", "german", "Halt tanks", "The seven tanks with the 77th down the railway at Halt", "", "armor", 7, {}),
     ("arlon_t", "german", "Arlon tanks", "The twelve tanks that came up the Arlon road on the night of 23 December (their unit is not in the note)", "", "armor", 12, {}),
+    ("flam_t", "german", "Flamierge tanks", "The twelve tanks that came out of the woods south of the St Hubert road with infantry in snow suits on 23 December (their unit is not in the note)", "", "armor", 12, {}),
     ("tigers", "german", "Tigers", "Five Tigers newly arrived near Kokott's CP, sent down the Clochimont road (Tiger sightings are often Mark IVs)", "", "armor", 5, {}),
     # 15th Panzergrenadier Division, Kampfgruppe Maucke
     ("m115_1", "german", "115 PGR", "Kampfgruppe Maucke: the 115th Panzergrenadier Regiment's spearhead, a battalion (drawn as 550)", "Col. W. Maucke", "infantry", 550, {}),
     ("m115_2", "german", "115 PGR", "Kampfgruppe Maucke: a second spearhead battalion (drawn as 550)", "Col. W. Maucke", "infantry", 550, {}),
-    ("m115_t", "german", "115 Pz", "Kampfgruppe Maucke's armor: the eighteen tanks on the 327th's front", "Col. W. Maucke", "armor", 18, {}),
+    ("m115_t", "german", "115 Pz", "Kampfgruppe Maucke's armor: eleven of the eighteen tanks on the 327th's front, those that turned for Hemroulle", "Col. W. Maucke", "armor", 11, {}),
+    ("m115_t7", "german", "115 Pz", "Kampfgruppe Maucke's armor: the seven of the eighteen that turned north toward Rolley", "Col. W. Maucke", "armor", 7, {}),
     # 5th Parachute Division, Col. L. Heilmann
     ("fj14", "german", "14 FJR", "A company of the 14th Parachute Regiment at Chaumont (drawn as 150)", "Col. L. Heilmann, division", "infantry", 150, {}),
     ("stug11", "german", "11 StuG Bde", "11th Assault Gun Brigade, 'ten to fifteen remodeled Mark III carriages with 75-mm. guns' (drawn as twelve)", "", "armor", 12, {}),
@@ -259,7 +261,8 @@ OOB = [
 BASE = {row[0]: row for row in OOB}
 assert len(BASE) == len(OOB), "a duplicate unit id"
 # Units that ride: armored infantry in half-tracks, motorised guns
-MOTOR = {"desobry_i", "ryerson_i", "cherry_hq", "ohara_i", "pyle_i", "harper_i", "b10aib", "r53aib", "pz2_recce"} | {r[0] for r in OOB if r[5] == "artillery"}
+MOTOR = {"desobry_i", "ryerson_i", "cherry_hq", "ohara_i", "pyle_i", "harper_i", "b10aib", "r53aib", "pz2_recce", "kunkel", "kg902_i", "pl901_1", "pl901_2",
+         "pl_recce", "pzg2_1", "pzg2_2", "pzg304_1", "pzg304_2", "m115_1", "m115_2"} | {r[0] for r in OOB if r[5] == "artillery"}
 
 # ---- movement ----
 KEYS = {}
@@ -275,16 +278,674 @@ def keys(id, ks):  # every leg starts where the unit stands, unless it is coming
     have += ks
 def last(id): k = KEYS[id][-1]; return (k["x"], k["y"])
 def appear(id, t, p, h, state="line", **kw): keys(id, [K(t, p, h=h, state=state, **kw)])
+TINTS = []
+def hold_until(id, t0):  # stand until the minute before t0, then turn and go
+    if sec(t0) - sec(KEYS[id][-1]["t"]) > 120: keys(id, [K(plus(t0, -1), last(id))])
+def at(id, t, **kw): hold_until(id, t); keys(id, [K(t, last(id), **kw)])  # a change in place
+def hide(id, t): at(id, t, state="hidden")
+def dense(pts, step=1200):  # no straight leg longer than `step`, so no leg runs past three hours
+    out = [pts[0]]
+    for a, b in zip(pts, pts[1:]):
+        n = max(1, math.ceil(math.dist(a, b) / step))
+        out += [(a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n) for i in range(1, n + 1)]
+    return [p for i, p in enumerate(out) if i == 0 or math.dist(p, out[i - 1]) > 5]
+def heading(a, b): return round(math.degrees(math.atan2(b[0] - a[0], b[1] - a[1])) % 360)
+PACE, DRIVE = 4, 20  # km/h: a column of foot on the road; vehicles on a road in winter
+def walk(t0, pts, state="column", kmh=PACE):  # keys along a path at a pace
+    pts = dense(pts); t, out = sec(t0), []
+    for i, p in enumerate(pts):
+        if i: t += math.dist(pts[i - 1], p) / (kmh / 3.6)
+        out.append(K(fmt(t), p, h=heading(p, pts[i + 1]) if i + 1 < len(pts) else heading(pts[i - 1], p), **(dict(state=state) if i == 0 else {})))
+    return out
+def move(id, t0, pts, h=None, state="line", moving="column", kmh=PACE):  # from where it stands along pts at a pace; returns the arrival time
+    hold_until(id, t0)
+    ks = walk(t0, [last(id)] + list(pts), moving, kmh)
+    if len(ks) == 1: at(id, t0, state=state, **({"h": h} if h is not None else {})); return t0
+    ks[-1]["state"] = state
+    if h is not None: ks[-1]["h"] = h
+    keys(id, ks); return ks[-1]["t"]
+def drive(id, t0, pts, h=None, state="line", kmh=DRIVE): return move(id, t0, pts, h, state, "column", kmh)
+def go(id, t0, t1, pts, h=None, state="line", moving="column"):  # from where it stands along pts, arriving at t1
+    hold_until(id, t0)
+    pts = dense([last(id)] + list(pts)); d = [0]
+    if len(pts) == 1: return at(id, t1, state=state, **({"h": h} if h is not None else {}))
+    for a, b in zip(pts, pts[1:]): d.append(d[-1] + math.dist(a, b))
+    ks = [K(fmt(sec(t0) + (sec(t1) - sec(t0)) * d[i] / d[-1]), p, h=heading(p, pts[i + 1]) if i + 1 < len(pts) else heading(pts[i - 1], p)) for i, p in enumerate(pts)]
+    ks[0]["state"] = moving; ks[-1]["state"] = state
+    if h is not None: ks[-1]["h"] = h
+    keys(id, ks)
+def fire(id, t0, t1, state="line"): at(id, t0, state="firing"); at(id, t1, state=state)
+def along(line, a, b):  # the stretch of a road between the points on it nearest a and b
+    def proj(p):
+        best = None
+        for i, (u, v) in enumerate(zip(line, line[1:])):
+            dx, dy = v[0] - u[0], v[1] - u[1]; f = max(0, min(1, ((p[0] - u[0]) * dx + (p[1] - u[1]) * dy) / (dx * dx + dy * dy or 1)))
+            q = (u[0] + f * dx, u[1] + f * dy)
+            if best is None or math.dist(p, q) < best[0]: best = (math.dist(p, q), i + f, q)
+        return best[1], best[2]
+    (sa, qa), (sb, qb) = proj(a), proj(b)
+    mid = [line[i] for i in range(math.floor(min(sa, sb)) + 1, math.ceil(max(sa, sb)))]
+    return [qa] + (mid if sa <= sb else mid[::-1]) + [qb]
+def on_road(line, f):  # the point a fraction f of the way along a road
+    L = [0]
+    for a, b in zip(line, line[1:]): L.append(L[-1] + math.dist(a, b))
+    s = f * L[-1]; i = max(j for j in range(len(L) - 1) if L[j] <= s); u = (s - L[i]) / (L[i + 1] - L[i])
+    return (round(line[i][0] + u * (line[i + 1][0] - line[i][0])), round(line[i][1] + u * (line[i + 1][1] - line[i][1])))
+LOSS = {}  # id: [(t0, t1, men)], losses falling evenly over each span; a negative figure is men joining
+def lose(id, t0, t1, n): LOSS.setdefault(id, []).append((t0, t1, n))
+def smoke(name, at, t0, t1, rate=8, spread=300): features.append(dict(type="smoke", name=name, at=list(at), rate=rate, spread=spread, **{"from": t0, "until": t1}))
+def strike(name, at, t0, t1, spread=500, h=250): features.append(dict(type="airstrike", name=name, at=list(at), spread=spread, h=h, **{"from": t0, "until": t1}))
+def drop(name, kind, zone, t0, t1, units, h, craft):
+    features.append(dict(type="drop", kind=kind, name=name, zone=[list(p) for p in zone], h=h, craft=craft, units=list(units), **{"from": t0, "until": t1}))
 for id in BASE: appear(id, START, (0, 0), 0, state="hidden")
 
-TINTS = []
+# Places the movements use, as local metres
+NOV, FOY, NEFFE, MAGERET, BIZORY, MONT, MARVIE, WARDIN = P['noville'], P['foy'], P['neffe'], P['mageret'], P['bizory'], P['mont'], P['marvie'], P['wardin']
+LONGVILLY, HALT, MANDE, CHAMPS, HEMROULLE, ROLLEY, ASSENOIS = P['longvilly'], P['halt'], P['mande'], P['champs'], P['hemroulle'], P['rolley'], P['assenois']
+BRAS, BENON, CHATEAU, HILL510, HILL500, OHARA = P['bras'], P['benonchamps'], P['chateau'], P['hill510'], P['hill500'], P['ohara']
+def east(a, b): return along(R_EAST, a, b)
+def north(a, b): return along(R_NORTH, a, b)
+def marche(a, b): return along(R_MARCHE, a, b)
+TOWN_N, TOWN_E, TOWN_S, TOWN_W = off(B, 200, 600), off(B, 600, 100), off(B, 0, -500), off(B, -600, 0)
+NEFFE_W = (1250, 1680)          # where 1/501 met the fire west of Neffe, "about 2,000 yards from the city" [DERIVED]
+LINE_501_1 = (900, 1950)        # the high ground west of Neffe, the 501st's line from dusk on 19 Dec [DERIVED]
+LINE_501_2 = (1450, 3250)       # the high ground west of Bizory [DERIVED]
+LINE_327_2 = (100, -1000)       # 2/327 between Marvie and the Arlon road [DERIVED]
+F_COY = on_road(R_ARLON, 0.27)  # F Company 327th on the Arlon road above Remoifosse [DERIVED]
+LINE_326 = on_road(R_ASSENOIS, 0.55)  # the 326th Engineers' line on the Assenois road, where the relief came in [DERIVED]
+NEUF_RD = on_road(R_NEUF, 0.4)  # 1/327 and the 35th Engineers astride the Neufchâteau road [DERIVED]
+SENON = P['senonchamps']
+LINE_327_3 = (-5300, 4000)      # 3/327 after "Plan A", the high ground west of Champs [DERIVED]
+DZ = quad(DZ_C, 420, 280, 30)   # the pathfinders' zone, a part of the mile-square zone [DERIVED]
+
+# ---- Monday 18 December ----
+# CCB 10th Armored comes up the Arlon road from 15:30 [INF: the start]; "the first two teams got through the town during
+# daylight": Cherry east toward Longvilly, O'Hara south-east toward Wardin; "it was dark when the last team began moving",
+# Desobry north [M p14]. Hyduke halts short of Longvilly at 19:20 [M p22].
+for i, id in enumerate(("hyduke", "ryerson_t", "ryerson_i", "cherry_hq", "ohara_l", "ohara_t", "ohara_i", "fa420", "desobry_t", "desobry_i")):
+    appear(id, plus(START, 4 * i), EDGE_S, 0, "column")
+    drive(id, plus(START, 4 * i), along(R_ARLON, EDGE_S, B) + [TOWN_S], state="column", kmh=25)
+go("hyduke", D(18, "16:15"), D(18, "19:20"), east(B, on_road(R_EAST, 0.62)), h=70, state="line")
+go("ryerson_t", D(18, "16:20"), D(18, "19:35"), east(B, on_road(R_EAST, 0.55)), h=70, state="line")
+go("ryerson_i", D(18, "16:22"), D(18, "19:40"), east(B, on_road(R_EAST, 0.51)), h=70, state="line")
+drive("cherry_hq", D(18, "16:25"), east(B, NEFFE) + [CHATEAU], h=90)
+drive("ohara_t", D(18, "16:35"), along(R_WILTZ, B, OHARA), h=100); drive("ohara_i", D(18, "16:38"), along(R_WILTZ, B, off(OHARA, -300, 0)), h=100)
+drive("ohara_l", D(18, "16:32"), along(R_WILTZ, B, (3600, -760)), h=100)
+drive("fa420", D(18, "16:40"), [off(B, 800, 1200)], h=60)
+drive("desobry_t", D(18, "22:00"), north(B, NOV), h=30); drive("desobry_i", D(18, "22:05"), north(B, off(NOV, -150, -100)), h=30)
+# Task Force Harper at Allerborn, under fire late in the afternoon; "after dark" panzers destroy two tank platoons and it is
+# overrun [C13]. The survivors fall back on CCR's jam at Longvilly [INF].
+appear("harper_t", START, off(P['allerborn'], -200, 0), 90); appear("harper_i", START, off(P['allerborn'], -400, 150), 90)
+appear("pz2_t2", D(18, "16:00"), EDGE_E, 270, "column"); drive("pz2_t2", D(18, "16:00"), along(R_EAST, EDGE_E, off(P['allerborn'], 900, 150)), h=270)
+appear("pz2_t1", D(18, "16:10"), EDGE_E, 270, "column"); drive("pz2_t1", D(18, "16:10"), along(R_EAST, EDGE_E, off(P['allerborn'], 1300, 250)), h=270)
+for id in ("pz2_t2", "pz2_t1"): fire(id, D(18, "16:45"), D(18, "20:15"))
+for id in ("harper_t", "harper_i"): fire(id, D(18, "16:45"), D(18, "20:00"), state="retreat")
+lose("harper_t", D(18, "18:00"), D(18, "20:00"), 10); lose("harper_i", D(18, "18:00"), D(18, "20:00"), 150)
+drive("harper_t", D(18, "20:05"), east(last("harper_t"), on_road(R_EAST, 0.7)), h=90, kmh=10)
+drive("harper_i", D(18, "20:10"), east(last("harper_i"), on_road(R_EAST, 0.68)), h=90, kmh=10)
+# Panzer Lehr: the advance guard, "about fifteen tanks and four companies of the 902d", enters Niederwampach in the early
+# evening [C13]; at 22:00 it leaves on a mud road for Benonchamps, is there an hour after midnight, and at 02:00 in Mageret,
+# where Bayerlein blocks the road east with three tanks, infantry and mines [M-E p182-183].
+NWAMP = P['niederwampach']
+for i, id in enumerate(("kg902_t", "kg902_b", "kg902_i")):
+    appear(id, plus(D(18, "17:30"), 3 * i), EDGE_ESE, 250, "column"); drive(id, plus(D(18, "17:30"), 3 * i), along(R_BENON, EDGE_ESE, off(NWAMP, 150 * i, 0)), h=250)
+    go(id, plus(D(18, "22:00"), 2 * i), plus(D(19, "01:00"), 2 * i), along(R_BENON, NWAMP, off(BENON, 100 * i, 0)), h=270, state="column")
+    go(id, plus(D(19, "01:05"), 2 * i), plus(D(19, "02:00"), 2 * i), along(R_BENON, BENON, off(MAGERET, 200 - 100 * i, 0)), h=270, state="column")
+at("kg902_b", D(19, "02:10"), h=90, state="line")
+# Cherry's mine block east of Neffe and O'Hara's felled logs on the Wiltz road [M-E p183; M p119]
+features += [dict(type="works", name="Cherry's roadblock", pts=[[2160, 2060], [2280, 1870]], **{"from": D(18, "18:00"), "until": D(19, "06:00")}),
+             dict(type="works", name="Bayerlein's block", pts=[[3720, 2960], [3800, 2780]], **{"from": D(19, "02:00"), "until": D(21, "09:00")}),
+             dict(type="works", name="O'Hara's roadblock (about here)", pts=[[1680, -460], [1760, -660]], **{"from": D(18, "18:00"), "until": D(20, "23:00")})]
+# Desobry posts three outposts 800 yards out at 23:00 [M p51-52]; the 501st closes into Mande by midnight [M p30].
+for i, id in enumerate(("p501_1", "p501_2", "p501_3", "p501_i")):
+    appear(id, plus(D(18, "22:30"), 4 * i), EDGE_W, 90, "column"); move(id, plus(D(18, "22:30"), 4 * i), marche(EDGE_W, off(MANDE, 150 * i, 100)), h=90)
+# The CCR batteries at Longvilly fire at enemy 200 yards off at 23:15; at 23:40 CCR begins to withdraw and freezes on the
+# road [C13; M p24].
+for id in ("harper_t", "harper_i"): fire(id, D(18, "23:15"), D(18, "23:40"))
+
+# ---- Tuesday 19 December ----
+# The rest of the 101st comes in by the Marche road through the night [INF: the order beyond the 501st]
+for i, id in enumerate(("p506_1", "p506_2", "p506_3", "p502_1", "p502_2", "p502_3", "eng326", "fa321", "fa907", "fa377", "fa463", "aa81")):
+    t = plus(D(19, "00:30"), 12 * i); appear(id, t, EDGE_W, 90, "column")
+    if BASE[id][5] == "artillery": drive(id, t, marche(EDGE_W, off(MANDE, 300 - 60 * i, -250)), h=90, kmh=12)
+    else: move(id, t, marche(EDGE_W, off(MANDE, -400 + 80 * i, -200)), h=90)
+for i, id in enumerate(("g327_1", "g327_2", "g327_3")):
+    t = plus(D(19, "09:00"), 25 * i); appear(id, t, EDGE_W, 90, "column"); move(id, t, marche(EDGE_W, off(MANDE, 100 * i, 300)), h=90)
+# The 158th Engineers' outposts at Neffe and Mont [C19]; VIII Corps's artillery in the town [INF: the places]
+appear("eng158", START, off(NEFFE, -250, -60), 80)
+appear("fa755", D(19, "08:00"), off(B, -500, 1300), 60); appear("fa969", D(19, "08:00"), off(B, -900, -500), 120); appear("fa109", D(19, "11:00"), EDGE_W, 90, "column")
+drive("fa109", D(19, "11:00"), marche(EDGE_W, B) + [off(B, 1300, 700)], h=80, kmh=12)
+appear("snafu", D(19, "09:00"), off(B, -200, -150), 0)
+lose("snafu", D(19, "10:00"), D(25, "12:00"), -350)
+# 00:00 to 05:50: Bayerlein at Mageret, then down the road to Neffe; the lead tank hits a mine at Cherry's block and the
+# advance resumes at 05:50 with eleven tanks on the highway and a company south of the tracks toward the château; at 07:00
+# the armour pauses "almost an hour" at the Neffe station [M-E p183-184].
+go("kg902_t", D(19, "05:30"), D(19, "05:40"), east(last("kg902_t"), (2300, 2010)), h=250, state="column")
+lose("kg902_t", D(19, "05:40"), D(19, "05:41"), 1)
+go("kg902_t", D(19, "05:50"), D(19, "07:00"), east((2300, 2010), off(P['neffe_stn'], 120, 60)), h=250, state="line")
+go("kg902_i", D(19, "05:35"), D(19, "07:00"), east(last("kg902_i"), NEFFE) + [off(NEFFE, 0, -120)], h=250, state="line")
+fire("eng158", D(19, "05:50"), D(19, "06:30"), state="retreat"); lose("eng158", D(19, "05:50"), D(19, "06:30"), 30)
+move("eng158", D(19, "06:31"), east(last("eng158"), MONT) + [off(MONT, -300, 100)], h=80)
+# Cherry's reconnaissance platoon at the Neffe road junction breaks back at 06:00 [M p49]; the 501st passes its CP "on the
+# minute" at 06:00 [M p33], having come up from Mande in the night [INF]; 1/501 meets the fire west of Neffe about 08:20 [M p34; C19].
+for i, id in enumerate(("p501_1", "p501_2", "p501_3", "p501_i")):
+    move(id, plus(D(19, "04:15"), 3 * i), marche(last(id), off(B, -500, 300)), h=90, state="column")
+go("p501_1", D(19, "06:00"), D(19, "08:20"), east(off(B, -500, 300), NEFFE_W), h=80, state="firing")
+fire("kg902_t", D(19, "08:20"), D(19, "09:00")); fire("kg902_i", D(19, "08:20"), D(19, "13:00"))
+lose("kg902_i", D(19, "08:20"), D(19, "09:30"), 80)
+at("p501_1", D(19, "09:30"), state="line")
+move("kg902_t", D(19, "09:01"), [off(NEFFE, 500, 250)], h=250)
+fire("cherry_hq", D(19, "10:05"), D(19, "17:00"), state="retreat")
+smoke("Neffe château", CHATEAU, D(19, "14:00"), D(19, "17:30"), rate=6, spread=150)
+move("cherry_hq", D(19, "17:01"), [MONT], h=80, kmh=6)
+fire("kg902_i", D(19, "13:30"), D(19, "17:00"))
+move("kg902_t", D(19, "12:00"), east(last("kg902_t"), off(MAGERET, -300, -100)), h=250)
+# Hyduke ordered to hold Longvilly at 08:30 while Ryerson fights back through Mageret; at 09:45 Ryerson's lead tank is
+# hit 300 yards east of Mageret and plugs the cut [M p25, p27].
+MAG_E = on_road(east(MAGERET, LONGVILLY), 0.08)
+go("ryerson_t", D(19, "09:00"), D(19, "09:45"), east(last("ryerson_t"), MAG_E), h=250, state="firing")
+go("ryerson_i", D(19, "09:05"), D(19, "09:50"), east(last("ryerson_i"), off(MAG_E, 250, 100)), h=250, state="firing")
+fire("kg902_b", D(19, "09:45"), D(19, "17:00"))
+at("ryerson_t", D(19, "11:00"), state="line"); fire("ryerson_i", D(19, "15:00"), D(19, "16:30"))
+# Noville: the half-tracks of 2d Panzer's reconnaissance battalion hit the Bourcy road outpost at 05:30 and withdraw after
+# twenty minutes; three tanks duel the Houffalize-road outpost in the fog until 07:30; two Tigers nose out at 08:30 and are
+# destroyed by bazookas [M p53-56]. 2d Panzer had turned north east of Longvilly for Noville [M-E p185]; its routes in the
+# night are not recorded [INF].
+appear("pz2_recce", D(18, "21:00"), EDGE_E, 270, "column")
+go("pz2_recce", D(18, "21:00"), D(19, "04:50"), [(10500, 7000), (7500, 7900), off(P['bourcy'], 300, 0)], h=270, state="line")
+go("pz2_recce", D(19, "05:10"), D(19, "05:30"), along(R_NOV_BOURCY, P['bourcy'], on_road(R_NOV_BOURCY, 0.25)), h=270, state="firing")
+at("pz2_recce", D(19, "05:50"), state="retreat"); go("pz2_recce", D(19, "05:51"), D(19, "06:20"), [on_road(R_NOV_BOURCY, 0.6)], h=270, state="line", moving="retreat")
+go("pz2_t2", D(18, "21:00"), D(19, "05:20"), [(10000, 7300), (6000, 9800), (2700, 10300)], h=200, state="line")
+go("pz2_t2", D(19, "05:30"), D(19, "05:50"), [off(NOV, 450, 1200)], h=200, state="firing")
+go("pz2_t1", D(18, "21:10"), D(19, "06:00"), [(10500, 7600), (6000, 10200), (1600, 10600), (900, 9300)], h=150, state="line")
+lose("pz2_t2", D(19, "08:30"), D(19, "08:35"), 2)
+for id in ("desobry_t", "desobry_i"): fire(id, D(19, "05:30"), D(19, "07:30"))
+# 10:30: "the fog lifted like a curtain going up": more than 30 tanks, 14 in a line on the ridge short of Vaux; nine hit
+# straightaway; the fight dies at 11:30 [M p56-58]
+at("pz2_t1", D(19, "10:25"), state="firing"); at("pz2_t2", D(19, "10:25"), state="firing")
+lose("pz2_t1", D(19, "10:30"), D(19, "11:30"), 9)
+for id in ("desobry_t", "desobry_i"): fire(id, D(19, "10:30"), D(19, "11:30"))
+lose("desobry_t", D(19, "10:30"), D(19, "11:30"), 3)
+at("pz2_t1", D(19, "11:35"), state="line"); at("pz2_t2", D(19, "11:35"), state="line")
+# The 2d Panzer grenadiers come up behind the tanks [INF: when and where]
+for i, id in enumerate(("pzg2_1", "pzg2_2", "pzg304_1", "pzg304_2")):
+    appear(id, plus(D(19, "07:00"), 20 * i), EDGE_N, 200, "column")
+for id, p in (("pzg2_1", off(NOV, 900, 1400)), ("pzg2_2", off(NOV, 1300, 600)), ("pzg304_1", (3400, 7300)), ("pzg304_2", (3800, 8600))):
+    drive(id, KEYS[id][-1]["t"], [p], h=220, kmh=12)
+# 10:50: Higgins sends 1/506 to Noville, the 2d and 3d Bns 506th to reserve north of the town; 1/506 reaches Noville at 13:30
+# [M p60-61]. The 506th has come through Bastogne from Mande [INF: the times].
+for i, id in enumerate(("p506_1", "p506_2", "p506_3")):
+    move(id, plus(D(19, "07:30"), 10 * i), marche(last(id), B) + [off(B, 100 * i, 500)], h=30, state="column")
+move("p506_1", D(19, "11:40"), north(B, off(NOV, -100, -300)), h=20)
+# 14:30: the Noville counterattack: three tanks up the Houffalize road, four east toward Bourcy, three companies between;
+# held until dark, then back into Noville [M p62-63]
+for id, p in (("p506_1", off(NOV, 650, 650)), ("desobry_t", off(NOV, 500, 900))):
+    go(id, D(19, "14:30"), D(19, "15:10"), [p], h=40, state="firing", moving="charge")
+for id in ("pz2_t1", "pz2_t2", "pzg2_1", "pzg2_2"): fire(id, D(19, "14:40"), D(19, "16:40"))
+lose("pz2_t1", D(19, "14:40"), D(19, "16:40"), 3); lose("desobry_t", D(19, "14:40"), D(19, "16:40"), 1)
+lose("p506_1", D(19, "13:30"), D(19, "17:30"), 90); lose("desobry_i", D(19, "05:30"), D(19, "17:30"), 50)
+for id, p in (("p506_1", off(NOV, -100, -300)), ("desobry_t", NOV)): go(id, D(19, "16:45"), D(19, "17:30"), [p], h=40, state="line", moving="retreat")
+smoke("Noville", off(NOV, 0, 50), D(19, "14:00"), D(20, "13:30"), rate=10, spread=250)
+# 2/501 takes Bizory at 12:03 and stops on Hill 510 against the 26th VGD's reconnaissance; 3/501 reaches Mont; Company I
+# to the woods west of Wardin, "no enemy" at 13:30; at 14:15 it is attacked in Wardin by seven tanks and a battalion of
+# Panzer Lehr and scattered, 45 men and 4 officers lost [M p39-46]
+go("p501_2", D(19, "10:00"), D(19, "12:03"), along(R_BIZORY, off(B, -500, 300), BIZORY), h=90, state="line")
+go("p501_3", D(19, "10:05"), D(19, "12:00"), east(off(B, -500, 300), MONT) + [off(MONT, 200, 0)], h=100, state="line")
+go("p501_i", D(19, "10:10"), D(19, "12:00"), east(off(B, -500, 300), MONT) + [off(MONT, 150, -150)], h=100, state="column")
+go("p501_i", D(19, "12:15"), D(19, "13:30"), [(2600, 300)], h=110, state="line")
+appear("kunkel", D(19, "10:30"), EDGE_ESE, 270, "column")
+go("kunkel", D(19, "10:30"), D(19, "12:00"), along(R_BENON, EDGE_ESE, MAGERET) + [off(HILL510, 350, -100)], h=290, state="line")
+go("p501_2", D(19, "12:10"), D(19, "12:45"), [off(HILL510, -300, 50)], h=110, state="firing")
+fire("kunkel", D(19, "12:45"), D(19, "13:45"))
+at("p501_2", D(19, "13:45"), state="line")
+appear("pl_wardin_t", D(19, "10:30"), EDGE_SE, 280, "column"); appear("pl_recce", D(19, "10:40"), EDGE_SE, 280, "column")
+drive("pl_wardin_t", D(19, "10:30"), along(R_WILTZ, EDGE_SE, off(BRAS, -800, 0)), h=280, state="line", kmh=12)
+drive("pl_recce", D(19, "10:40"), along(R_WILTZ, EDGE_SE, off(BRAS, -500, 150)), h=280, state="line", kmh=12)
+fire("ohara_l", D(19, "11:40"), D(19, "12:10"), state="retreat"); fire("pl_wardin_t", D(19, "11:40"), D(19, "12:10"))
+drive("ohara_l", D(19, "12:11"), along(R_WILTZ, last("ohara_l"), off(OHARA, 200, 100)), h=100, kmh=12)
+go("pl_wardin_t", D(19, "13:30"), D(19, "14:15"), [off(WARDIN, 700, -300)], h=290, state="firing")
+go("pl_recce", D(19, "13:35"), D(19, "14:15"), [off(WARDIN, 600, 100)], h=280, state="firing")
+go("p501_i", D(19, "13:45"), D(19, "14:10"), [off(WARDIN, -100, 0)], h=100, state="firing")
+lose("p501_i", D(19, "14:15"), D(19, "15:00"), 49)
+at("p501_i", D(19, "15:00"), state="rout"); go("p501_i", D(19, "15:01"), D(19, "16:30"), [off(MONT, 300, -300)], h=280, state="line", moving="rout")
+go("pl_recce", D(19, "15:00"), D(19, "15:30"), [off(WARDIN, 100, 0)], h=280, state="line"); at("pl_wardin_t", D(19, "15:30"), state="line")
+# The Longvilly road, 14:00 to about 16:00: Hyduke under direct fire at 14:00 and ordered back at 14:30, the road blocked;
+# the Benonchamps force, the 901st and about twenty TDs, on Hill 490 a little after 14:00; the 77th VGR's guns; 2d Panzer's
+# 88s below Chifontaine; "all three divisions engaged at one time" [M p26-27; M-E p189-190]. Hill 490 is not placed [INF].
+HILL490 = (5650, 2650)
+for i, id in enumerate(("pl_td", "pl901_1", "pl901_2", "pl_art")):
+    appear(id, plus(D(19, "11:00"), 6 * i), EDGE_ESE, 260, "column")
+    drive(id, plus(D(19, "11:00"), 6 * i), along(R_BENON, EDGE_ESE, BENON), h=320, state="column", kmh=10)
+drive("pl_td", D(19, "13:40"), [HILL490], h=10, state="firing", kmh=10); drive("pl901_1", D(19, "13:45"), [off(HILL490, -300, -150)], h=10, state="line", kmh=8)
+drive("pl901_2", D(19, "13:50"), [off(HILL490, 300, -200)], h=10, state="line", kmh=8); drive("pl_art", D(19, "13:55"), [off(BENON, 300, -300)], h=10, state="firing", kmh=8)
+appear("pz2_88", D(19, "13:30"), off(P['chifontaine'], -100, -350), 270); fire("pz2_88", D(19, "14:00"), D(19, "16:00"))
+appear("gr77_1", D(19, "11:30"), EDGE_ESE, 280, "column"); appear("gr77_2", D(19, "11:45"), EDGE_ESE, 280, "column")
+for id in ("hyduke", "harper_t", "harper_i"): fire(id, D(19, "14:00"), D(19, "15:00"), state="rout")
+lose("hyduke", D(19, "14:00"), D(19, "15:00"), 9); lose("harper_t", D(19, "14:00"), D(19, "15:00"), 15); lose("harper_i", D(19, "14:00"), D(19, "15:00"), 150)
+at("pl_td", D(19, "16:05"), state="line"); at("pl_art", D(19, "16:05"), state="line")
+go("hyduke", D(19, "15:01"), D(19, "15:30"), [off(last("ryerson_t"), 200, 150)], h=250, state="line", moving="rout")
+for id in ("harper_t", "harper_i"): go(id, D(19, "15:05"), D(19, "15:40"), [off(last("ryerson_t"), 400, 250)], h=250, state="line", moving="rout"); hide(id, D(19, "16:30"))
+# The 26th VGD comes up behind: the 77th to Bizory's east, the 78th against Hill 540 south-east of Foy, stopped by Sink's men;
+# the 39th south of Panzer Lehr at Wardin [M-E p186-187]. Hill 540 is not placed; drawn at the Bois Jacques [INF].
+move("gr77_1", D(19, "11:30"), along(R_BENON, EDGE_ESE, MAGERET) + [(3300, 3600)], h=260)
+move("gr77_2", D(19, "11:45"), along(R_BENON, EDGE_ESE, MAGERET) + [(2900, 2700)], h=260)
+for i, id in enumerate(("gr78_1", "gr78_2")):
+    appear(id, plus(D(19, "09:00"), 15 * i), EDGE_E, 270, "column"); move(id, plus(D(19, "09:00"), 15 * i), along(R_EAST, EDGE_E, P['longvilly']) + [P['arloncourt'], (2400 + 500 * i, 5200 - 300 * i)], h=250)
+for i, id in enumerate(("gr39_1", "gr39_2")):
+    appear(id, plus(D(19, "12:00"), 15 * i), EDGE_SE, 280, "column"); move(id, plus(D(19, "12:00"), 15 * i), along(R_WILTZ, EDGE_SE, BRAS) + [(4300 - 300 * i, -900 - 400 * i)], h=290)
+# The 502d to Longchamps in the afternoon, the 3d Bn on the hill south and the 1st in the Bois de Niblamont; the 3d Bn 506th
+# to Foy, the 2d to Luzery [M p65, p86]; the 327th's CP at Mande at 15:00, its 1st Bn attached to the 501st at 16:30 [M p99];
+# the 326th Engineers to Marvie [INF: when].
+for id, p, h in (("p502_2", off(P['longchamps'], 300, 100), 20), ("p502_3", off(P['longchamps'], 400, -800), 40), ("p502_1", off(P['longchamps'], -300, -900), 300)):
+    move(id, D(19, "12:30"), [off(MANDE, 0, 600), off(CHAMPS, 200, 0), ROLLEY, p], h=h)
+move("p506_3", D(19, "13:00"), north(off(B, 200, 500), FOY) + [off(FOY, 100, 150)], h=40); move("p506_2", D(19, "13:00"), north(off(B, 100, 500), P['luzery']), h=40)
+move("eng326", D(19, "07:00"), marche(last("eng326"), B) + along(R_WILTZ, B, MARVIE) + [off(MARVIE, 100, -100)], h=120)
+move("g327_1", D(19, "16:30"), marche(last("g327_1"), B) + [(300, 500)], h=110)
+fire("gr78_1", D(19, "15:30"), D(19, "16:30")); fire("p506_3", D(19, "15:30"), D(19, "16:30"))
+# The 101st's guns in place by about ten: Battery B 907th GFA opens "a few minutes after 1000" from the left of the Longvilly
+# road [M p36]; the other positions are not recorded [INF].
+for id, p in (("fa907", off(P['mardasson'], -200, -250)), ("fa321", off(P['savy'], 400, -300)), ("fa377", off(B, -1100, 900)), ("fa463", off(P['hemroulle'], 400, -200)), ("aa81", off(B, 300, -600))):
+    drive(id, D(19, "07:00"), marche(last(id), B) + [p], h=80, kmh=12)
+fire("fa907", D(19, "10:05"), D(19, "13:00"))
+# 17:00 to 18:00: the 501st falls back to the high ground west of Bizory and Neffe; O'Hara back to the high ground north
+# of Marvie at 17:15; Cherry burned out of the château to Mont at dusk [M p46-50]
+go("p501_1", D(19, "17:00"), D(19, "17:45"), [LINE_501_1], h=80, state="line")
+go("p501_2", D(19, "17:00"), D(19, "17:50"), [LINE_501_2], h=100, state="line")
+for id, p in (("ohara_t", off(MARVIE, 200, 350)), ("ohara_i", off(MARVIE, 450, 150)), ("ohara_l", off(MARVIE, 0, 500))):
+    drive(id, D(19, "17:15"), along(R_WILTZ, last(id), MARVIE) + [p], h=110, kmh=10)
+# 20:30: the 705th TD Battalion reaches Bastogne by Laroche and Champlon, from the north-west [M p21]
+for i, id in enumerate(("td705a", "td705b", "td705c")):
+    appear(id, plus(D(19, "19:50"), 4 * i), EDGE_W, 90, "column"); drive(id, plus(D(19, "19:50"), 4 * i), marche(EDGE_W, B) + [off(B, -300 + 200 * i, 400)], h=90)
+
+# ---- Wednesday 20 December ----
+# 00:30 CCB orders Ryerson out; he pulls out "a little after daybreak" and reaches the paratroopers 40 minutes later
+# [M p48; C13], by Arloncourt and Bizory [INF: the route].
+for id, p in (("ryerson_t", off(LINE_501_2, 300, 200)), ("ryerson_i", off(LINE_501_2, 150, 350)), ("hyduke", off(LINE_501_2, 450, 50))):
+    go(id, D(20, "08:10"), D(20, "08:50"), [P['arloncourt'], p], h=90, state="line")
+for id in ("ryerson_t", "ryerson_i", "hyduke"): drive(id, D(20, "10:00"), along(R_BIZORY, last(id), B) + [off(B, 400, 300)], h=90, kmh=10)
+hide("hyduke", D(20, "11:30"))
+# 02:00: four TDs of B Company 705th at the south edge of Bizory [M p74]
+drive("td705b", D(20, "01:20"), along(R_BIZORY, B, BIZORY) + [off(BIZORY, 0, -250)], h=90, kmh=10)
+# 05:30 to 09:30: the 2d Bn of a 26th VGD regiment comes over the hill east of Bizory with a Mark IV, a Mark V and two SPs;
+# firing opens at 07:30 and the attack is broken in about two hours [M p74-75]. Drawn as the 77th's [INF].
+go("gr77_2", D(20, "05:30"), D(20, "07:30"), [off(BIZORY, 800, -100)], h=270, state="firing")
+for id in ("td705b", "p501_2"): fire(id, D(20, "07:30"), D(20, "09:30"))
+at("gr77_2", D(20, "09:30"), state="retreat"); go("gr77_2", D(20, "09:31"), D(20, "10:30"), [(3000, 2800)], h=270, state="line", moving="retreat")
+# 04:00 to 06:00: the 327th's 2d Bn marches into Bastogne at 06:00 and goes straight on to Marvie, relieving the engineers [M p99]
+move("g327_2", D(20, "04:20"), marche(last("g327_2"), B) + along(R_WILTZ, B, MARVIE) + [off(MARVIE, -100, 0)], h=120, kmh=4.5)
+move("eng326", D(20, "07:30"), along(R_WILTZ, MARVIE, B) + [off(B, 0, -900)], h=200)
+# 07:30: two tanks charge into Noville and are burned [M p86-87]
+go("pz2_t2", D(20, "07:20"), D(20, "07:35"), [off(NOV, 300, 700)], h=200, state="firing"); at("pz2_t2", D(20, "08:00"), state="line")
+lose("pz2_t2", D(20, "07:30"), D(20, "07:40"), 2)
+# 08:00 to 10:30: two companies and three tanks attack 3/506 at Foy; it withdraws to the high ground south [M p90].
+# Lüttwitz puts the 78th at Foy on the 20th [M-E p193].
+go("gr78_1", D(20, "07:20"), D(20, "08:00"), [off(FOY, 450, 300)], h=230, state="firing"); fire("p506_3", D(20, "08:00"), D(20, "10:30"), state="retreat")
+go("p506_3", D(20, "10:31"), D(20, "11:00"), [off(FOY, 0, -650)], h=20, state="line", moving="retreat")
+go("gr78_1", D(20, "10:30"), D(20, "11:00"), [off(FOY, 150, 100)], h=200, state="line")
+# 10:00: the fog lifts at Noville, 15 German tanks in view, four hit [M p88]
+fire("pz2_t2", D(20, "10:00"), D(20, "10:40")); fire("desobry_t", D(20, "10:00"), D(20, "10:40"))
+lose("pz2_t2", D(20, "10:00"), D(20, "10:40"), 4)
+# 11:25: four tanks and six half-tracks attack Marvie from the woods south-east; two Mark IVs and a half-track killed by
+# O'Hara's Shermans; the glider infantry clears the houses; 20 prisoners and 30 dead; clear by about 13:00 [M p101-106]
+appear("pl901_tk", D(20, "10:30"), off(MARVIE, 1300, -800), 300, "line")
+drive("pl901_1", D(20, "08:00"), along(R_WILTZ, BRAS, OHARA) + [off(MARVIE, 1000, -700)], h=300, kmh=8)
+go("pl901_tk", D(20, "11:25"), D(20, "11:40"), [off(MARVIE, 450, -350)], h=300, state="firing")
+go("pl901_1", D(20, "11:25"), D(20, "11:50"), [off(MARVIE, 300, -250)], h=300, state="firing")
+lose("pl901_tk", D(20, "11:30"), D(20, "11:45"), 2); lose("pl901_1", D(20, "11:30"), D(20, "13:00"), 50); lose("g327_2", D(20, "11:30"), D(20, "13:00"), 20)
+for id in ("ohara_t", "g327_2"): fire(id, D(20, "11:30"), D(20, "13:00"))
+for id in ("pl901_tk", "pl901_1"): at(id, D(20, "13:00"), state="retreat")
+go("pl901_tk", D(20, "13:01"), D(20, "13:30"), [off(MARVIE, 1300, -1300)], h=300, state="line", moving="retreat")
+go("pl901_1", D(20, "13:01"), D(20, "13:50"), [off(MARVIE, 1100, -1100)], h=300, state="line", moving="retreat")
+# 11:30: 3/502 toward Recogne to open the way for Noville [M p90]
+go("p502_3", D(20, "11:30"), D(20, "12:30"), [off(P['recogne'], -300, -200)], h=60, state="line")
+# 13:00 to dusk: out of Noville. C Company 506th leaves at 13:15 and the vehicles at 13:25; the column is ambushed at a
+# farmhouse 500 yards short of Foy, Shermans burned, the infantry hooks right through the fields and takes 43 prisoners;
+# Toms's TDs enter Foy at 14:30; at dusk the column is through Foy [M p93-97]. Desobry went with fifteen tanks and came back
+# with four; 1/506 lost 13 officers and 199 men [M p97].
+SHORT_FOY = on_road(north(FOY, NOV), 0.2)
+go("p506_1", D(20, "13:15"), D(20, "14:00"), north(last("p506_1"), SHORT_FOY), h=200, state="firing")
+go("desobry_t", D(20, "13:25"), D(20, "14:05"), north(last("desobry_t"), off(SHORT_FOY, 100, 150)), h=200, state="firing")
+go("desobry_i", D(20, "13:25"), D(20, "14:10"), north(last("desobry_i"), off(SHORT_FOY, 150, 300)), h=200, state="firing")
+fire("gr78_1", D(20, "14:00"), D(20, "16:00")); lose("gr78_1", D(20, "14:00"), D(20, "16:00"), 43)
+lose("desobry_t", D(20, "14:00"), D(20, "14:30"), 7); lose("p506_1", D(19, "17:30"), D(20, "16:30"), 122); lose("desobry_i", D(20, "13:15"), D(20, "16:30"), 50)
+drive("td705c", D(20, "12:30"), north(off(B, -100, 400), off(FOY, 0, -650)), h=20, kmh=8)
+go("td705c", D(20, "14:00"), D(20, "14:30"), [off(FOY, 0, -100)], h=20, state="firing")
+go("gr78_1", D(20, "16:01"), D(20, "16:30"), [off(FOY, 700, 500)], h=230, state="line", moving="retreat")
+for id, p in (("p506_1", off(P['luzery'], 200, 300)), ("desobry_t", off(B, 500, 800)), ("desobry_i", off(B, 300, 900)), ("td705c", off(B, -200, 600))):
+    go(id, D(20, "16:30"), D(20, "18:30") if id == "p506_1" else D(20, "17:30"), along(R_NORTH, last(id), B)[:-1] + [p], h=20, state="line")
+smoke("the ammunition dump at Noville", off(NOV, -150, -100), D(20, "13:25"), D(20, "16:00"), rate=14, spread=150)
+# 2d Panzer takes Noville "somewhere near the middle of the afternoon" [M-E p191]
+for id, p in (("pz2_t1", off(NOV, 0, 300)), ("pz2_t2", off(NOV, 300, 100)), ("pzg2_1", off(NOV, -200, 0)), ("pzg2_2", off(NOV, 200, -300)), ("pz2_recce", off(NOV, 600, -200))):
+    go(id, D(20, "14:30"), D(20, "15:30"), [p], h=200, state="line")
+# Afternoon to 20:00: the 39th and the reconnaissance battalion swing south and west by Villers-la-Bonne-Eau and Hompré;
+# "Sibret was captured about 2000"; the 39th is checked a kilometre north of Remoifosse and in the wood a kilometre north
+# of Assenois, the reconnaissance battalion at Chenogne [M-E p192]. Lutremange, on their road, is off the map.
+move("kunkel", D(20, "12:30"), [(3500, -2500), P['villers'], P['hompre'], P['sibret'], off(P['sibret'], -300, 200)], h=0, state="firing", kmh=8)
+fire("kunkel", D(20, "19:40"), D(20, "20:10")); go("kunkel", D(20, "20:15"), D(20, "21:30"), [off(P['chenogne'], 250, -100)], h=60, state="line")
+move("gr39_1", D(20, "13:00"), [(1500, -4000), P['lutrebois'], off(P['remoifosse'], -50, -700), off(P['remoifosse'], 0, 1000)], h=0)
+move("gr39_2", D(20, "12:40"), [(1600, -4400), P['villers'], P['hompre'], off(ASSENOIS, 200, 300), off(ASSENOIS, 250, 1000)], h=10)
+# 19:00: Panzer Lehr's 902d charges down the road from Neffe into "a dam of fire" from the eleven artillery battalions; two
+# Panthers and a Tiger Royal destroyed at the last houses; 19:00 to 23:00 the attack between Neffe and Mont dies on the wire
+# against 3/501 and Andrews's TDs [M p76-78]
+drive("fa420", D(20, "14:00"), marche(last("fa420"), P['isle_hesse']) + along(R_SENON, P['isle_hesse'], off(SENON, 200, 300)), h=200, kmh=10)
+drive("td705a", D(20, "16:00"), east(off(B, -300, 400), MONT) + [off(MONT, 350, 200)], h=80, kmh=8)
+drive("kg902_t", D(20, "18:00"), east(last("kg902_t"), off(NEFFE, 300, 100)), h=250, kmh=10)
+go("kg902_t", D(20, "19:00"), D(20, "19:15"), [off(NEFFE, -250, -20)], h=250, state="firing")
+lose("kg902_t", D(20, "19:05"), D(20, "19:30"), 3)
+go("kg902_i", D(20, "19:00"), D(20, "19:40"), [(1100, 1500)], h=260, state="firing")
+for id in ("p501_3", "td705a", "p501_1"): fire(id, D(20, "19:00"), D(20, "23:00"))
+for id in ("fa907", "fa321", "fa377", "fa463", "fa755", "fa969", "fa109", "fa420"): fire(id, D(20, "19:00"), D(20, "19:40"))
+lose("kg902_i", D(20, "19:40"), D(20, "23:00"), 120)
+go("kg902_t", D(20, "19:45"), D(20, "20:15"), [off(NEFFE, 500, 200)], h=250, state="line", moving="retreat")
+at("kg902_i", D(20, "23:00"), state="retreat"); go("kg902_i", D(20, "23:01"), D(20, "23:45"), [off(NEFFE, 200, -100)], h=250, state="line", moving="retreat")
+# 16:00 to 22:30: Company A 501st clears the woods south of the railway toward Halt; seven tanks and two companies of the
+# 77th come down the railway and are ambushed in the fog; A Company falls back at 22:30 [M p80-82]
+appear("vgd_t", D(20, "18:30"), off(HALT, 2400, 1700), 230, "column")
+go("vgd_t", D(20, "19:30"), D(20, "20:30"), [off(HALT, 500, 400)], h=230, state="firing")
+go("gr77_1", D(20, "18:30"), D(20, "20:30"), [off(HALT, 300, 200)], h=230, state="firing")
+at("vgd_t", D(20, "22:30"), state="line"); at("gr77_1", D(20, "22:30"), state="line")
+go("gr77_1", D(20, "23:00"), D(21, "01:00"), [off(HALT, -300, -100)], h=230, state="line")
+TINT_FOG = "rgba(205,208,212,0.38)"
+TINTS += [dict(color=TINT_FOG, **{"from": D(19, "06:00"), "until": D(19, "10:30")}), dict(color=TINT_FOG, **{"from": D(19, "13:30"), "until": D(19, "17:00")}),
+          dict(color=TINT_FOG, **{"from": D(20, "06:00"), "until": D(20, "10:00")}), dict(color=TINT_FOG, **{"from": D(20, "13:00"), "until": D(20, "17:00")}),
+          dict(color=TINT_FOG, **{"from": D(21, "06:00"), "until": D(21, "11:00")}), dict(color=TINT_FOG, **{"from": D(25, "06:30"), "until": D(25, "09:00")}),
+          dict(color="rgba(236,238,242,0.22)", **{"from": D(20, "17:00"), "until": END}),
+          dict(color="rgba(228,231,236,0.30)", **{"from": D(22, "13:00"), "until": D(22, "17:00")}), dict(color="rgba(228,231,236,0.30)", **{"from": D(23, "17:00"), "until": D(23, "20:00")})]
+
+# ---- Thursday 21 December ----
+# 04:00 to 11:00: D Company 506th finds its flank turned at 04:00; A and C Companies arrive about 08:15; "By about 1100 ...
+# the envelopment was complete": about 100 of the 77th captured and 55 killed by the 506th, 80 driven into the 501st [M p83-85]
+fire("gr77_1", D(21, "04:00"), D(21, "11:00"), state="retreat"); lose("gr77_1", D(21, "04:00"), D(21, "11:00"), 235)
+go("p506_2", D(21, "04:00"), D(21, "05:00"), [off(HALT, -800, -300)], h=60, state="firing")
+go("p506_1", D(21, "07:00"), D(21, "08:15"), [off(HALT, -600, 500)], h=110, state="firing")
+fire("p501_1", D(21, "08:00"), D(21, "11:00"))
+for id in ("p506_2", "p506_1"): at(id, D(21, "11:00"), state="line")
+go("gr77_1", D(21, "11:01"), D(21, "12:30"), [(3300, 4200)], h=230, state="line", moving="retreat")
+go("p506_2", D(21, "12:00"), D(21, "12:45"), [off(HALT, -150, 0)], h=50, state="line")
+go("p506_1", D(21, "12:00"), D(21, "13:30"), [off(P['luzery'], 200, 300)], h=40, state="line")
+# Panzer Lehr leaves for Morhet and the west; the 77th replaces the 902d before Neffe; the 78th takes over 2d Panzer's
+# sector, and 2d Panzer is strung out from Tenneville, off the map to the north-west, back to Bourcy [M-E p193]. The roads
+# they took are not recorded [INF].
+LEHR_W = [(2500, -2500), (-200, -4500), P['hompre'], P['sibret'], off(P['morhet'], 300, 0)]
+for i, id in enumerate(("kg902_t", "kg902_b", "kg902_i", "pl_recce", "pl_wardin_t", "pl_art")):
+    drive(id, plus(D(21, "06:00"), 15 * i), LEHR_W, h=270, state="column", kmh=12); hide(id, plus(KEYS[id][-1]["t"], 2))
+go("gr77_2", D(21, "07:00"), D(21, "09:00"), [off(NEFFE, 400, 0)], h=250, state="line")
+for i, id in enumerate(("pz2_t1", "pz2_t2", "pzg2_1", "pzg2_2", "pzg304_2", "pz2_88")):
+    drive(id, plus(D(21, "08:00"), 20 * i), [off(NOV, -800, 900), (-2500, 9800), (-7000, 9600), (-11900, 9400)], h=270, state="column", kmh=12)
+    hide(id, plus(KEYS[id][-1]["t"], 1))
+go("pzg304_1", D(21, "08:00"), D(21, "09:30"), [off(P['bourcy'], -300, -200)], h=230, state="line")
+go("gr78_2", D(21, "07:00"), D(21, "09:00"), [off(NOV, 300, -700)], h=200, state="line")
+go("pz2_recce", D(21, "07:30"), D(21, "08:30"), [off(P['bourcy'], 200, 200)], h=230, state="line")
+# Kampfgruppe Kunkel nearly reaches the highway near Mande [M-E p193]; Team Pyle to Senonchamps to cover the 420th; Germans in
+# American dress from Sibret; the fight into the Bois de Fragotte; by night Browne holds 4,000 yards with 300 infantry and
+# 19 tanks [M p113]. The 420th had moved to Senonchamps by then [INF: when].
+for id in ("pyle_t", "pyle_i"): appear(id, D(21, "08:00"), off(B, -300, -100), 260, "column")
+drive("pyle_t", D(21, "08:00"), marche(B, P['isle_hesse']) + along(R_SENON, P['isle_hesse'], off(SENON, 0, -250)), h=180, kmh=8)
+drive("pyle_i", D(21, "08:05"), marche(B, P['isle_hesse']) + along(R_SENON, P['isle_hesse'], off(SENON, -300, -300)), h=180, kmh=8)
+go("kunkel", D(21, "08:30"), D(21, "10:00"), [off(SENON, -300, -1100)], h=10, state="firing")
+for id in ("pyle_t", "pyle_i"): fire(id, D(21, "10:00"), D(21, "13:00"))
+go("kunkel", D(21, "13:00"), D(21, "14:30"), [off(SENON, -1700, -300)], h=60, state="line", moving="retreat")
+# Early afternoon: Germans across the Arlon road; 1/327 to the south-west, astride the Neufchâteau road; the 35th
+# Engineers block that road at early dark [M p118-119; C19]
+move("g327_1", D(21, "12:30"), [NEUF_RD], h=220)
+appear("eng35", D(21, "14:00"), off(B, -200, -300), 220, "column"); move("eng35", D(21, "14:00"), along(R_NEUF, B, off(NEUF_RD, -500, -200)), h=220)
+move("eng326", D(21, "13:00"), [LINE_326], h=210)
+# The 39th astride the southern roads and the Assenois garrison [M-E p195; C21] [INF: the places]
+appear("assenois_g", D(21, "06:00"), off(ASSENOIS, 0, 150), 30)
+go("gr39_1", D(21, "09:00"), D(21, "10:00"), [off(F_COY, 0, -800)], h=0, state="line")
+# 07:30: 1/502 east toward Recogne; Stopka's line pulled back south of Recogne at noon [M p150-151]
+go("p502_1", D(21, "07:30"), D(21, "08:45"), [off(P['recogne'], -1200, -600)], h=60, state="line")
+go("p502_3", D(21, "12:00"), D(21, "12:40"), [off(P['recogne'], -200, -700)], h=40, state="line")
+
+# ---- Friday 22 December ----
+# 09:00: a German block on the Mont road south-east of Flamizoulle, cleared before noon by 3/327, 25 prisoners [M p150]
+move("g327_3", D(21, "10:00"), [off(P['flamizoulle'], 300, -500)], h=270)
+go("kunkel", D(22, "08:00"), D(22, "09:00"), [off(P['flamizoulle'], 600, -1300)], h=0, state="firing"); fire("g327_3", D(22, "09:00"), D(22, "11:30"))
+lose("kunkel", D(22, "09:00"), D(22, "11:30"), 25); at("kunkel", D(22, "11:30"), state="retreat")
+go("kunkel", D(22, "11:31"), D(22, "12:30"), [off(SENON, -1500, -500)], h=60, state="line", moving="retreat")
+# 11:30: four Germans with a white flag come up the road from Remoifosse to F Company 327th; "Nuts!" goes back at 13:50;
+# two small attacks on F Company at 15:55 and 17:00 are beaten off by fire [M p115-117]
+fire("gr39_1", D(22, "15:55"), D(22, "16:15")); fire("gr39_1", D(22, "17:00"), D(22, "17:20"))
+fire("g327_2", D(22, "15:55"), D(22, "16:15")); fire("g327_2", D(22, "17:00"), D(22, "17:20"))
+# Noon: A Company 502d to Champs and the 1st Bn 502d to Hemroulle, facing west [M p151]
+go("p502_1", D(22, "11:00"), D(22, "12:30"), [off(HEMROULLE, -350, 700)], h=270, state="line")
+# Afternoon: three attacks from the woods near Senonchamps; at twilight Browne reports "terrible casualties" [C19]
+go("kunkel", D(22, "13:30"), D(22, "14:30"), [off(SENON, -700, -500)], h=60, state="firing")
+for id in ("pyle_t", "pyle_i", "fa420"): fire(id, D(22, "14:30"), D(22, "16:30"))
+at("kunkel", D(22, "16:30"), state="line")
+# The 4th Armored: CCB starts at 04:30 and is in sight of Burnon at noon, "about seven miles from Bastogne"; it clears the
+# rear guard after midnight [C21]
+for i, id in enumerate(("b8tk", "b10aib")):
+    appear(id, plus(D(22, "11:30"), 5 * i), (-5000 - 200 * i, -11900), 0, "column")
+    drive(id, plus(D(22, "11:30"), 5 * i), [off(P['burnon'], 200 * i, -600)], h=0, state="line", kmh=8)
+appear("fj14", D(22, "10:00"), off(P['burnon'], 0, 150), 180)
+fire("fj14", D(22, "12:30"), D(22, "13:30")); go("fj14", D(23, "00:30"), D(23, "01:30"), [off(P['chaumont'], 0, -250)], h=180, state="line", moving="retreat")
+go("b10aib", D(23, "00:30"), D(23, "01:30"), [off(P['burnon'], 200, 100)], h=0, state="line")
+go("b8tk", D(23, "01:00"), D(23, "01:40"), [off(P['burnon'], -100, 200)], h=0, state="line")
+
+# The perimeter as it stood on 22 December, from the battalions' places [DERIVED in the note from its §3]
+PERIMETER = [(1500, 3350), (950, 1950), (650, 1250), (550, -450), (-1450, -2250), (-2900, -950), (-3450, -350), (-5600, 300), (-6300, 1300),
+             (-7300, 3000), (-7500, 4250), (-4900, 5900), (-3400, 7350), (-100, 6550), (900, 5550), (1700, 4450), (1500, 3350)]
+features.append(dict(type="works", name="the perimeter, 22 December", pts=[list(p) for p in PERIMETER], **{"from": D(22, "06:00")}))
+# The 77th to the north-west sector from 22 December [M-E p195], round the north [INF: the road]
+for i, id in enumerate(("gr77_1", "gr77_2")):
+    move(id, plus(D(22, "05:00"), 30 * i), [(2600, 6200), off(NOV, -500, -400), (-2500, 9300), (-5600, 6900 - 500 * i)], h=150)
+go("p502_1", D(22, "13:00"), D(22, "14:00"), [off(CHAMPS, 400, -400)], h=280, state="line")
+move("pl_td", D(20, "09:00"), [(3300, -1300)], h=270, kmh=8)
+move("pl901_2", D(20, "09:00"), [(2700, -1800)], h=280, kmh=8)
+
+# ---- Saturday 23 December ----
+# 09:35: "several large planes were circling"; the pathfinders jump in the 2d Bn 327th's area [M p137]. Three aircraft, the
+# run-in heading and the rally at 09:45 on the zone are [INF].
+drop("Pathfinders over the 327th", "para", DZ, D(23, "09:35"), D(23, "09:37"), ["pf327"], 60, 3)
+appear("pf327", D(23, "09:45"), DZ_C, 60, "line")
+features.append(label("drop zone (about here)", DZ_C, dy=-420, **{"from": D(23, "09:00"), "until": D(24, "16:00")}))
+# Noon to dark: twelve tanks and infantry in snow suits come out of the woods south of the St Hubert road; 3/327's outposts
+# withdraw about 13:30 and the Germans halt on the ridge near Cochleval (not placed) and fire into C Company; at dark the
+# Flamierge roadblock is overrun from the north-west, four tanks hit C Company and ten more come over the ridge from the
+# south; under Allen's "Plan A" the battalion withdraws to the high ground west of Champs [M p152-154]. The 26th VGD's
+# reconnaissance battalion closes its grip on the Bastogne-Champlon road [M-E p196].
+appear("flam_t", D(23, "11:00"), (-9400, 3100), 30, "line")
+go("flam_t", D(23, "12:00"), D(23, "13:00"), [(-8700, 3700)], h=40, state="firing")
+fire("g327_3", D(23, "12:30"), D(23, "13:30"))
+go("flam_t", D(23, "13:30"), D(23, "14:00"), [(-8300, 3900)], h=50, state="firing")
+at("flam_t", D(23, "16:00"), state="line")
+move("kunkel", D(23, "09:00"), [(-9000, 2000), (-10200, 5600)], h=110, state="line", kmh=8)
+go("kunkel", D(23, "16:45"), D(23, "17:30"), [off(P['flamierge'], 700, -100)], h=110, state="firing")
+go("flam_t", D(23, "16:50"), D(23, "17:30"), [(-7700, 3900)], h=50, state="firing")
+fire("g327_3", D(23, "17:00"), D(23, "18:00"), state="retreat")
+go("g327_3", D(23, "18:01"), D(23, "19:30"), [LINE_327_3], h=250, state="line", moving="retreat")
+go("kunkel", D(23, "18:30"), D(23, "20:00"), [off(P['flamizoulle'], 200, 0)], h=90, state="line")
+go("flam_t", D(23, "18:30"), D(23, "19:30"), [off(MANDE, -300, 400)], h=60, state="line")
+# 13:30 to dusk: CCB 4th Armored assaults Chaumont after fighter-bomber strikes; ten to fifteen assault guns of the 11th
+# Brigade counterattack; it is repulsed at dusk with eleven Shermans lost and about 65 men of A Company 10th AIB [C21]
+strike("Fighter-bombers on Chaumont", P['chaumont'], D(23, "13:00"), D(23, "13:15"), 400, h=20)
+go("b8tk", D(23, "12:00"), D(23, "13:30"), along(R_CHAUMONT, last("b8tk"), off(P['chaumont'], -100, -700)), h=10, state="firing")
+go("b10aib", D(23, "12:10"), D(23, "13:30"), along(R_CHAUMONT, last("b10aib"), off(P['chaumont'], 150, -650)), h=10, state="firing")
+fire("fj14", D(23, "13:30"), D(23, "14:30"), state="retreat"); go("fj14", D(23, "14:31"), D(23, "15:00"), [off(P['chaumont'], 300, 500)], h=200, state="line", moving="retreat")
+go("b8tk", D(23, "14:00"), D(23, "14:40"), [off(P['chaumont'], -100, -100)], h=10, state="line")
+go("b10aib", D(23, "14:05"), D(23, "14:45"), [off(P['chaumont'], 150, 0)], h=10, state="line")
+appear("stug11", D(23, "14:00"), off(P['hompre'], -100, -400), 200, "column")
+go("stug11", D(23, "15:00"), D(23, "15:40"), [off(P['chaumont'], 500, 600)], h=210, state="firing")
+for id in ("b8tk", "b10aib"): fire(id, D(23, "15:40"), D(23, "16:30"), state="retreat")
+lose("b8tk", D(23, "13:30"), D(23, "16:30"), 11); lose("b10aib", D(23, "13:30"), D(23, "16:30"), 65)
+go("b8tk", D(23, "16:31"), D(23, "17:15"), [off(P['chaumont'], -300, -1500)], h=10, state="line", moving="retreat")
+go("b10aib", D(23, "16:31"), D(23, "17:20"), [off(P['chaumont'], 0, -1400)], h=10, state="line", moving="retreat")
+at("stug11", D(23, "16:40"), state="line"); go("fj14", D(23, "17:00"), D(23, "17:30"), [off(P['chaumont'], 0, 50)], h=180, state="line")
+# Afternoon: Kokott sends five Tigers down the Clochimont road against the 4th Armored [M-E p196]
+appear("tigers", D(23, "14:00"), off(ASSENOIS, 300, 100), 220, "column")
+drive("tigers", D(23, "14:00"), along(R_ASSENOIS, ASSENOIS, P['clochimont']) + [off(P['clochimont'], 100, -500)], h=190, kmh=10)
+# 17:25: Marvie shelled by tanks in the firs above Martaimont; 17:35 tanks and snow-suited infantry attack; after 18:40 a
+# platoon of G Company is surrounded on Hill 500 and overwhelmed some time after 19:00; at 20:00 German infantry are in the
+# south end of Marvie and two Shermans are sent in; near midnight the Shermans knock out the lead German tank; Rouzie's
+# scratch force and twelve guns of the 81st close the gap [M p121-130]. 18:30: McAuliffe sends Team Cherry [C19].
+move("pl_td", D(23, "16:00"), [off(P['martaimont'], -150, 350)], h=330, state="line", kmh=8)
+fire("pl_td", D(23, "17:25"), D(23, "19:30"))
+go("pl901_tk", D(23, "17:35"), D(23, "18:10"), [off(MARVIE, 200, -450)], h=330, state="firing")
+go("pl901_1", D(23, "17:35"), D(23, "18:20"), [off(MARVIE, 0, -450)], h=340, state="firing")
+fire("g327_2", D(23, "17:35"), D(24, "01:00"))
+go("pl901_2", D(23, "18:00"), D(23, "18:40"), [off(HILL500, 350, -150)], h=290, state="firing")
+lose("g327_2", D(23, "18:40"), D(23, "19:30"), 60); lose("g327_2", D(23, "20:00"), D(24, "01:00"), 12)
+at("pl901_2", D(23, "19:40"), state="line")
+go("pl901_1", D(23, "20:00"), D(23, "20:30"), [off(MARVIE, 0, -250)], h=340, state="firing")
+for id, p in (("ryerson_t", off(MARVIE, -100, 200)), ("ryerson_i", off(MARVIE, -300, 250))): drive(id, D(23, "18:30"), along(R_WILTZ, last(id), MARVIE)[:-1] + [p], h=160, kmh=8)
+fire("ryerson_t", D(23, "23:45"), D(24, "00:45")); lose("pl901_tk", D(23, "23:50"), D(24, "00:10"), 1)
+drive("aa81", D(23, "23:00"), along(R_WILTZ, last("aa81"), MARVIE)[:-1] + [off(MARVIE, -350, 400)], h=150, kmh=8)
+fire("aa81", D(24, "00:00"), D(24, "01:00"))
+for id in ("pl901_1", "pl901_tk"): at(id, D(24, "01:00"), state="line")
+smoke("Marvie", off(MARVIE, 0, -150), D(23, "20:00"), D(24, "06:00"), rate=8, spread=200)
+# 20:00: twelve tanks come north up the Arlon road at F Company; two break through into Bastogne [M p123, p129]
+appear("arlon_t", D(23, "19:20"), on_road(R_ARLON, 0.55), 0, "column")
+go("arlon_t", D(23, "19:30"), D(23, "20:00"), along(R_ARLON, last("arlon_t"), off(F_COY, 0, -400)), h=0, state="firing")
+at("arlon_t", D(23, "20:45"), state="retreat"); go("arlon_t", D(23, "20:46"), D(23, "21:20"), [on_road(R_ARLON, 0.55)], h=180, state="line", moving="retreat")
+hide("arlon_t", D(23, "21:30"))
+
+# ---- Sunday 24 December ----
+# 08:30 to 15:30 the second airdrop, about 100 tons from 160 planes [M p138]; 13:40 and 16:45, six P-47s bomb and strafe
+# Marvie in error [M p130-131]; 19:45 Bastogne bombed [M p131]
+strike("P-47s on Marvie, in error", MARVIE, D(24, "13:40"), D(24, "13:50"), 350, h=300)
+strike("P-47s on Marvie again", MARVIE, D(24, "16:45"), D(24, "16:55"), 350, h=120)
+strike("The Luftwaffe over Bastogne", B, D(24, "19:45"), D(24, "20:00"), 600, h=240)
+smoke("Bastogne", off(B, 150, 100), D(24, "20:00"), D(25, "10:00"), rate=8, spread=350)
+drive("ryerson_t", D(24, "10:00"), along(R_WILTZ, last("ryerson_t"), B) + [off(B, 400, 300)], h=270, kmh=8)
+drive("ryerson_i", D(24, "10:05"), along(R_WILTZ, last("ryerson_i"), B) + [off(B, 300, 400)], h=270, kmh=8)
+drive("td705c", D(24, "14:00"), along(R_BERTOGNE, B, P['savy']) + [off(HEMROULLE, -300, 500)], h=260, kmh=8)
+appear("b318", D(24, "12:00"), (-5300, -11900), 0, "column"); move("b318", D(24, "12:00"), [off(P['burnon'], -400, 200)], h=0)
+# 22:00: the forward elements of the 15th Panzergrenadier Division reach the sector facing Champs and Hemroulle, from the
+# north-west; Kokott sets the attack for 03:00 [M-E p197]
+for i, id in enumerate(("m115_t", "m115_t7", "m115_1", "m115_2")):
+    appear(id, plus(D(24, "20:00"), 8 * i), EDGE_W, 90, "column")
+    drive(id, plus(D(24, "20:00"), 8 * i), marche(EDGE_W, MANDE) + [off(MANDE, 700 + 150 * i, 250 - 100 * i)], h=60, kmh=12)
+
+# ---- Monday 25 December, Christmas ----
+# 02:45 shelling; bombs round Rolley about 03:00 [M p157; C19]; 03:30 to 05:45 Company A 502d in Champs, house to house;
+# two battalions of the 77th make the attack [M p157-159, p169]
+strike("Bombs round Rolley", ROLLEY, D(25, "02:55"), D(25, "03:10"), 500, h=120)
+go("gr77_1", D(25, "03:00"), D(25, "03:30"), [off(CHAMPS, -150, 250)], h=130, state="firing")
+go("gr77_2", D(25, "03:05"), D(25, "03:35"), [off(CHAMPS, -400, -50)], h=110, state="firing")
+fire("p502_1", D(25, "03:30"), D(25, "09:00"))
+lose("gr77_1", D(25, "03:30"), D(25, "09:00"), 100); lose("gr77_2", D(25, "03:30"), D(25, "09:00"), 79)
+for id in ("gr77_1", "gr77_2"): at(id, D(25, "09:00"), state="retreat")
+go("gr77_1", D(25, "09:01"), D(25, "10:00"), [off(CHAMPS, -1000, 900)], h=130, state="line", moving="retreat")
+go("gr77_2", D(25, "09:01"), D(25, "10:00"), [off(CHAMPS, -1300, 300)], h=110, state="line", moving="retreat")
+# 05:00: 18 tanks formed just east of Mande; 07:10 they and the infantry break through A and B Companies 3/327, and split,
+# seven north toward Rolley and the rest toward Hemroulle; C Company 502d fires into the riders from the woods, two hidden
+# TDs of C Company 705th take the turning tanks in flank, the 463d fires over open sights; "By 0900 ... the action was
+# cleared up around Rolle"; all 18 tanks disabled; C Company 502d counted 67 dead and 35 prisoners, and 3/327's A Company,
+# 68 survivors, took 92 prisoners [M p160-169]
+BREAK = off(LINE_327_3, -150, -150)
+go("m115_t", D(25, "06:30"), D(25, "07:10"), [BREAK], h=60, state="firing"); go("m115_t7", D(25, "06:35"), D(25, "07:10"), [off(BREAK, 100, 200)], h=60, state="firing")
+go("m115_1", D(25, "06:40"), D(25, "07:10"), [off(BREAK, -100, 100)], h=60, state="firing")
+fire("g327_3", D(25, "07:00"), D(25, "09:00")); lose("g327_3", D(25, "07:10"), D(25, "07:30"), 9)
+go("m115_t7", D(25, "07:15"), D(25, "07:45"), [off(ROLLEY, -500, -400)], h=30, state="firing")
+go("m115_t", D(25, "07:15"), D(25, "07:45"), [off(HEMROULLE, -500, 100)], h=80, state="firing")
+go("m115_1", D(25, "07:15"), D(25, "07:50"), [off(HEMROULLE, -700, 300)], h=70, state="firing")
+lose("m115_t7", D(25, "07:30"), D(25, "09:00"), 7); lose("m115_t", D(25, "07:30"), D(25, "09:00"), 11); lose("m115_1", D(25, "07:10"), D(25, "09:00"), 194)
+for id in ("td705c", "fa463"): fire(id, D(25, "07:30"), D(25, "09:00"))
+for id in ("m115_t7", "m115_t"): hide(id, D(25, "09:10"))
+at("m115_1", D(25, "09:00"), state="retreat"); go("m115_1", D(25, "09:01"), D(25, "10:00"), [off(MANDE, 900, 500)], h=60, state="line", moving="retreat")
+# about 08:00: Force Cherry through Hemroulle to the high ground south of the 502d [M p169]
+for id, p in (("ryerson_t", off(HEMROULLE, -200, 600)), ("ryerson_i", off(HEMROULLE, 0, 750))):
+    drive(id, D(25, "07:20"), along(R_BERTOGNE, B, P['savy']) + along(R_HEMROULLE, P['savy'], HEMROULLE) + [p], h=290, kmh=10)
+# CCB 4th Armored takes Chaumont; CCR passes Vaux-lez-Rosières, takes Remonville and halts at a crater near Cobreville [C21]
+for id, p in (("b8tk", off(P['chaumont'], -100, 0)), ("b10aib", off(P['chaumont'], 200, 100)), ("b318", off(P['chaumont'], -300, -300))):
+    go(id, D(25, "09:00"), D(25, "10:30"), [p], h=10, state="firing")
+for id in ("fj14", "stug11"): fire(id, D(25, "10:00"), D(25, "11:30"), state="retreat")
+for id in ("b8tk", "b10aib", "b318"): at(id, D(25, "11:30"), state="line")
+go("fj14", D(25, "11:31"), D(25, "12:30"), [off(P['hompre'], 300, -200)], h=30, state="line", moving="retreat")
+go("stug11", D(25, "11:31"), D(25, "12:10"), [off(P['hompre'], 100, -100)], h=30, state="line", moving="retreat")
+CRATER = off(P['cobreville'], 300, -350)
+for i, id in enumerate(("dwight", "r37tk", "r53aib", "r94fa")):
+    appear(id, plus(D(25, "14:00"), 6 * i), EDGE_SSW, 340, "column")
+    drive(id, plus(D(25, "14:00"), 6 * i), along(R_ASSENOIS, EDGE_SSW, off(CRATER, 0, -150 * i)), h=0, state="line", kmh=10)
+
+# ---- Tuesday 26 December ----
+# Morning: Kokott's last effort toward Hemroulle and Savy [C19; M p170] [INF: the times]
+go("m115_2", D(26, "08:00"), D(26, "08:40"), [off(HEMROULLE, -900, -300)], h=70, state="firing")
+fire("m115_2", D(26, "08:40"), D(26, "10:00"), state="retreat")
+go("m115_2", D(26, "10:01"), D(26, "10:45"), [off(MANDE, 1100, 0)], h=60, state="line", moving="retreat")
+fire("fa463", D(26, "08:30"), D(26, "09:30"))
+# CCB on to Hompré [INF: the times]; the Tigers fall back before CCR [INF]
+go("tigers", D(26, "12:30"), D(26, "13:30"), [off(P['lutrebois'], -800, -300)], h=90, state="column"); hide("tigers", D(26, "13:31"))
+for id in ("fj14", "stug11"): hide(id, D(26, "10:00"))
+for id, p in (("b8tk", off(P['hompre'], -100, -300)), ("b10aib", off(P['hompre'], 200, -400)), ("b318", off(P['hompre'], -300, -600))):
+    go(id, D(26, "10:00"), D(26, "13:00"), along(R_CHAUMONT, last(id), P['hompre'])[:-1] + [p], h=10, state="line")
+# CCR: the drive begins about 11:00 after its "cat nap"; the advance guard is checked at a creek near Cobreville about
+# 14:00; about 15:00 it is on the high ground over Clochimont, ordered on to Sibret; at 15:20 Abrams calls Dwight forward for
+# Assenois; the team moves at 16:20; at 16:34 ten volleys from thirteen batteries on Assenois; at 16:50 Boggess drives the
+# first vehicle into the 326th Engineers' line; about 17:10 Abrams meets McAuliffe; Assenois is cleared by 20:00 with 428
+# prisoners [M p170-172; C21]. The creek and the high ground are not placed [INF].
+CREEK = on_road(along(R_ASSENOIS, P['cobreville'], P['remichampagne']), 0.35)
+OVER_CLOCHIMONT = off(P['clochimont'], -600, -500)
+for i, id in enumerate(("dwight", "r37tk", "r53aib")):
+    go(id, plus(D(26, "11:00"), 5 * i), plus(D(26, "13:50"), 5 * i), along(R_ASSENOIS, last(id), off(CREEK, 0, -200 * i)), h=40, state="firing" if id == "dwight" else "line")
+at("dwight", D(26, "14:20"), state="line")
+for i, id in enumerate(("dwight", "r37tk", "r53aib")):
+    go(id, plus(D(26, "14:20"), 5 * i), plus(D(26, "15:00"), 5 * i), along(R_ASSENOIS, last(id), P['remichampagne'])[:-1] + [P['remichampagne'], off(OVER_CLOCHIMONT, 150 * i, -150 * i)], h=40, state="line")
+drive("r94fa", D(26, "11:00"), along(R_ASSENOIS, last("r94fa"), P['remichampagne'])[:-1] + [off(P['remichampagne'], 300, -300)], h=40, kmh=8)
+fire("r94fa", D(26, "16:34"), D(26, "16:50"))
+go("dwight", D(26, "16:20"), D(26, "16:50"), along(R_ASSENOIS, P['clochimont'], LINE_326), h=30, state="line", moving="charge")
+fire("assenois_g", D(26, "16:34"), D(26, "20:00"), state="surrender"); lose("assenois_g", D(26, "16:40"), D(26, "20:00"), 428)
+go("gr39_2", D(26, "16:40"), D(26, "17:10"), [off(ASSENOIS, 1300, 700)], h=270, state="line", moving="retreat")
+go("r37tk", D(26, "16:45"), D(26, "17:20"), along(R_ASSENOIS, P['clochimont'], ASSENOIS)[:-1] + [off(ASSENOIS, -150, -200)], h=30, state="firing")
+go("r53aib", D(26, "16:50"), D(26, "17:30"), along(R_ASSENOIS, P['clochimont'], ASSENOIS)[:-1] + [off(ASSENOIS, -250, 0)], h=30, state="firing")
+for id in ("r37tk", "r53aib"): at(id, D(26, "20:00"), state="line")
+
+
+# ---- strengths: each unit's losses fall evenly over their span ----
+def pose(id, t):  # where a unit is at time t between its keys
+    ks = KEYS[id]; a = max((k for k in ks if sec(k["t"]) <= sec(t)), key=lambda k: sec(k["t"])); b = next((k for k in ks if sec(k["t"]) > sec(t)), None)
+    if b is None: return (a["x"], a["y"])
+    f = (sec(t) - sec(a["t"])) / (sec(b["t"]) - sec(a["t"])); return (a["x"] + f * (b["x"] - a["x"]), a["y"] + f * (b["y"] - a["y"]))
+def state_at(id, t): return next((k["state"] for k in reversed(KEYS[id]) if sec(k["t"]) <= sec(t) and "state" in k), None)
+def curve(pts, base):
+    def f(s):
+        if s < pts[0][0]: return base
+        on = [(a, b) for a, b in zip(pts, pts[1:]) if a[0] <= s <= b[0]]
+        if not on: return pts[-1][1]
+        (s0, v0), (s1, v1) = on[-1]
+        return v1 if s1 == s0 else round(v0 + (s - s0) / (s1 - s0) * (v1 - v0))
+    return f
+for id in KEYS: KEYS[id].sort(key=lambda k: sec(k["t"]))
+for id, spans in LOSS.items():
+    spans = sorted((s for s in spans if s[2]), key=lambda s: sec(s[0])); cur, pts = BASE[id][6], []
+    for t0, t1, n in spans:
+        assert state_at(id, t0) not in (None, "hidden") and state_at(id, t1) not in (None, "hidden"), (id, t0, t1, "losses while off the map")
+        pts += [(sec(t0), cur), (sec(t1), cur - n)]; cur -= n
+    assert cur >= 0, (id, cur)
+    s_at = curve(pts, BASE[id][6]); have = {k["t"] for k in KEYS[id]}
+    for s, _ in pts:
+        t = fmt(s)
+        if t not in have: KEYS[id].append(K(t, pose(id, t))); have.add(t)
+    KEYS[id].sort(key=lambda k: sec(k["t"]))
+    for k in KEYS[id]: k["strength"] = s_at(sec(k["t"]))
+def strength(id, t): return next((k["strength"] for k in reversed(KEYS[id]) if sec(k["t"]) <= sec(t) and "strength" in k), BASE[id][6])
+def lost(id, t): return BASE[id][6] - strength(id, t)
+# The figures the note gives
+assert strength("desobry_t", D(20, "18:00")) == 4, "Desobry went to Noville with fifteen tanks and came back with four"
+assert lost("p506_1", D(20, "18:30")) == 212, "1/506 lost 13 officers and 199 men at Noville"
+assert lost("p501_i", D(19, "16:00")) == 49, "Company I: 45 men and 4 officers at Wardin"
+assert lost("eng158", D(19, "08:00")) == 30, "about 30 of the 158th at Neffe"
+assert lost("kg902_i", D(19, "10:00")) == 80, "about eighty Germans at Neffe within the first hour"
+assert lost("pz2_t1", D(21, "00:00")) + lost("pz2_t2", D(21, "00:00")) == 20, "between twenty and thirty known enemy tanks at Noville"
+assert lost("pl901_1", D(20, "14:00")) == 50 and lost("pl901_tk", D(20, "14:00")) == 2, "Marvie, 20 Dec: 20 prisoners, 30 dead, two Mark IVs"
+assert lost("g327_2", D(20, "14:00")) == 20, "2/327 at Marvie on 20 Dec: 5 killed, 15 wounded"
+assert lost("gr77_1", D(21, "12:00")) == 235, "the Halt woods: 100 captured, 55 killed, 80 into the 501st"
+assert lost("b8tk", D(23, "18:00")) == 11 and lost("b10aib", D(23, "18:00")) == 65, "Chaumont: eleven Shermans, about 65 of A Company"
+assert strength("m115_t", D(25, "09:05")) + strength("m115_t7", D(25, "09:05")) == 0, "all 18 tanks on the 327th's front disabled"
+assert lost("gr77_1", D(25, "10:00")) + lost("gr77_2", D(25, "10:00")) - 235 == 179, "A Company 502d counted 98 killed and 81 captured"
+assert lost("m115_1", D(25, "10:00")) == 67 + 35 + 92, "C Company 502d's 67 dead and 35 prisoners, and 3/327's 92 prisoners"
+assert lost("assenois_g", D(26, "20:00")) == 428, "Assenois: 428 prisoners"
+assert strength("snafu", D(25, "12:00")) == 600, "Team SNAFU: 600 within a week"
+assert set(KEYS) == set(BASE), set(KEYS) ^ set(BASE)
+BUSY = {"skirmish", "firing", "charge", "retreat", "rout"}
+for id in KEYS: assert state_at(id, END) not in BUSY, (id, state_at(id, END), "a last key busy holds time-lapse to the end")
 
 # ---- assemble and check ----
 for id in KEYS:
     if carried(id, "state") != "hidden" and sec(KEYS[id][-1]["t"]) < sec(END): KEYS[id].append(K(END, last(id)))
 TOP = {"infantry": 6, "artillery": 6, "armor": 30}  # km/h, the fastest any leg may go; units that ride go at armor's pace
 units = []
-def state_at(id, t): return next((k["state"] for k in reversed(KEYS[id]) if sec(k["t"]) <= sec(t) and "state" in k), None)
 for id, side, short, name, commander, type, strength0, extra in OOB:
     ks, state, h = KEYS[id], None, None
     top = TOP["armor"] if id in MOTOR else TOP[type]
