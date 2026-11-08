@@ -365,15 +365,369 @@ def keys(id, ks):  # every leg starts where the unit stands, unless it is coming
         if a["t"] == b["t"]: a.update({k: v for k, v in b.items() if k != "t"}); ks = ks[1:]
     have += ks
 def appear(id, t, p, h, state="line", **kw): keys(id, [K(t, p, h=h, state=state, **kw)])
+def last(id): k = KEYS[id][-1]; return (k["x"], k["y"])
+def heading(a, b): return round(math.degrees(math.atan2(b[0] - a[0], b[1] - a[1])) % 360)
+def hold_until(id, t0):  # stand until the minute before t0, then turn and go
+    if sec(t0) - sec(KEYS[id][-1]["t"]) > 120: keys(id, [K(plus(t0, -1), last(id))])
+def at(id, t, **kw): hold_until(id, t); keys(id, [K(t, last(id), **kw)])  # a change in place
+def dense(pts, step=600):  # no straight leg longer than `step`
+    out = [pts[0]]
+    for a, b in zip(pts, pts[1:]):
+        n = max(1, math.ceil(math.dist(a, b) / step))
+        out += [(a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n) for i in range(1, n + 1)]
+    return [p for i, p in enumerate(out) if i == 0 or math.dist(p, out[i - 1]) > 5]
+PACE = 3  # km/h: foot inland through the hedgerows, or along the beach under fire
+def walk(t0, pts, state="column", kmh=PACE):  # keys along a path at a pace
+    pts = dense(pts); t, out = sec(t0), []
+    for i, p in enumerate(pts):
+        if i: t += math.dist(pts[i - 1], p) / (kmh / 3.6)
+        out.append(K(fmt(t), p, h=heading(p, pts[i + 1]) if i + 1 < len(pts) else heading(pts[i - 1], p), **(dict(state=state) if i == 0 else {})))
+    return out
+def move(id, t0, pts, h=None, state="line", moving="column", kmh=PACE):  # from where it stands along pts at a pace; returns the arrival time
+    hold_until(id, t0)
+    ks = walk(t0, [last(id)] + list(pts), moving, kmh)
+    if len(ks) == 1: at(id, t0, state=state, **({"h": h} if h is not None else {})); return t0
+    ks[-1]["state"] = state
+    if h is not None: ks[-1]["h"] = h
+    keys(id, ks); return ks[-1]["t"]
+def go(id, t0, t1, pts, h=None, state="line", moving="column"):  # from where it stands along pts, arriving at t1
+    hold_until(id, t0)
+    pts = dense([last(id)] + list(pts)); d = [0]
+    if len(pts) == 1: return at(id, t1, state=state, **({"h": h} if h is not None else {}))
+    for a, b in zip(pts, pts[1:]): d.append(d[-1] + math.dist(a, b))
+    ks = [K(fmt(sec(t0) + (sec(t1) - sec(t0)) * d[i] / d[-1]), p, h=heading(p, pts[i + 1]) if i + 1 < len(pts) else heading(pts[i - 1], p)) for i, p in enumerate(pts)]
+    ks[0]["state"] = moving; ks[-1]["state"] = state
+    if h is not None: ks[-1]["h"] = h
+    keys(id, ks)
+def fire(id, t0, t1, state="line"): at(id, t0, state="firing"); at(id, t1, state=state)
+def along(line, a, b):  # the stretch of a road between the points on it nearest a and b
+    def proj(p):
+        best = None
+        for i, (u, v) in enumerate(zip(line, line[1:])):
+            dx, dy = v[0] - u[0], v[1] - u[1]; f = max(0, min(1, ((p[0] - u[0]) * dx + (p[1] - u[1]) * dy) / (dx * dx + dy * dy or 1)))
+            q = (u[0] + f * dx, u[1] + f * dy)
+            if best is None or math.dist(p, q) < best[0]: best = (math.dist(p, q), i + f, q)
+        return best[1], best[2]
+    (sa, qa), (sb, qb) = proj(a), proj(b)
+    mid = [line[i] for i in range(math.floor(min(sa, sb)) + 1, math.ceil(max(sa, sb)))]
+    return [qa] + (mid if sa <= sb else mid[::-1]) + [qb]
+def off(p, dx, dy): return (p[0] + dx, p[1] + dy)
+LOSS = {}  # id: [(t0, t1, men)], losses falling evenly over each span; a negative figure is men joining
+def lose(id, t0, t1, n): LOSS.setdefault(id, []).append((t0, t1, n))
+def smoke(name, at, t0, t1, rate=10, spread=150): features.append(dict(type="smoke", name=name, at=list(at), rate=rate, spread=spread, **{"from": t0, "until": t1}))
+def hull(c, h, L, W):  # a boat's outline, bow toward compass heading h
+    s, co = math.sin(math.radians(h)), math.cos(math.radians(h))
+    return [[round(c[0] + a * s + b * co, 1), round(c[1] + a * co - b * s, 1)] for a, b in [(-L / 2, -W / 2), (L / 2 - L / 6, -W / 2), (L / 2, 0), (L / 2 - L / 6, W / 2), (-L / 2, W / 2)]]
 for id in BASE: appear(id, START, (0, 0), 0, state="hidden")
 
+# Places the movements use, as local metres
+ALONG = heading(BOUNDS[0], BOUNDS[-1])  # the beach's run, west-north-west to east-south-east
+def shore(p, w=-15): return to_line(p, w)  # straight in from p to the shingle or the sea wall
+def edge(p, t, w=0): return to_line(p, waterline(t) + w)  # the water's edge at t, straight in or out from p
+def inland(p): return heading(p, to_line(p, -100))
+DW_TOP = to_line(off(TD['c116'], -150, 0), -330)  # the bluff top above Dog White, where the 116th and the Rangers went up
+VIERVILLE, STL, COLLEVILLE_W = P['vierville'], P['stlaurent'], (1600, -2060)
+
+# Each company comes in on its craft at its minute and stands at the water's edge [the note §3.5]: six LCVPs for a
+# rifle company, drawn from three minutes before touchdown to five after [INF].
+def land(id, t, p, craft=6, h=None):
+    q = edge(p, t, 10); h = inland(q) if h is None else h
+    appear(id, t, q, h, state="line")
+    run = (math.sin(math.radians(ALONG)), math.cos(math.radians(ALONG)))
+    for i in range(craft):
+        u = (i - (craft - 1) / 2) * 32; c = edge((q[0] + run[0] * u, q[1] + run[1] * u), t, 18)
+        features.append(dict(type="ship", poly=hull(c, inland(c), 11, 3.2), **{"from": plus(t, -3), "until": plus(t, 5)}))
+def cross(id, t0, t1, w=-15, state="line"):  # over the flat to the shingle or the wall, arriving at t1
+    go(id, t0, t1, [shore(last(id), w)], h=inland(last(id)), state=state, moving="line")
+def wade(id, t0, state="line"):  # up the beach at the edge of the water as the tide comes in, until the wall [OBH ch. 3]
+    hold_until(id, t0); p0, t = last(id), sec(t0); ks = [K(t0, p0)]
+    while True:
+        t += 300; w = waterline(t) - 5
+        q = to_line(p0, w if w > 10 else -15); ks.append(K(fmt(t), q, h=inland(q), state=state))
+        if w <= 10: break
+    keys(id, ks)
+
+# ---- the DD tanks swim in, and the first tanks touch down at H-5 and H-Hour ----
+# B and C Companies of the 741st are launched at 05:40, 6,000 yards out, and swim for Easy Red and Fox Green at about
+# 4 knots; five reach the shore [OBH ch. 3].
+DD_MID = ((DD_LAUNCH[0][0] + DD_LAUNCH[1][0]) / 2, (DD_LAUNCH[0][1] + DD_LAUNCH[1][1]) / 2)
+appear("t741dd", "05:40", DD_MID, heading(DD_MID, BOUNDS[5]))
+go("t741dd", "05:41", "06:29", [edge(off(BOUNDS[5], -150, 60), "06:29", 15)], state="line", moving="line")
+lose("t741dd", "05:45", "06:25", 27)
+land("t741a", "06:30", off(BOUNDS[5], 250, -120), craft=0); lose("t741a", "06:30", "06:32", 2); lose("t741a", "06:32", "06:45", 3)
+land("t743b", "06:25", off(BOUNDS[0], 450, -230), craft=0); lose("t743b", "06:25", "06:40", 8)
+land("t743c", "06:25", off(BOUNDS[1], 250, -160), craft=0)
+land("t743a", "06:30", off(BOUNDS[3], 120, -50), craft=0)
+for id in ("t741dd", "t741a", "t743b", "t743c", "t743a"):
+    wade(id, plus(KEYS[id][-1]["t"], 1), state="firing")
+# 17:00: D-1 open to Vierville, and the 741st's remaining tanks ordered inland by E-1; four attack St-Laurent [OBH ch. 5]
+for id, dx in (("t743b", 0), ("t743c", 120)):
+    move(id, "17:00", along(SEA_WALL + [], last(id), D1[0]) + D1 + [off(VIERVILLE, 150 + dx, 60)], h=200, kmh=6)
+move("t741a", "17:00", along(SHINGLE, last("t741a"), E1[0]) + E1 + [(650, -900)], h=230, kmh=6)
+move("t741dd", "17:10", along(SHINGLE, last("t741dd"), E1[0]) + E1 + [(150, -880)], h=260, kmh=6)
+fire("t741dd", "19:30", "21:30")
+move("t743a", "17:20", along(SHINGLE, last("t743a"), E1[0]) + E1[:4], h=200, kmh=6)
+land("t745b", "16:30", off(BOUNDS[5], 700, -170), craft=0)
+cross("t745b", "16:31", "16:50"); move("t745b", "19:00", along(SHINGLE, last("t745b"), F1[0]) + F1[:7], h=200, kmh=4)
+
+# ---- the destroyers: on station by 05:50, firing to H-3; their own targets from 08:00; two close to 1,000 yards
+# between 10:00 and 11:00 [OBH ch. 2, 4; NHF]. Stations are not recorded: drawn 1,700 to 2,600 m out off each
+# division's sectors. Which two closed in is not recorded either: drawn as Carmick and Doyle, which went to 800 yards.
+STATIONS = {"dd_mccook": ((-3300, 2350), 1500), "dd_carmick": (BOUNDS[1], 2000), "dd_harding": ((400, 200), 2500), "dd_frankford": ((1300, -300), 2100),
+            "dd_baldwin": ((1950, -620), 2700), "dd_doyle": ((2600, -720), 1800), "dd_emmons": ((3700, -1080), 2300)}
+for id, (p, w) in STATIONS.items():
+    st = to_line(p, w); appear(id, START, st, heading(st, p))
+    fire(id, "05:50", "06:27"); at(id, "08:00", state="firing")
+    if id in ("dd_carmick", "dd_doyle"):
+        close = to_line(p, 900); go(id, "10:00", "10:06", [close], h=heading(close, p), state="firing", moving="firing")
+        go(id, "11:00", "11:06", [st], h=heading(st, p), state="firing", moving="firing")
+        for a, b, c in (("05:30", "10:00", st), ("10:06", "11:00", close), ("11:06", END, st)):
+            features.append(dict(type="ship", poly=hull(c, ALONG, 106, 11), **{"from": a, "until": b}))
+    else: features.append(dict(type="ship", poly=hull(st, ALONG, 106, 11), **{"from": START}))
+    at(id, "14:00", state="line")
+AFLOAT = {id: END for id in STATIONS} | {"t741dd": "06:29"}
+
+# ---- the first wave, 06:31: eight companies, most of them east of where they were sent [OBH ch. 3; Map V] ----
+land("f116", "06:31", TD['f116']); land("g116", "06:31", TD['g116']); land("e116", "06:31", off(TD['fox_green'], -80, 30))
+land("e116w", "06:31", TD['e116w'], craft=2); land("e16", "06:31", TD['e16']); land("spalding", "06:31", off(TD['e16'], -170, 60), craft=1)
+land("f16", "06:31", off(TD['fox_green'], 90, -30)); land("a116", "06:36", TD['a116'])
+land("setf116", "06:35", off(TD['c116'], 0, 0), craft=0); land("setf16", "06:35", off(TD['ab16'], 60, -30), craft=0)
+lose("a116", "06:36", "06:51", 124)  # 'up to two-thirds'; the company out of action within fifteen minutes
+lose("e16", "06:31", "07:00", 105); lose("setf116", "06:35", "07:05", 202); lose("setf16", "06:35", "07:05", 202)  # the engineers' 41%
+for id, t in (("f116", "06:58"), ("g116", "06:55"), ("e116", "06:55"), ("e116w", "06:55"), ("e16", "07:00"), ("spalding", "06:50"), ("f16", "06:58")):
+    cross(id, plus(KEYS[id][-1]["t"], 1), t)
+wade("a116", "06:37")
+for id in ("setf116", "setf16"): cross(id, "06:36", "07:15")
+# C Company of the 2nd Rangers on Charlie at H+15: about 30 of 64 cross the sand, and go up the cliff 300 yards west;
+# all are up by 07:30 and fight on the cliff top into the afternoon [OBH ch. 3, 4].
+land("rgr2c", "06:45", TD['rgr2c'], craft=2); lose("rgr2c", "06:45", "07:00", 35); cross("rgr2c", "06:46", "07:00")
+CLIFF = to_line(off(TD['rgr2c'], -220, 165), -70)
+go("rgr2c", "07:00", "07:30", [CLIFF], h=heading(CLIFF, P['wn73']), moving="column"); fire("rgr2c", "07:35", "14:00")
+
+# ---- the second group of waves, 07:00 to 07:40 ----
+land("d116", "07:00", TD['d116']); land("b116", "07:00", TD['b116']); land("h116", "07:00", TD['h116'])
+land("g16", "07:00", TD['g16']); land("k16", "07:00", TD['km16']); land("l16", "07:00", TD['l16'])
+land("c116", "07:10", TD['c116']); lose("c116", "07:10", "07:20", 6)
+lose("g16", "07:00", "07:30", 63); lose("k16", "07:00", "07:30", 53); lose("l16", "07:00", "08:00", 61)  # L reduced to 125
+for id, t in (("d116", "07:20"), ("b116", "07:25"), ("h116", "07:20"), ("g16", "07:30"), ("k16", "07:25"), ("l16", "07:30"), ("c116", "07:20")):
+    cross(id, plus(KEYS[id][-1]["t"], 1), t)
+land("i116", "07:25", off(TD['ik116'], -60, 25)); land("k116", "07:28", off(TD['ik116'], 60, -25)); land("l116", "07:35", TD['l116'])
+land("m116", "07:30", TD['m116']); land("h16", "07:30", TD['h16']); land("m16", "07:40", off(TD['km16'], 130, -40))
+land("cmd116", "07:30", off(BOUNDS[2], -60, 40), craft=3)
+land("a16", "07:40", off(TD['ab16'], -60, 20)); land("b16", "07:42", off(TD['ab16'], 70, -25)); land("c16", "07:40", TD['c16'])
+land("d16", "07:44", off(TD['ab16'], 190, -70)); land("rgr2a", "07:35", off(TD['rgr2ab'], -50, 25), craft=2); land("rgr2b", "07:37", off(TD['rgr2ab'], 50, -25), craft=2)
+lose("rgr2a", "07:35", "07:40", 30); lose("rgr2b", "07:37", "07:40", 38)  # about 35 and 27 reach the wall
+land("rgr5", "07:50", TD['rgr5'], craft=6); land("rgr5a", "07:50", off(TD['rgr5'], 110, -45), craft=2); lose("rgr5", "07:50", "07:58", 8)
+land("cmd16", "08:00", off(TD['ab16'], 120, -40), craft=3); lose("cmd16", "08:00", "08:15", 36)  # the executive officer and 35 men on the flat
+land("i16", "08:00", TD['i16'])
+for id, t in (("i116", "07:45"), ("k116", "07:47"), ("l116", "07:52"), ("m116", "07:48"), ("h16", "07:50"), ("m16", "07:58"), ("cmd116", "07:45"),
+              ("a16", "07:58"), ("b16", "08:00"), ("c16", "07:58"), ("d16", "08:02"), ("rgr2a", "07:40"), ("rgr2b", "07:41"), ("rgr5", "07:58"),
+              ("rgr5a", "07:58"), ("cmd16", "08:15"), ("i16", "08:15")):
+    cross(id, plus(KEYS[id][-1]["t"], 1), t)
+
+# ---- off the beach at Dog White: upwards of 600 men on a front of less than 300 yards, 08:00 to 09:00 [OBH ch. 4, 5] ----
+go("c116", "07:50", "08:50", [DW_TOP], h=215); go("cmd116", "07:51", "08:30", [off(DW_TOP, 80, 120)], h=215)
+go("rgr5", "08:10", "09:00", [off(DW_TOP, -150, 40)], h=230); go("rgr5a", "08:12", "09:00", [off(DW_TOP, 120, -40)], h=200)
+go("rgr2a", "08:00", "08:30", [to_line(last("rgr2a"), -280)], h=210); go("rgr2b", "08:01", "08:30", [to_line(last("rgr2b"), -280)], h=210)
+move("g116", "07:30", along(SEA_WALL, last("g116"), shore(off(TD['c116'], 120, -40))), h=30, state="line", kmh=1.5)  # G's remnants reach Dog White about 08:30
+go("g116", "08:35", "09:25", [off(DW_TOP, 160, 120)], h=180)
+for id, dx in (("c116", 0), ("cmd116", 60), ("rgr5", -120), ("rgr2a", -200), ("rgr2b", -260)):  # Vierville by 11:00 [OBH ch. 5; HAR]
+    go(id, "10:00", "10:55", along(COAST_RD, last(id), VIERVILLE)[1:] + [off(VIERVILLE, dx, 40 if dx else -40)], h=250)
+# C/116 and B Company of the 5th Rangers go west on the coast road before noon; the Rangers' attempt south is given up
+# at 14:00; the main Ranger force is on the coast road west of Vierville at 17:00 [OBH ch. 5]
+go("c116", "11:00", "11:50", along(COAST_RD, VIERVILLE, (-2900, 800))[1:], h=270, state="firing"); at("c116", "12:30", state="line")
+go("rgr5", "12:00", "12:50", [(-2250, 250)], h=200, state="firing"); go("rgr5", "14:00", "14:40", [(-2550, 700)], h=230)
+go("rgr5", "16:20", "17:00", along(COAST_RD, (-2550, 700), (-2750, 780))[1:], h=260)
+for id, p in (("c116", off(MAPIX['vgroup'], -80, 60)), ("rgr5", off(MAPIX['vgroup'], 60, -60)), ("rgr2a", off(MAPIX['vgroup'], 140, 60)), ("rgr2b", off(MAPIX['vgroup'], -160, -40))):
+    go(id, "20:00", "21:00", [p], h=250)
+go("rgr2c", "15:00", "16:30", [off(MAPIX['vgroup'], 0, 160)], h=250)
+# A Company of the 5th Rangers, Parker's platoon, inland past Vaumicel; it leaves the château at 14:30 and joins the
+# 2nd Rangers' inland group south of the Grandcamp road about 21:00 [OBH ch. 5; Map IX]
+go("rgr5a", "10:00", "13:30", [(-1950, 250), off(P['vaumicel'], 120, 40)], h=200); go("rgr5a", "14:30", "21:00", [(-3000, 150), MAPIX['parker']], h=270)
+go("cmd116", "13:00", "13:20", [off(VIERVILLE, 0, -90)], h=180)
+# the 2nd Battalion's men up from Dog Red, and the 116th's elements in St-Laurent at midnight [OBH-IX]
+for id, dx in (("f116", -60), ("h116", 60), ("g116", 0)):
+    go(id, "09:40" if id != "g116" else "10:00", "12:30", [off(DW_TOP, 300 + dx, -150), off(MAPIX['stl_oval'], -250 + dx, 200)], h=150)
+    go(id, "19:00", "20:00", [off(MAPIX['stl_oval'], dx * 2, 60)], h=160)
+# A Company stays at the wall; B Company and the 1st Battalion's headquarters come up D-1 once it is open [INF]
+move("d116", "13:10", along(SEA_WALL, last("d116"), D1[0])[:1] + [D1[0]], h=120, kmh=2)
+move("d116", "15:00", D1 + [off(VIERVILLE, -120, -150)], h=180, kmh=2); go("d116", "21:00", "22:30", [MAPIX['bn1_116']], h=200)
+move("b116", "17:00", along(SEA_WALL, last("b116"), D1[0])[1:] + D1 + [off(VIERVILLE, 60, -200)], h=180, kmh=2.5)
+
+# ---- 3rd Battalion, 116th: past the bluff between D-3 and E-1 by 09:00, on the high ground by 10:00; short of the
+# St-Laurent-Colleville road at dusk [OBH ch. 4, 5]; K Company loses 15 to 20 on the bluff ----
+for id, dx, dy in (("i116", -150, 0), ("k116", 0, -100), ("l116", 160, 40), ("m116", 40, 140)):
+    top = to_line(off(last(id), 0, 0), -450)
+    go(id, "08:20", "09:30" if id != "m116" else "10:00", [top], h=210, moving="column")
+    go(id, "11:00", "14:30", [off(MAPIX["bn3_116"], dx, dy + 300), off(MAPIX['bn3_116'], dx, dy)], h=180, moving="line")
+lose("k116", "08:30", "09:00", 18)
+
+# ---- Easy Red and Fox Green: G Company climbs west of E-3 and reaches Colleville; the 1st Battalion is at the crest by
+# 09:30 and on the highway at 13:00 [OBH ch. 4, 5] ----
+G_TOP = to_line(off(TD['g16'], -40, -40), -320)
+go("g16", "07:31", "08:30", [G_TOP], h=200, moving="column")
+go("g16", "09:30", "12:05", [(1650, -1200), COLLEVILLE_W], h=120); fire("g16", "12:06", "14:00")
+go("g16", "20:00", "20:40", [off(MAPIX['bn2_16'], -80, 40)], h=150)
+go("spalding", "07:45", "08:45", [to_line(off(last("spalding"), -60, 0), -300)], h=230, moving="column")
+go("spalding", "09:00", "09:50", [off(P['wn64'], 80, -170)], h=330); fire("spalding", "09:51", "10:00")
+go("spalding", "13:00", "15:00", [(1400, -1400), off(MAPIX['bn2_16'], 100, 120)], h=150)
+for id, dx in (("a16", -120), ("b16", 0), ("c16", 120), ("d16", 60)):
+    go(id, "08:30", "09:30", [to_line(off(last(id), 0, 0), -330)], h=210, moving="column")
+lose("a16", "08:30", "09:30", 48)
+go("b16", "11:30", "13:00", [(900, -1250)], h=200); go("c16", "11:30", "13:00", [(1150, -1400)], h=200)
+go("a16", "12:00", "13:30", [(1000, -1650)], h=190); go("d16", "12:00", "13:30", [(1250, -1600)], h=190)
+go("b16", "18:00", "19:30", [MAPIX['bn1_16a']], h=190); go("c16", "18:00", "19:30", [MAPIX['bn1_16b']], h=190)
+go("h16", "09:00", "10:00", [off(G_TOP, 120, -40)], h=200, moving="column"); go("h16", "13:00", "15:00", [off(COLLEVILLE_W, 60, -150)], h=120)
+go("h16", "20:00", "20:40", [off(MAPIX['bn2_16'], 90, -50)], h=150)
+for id in ("e16", "e116w", "f16", "e116"):
+    go(id, "10:30", "11:30", [to_line(off(last(id), 0, 0), -300)], h=210, moving="column")
+go("e16", "13:00", "15:00", [off(COLLEVILLE_W, -120, 40)], h=120)
+go("cmd16", "09:00", "09:30", [to_line(last("cmd16"), -120)], h=200); go("cmd16", "20:00", "20:35", [(1550, -1500)], h=180)
+
+# ---- 3rd Battalion, 16th: L Company up F-1 against WN 60, which falls at 09:00 with 31 prisoners; the battalion holds
+# le Grand Hameau at night with about 100 men [OBH ch. 4; HAR; Map IX] ----
+go("l16", "07:45", "08:45", [to_line(off(P['wn60'], 150, 150), -40)], h=230, moving="column"); fire("l16", "08:46", "09:00")
+go("l16", "10:00", "12:30", [(3200, -1900)], h=180); go("l16", "18:00", "21:00", [off(P['hameau'], -80, 60)], h=120)
+lose("l16", "12:30", "21:00", 25)
+for id, dx in (("k16", -100), ("m16", 0), ("i16", 110)):
+    go(id, "09:10", "10:10", [to_line(off(last(id), 0, 0), -300)], h=200, moving="column")
+    go(id, "11:00", "13:00", [off(MAPIX['cabourg_n'], dx, 40 if dx else -60)], h=170)
+
+# ---- the engineers, the guns and the follow-up regiments ----
+land("eng149", "09:00", off(P['ruquet'], 150, 60), craft=4); cross("eng149", "09:01", "09:20")
+go("eng149", "12:00", "13:00", E1[:5], h=200, moving="column")
+land("eng336", "14:30", off(P['ruquet'], 300, 20), craft=4); cross("eng336", "14:31", "14:50")
+move("eng336", "15:00", along(SHINGLE, last("eng336"), F1[0]) + [F1[0]], h=100, kmh=1.6)
+land("eng121", "17:00", off(BOUNDS[0], 200, -110), craft=4); cross("eng121", "17:01", "17:25")
+move("eng121", "17:30", along(SEA_WALL, last("eng121"), D1[0])[1:] + D1 + [MAPIX['eng121']], h=200, kmh=3)
+for id, p, t in (("fa7", (1150, -330), "15:30"), ("fa62", (2250, -780), "15:00"), ("fa111", (1350, -380), "15:00"), ("fa58", (1500, -420), "16:30")):
+    land(id, t, p, craft=0); cross(id, plus(t, 1), plus(t, 25), w=-70)
+fire("fa7", "16:15", "18:00"); fire("fa62", "17:00", "19:00")
+move("fa58", "18:00", along(SHINGLE, last("fa58"), E1[0]) + E1 + [(250, -950)], h=200, kmh=5); fire("fa58", "19:30", "21:30")
+# 2nd Battalion, 18th, lands shortly after 10:00, is off the beach before noon and at Colleville at 15:00 [OBH ch. 4, 5]
+land("r18_2", "10:15", off(P['ruquet'], 200, 30), craft=6); cross("r18_2", "10:16", "10:30")
+go("r18_2", "10:45", "11:50", [to_line(off(last("r18_2"), 100, 0), -400)], h=200); go("r18_2", "13:30", "15:00", [(1350, -1500), (1500, -2350)], h=150)
+go("r18_2", "18:00", "20:00", [MAPIX['bn2_18']], h=150)
+# the 115th lands together on Easy Red near E-1 just before noon and is inland by nearly 14:00; 2/115 fights in
+# St-Laurent till dusk; 3/115 is on a strongpoint at D-3 in the evening [OBH ch. 4, 5; G3]
+for id, dx in (("r115_1", -150), ("r115_2", 0), ("r115_3", 150)):
+    land(id, "11:50", off(P['ruquet'], 280 + dx, -20 - dx / 3), craft=6); cross(id, "11:51", "12:10")
+    move(id, "12:30" if id == "r115_2" else "12:50" if id == "r115_1" else "13:10", along(SHINGLE, last(id), E1[0]) + E1, h=230, moving="column", kmh=1.5)
+go("r115_2", "14:30", "15:00", [(30, -870)], h=270); fire("r115_2", "15:01", "21:50"); go("r115_2", "22:10", "22:50", [MAPIX['stl_oval']], h=210)
+go("r115_1", "15:00", "17:30", [(350, -1350), MAPIX['bn1_115']], h=270)
+go("r115_3", "15:30", "17:00", [(450, -600), (200, -330)], h=320); fire("r115_3", "19:00", "21:00"); go("r115_3", "22:00", "23:30", [(600, -900), MAPIX['bn3_115']], h=180)
+# the 1st and 3rd Battalions, 18th, land about 13:00; 3/18 is still north of the coast road at 18:00 [OBH ch. 4, 5]
+for id, dx in (("r18_1", -130), ("r18_3", 130)):
+    land(id, "13:00", off(P['ruquet'], 420 + dx, -60 - dx / 3), craft=6); cross(id, "13:01", "13:20")
+    move(id, "13:40" if id == "r18_1" else "14:30", along(SHINGLE, last(id), E1[0]) + E1, h=200, moving="column", kmh=1.2)
+go("r18_1", "16:00", "18:00", [(700, -1350), MAPIX['bn1_18']], h=180)
+go("r18_3", "16:30", "17:30", [(750, -1150)], h=180); go("r18_3", "19:00", "20:30", [MAPIX['bn3_18']], h=180)
+go("r18_1", "23:45", "23:59", [off(MAPIX['bn1_18'], 60, -80)], h=150)  # committed at 23:45 to take over the 1st Battalion, 16th's mission
+# the 26th lands at E-3 from 19:30 and is ashore by 21:00; at midnight 2/26 and 3/26 are on the move [G3; Map IX]
+for id, t in (("r26_2", "19:40"), ("r26_3", "20:30")):
+    land(id, t, off(BOUNDS[5], -40 if id == "r26_2" else 90, 0), craft=6); cross(id, plus(t, 1), plus(t, 20 if id == "r26_2" else 12))
+    move(id, plus(t, 25), E3[:6] + [(1500, -1500), MAPIX['bn2_26' if id == "r26_2" else 'bn3_26']], h=270, moving="column", kmh=2.5)
+
+# ---- the Germans: the strongpoints fire on the beach from H-Hour until they fall or are silenced ----
+for k in WN:
+    appear(k, START, P[k], heading(P[k], to_line(P[k], 300)))
+for k, t1 in (("wn74", "09:50"), ("wn73", "13:00"), ("wn72", "13:00"), ("wn71", "13:00"), ("wn70", "13:00"), ("wn66", "12:00"), ("wn68", "12:00"),
+              ("wn67", "12:00"), ("wn62", "13:00"), ("wn61", "07:10")):
+    fire(k, "06:45" if k == "wn74" else "06:30", t1)
+fire("wn66", "19:00", "21:00"); fire("wn68", "19:00", "21:00")
+at("wn61", "09:05", state="surrender")  # reported lost [WP]
+fire("wn60", "06:30", "09:00", state="surrender"); lose("wn60", "08:46", "09:00", 9)  # 31 prisoners
+fire("wn64", "06:30", "10:00", state="surrender"); lose("wn64", "09:51", "10:00", 4)  # 21 prisoners
+fire("wn65", "06:30", "11:30", state="surrender"); lose("wn65", "10:00", "11:30", 5)  # 20 prisoners
+fire("wn63", "12:05", "14:00"); fire("wn69", "14:30", "21:50")
+# the 352nd Artillery Regiment's four batteries behind the bluffs (places not found) [the note]
+for id, p in (("art1", (-2600, -3500)), ("art2", (-700, -3900)), ("art3", (1300, -3400)), ("art4", (3200, -3700))):
+    appear(id, START, p, 20); fire(id, "06:30", "18:00")
+# the 916th's reserve from Formigny into St-Laurent; II./915 against Colleville in the early afternoon; the 352nd's
+# engineers in the evening [WP; HAR; INF]
+appear("res916", START, off(P['formigny'], 0, 80), 20)
+go("res916", "08:30", "09:30", along(FORMIGNY_RD, P['formigny'], (-2100, -1300))[1:] + [(-600, -900)], h=70)
+fire("res916", "15:00", "21:50"); go("res916", "22:10", "23:30", [(-1250, -2600)], h=200, moving="retreat")
+appear("ii915", "11:00", (4900, -4300), 300, state="column")
+go("ii915", "11:01", "12:50", [(3800, -3500), (2700, -2600)], h=290); go("ii915", "13:10", "13:30", [(2250, -2350)], h=290, state="firing", moving="charge")
+at("ii915", "14:00", h=120, state="retreat"); go("ii915", "14:01", "15:30", [(3400, -3800)], h=150, state="line", moving="retreat")
+appear("eng352", "19:00", (900, -4900), 0, state="column"); go("eng352", "19:01", "20:30", [(900, -3400)], h=0)
+
+# ---- smoke and weather ----
+smoke("grass fires on the bluff", to_line(off(BOUNDS[3], -200, 60), -150), "06:30", "10:00", rate=8, spread=200)
+LCI91, LCI92 = edge(off(BOUNDS[2], -350, 170), "08:00", 40), edge(off(BOUNDS[2], 330, -100), "08:00", 40)
+features += [dict(type="ship", poly=hull(LCI91, inland(LCI91), 48, 7), **{"from": "07:40", "until": "16:30"}),
+             dict(type="ship", poly=hull(LCI92, inland(LCI92), 48, 7), **{"from": "07:50", "until": "16:30"})]
+smoke("LCI 91", LCI91, "08:00", "16:30", rate=6, spread=40); smoke("LCI 92", LCI92, "08:00", "16:30", rate=6, spread=40)
+smoke("naval fire on the Vierville strongpoint", P['wn72'], "12:00", "13:00", rate=10, spread=120)
+TINTS = [dict(color="rgba(196,200,206,0.28)", **{"from": START, "until": "07:30"})]  # a slight morning mist under partial overcast
+
+# ---- strengths: each unit's losses fall evenly over their span ----
+def pose(id, t):  # where a unit is at time t between its keys
+    ks = KEYS[id]; a = max((k for k in ks if sec(k["t"]) <= sec(t)), key=lambda k: sec(k["t"])); b = next((k for k in ks if sec(k["t"]) > sec(t)), None)
+    if b is None: return (a["x"], a["y"])
+    f = (sec(t) - sec(a["t"])) / (sec(b["t"]) - sec(a["t"])); return (a["x"] + f * (b["x"] - a["x"]), a["y"] + f * (b["y"] - a["y"]))
+def state_at(id, t): return next((k["state"] for k in reversed(KEYS[id]) if sec(k["t"]) <= sec(t) and "state" in k), None)
+def curve(pts, base):
+    def f(s):
+        if s < pts[0][0]: return base
+        on = [(a, b) for a, b in zip(pts, pts[1:]) if a[0] <= s <= b[0]]
+        if not on: return pts[-1][1]
+        (s0, v0), (s1, v1) = on[-1]
+        return v1 if s1 == s0 else round(v0 + (s - s0) / (s1 - s0) * (v1 - v0))
+    return f
+for id in KEYS: KEYS[id].sort(key=lambda k: sec(k["t"]))
+for id, spans in LOSS.items():
+    spans = sorted(spans, key=lambda s: sec(s[0])); cur, pts = BASE[id][6], []
+    for t0, t1, n in spans:
+        assert state_at(id, t0) not in (None, "hidden") and state_at(id, t1) not in (None, "hidden"), (id, t0, t1, "losses while off the map")
+        pts += [(sec(t0), cur), (sec(t1), cur - n)]; cur -= n
+    assert cur >= 0, (id, cur)
+    s_at = curve(pts, BASE[id][6]); have = {k["t"] for k in KEYS[id]}
+    for s, _ in pts:
+        t = fmt(s)
+        if t not in have: KEYS[id].append(K(t, pose(id, t))); have.add(t)
+    KEYS[id].sort(key=lambda k: sec(k["t"]))
+    for k in KEYS[id]: k["strength"] = s_at(sec(k["t"]))
+def strength(id, t): return next((k["strength"] for k in reversed(KEYS[id]) if sec(k["t"]) <= sec(t) and "strength" in k), BASE[id][6])
+# The figures the note gives
+assert strength("a116", "07:00") == 62, "A/116: up to two-thirds lost"
+assert strength("c116", "08:00") == 180, "C/116: five or six casualties"
+assert strength("e16", "08:00") == 50 and strength("g16", "08:00") == 123 and strength("k16", "08:00") == 133, "E, G and K/16: 105, 63 and 53"
+assert strength("l16", "08:30") == 125 and strength("l16", "23:00") == 100, "L/16 reduced to 125; about 100 at le Grand Hameau"
+assert strength("rgr2c", "07:10") == 29 and strength("rgr2a", "07:45") == 35 and strength("rgr2b", "07:45") == 27, "the Rangers who crossed"
+assert strength("t741dd", "06:30") == 5 and strength("t743b", "07:00") == 8, "five DD tanks ashore; eight of B/743"
+assert strength("wn60", "09:00") == 31 and strength("wn64", "10:00") == 21 and strength("wn65", "11:30") == 20, "the prisoners"
+assert round(strength("setf116", "07:30") / 492, 2) == 0.59, "the engineers' 41%"
+assert set(KEYS) == set(BASE), set(KEYS) ^ set(BASE)
+for id in KEYS:
+    if carried(id, "state") != "hidden" and sec(KEYS[id][-1]["t"]) < sec(END): KEYS[id].append(K(END, last(id)))
+
 # ---- assemble and check ----
-TOP = {"infantry": 6, "artillery": 6, "armor": 30}  # km/h, the fastest any leg may go ashore
+# The land check knows the tide: a unit may stand on the flat while the sea is below it, or wade up to WADE metres into
+# it at the water's edge. The destroyers, and the DD tanks until they touch down, must be on the water.
+TOP = {"infantry": 6, "artillery": 6, "armor": 30, "afloat": 45}  # km/h, the fastest any leg may go
 units = []
 for id, side, short, name, commander, type, strength0, extra in OOB:
-    units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength0, keys=KEYS[id], **extra))
+    ks, state, h = KEYS[id], None, None
+    for a, b in zip(ks, ks[1:]):
+        state, h = a.get("state", state), a.get("h", h)
+        assert sec(b["t"]) > sec(a["t"]), (id, a["t"], b["t"])
+        if state == "hidden": continue
+        moved = (a["x"], a["y"]) != (b["x"], b["y"])
+        assert moved or b.get("h", h) == h or "strength" in b or sec(b["t"]) - sec(a["t"]) <= 600, (id, a["t"], b["t"], "a slow turn in place holds the time-lapse")
+        assert not (moved and sec(b["t"]) - sec(a["t"]) > 3 * 3600), (id, a["t"], b["t"], "a march leg over three hours")
+        kmh = math.dist((a["x"], a["y"]), (b["x"], b["y"])) / (sec(b["t"]) - sec(a["t"])) * 3.6
+        afloat = id in AFLOAT and sec(a["t"]) < sec(AFLOAT[id])
+        assert kmh <= TOP["afloat" if afloat else type], (id, a["t"], b["t"], f"{kmh:.1f} km/h")
+        for s in range(sec(a["t"]), sec(b["t"]) + 1, 60):
+            f = (s - sec(a["t"])) / (sec(b["t"]) - sec(a["t"])); q = (a["x"] + f * (b["x"] - a["x"]), a["y"] + f * (b["y"] - a["y"]))
+            if id in AFLOAT and s <= sec(AFLOAT[id]): assert not dry(q, s), (id, fmt(s), q, "aground")
+            else: assert dry(q, s, WADE), (id, fmt(s), q, f"{seaward(q) - waterline(s):.0f} m out in the water")
+    for k in ks: assert max(abs(k["x"]), abs(k["y"])) < HALF_EXTENT, (id, k["t"], "off the map")
+    units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength0, keys=ks, **extra))
 for f in features:
-    if "at" in f:
+    if "at" in f and f.get("type") != "smoke":
         t_last = f.get("until", END)
         assert max(map(abs, f["at"])) < HALF_EXTENT - 100 and dry(f["at"], sec(t_last) - 60), (f.get("name"), f["at"], "a label off the map or under the water")
 
@@ -387,7 +741,7 @@ battle = dict(
     view=dict(x=0, y=0, width=2 * HALF_EXTENT),
     sides=dict(us=dict(name="Americans (V Corps: the 1st Infantry Division, with the 29th's 116th and 115th Infantry and the Rangers)", color="#3a5f9e", light="#7d9bd0", dark="#1d3561"),
                german=dict(name="Germans (352nd Infantry Division, Kraiss)", color="#b8322a", light="#de5d50", dark="#5c1712")),
-    features=features, units=units, events=[], sources=SOURCES,
+    features=features, units=units, events=[], tints=TINTS, sources=SOURCES,
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1, ensure_ascii=False)
 print(len(units), "units,", len(TIDE_STEPS), "tide steps,", len(OBSTACLES), "obstacle posts,", len(changed), "flat cells")
