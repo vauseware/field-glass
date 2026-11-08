@@ -125,15 +125,13 @@ const f2 = v => (v == null ? '-' : v.toFixed(2));
     }
   }
 
-  // the frames for the PR: field, title and landing, then the title on a phone
+  // the frames for the PR: field, title and landing
   await p.setViewport({ width: 1536, height: 830 });
   for (const id of ids.split(',')) {
     await open(`#${id}`); await p.click('#play');
     for (const [n, e] of [['field', 0.5], ['title', 3.2]]) { await p.evaluate(e => fg.hold(e), e); await frames(3); await shot(`${id}-${n}`); }
     await p.evaluate(() => fg.hold(9.2)); await wait(1500); await shot(`${id}-landing`);
   }
-  await p.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
-  await open(`#${ids.split(',')[0]},opening`); await frames(3); await shot(`${ids.split(',')[0]}-title-phone`);
 
   if (clip) { // 15 fps, the panels' fade held to the same clock
     await p.setViewport({ width: 1536, height: 830 });

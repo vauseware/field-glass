@@ -44,5 +44,5 @@ Rename it to `themes/<war id>.js` with the id the war uses in `WARS` (`splash.js
 
 ## 3. Verify and ship
 
-- `npm run check`; `start-screen.cjs`; `shoot-skins.cjs <id>`; the start screen on `#<id>` at 1536x830 and 390x844.
-- Then follow `.claude/skills/verify-field-glass/SKILL.md` and open the PR with desktop and phone shots via `bash ~/bin/pr-shot.sh`.
+- `npm run check`; `start-screen.cjs`; `shoot-skins.cjs <id>`; the start screen on `#<id>` at 1536x830.
+- Then follow `.claude/skills/verify-field-glass/SKILL.md` and open the PR with desktop shots (no phone, ADR-0012) via `bash ~/bin/pr-shot.sh`.

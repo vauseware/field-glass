@@ -27,7 +27,6 @@ Preconditions:
 - **Unit card.** Run `fg.sh shot <dir> '#cowpens@07:30,play,select=<unit id>,warp' cowpens-card`, using a unit id from `battles/cowpens/battle.json`. `#card` shows that unit's name beside it.
 - **Legend.** Run `fg.sh shot <dir> '#sidi-bou-zid@1943-02-14T10:00,warp,legend' sbz-legend`. The Legend dialog is open over the WW2 skin, and the clock behind it reads `1000 HRS 14 FEB`.
 - **Chapter title.** Run `fg.sh shot <dir> '#cowpens@07:31,play,warp,title' cowpens-title 1536 830`. "The main line" sits just above the chapter labels on its paper band.
-- **Phone.** Add width and height: `fg.sh shot <dir> '#cowpens@07:30,play,warp' cowpens-phone 390 844`.
 - **Settles.** In a journey, load `#cowpens@10:00,play,warp`, set `window.mark = 1`, and wait. `location.hash` becomes `#cowpens` and `window.mark` is still `1`, so the page did not reload.
 
 ## Gotchas

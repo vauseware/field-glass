@@ -65,7 +65,7 @@ Everything goes in `<dir>`: the journey logs, `start-screen-*.png`, `playback-<b
 - for a battle data change, show the moment it affects, with a `shot` link at that time, and run `npm run check`, which validates every battle and rewrites the running times in `battles/index.json`.
 - look at the screenshots. A `PASS` from a blank canvas is not proof.
 
-To show the user, put the PNG paths in chat (Cursor: attach or Read the files; Claude Code: SendUserFile). For a PR, use `bash ~/bin/pr-shot.sh <pr#> <png>...` with a desktop shot and a phone shot (390x844).
+To show the user, put the PNG paths in chat (Cursor: attach or Read the files; Claude Code: SendUserFile). For a PR, use `bash ~/bin/pr-shot.sh <pr#> <png>...` with desktop shots only: phones are out of scope (ADR-0012).
 
 ## Cleanup
 

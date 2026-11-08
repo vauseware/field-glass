@@ -154,11 +154,18 @@
   "runtime": 1794
  },
  {
+  "id": "omaha-beach",
+  "name": "Omaha Beach, 6 Jun 1944",
+  "date": "1944-06-06",
+  "war": "World War II",
+  "runtime": 1025
+ },
+ {
   "id": "arnhem",
   "name": "Arnhem, 17–26 Sep 1944",
   "date": "1944-09-17",
   "war": "World War II",
-  "runtime": 2488
+  "runtime": 2633
  },
  {
   "id": "bastogne",

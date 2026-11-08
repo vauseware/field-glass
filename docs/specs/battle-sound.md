@@ -9,11 +9,18 @@ of the field misses a volley at the other end. A low bed of musketry, guns and h
 started, grown or died down, the way a documentary's sound does. Field Glass is watched, not played, so
 the sound is a mood track driven by the replay, not one sound per shot.
 
+The aim on desktop is immersion: the viewer should hear an army move as well as fight. Columns tramp
+up a road, guns rattle into position, horses come on, and a line going forward through a field sounds
+different from one falling back. Movement fills the long stretches between the fighting, which are most
+of a battle.
+
 ## Rules for every sound
 
 - **What we want.** Cannon and field guns, musket volleys and scattered skirmish fire, rifles, machine
-  guns, shell bursts, tanks and aircraft for the wars that had them, horses at the trot and gallop, drums
-  and fifes on the march, men cheering, shouting orders and yelling in a charge.
+  guns, shell bursts, tanks and aircraft for the wars that had them, horses at the walk, trot and gallop,
+  drums and fifes on the march, bugle calls, men cheering, shouting orders and yelling in a charge. For
+  movement: boots on road and in grass, the rattle of kit and canteens, gun limbers, caissons and wagons,
+  harness and teams, trucks and half-tracks, and transport aircraft overhead.
 - **What we never take.** Nothing with agony, pain, screaming, the wounded, dying, crying or gore, and no
   distressed animals. No modern sounds in the clip: traffic, an aircraft over a re-enactment, a PA, or
   talk between shots. No speech a viewer can make out, since it would be in the wrong voice.
@@ -32,10 +39,10 @@ draws on it:
 
 | Era | Battles | What it needs |
 |---|---|---|
-| `flintlock` | Revolution, War of 1812 | smoothbore musket volleys, skirmish pops, field guns, cavalry, fife and drum |
-| `percussion` | Civil War | rifle-musket volleys, skirmish, rifled and smoothbore guns, naval guns (Fort Fisher), cavalry, drums, the rebel yell and cheering |
-| `great-war` | First World War | bolt-action rifles, machine guns, field guns and shell bursts, whistles |
-| `ww2` | Second World War | rifles, machine guns, tank guns and engines, artillery, aircraft and bombs |
+| `flintlock` | Revolution, War of 1812 | smoothbore musket volleys, skirmish pops, field guns, cavalry, fife and drum; marching feet, gun teams and limbers, bugle and horn calls |
+| `percussion` | Civil War | rifle-musket volleys, skirmish, rifled and smoothbore guns, naval guns (Fort Fisher), cavalry, drums, the rebel yell and cheering; marching feet, limbers and caissons, bugle calls |
+| `great-war` | First World War | bolt-action rifles, machine guns, field guns and shell bursts, whistles; boots and kit, horse-drawn guns and wagons |
+| `ww2` | Second World War | rifles, machine guns, tank guns and engines, artillery, aircraft and bombs; boots and kit, trucks and half-tracks, transport aircraft |
 
 Files live in `sounds/<era>/<cue>-<n>.m4a`, beside `sounds/<era>/manifest.json`. Each cue has 3 to 6
 takes, so repeats don't sound looped.
@@ -54,12 +61,23 @@ such as `ship`, `battery` and `airstrike`. The cues map onto those, so nothing n
 | `gun` | artillery firing; armour firing in WW2 | one-shot |
 | `heavy` | a `ship` or `battery` feature firing; WW1 and WW2 shell bursts | one-shot |
 | `mg` | WW1 and WW2 infantry firing, mixed with `volley` | one-shot |
-| `hooves` | cavalry moving or charging | loop, faded by distance |
+| `hooves` | cavalry moving or charging; the gait (walk, trot, gallop) follows the unit's ground speed | loop, faded by distance |
 | `engine` | armour moving | loop |
 | `air` | an `airstrike` feature active | loop, with `heavy` for the bombs |
+| `transport` | a `drop` feature's transports over the zone (`f.air`, ADR-0011) | loop, the drone rising and passing |
 | `cheer` | a unit enters `charge` | one-shot, once per charge |
-| `march` | infantry in column on the move (flintlock and percussion only) | loop, quiet |
+| `bugle` | a cavalry unit enters `charge` (flintlock and percussion); in WW1, the whistle as infantry leave their trench | one-shot, once per charge or attack |
+| `march` | infantry-type units in `column` on the move, every era: boots on the road, kit | loop, its volume set by the men moving in view |
+| `drum` | flintlock and percussion infantry moving in `column` or `line` | loop, with `march` |
+| `advance` | infantry-type units moving in `line` or `skirmish`: feet in grass, kit, an order shouted now and then | loop, quieter than `march` |
+| `wheels` | artillery moving: limbers, caissons and teams; trucks and tows in WW2 | loop |
+| `fallback` | units in `retreat` or `rout`: hurried feet and hooves, no voices in distress | loop, faster than `march` |
 | `field` | always while playing: wind, birds, a distant rumble | loop, a very quiet bed |
+
+**Moving** means a unit's position changed since the last frame by more than a walking pace at the
+current battle time, read from the same keyframes the map draws, so no unit needs new data. A unit
+standing in `column` or `line` makes no movement sound. The movement loops play at their natural pace,
+like the fire cues; only their volume follows how many men move in view.
 
 A battle that needs a sound its era lacks, such as bagpipes for the 71st at Cowpens, adds it to the
 era's library with a `battles` list in its manifest entry. Its battle.json names it in an optional
@@ -104,6 +122,10 @@ battles add only the cues and extras they lack.
   after a gesture. Each frame the page sums what is in view: fire by unit type, cavalry and armour
   moving, charges begun, active features. That mix sets each cue's rate and volume. Units off screen
   count at a quarter, so a fight just out of frame is heard faintly.
+- **Place on desktop.** Each source pans left or right by where its units sit across the screen (a
+  `StereoPannerNode` per active cue), and its volume falls with distance from the centre of the view.
+  Zoomed in, the near column's boots and the battery in front of it stand out; zoomed out, the field
+  blends into one sound. Desktop only: phones are out of scope (ADR-0012).
 - **Real time, not battle time.** At 10× to 300× a unit fires many times a second of replay, so each
   sound plays at its natural pace and only the density follows the fighting. At most 8 one-shots sound
   at once.
@@ -116,7 +138,7 @@ battles add only the cues and extras they lack.
   stored as `{ on, volume }` in `localStorage` key `fieldglass.sound` inside `try`. Dragging the slider
   to zero mutes; raising it unmutes.
 - **Loading.** An era's files load on the first Play, so the start screen and first frame cost nothing
-  new. About 3 MB per era.
+  new. About 5 MB per era with the movement cues.
 - **Credits.** The Sources dialog lists every CC BY sound the battle can play, with title, author and
   link.
 
@@ -126,9 +148,11 @@ battles add only the cues and extras they lack.
   cue a battle can trigger has at least 3 takes, and no file is over 10 s or 200 KB.
 - A journey, `journeys/sound.cjs`, records which cues fire and how loud, through a hook available only
   under `navigator.webdriver`. It checks: silence while paused and during the opening; `volley` and `gun`
-  during Cowpens's main line; `hooves` during Washington's charge; `air` during Sidi Bou Zid's dive
-  bombers; nothing while scrubbing; nothing after `m`; the slider scales the master gain and its value
-  survives a reload.
+  during Cowpens's main line; `march` and `drum` as Tarleton's column comes on before dawn;
+  `hooves` during Washington's charge; `wheels` when a battery limbers up and moves; `fallback` during a
+  rout; `transport` during an Arnhem lift; `air` during Sidi Bou Zid's dive bombers; no movement cue
+  while every unit in view stands; a source at the left edge pans left; nothing while scrubbing; nothing
+  after `m`; the slider scales the master gain and its value survives a reload.
 - `laptop.cjs` still passes with the speaker button and its slider open, and the bar does not wrap at
   1280x700.
 
@@ -140,8 +164,13 @@ Dave answered on 2026-10-25:
 2. There is a volume slider as well as mute.
 3. Dave alone signs off the audition page.
 
+Dave added on 2026-11-08:
+
+4. The goal is immersive on desktop: sound covers marches and every kind of unit movement, not only
+   fighting, and sources sit in stereo by where they are on screen.
+
 ## Out of scope
 
 - Music.
-- Narration.
-- Stereo placement by each unit's place on screen. It could come later.
+- Narration, which issue #88 covers. It will share this spec's control and `AudioContext`, and battle
+  sound ducks while the narrator speaks.
