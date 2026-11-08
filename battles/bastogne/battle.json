@@ -1691,12 +1691,7 @@
      3600,
      -100
     ]
-   ],
-   "at": [
-    3550,
-    750
-   ],
-   "rot": -70
+   ]
   },
   {
    "type": "fence",
@@ -1775,8 +1770,8 @@
   {
    "name": "Neffe château (about here)",
    "at": [
-    1789,
-    1297
+    2089,
+    1097
    ]
   },
   {
@@ -1909,7 +1904,7 @@
    "name": "Mont",
    "at": [
     496,
-    1228
+    1628
    ]
   },
   {
@@ -2259,7 +2254,6 @@
   },
   {
    "type": "smoke",
-   "name": "Neffe château",
    "at": [
     1789,
     1447
@@ -2271,7 +2265,6 @@
   },
   {
    "type": "smoke",
-   "name": "Noville",
    "at": [
     1789,
     8324
@@ -2283,7 +2276,6 @@
   },
   {
    "type": "smoke",
-   "name": "the ammunition dump at Noville",
    "at": [
     1639,
     8174
@@ -2421,7 +2413,6 @@
   },
   {
    "type": "smoke",
-   "name": "Marvie",
    "at": [
     502,
     -762
@@ -2469,7 +2460,6 @@
   },
   {
    "type": "smoke",
-   "name": "Bastogne",
    "at": [
     -1412,
     1297
@@ -5014,50 +5004,32 @@
      "t": "1944-12-21 12:30",
      "x": 300,
      "y": 500,
-     "h": 251,
+     "h": 262,
      "state": "column"
     },
     {
-     "t": "1944-12-21 12:45:35",
-     "x": -685,
-     "y": 170,
-     "h": 251
+     "t": "1944-12-21 12:46:27",
+     "x": -787,
+     "y": 354,
+     "h": 262
     },
     {
-     "t": "1944-12-21 13:01:10",
-     "x": -1670,
-     "y": -161,
-     "h": 251
+     "t": "1944-12-21 13:02:53",
+     "x": -1873,
+     "y": 209,
+     "h": 262
     },
     {
-     "t": "1944-12-21 13:16:45",
-     "x": -2655,
-     "y": -491,
-     "h": 251
-    },
-    {
-     "t": "1944-12-21 13:32:20",
-     "x": -3640,
-     "y": -821,
-     "h": 251
-    },
-    {
-     "t": "1944-12-21 13:47:55",
-     "x": -4625,
-     "y": -1152,
-     "h": 251
-    },
-    {
-     "t": "1944-12-21 14:03:30",
-     "x": -5610,
-     "y": -1482,
+     "t": "1944-12-21 13:19:20",
+     "x": -2960,
+     "y": 63,
      "h": 220,
      "state": "line"
     },
     {
      "t": "1944-12-26 20:30",
-     "x": -5610,
-     "y": -1482
+     "x": -2960,
+     "y": 63
     }
    ]
   },
@@ -5248,105 +5220,127 @@
      "strength": 680
     },
     {
-     "t": "1944-12-22 15:54",
+     "t": "1944-12-21 08:59",
      "x": 402,
      "y": -612,
      "strength": 680
     },
     {
-     "t": "1944-12-22 15:55",
+     "t": "1944-12-21 09:00",
      "x": 402,
      "y": -612,
+     "h": 226,
+     "state": "column",
+     "strength": 680
+    },
+    {
+     "t": "1944-12-21 09:30",
+     "x": -300,
+     "y": -1300,
+     "h": 160,
+     "state": "line",
+     "strength": 680
+    },
+    {
+     "t": "1944-12-22 15:54",
+     "x": -300,
+     "y": -1300,
+     "strength": 680
+    },
+    {
+     "t": "1944-12-22 15:55",
+     "x": -300,
+     "y": -1300,
      "state": "firing",
      "strength": 680
     },
     {
      "t": "1944-12-22 16:14",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "strength": 680
     },
     {
      "t": "1944-12-22 16:15",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "state": "line",
      "strength": 680
     },
     {
      "t": "1944-12-22 16:59",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "strength": 680
     },
     {
      "t": "1944-12-22 17:00",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "state": "firing",
      "strength": 680
     },
     {
      "t": "1944-12-22 17:19",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "strength": 680
     },
     {
      "t": "1944-12-22 17:20",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "state": "line",
      "strength": 680
     },
     {
      "t": "1944-12-23 17:34",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "strength": 680
     },
     {
      "t": "1944-12-23 17:35",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "state": "firing",
      "strength": 680
     },
     {
      "t": "1944-12-23 18:40",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "strength": 680
     },
     {
      "t": "1944-12-23 19:30",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "strength": 620
     },
     {
      "t": "1944-12-23 20:00",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "strength": 620
     },
     {
      "t": "1944-12-24 00:59",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "strength": 608
     },
     {
      "t": "1944-12-24 01:00",
-     "x": 402,
-     "y": -612,
+     "x": -300,
+     "y": -1300,
      "state": "line",
      "strength": 608
     },
     {
      "t": "1944-12-26 20:30",
-     "x": 402,
-     "y": -612
+     "x": -300,
+     "y": -1300
     }
    ]
   },
@@ -5783,56 +5777,26 @@
      "t": "1944-12-21 13:00",
      "x": -1562,
      "y": 297,
-     "h": 219,
+     "h": 228,
      "state": "column"
     },
     {
-     "t": "1944-12-21 13:16:53",
-     "x": -2275,
-     "y": -575,
-     "h": 219
+     "t": "1944-12-21 13:13:23",
+     "x": -2223,
+     "y": -302,
+     "h": 228
     },
     {
-     "t": "1944-12-21 13:33:47",
-     "x": -2987,
-     "y": -1447,
-     "h": 219
-    },
-    {
-     "t": "1944-12-21 13:50:40",
-     "x": -3700,
-     "y": -2319,
-     "h": 219
-    },
-    {
-     "t": "1944-12-21 14:07:34",
-     "x": -4412,
-     "y": -3190,
-     "h": 219
-    },
-    {
-     "t": "1944-12-21 14:24:27",
-     "x": -5125,
-     "y": -4062,
-     "h": 219
-    },
-    {
-     "t": "1944-12-21 14:41:20",
-     "x": -5837,
-     "y": -4934,
-     "h": 219
-    },
-    {
-     "t": "1944-12-21 14:58:14",
-     "x": -6550,
-     "y": -5806,
+     "t": "1944-12-21 13:26:45",
+     "x": -2884,
+     "y": -900,
      "h": 210,
      "state": "line"
     },
     {
      "t": "1944-12-26 20:30",
-     "x": -6550,
-     "y": -5806
+     "x": -2884,
+     "y": -900
     }
    ],
    "loose": true
@@ -11166,28 +11130,16 @@
      "h": 241
     },
     {
-     "t": "1944-12-21 14:53:37",
-     "x": -4163,
-     "y": -672,
-     "h": 241
-    },
-    {
-     "t": "1944-12-21 15:10:03",
-     "x": -5119,
-     "y": -1208,
-     "h": 241
-    },
-    {
-     "t": "1944-12-21 15:26:30",
-     "x": -6076,
-     "y": -1743,
+     "t": "1944-12-21 14:40:29",
+     "x": -3400,
+     "y": -245,
      "h": 220,
      "state": "line"
     },
     {
      "t": "1944-12-26 20:30",
-     "x": -6076,
-     "y": -1743
+     "x": -3400,
+     "y": -245
     }
    ],
    "loose": true
@@ -12497,28 +12449,40 @@
      "state": "charge"
     },
     {
-     "t": "1944-12-26 16:27:52",
+     "t": "1944-12-26 16:24:57",
      "x": -5006,
      "y": -4239,
-     "h": 225
+     "h": 33
     },
     {
-     "t": "1944-12-26 16:38:56",
-     "x": -5778,
-     "y": -5023,
-     "h": 225
+     "t": "1944-12-26 16:31:03",
+     "x": -4486,
+     "y": -3427,
+     "h": 33
+    },
+    {
+     "t": "1944-12-26 16:37:10",
+     "x": -3966,
+     "y": -2615,
+     "h": 32
+    },
+    {
+     "t": "1944-12-26 16:43:35",
+     "x": -3425,
+     "y": -1757,
+     "h": 32
     },
     {
      "t": "1944-12-26 16:50",
-     "x": -6550,
-     "y": -5806,
+     "x": -2884,
+     "y": -900,
      "h": 30,
      "state": "line"
     },
     {
      "t": "1944-12-26 20:30",
-     "x": -6550,
-     "y": -5806
+     "x": -2884,
+     "y": -900
     }
    ]
   },
@@ -18483,70 +18447,64 @@
      "t": "1944-12-21 09:00",
      "x": -1449,
      "y": -1661,
-     "h": 180,
+     "h": 198,
      "state": "column"
     },
     {
-     "t": "1944-12-21 09:30",
-     "x": -1454,
-     "y": -2402,
-     "h": 180
-    },
-    {
      "t": "1944-12-21 10:00",
-     "x": -1458,
-     "y": -3143,
+     "x": -1492,
+     "y": -1795,
      "h": 0,
      "state": "line"
     },
     {
      "t": "1944-12-22 15:54",
-     "x": -1458,
-     "y": -3143
+     "x": -1492,
+     "y": -1795
     },
     {
      "t": "1944-12-22 15:55",
-     "x": -1458,
-     "y": -3143,
+     "x": -1492,
+     "y": -1795,
      "state": "firing"
     },
     {
      "t": "1944-12-22 16:14",
-     "x": -1458,
-     "y": -3143
+     "x": -1492,
+     "y": -1795
     },
     {
      "t": "1944-12-22 16:15",
-     "x": -1458,
-     "y": -3143,
+     "x": -1492,
+     "y": -1795,
      "state": "line"
     },
     {
      "t": "1944-12-22 16:59",
-     "x": -1458,
-     "y": -3143
+     "x": -1492,
+     "y": -1795
     },
     {
      "t": "1944-12-22 17:00",
-     "x": -1458,
-     "y": -3143,
+     "x": -1492,
+     "y": -1795,
      "state": "firing"
     },
     {
      "t": "1944-12-22 17:19",
-     "x": -1458,
-     "y": -3143
+     "x": -1492,
+     "y": -1795
     },
     {
      "t": "1944-12-22 17:20",
-     "x": -1458,
-     "y": -3143,
+     "x": -1492,
+     "y": -1795,
      "state": "line"
     },
     {
      "t": "1944-12-26 20:30",
-     "x": -1458,
-     "y": -3143
+     "x": -1492,
+     "y": -1795
     }
    ]
   },
@@ -19453,52 +19411,64 @@
      "state": "column"
     },
     {
-     "t": "1944-12-23 19:40",
-     "x": -1315,
-     "y": -4920,
+     "t": "1944-12-23 19:37:35",
+     "x": -1316,
+     "y": -4893,
      "h": 357
     },
     {
-     "t": "1944-12-23 19:50",
-     "x": -1379,
-     "y": -3831,
+     "t": "1944-12-23 19:45:10",
+     "x": -1383,
+     "y": -3777,
      "h": 357
+    },
+    {
+     "t": "1944-12-23 19:52:46",
+     "x": -1449,
+     "y": -2661,
+     "h": 358
     },
     {
      "t": "1944-12-23 20:00",
-     "x": -1444,
-     "y": -2742,
+     "x": -1480,
+     "y": -1595,
      "h": 0,
      "state": "firing"
     },
     {
      "t": "1944-12-23 20:44",
-     "x": -1444,
-     "y": -2742
+     "x": -1480,
+     "y": -1595
     },
     {
      "t": "1944-12-23 20:45",
-     "x": -1444,
-     "y": -2742,
+     "x": -1480,
+     "y": -1595,
      "state": "retreat"
     },
     {
      "t": "1944-12-23 20:46",
-     "x": -1444,
-     "y": -2742,
+     "x": -1480,
+     "y": -1595,
      "h": 177,
      "state": "retreat"
     },
     {
-     "t": "1944-12-23 20:57:20",
-     "x": -1379,
-     "y": -3831,
+     "t": "1944-12-23 20:54:30",
+     "x": -1422,
+     "y": -2698,
      "h": 177
     },
     {
-     "t": "1944-12-23 21:08:40",
-     "x": -1315,
-     "y": -4920,
+     "t": "1944-12-23 21:03",
+     "x": -1365,
+     "y": -3802,
+     "h": 177
+    },
+    {
+     "t": "1944-12-23 21:11:30",
+     "x": -1308,
+     "y": -4906,
      "h": 177
     },
     {
@@ -20128,7 +20098,7 @@
      "x": -6321,
      "y": 3540,
      "h": 70,
-     "state": "column",
+     "state": "charge",
      "strength": 11
     },
     {
@@ -20150,7 +20120,7 @@
      "x": -5450,
      "y": 3850,
      "h": 89,
-     "state": "column",
+     "state": "charge",
      "strength": 11
     },
     {
@@ -20282,7 +20252,7 @@
      "x": -6171,
      "y": 3440,
      "h": 53,
-     "state": "column",
+     "state": "charge",
      "strength": 7
     },
     {
@@ -20304,7 +20274,7 @@
      "x": -5350,
      "y": 4050,
      "h": 47,
-     "state": "column",
+     "state": "charge",
      "strength": 7
     },
     {
@@ -20714,7 +20684,320 @@
    ]
   }
  ],
- "events": [],
+ "events": [
+  {
+   "t": "1944-12-18 16:00",
+   "title": "Three teams",
+   "text": "Monday 18 December 1944, the third day of the German offensive in the Ardennes. Bastogne is the hub of a radial road net. At four the 101st Airborne Division's party under Brig. Gen. A. C. McAuliffe reaches the VIII Corps command post, and Col. W. L. Roberts of Combat Command B, 10th Armored Division, ahead of his column, reports to Middleton at the same moment. Middleton's order: 'One team will go to the southeast of Wardin, one team to the vicinity of Longvilly and one team to the vicinity of Noville ... Hold these positions at all costs.' Teams Cherry and O'Hara get through the town in daylight; sunset is at 4:37.",
+   "at": [
+    -1300,
+    -1500
+   ],
+   "view": 11000,
+   "speed": 300,
+   "when": "4:00 PM"
+  },
+  {
+   "t": "1944-12-18 19:20",
+   "title": "Longvilly",
+   "text": "Team Cherry drives east on the Longvilly road. At 7:20 Lt. E. P. Hyduke's advance guard, four Shermans and seven light tanks, halts just short of Longvilly, whose streets are jammed with the vehicles of CCR 9th Armored. Beyond it CCR's Task Force Harper has been under fire at Allerborn since late afternoon; after dark German armour destroys two of its tank platoons and overruns it, and Lt. Col. Harper is killed. At 11:40 that night CCR begins to pull out of Longvilly, and its column freezes on the road until morning.",
+   "at": [
+    7600,
+    4200
+   ],
+   "view": 5000,
+   "speed": 300,
+   "when": "7:20 PM"
+  },
+  {
+   "t": "1944-12-18 23:00",
+   "title": "Noville",
+   "text": "Team Desobry left the town after dark, the last of the three. At eleven it assembles at Noville with fifteen tanks, and Maj. W. R. Desobry posts three outposts 800 yards out on the Bourcy, Houffalize and Vaux roads. Noville lies under two ridges about 800 yards off and is 'a perfect sinkhole for fog'. The 101st has driven through the night from Mourmelon in 380 trucks; by midnight its 501st Parachute Infantry has closed into Mande-Saint-Étienne, half an hour early.",
+   "at": [
+    1700,
+    8300
+   ],
+   "view": 3200,
+   "speed": 300,
+   "when": "11:00 PM"
+  },
+  {
+   "t": "1944-12-19 02:00",
+   "title": "Bayerlein at Mageret",
+   "text": "Tuesday. Panzer Lehr's advance guard, about fifteen tanks and four companies of the 902d, left Niederwampach at ten on a mud road, Lt. Gen. F. Bayerlein in a lead tank, and reached Benonchamps an hour after midnight, 'so dark was the night'. At two it is in Mageret, behind Team Cherry. A Belgian tells Bayerlein of 'fifty tanks and forty other armored vehicles' gone east, and he blocks the road east with three tanks, infantry and mines.",
+   "at": [
+    3600,
+    2600
+   ],
+   "view": 4500,
+   "speed": 300,
+   "when": "2:00 AM"
+  },
+  {
+   "t": "1944-12-19 06:00",
+   "title": "Ewell moves out",
+   "text": "The 101st's advance party reached Bastogne at three. At six the 501st Parachute Infantry passes Ewell's command post 'on the minute', heading east on the Neffe road into fog. Bayerlein's column moved off from Mageret at 5:30; its lead tank hit a mine at Cherry's roadblock east of Neffe, and at 5:50 it came on with eleven tanks on the highway and a company south of the tracks toward the château. At six Cherry's reconnaissance platoon at the Neffe road junction is hit and breaks back. At Noville the outposts have fought half-tracks of the 2d Panzer Division's reconnaissance battalion on the Bourcy road since 5:30, and three tanks in the fog on the Houffalize road.",
+   "at": [
+    600,
+    1700
+   ],
+   "view": 5000,
+   "speed": 120,
+   "when": "6:00 AM"
+  },
+  {
+   "t": "1944-12-19 08:20",
+   "title": "Contact at Neffe",
+   "text": "Fog limits sight to 500 yards. About 8:20, a little more than two hours after starting, the 1st Battalion 501st, Maj. R. V. Bottomly, is fired on west of Neffe. Bayerlein's tanks, which reached the Neffe station at seven and waited almost an hour, recoil, and his infantry will not move; about eighty Germans are killed or wounded at Neffe in the first hour or so. Team Cherry's headquarters holds the walled château 300 yards south of the village.",
+   "at": [
+    1500,
+    1650
+   ],
+   "view": 2600,
+   "speed": 120,
+   "when": "8:20 AM"
+  },
+  {
+   "t": "1944-12-19 10:30",
+   "title": "The fog lifts at Noville",
+   "text": "At 8:30 two tanks Marshall calls Tigers nosed out of the fog into Noville and were destroyed by bazookas at 20 yards. At 10:30 'the fog lifted like a curtain going up': more than 30 tanks are in sight, fourteen in a line along the ridge short of Vaux, and nine are hit straightaway. The fight dies at 11:30. At 10:50 Higgins sends Lt. Col. J. L. LaPrade's 1st Battalion 506th to Noville, and the 506th's other two battalions to reserve north of the town.",
+   "at": [
+    1600,
+    8800
+   ],
+   "view": 3200,
+   "speed": 120,
+   "when": "10:30 AM"
+  },
+  {
+   "t": "1944-12-19 12:03",
+   "title": "Bizory and Hill 510",
+   "text": "At 12:03 the 2d Battalion 501st, Maj. S. N. Homan, takes Bizory. Ordered on to Mageret, it meets the 26th Volksgrenadier Division's reconnaissance on the crest of Hill 510 and stops. The 3d Battalion reaches Mont, and its Company I goes on to the woods west of Wardin: 'no enemy' at 1:30. Battery B of the 907th Glider Field Artillery opened a few minutes after ten. At 11:40 O'Hara's screen met the head of a German column on the Wiltz road near Bras, two Mark IVs and a carrier.",
+   "at": [
+    2200,
+    2300
+   ],
+   "view": 4600,
+   "speed": 120,
+   "when": "12:03 PM"
+  },
+  {
+   "t": "1944-12-19 14:00",
+   "title": "The Longvilly road",
+   "text": "At two the German armour puts direct fire on Hyduke's position at Longvilly. He is ordered back at 2:30, but the road is blocked. The 901st Panzergrenadiers, with about twenty tank destroyers and a battalion of guns, come up from Benonchamps to Hill 490 and fire at 1,500 to 2,000 yards; the 77th Volksgrenadiers' guns join from the south-east and 2d Panzer's 88s from the road junction below Chifontaine: 'all three divisions engaged at one time', for about two hours. Hyduke loses five of his seven light tanks and his mediums, and by three most of the survivors have joined Ryerson east of Mageret.",
+   "at": [
+    6300,
+    3500
+   ],
+   "view": 5200,
+   "speed": 60,
+   "when": "2:00 PM"
+  },
+  {
+   "t": "1944-12-19 14:15",
+   "title": "Wardin",
+   "text": "Company I 501st is in Wardin when, at 2:15, 'seven tanks and one infantry battalion from Panzer Lehr' attack it. The company is scattered, losing 45 men and 4 officers, and Panzer Lehr's reconnaissance battalion holds the village.",
+   "at": [
+    3200,
+    0
+   ],
+   "view": 2600,
+   "speed": 60,
+   "when": "2:15 PM"
+  },
+  {
+   "t": "1944-12-19 14:30",
+   "title": "Counterattack from Noville",
+   "text": "The 1st Battalion 506th reached Noville at 1:30. At 2:30 it attacks with Desobry's tanks: three tanks north up the Houffalize road, four east toward the high ground west of Bourcy, three paratroop companies fanned out between. They hold the slopes until dark, then fall back into Noville, which is burning. In the evening an 88 shell kills LaPrade and wounds Desobry; Maj. R. F. Harwick and Maj. C. L. Hustead take over. At 6:20 Sink asks to pull Noville back. Middleton: 'No; if we are to hold on to Bastogne, you cannot keep falling back.'",
+   "at": [
+    2000,
+    8600
+   ],
+   "view": 3200,
+   "speed": 300,
+   "when": "2:30 PM"
+  },
+  {
+   "t": "1944-12-20 07:30",
+   "title": "Bizory holds",
+   "text": "Wednesday. At dusk on the 19th the 501st fell back to the high ground west of Bizory and Neffe, and Cherry led his men out of the burning château to Mont: 'We're not driven out ... we were burned out.' The 705th Tank Destroyer Battalion came in from the north-west at 8:30 that evening, and four of its B Company's TDs reached the south edge of Bizory at two. From 5:30 a battalion of the 26th Volksgrenadiers comes over the hill east of the village with a Mark IV, a Mark V and two self-propelled guns. Firing opens at 7:30, and in about two hours the attack is broken by the TDs and 'all the artillery that General McAuliffe could turn eastward'.",
+   "at": [
+    2100,
+    3000
+   ],
+   "view": 3200,
+   "speed": 120,
+   "when": "7:30 AM"
+  },
+  {
+   "t": "1944-12-20 11:25",
+   "title": "Marvie",
+   "text": "The 2d Battalion 327th Glider Infantry marched into Bastogne at six and went straight on to Marvie, relieving the engineers. At 11:25 four tanks and six half-tracks attack from the woods south-east. O'Hara's Shermans kill two Mark IVs and a half-track broadside at 700 yards, and the glider infantry clears the houses: 20 prisoners and 30 German dead, and the village clear by about one, for 5 killed and 15 wounded. At Foy the 3d Battalion 506th, attacked by two companies and three tanks from eight, withdrew at 10:30 to the high ground south of the village.",
+   "at": [
+    700,
+    -500
+   ],
+   "view": 2600,
+   "speed": 120,
+   "when": "11:25 AM"
+  },
+  {
+   "t": "1944-12-20 13:15",
+   "title": "Out of Noville",
+   "text": "Radio contact with Noville is restored at one, with the order to withdraw. C Company 506th leaves at 1:15 and the vehicles at 1:25, the ammunition dump blown behind them, as the fog closes in again. A farmhouse 500 yards short of Foy hides an ambush; Shermans burn, and the infantry hooks right through the fields and takes 43 prisoners. Toms's tank destroyers enter Foy at 2:30, and at dusk the column finds its way through. Desobry's team went to Noville with fifteen tanks and comes back with four, and the 1st Battalion 506th has lost 13 officers and 199 men. 2d Panzer takes Noville in the middle of the afternoon.",
+   "at": [
+    1300,
+    7000
+   ],
+   "view": 4200,
+   "speed": 120,
+   "when": "1:15 PM"
+  },
+  {
+   "t": "1944-12-20 19:00",
+   "title": "The dam of fire",
+   "text": "Heavy shelling falls along the 501st, and at seven Panzer Lehr's 902d charges down the road from Neffe. 'All the guns from the eleven artillery battalions in Bastogne dropped a dam of fire across the road one or two hundred yards west of Neffe'; two Panthers and a Tiger Royal are destroyed at the last houses. Until eleven the attack between Neffe and Mont dies on the barbed-wire fences of the pasture, five or six strands thirty to fifty yards apart, under the 3d Battalion 501st and Andrews's tank destroyers. To the north seven tanks and two companies of the 77th come down the railway at Halt, into Company A 501st's ambush in the fog.",
+   "at": [
+    1300,
+    2300
+   ],
+   "view": 3600,
+   "speed": 120,
+   "when": "7:00 PM"
+  },
+  {
+   "t": "1944-12-20 20:00",
+   "title": "Sibret",
+   "text": "Since the afternoon Maj. Gen. H. Kokott's 39th Grenadier Regiment and his reconnaissance battalion have swung south and west round the town by Villers-la-Bonne-Eau and Hompré. 'Sibret was captured about 2000.' The 39th is checked a kilometre north of Remoifosse and in the wood a kilometre north of Assenois, the reconnaissance battalion at Chenogne. That night the Neufchâteau road is cut, isolating Bastogne; McAuliffe had driven it half an hour before. The first snow flurries fall.",
+   "at": [
+    -4300,
+    -2300
+   ],
+   "view": 9000,
+   "speed": 300,
+   "when": "8:00 PM"
+  },
+  {
+   "t": "1944-12-21 08:15",
+   "title": "The Halt woods",
+   "text": "Thursday, heavy with fog. The 77th's men who came down the railway in the night turned D Company 506th's flank at four. A and C Companies arrive about 8:15, and 'by about 1100 ... the envelopment was complete': the 506th captures about 100 and kills 55, and drives 80 more into the 501st. Kokott has moved his command post to Bras. Panzer Lehr leaves for Morhet and the west, its 901st staying under Kokott, and 2d Panzer is strung out from Bourcy west toward Tenneville. By noon the Germans have cut all seven roads into Bastogne.",
+   "at": [
+    1200,
+    4300
+   ],
+   "view": 3000,
+   "speed": 300,
+   "when": "8:15 AM"
+  },
+  {
+   "t": "1944-12-22 11:30",
+   "title": "The surrender demand",
+   "text": "Friday. Since the 21st Team Pyle, 14 tanks and 200 men, has fought Kampfgruppe Kunkel into the Bois de Fragotte by Senonchamps, and by night Lt. Col. B. D. Browne held 4,000 yards there with 300 infantry and 19 tanks. At 11:30 four Germans with a white flag come up the road from Remoifosse to F Company 327th with Lüttwitz's demand for surrender. McAuliffe: 'Aw, nuts!' The reply goes back at 1:50: 'Nuts!' Two small attacks on F Company, at 3:55 and five, are beaten off by fire. That night the Luftwaffe begins bombing the town, and repeats it on the next four nights.",
+   "at": [
+    -900,
+    -1500
+   ],
+   "view": 3200,
+   "speed": 300,
+   "when": "11:30 AM"
+  },
+  {
+   "t": "1944-12-23 09:35",
+   "title": "The pathfinders",
+   "text": "Saturday 23 December is clear and cold, visibility unlimited. At 9:35 'several large planes were circling', and pathfinders jump into the 2d Battalion 327th's area to mark a drop zone. Its place is not recorded; it is drawn here, in that battalion's area.",
+   "at": [
+    -700,
+    -700
+   ],
+   "view": 1400,
+   "speed": 30,
+   "when": "9:35 AM"
+  },
+  {
+   "t": "1944-12-23 11:50",
+   "title": "Supplies from the sky",
+   "text": "At 11:50 'men all along the front saw the planes coming in'. By 4:06, '241 planes had dropped 1,446 bundles weighing 144 tons by parachute into the mile-square drop zone', and 95 per cent are recovered. Kokott sees the drop and thinks it reinforcements. On the 24th 160 planes drop about 100 tons more.",
+   "at": [
+    -700,
+    -700
+   ],
+   "view": 4000,
+   "speed": 300,
+   "when": "11:50 AM"
+  },
+  {
+   "t": "1944-12-23 13:30",
+   "title": "Chaumont",
+   "text": "III Corps attacked at six on the 22nd, its 4th Armored Division from north of Arlon by three separate routes; by noon its CCB, Brig. Gen. H. E. Dager, was in sight of Burnon, about seven miles from Bastogne. Today, after fighter-bomber strikes, CCB's 8th Tank Battalion, 22 Shermans fit to fight, and the 10th Armored Infantry assault Chaumont at 1:30, the Shermans churning in the mud of the afternoon thaw. Ten to fifteen assault guns of the 11th Brigade counterattack, and at dusk CCB is thrown back with eleven Shermans lost and about 65 men of A Company. In the west, twelve tanks and infantry in snow suits come out of the woods south of the St Hubert road toward Flamierge.",
+   "at": [
+    -4800,
+    -8300
+   ],
+   "view": 3800,
+   "speed": 300,
+   "when": "1:30 PM"
+  },
+  {
+   "t": "1944-12-23 17:35",
+   "title": "Hill 500",
+   "text": "At 5:25 tanks in a small plantation of firs above Martaimont shell Marvie, and at 5:35, in a light snow, tanks and snow-suited infantry of the 901st attack. After 6:40 a platoon of G Company 327th is surrounded on Hill 500 ('We're still holding on') and overwhelmed some time after seven. McAuliffe sent Team Cherry at 6:30. By eight German infantry are in the south end of Marvie, and twelve tanks come up the Arlon road at F Company, two of them breaking into the town. Near midnight the Shermans knock out the lead German tank, and twelve guns of the 81st close the gap. At dark the Flamierge roadblock was overrun, and the 327th's 3d Battalion fell back to the high ground west of Champs.",
+   "at": [
+    300,
+    -1100
+   ],
+   "view": 3000,
+   "speed": 300,
+   "when": "5:35 PM"
+  },
+  {
+   "t": "1944-12-25 03:30",
+   "title": "Christmas at Champs",
+   "text": "Sunday brought the second airdrop and, twice, six P-47s bombing Marvie in error; Bastogne was bombed at 7:45 that evening. At ten the forward elements of the 15th Panzergrenadier Division reached the sector facing Champs and Hemroulle, and Kokott set the attack for three, Bastogne to be taken by eight. Christmas morning: the 502d's officers turned in at 1:30 after midnight Mass at Rolley; at 2:45 comes 'an intense shelling', and at 3:30 two battalions of the 77th are in Champs, 'on top of' A Company 502d. They fight house to house, and B Company holds at the edge till light.",
+   "at": [
+    -4700,
+    5400
+   ],
+   "view": 2600,
+   "speed": 120,
+   "when": "3:30 AM"
+  },
+  {
+   "t": "1944-12-25 07:10",
+   "title": "Eighteen tanks",
+   "text": "Eighteen tanks of Kampfgruppe Maucke formed just east of Mande-Saint-Étienne at five. At 7:10, in ground fog, the tanks and the 77th's infantry break through A and B Companies of 3/327, the 115th Panzergrenadiers with them, and split: seven north toward Rolley, the rest toward Hemroulle. C Company 502d falls back to the woods and fires into the riders, two hidden TDs of the 705th's C Company take the turning tanks in flank, and the 463d fires over open sights. 'By 0900, December 25, the action was cleared up around Rolle.' All eighteen tanks are disabled. Force Cherry comes through Hemroulle about eight. By ten Kokott knows his plan is lost.",
+   "at": [
+    -4600,
+    4300
+   ],
+   "view": 3200,
+   "speed": 120,
+   "when": "7:10 AM"
+  },
+  {
+   "t": "1944-12-26 15:20",
+   "title": "Abrams turns for Assenois",
+   "text": "On Christmas Day CCB took Chaumont, and the 4th Armored's CCR, Col. W. Blanchard, came up by Vaux-lez-Rosières and Remonville to halt at a crater near Cobreville. Its drive began again about eleven today; the advance guard was checked at a creek near Cobreville about two, and by three it is on the high ground over Clochimont, ordered on to Sibret, with C-47s overhead. Lt. Col. C. W. Abrams's 37th Tank Battalion has no more than twenty Shermans in operation. At 3:20 he calls Capt. W. A. Dwight forward with a light team for Assenois.",
+   "at": [
+    -5300,
+    -4700
+   ],
+   "view": 4200,
+   "speed": 120,
+   "when": "3:20 PM"
+  },
+  {
+   "t": "1944-12-26 16:50",
+   "title": "The ring is broken",
+   "text": "Dwight's team moves at 4:20. At 4:34 Abrams calls down ten volleys from thirteen batteries on Assenois. At 4:50, ten minutes after sunset, 1st Lt. Charles P. Boggess drives the first vehicle of the 4th Armored Division into the lines of the 326th Airborne Engineer Battalion, and about 5:10 Abrams meets McAuliffe. Assenois is cleared by eight with 428 prisoners, and the convoys enter Bastogne after midnight. The 101st counted 105 officers and 1,536 men as battle casualties, CCB 10th Armored about 25 officers and 478 men, and the 4th Armored about 1,000 men in seven days. German losses for the siege were not found.",
+   "at": [
+    -3400,
+    -1800
+   ],
+   "view": 3600,
+   "speed": 120,
+   "when": "4:50 PM"
+  }
+ ],
  "tints": [
   {
    "color": "rgba(205,208,212,0.38)",
@@ -20747,7 +21030,7 @@
    "until": "1944-12-25 09:00"
   },
   {
-   "color": "rgba(236,238,242,0.22)",
+   "color": "rgba(236,238,242,0.12)",
    "from": "1944-12-20 17:00",
    "until": "1944-12-26 20:30"
   },
@@ -20757,12 +21040,31 @@
    "until": "1944-12-22 17:00"
   },
   {
-   "color": "rgba(228,231,236,0.30)",
+   "color": "rgba(228,231,236,0.12)",
    "from": "1944-12-23 17:00",
    "until": "1944-12-23 20:00"
   }
  ],
+ "outcome": {
+  "result": "American victory: the 101st Airborne Division and CCB 10th Armored held Bastogne, and the 4th Armored Division broke the ring on 26 December",
+  "losses": [
+   [
+    "american",
+    "The 101st Airborne Division: 105 officers and 1,536 men battle casualties (Cole). CCB 10th Armored: about 25 officers and 478 men. The 4th Armored Division: about 1,000 men in the seven days from 22 December, eleven Shermans at Chaumont on the 23rd alone. Wikipedia gives more than 3,000 for all Americans at Bastogne, 2,000 of them in the 101st. The perimeter battalions are drawn at full strength where the note gives no figure."
+   ],
+   [
+    "german",
+    "Not found for the siege. In the fights shown: about 80 at Neffe on the 19th; 20 to 30 tanks at Noville on the 19th and 20th; 20 prisoners and 30 dead at Marvie on the 20th; about 235 in the Halt woods on the 21st; on Christmas Day all 18 tanks on the 327th's front, 98 killed and 81 taken by A Company 502d, 67 dead and 35 taken by C Company, and 92 taken by A Company 3/327; at Assenois 428 prisoners (Cole: about 500)."
+   ]
+  ],
+  "note": "Clock times are GMT+1, the clock of every source. Where Marshall and Cole differ, Marshall's time is used: the first contact at Noville (5:30, Cole 7:20), the fog lifting there (10:30, Cole 10:00), the night attack at Marvie (5:35, Cole about 6:45) and the relief (4:50, Cole 4:45)."
+ },
  "sources": [
-  "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m, sampled to 32 m."
+  "S. L. A. Marshall, <a href='https://www.govinfo.gov/content/pkg/GOVPUB-D114-PURL-gpo153609/pdf/GOVPUB-D114-PURL-gpo153609.pdf' target='_blank'><i>Bastogne: The Story of the First Eight Days</i></a> (Infantry Journal Press, 1946; CMH facsimile), written in 1945 from interviews with the 101st, CCB 10th Armored and the 705th TD Battalion: the clock times, the fights, the quotations. Its appendix 'The Enemy Story', from Marshall's 1945 conferences with Lüttwitz, Bayerlein and Kokott: the German side and its times. Chapter 18 and the plates were not read.",
+  "Hugh M. Cole, <i>The Ardennes: Battle of the Bulge</i> (US Army in World War II, 1965), chapters <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-Ardennes/USA-E-Ardennes-13.html' target='_blank'>XIII</a> (CCR 9th Armored, Longvilly), <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-Ardennes/USA-E-Ardennes-19.html' target='_blank'>XIX</a> (the Battle of Bastogne) and <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-Ardennes/USA-E-Ardennes-21.html' target='_blank'>XXI</a> (III Corps's counterattack): the 4th Armored's advance, the tank counts and the casualties.",
+  "Wikipedia, 'Siege of Bastogne' (read 7 November 2026), for its infobox figures; 'Panzer Lehr Division', '2nd Panzer Division' and historyofwar.org's Panzer Lehr page, as search summaries, for the German divisions; the 10th Armored Division Veterans' Bastogne plaque release for CCB's strength.",
+  "Places: OpenStreetMap contributors (ODbL) for the villages, the seminary, the Heintz Barracks, the Château de Rolley and the old railways. Neffe château, Hill 510, Hill 500, the Halt station, Flamizoulle and O'Hara's roadblock are placed from Marshall's text, 150 to 300 m out, and labelled 'about here'. Each road is drawn straight between the places it joins. Sunrise 8:33 and sunset 4:37 for 19 December from the NOAA formulae, GMT+1.",
+  "Terrain: Copernicus GLO-30 DSM via AWS Open Data. Produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved, 30 m, sampled to 32 m. A surface model: woods stand 15 to 25 m above the ground, and the modern town and the A26 motorway show. The brook from Mont past Neffe toward Wardin is traced from its valley floor.",
+  "Placed by inference, not from the sources: every battalion's and team's strength in men (TO&E figures for the 101st and CCB, 500 to 700 for each German battalion, 300 men for each artillery battalion); Team Cherry's and Team O'Hara's tank counts; the routes between recorded places, including 2d Panzer's night march to Noville, Panzer Lehr's road to Morhet, the 77th's to the north-west, and the 101st's arrival order after the 501st; the places of the guns, of Hill 490 and of the units round the perimeter; Marshall's 'second battalion of the 76th' at Bizory drawn as the 77th's; how the tanks Marshall counts at Noville, at Marvie, at Flamierge and on the Arlon road were split into units; when losses fell between the figures the sources give; Task Force Harper's losses; and, in the drop, the pathfinders' number (60), their three aircraft, the run-in heading, the zone and the rally on it. The supply drops are not drawn: the drop feature needs men, so the 23 and 24 December bundles are a caption."
  ]
 }

@@ -122,19 +122,19 @@ features = [
     rd(R_MARCHE, "Marche road", (-10700, 5400), 0), rd(R_BERTOGNE, "Bertogne road", (-4100, 9600), 75), rd(R_CHAMPS), rd(R_HEMROULLE), rd(R_SENON),
     rd(R_ASSENOIS, "Assenois road", (-7900, -7300), 50), rd(R_CHAUMONT, "Chaumont road", (-5000, -9600), 80), rd(R_SOUTH),
     rd(RAIL_GOUVY, "railway to Gouvy", (7500, 9000), 20), rd(RAIL_WILTZ, "railway to Wiltz", (8500, 2350), 5), rd(RAIL_LIBRAMONT, "railway to Libramont", (-9300, -7200), 35),
-    dict(type="creek", name="the brook (about here)", pts=[list(p) for p in BROOK], at=[3550, 750], rot=-70),
+    dict(type="creek", name="the brook (about here)", pts=[list(p) for p in BROOK]),
     dict(type="fence", pts=[[700, 1450], [1500, 1520]]),
     dict(type="fence", pts=[[700, 1600], [1500, 1660]]), dict(type="fence", pts=[[1000, 1380], [1000, 1700]]),
     label("BASTOGNE", P['town'], dy=-50), label("Heintz Barracks", P['barracks'], dx=-600, dy=150), label("the seminary", P['seminary'], dx=500, dy=60),
     label("CCB's CP, the Hôtel Lebrun (about here)", P['bastogne'], dy=-450),
-    label("Mardasson", P['mardasson'], dy=160), label("Neffe château (about here)", P['chateau'], dy=-150),
+    label("Mardasson", P['mardasson'], dy=160), label("Neffe château (about here)", P['chateau'], dx=300, dy=-350),
     label("Hill 510 (about here)", P['hill510'], dy=-200), label("Hill 500 (about here)", P['hill500'], dy=-170), label("Martaimont", P['martaimont'], dy=-200),
     label("Halt station (about here)", P['halt'], dx=550, dy=-60), label("Bois Jacques", P['bois_jacques'], dx=200, dy=350),
     label("Château de Rolley", P['rolley'], dy=170),
     label("Noville", P['noville'], dy=260), label("Vaux", P['vaux'], dy=200), label("Bourcy", P['bourcy'], dy=220), label("Cobru", P['cobru'], dx=-250, dy=120),
     label("Foy", P['foy'], dx=-220), label("Recogne", P['recogne'], dx=-320), label("Luzery", P['luzery'], dx=-300),
     label("Longchamps", P['longchamps'], dy=230), label("Monaville", P['monaville'], dy=-200), label("Bizory", P['bizory'], dy=250),
-    label("Mageret", P['mageret'], dy=-220), label("Neffe", P['neffe'], dy=220), label("Mont", P['mont'], dy=-200),
+    label("Mageret", P['mageret'], dy=-220), label("Neffe", P['neffe'], dy=220), label("Mont", P['mont'], dy=200),
     label("Marvie", P['marvie'], dx=-320), label("Wardin", P['wardin'], dy=-220), label("Bras", P['bras'], dy=-220),
     label("Benonchamps", P['benonchamps'], dy=-220), label("Niederwampach", P['niederwampach'], dy=-220), label("Oberwampach", P['oberwampach'], dy=220),
     label("Arloncourt", P['arloncourt'], dx=300), label("Oubourcy", P['oubourcy'], dy=200), label("Longvilly", P['longvilly'], dy=-230),
@@ -333,7 +333,7 @@ def on_road(line, f):  # the point a fraction f of the way along a road
     return (round(line[i][0] + u * (line[i + 1][0] - line[i][0])), round(line[i][1] + u * (line[i + 1][1] - line[i][1])))
 LOSS = {}  # id: [(t0, t1, men)], losses falling evenly over each span; a negative figure is men joining
 def lose(id, t0, t1, n): LOSS.setdefault(id, []).append((t0, t1, n))
-def smoke(name, at, t0, t1, rate=8, spread=300): features.append(dict(type="smoke", name=name, at=list(at), rate=rate, spread=spread, **{"from": t0, "until": t1}))
+def smoke(at, t0, t1, rate=8, spread=300): features.append(dict(type="smoke", at=list(at), rate=rate, spread=spread, **{"from": t0, "until": t1}))
 def strike(name, at, t0, t1, spread=500, h=250): features.append(dict(type="airstrike", name=name, at=list(at), spread=spread, h=h, **{"from": t0, "until": t1}))
 def drop(name, kind, zone, t0, t1, units, h, craft):
     features.append(dict(type="drop", kind=kind, name=name, zone=[list(p) for p in zone], h=h, craft=craft, units=list(units), **{"from": t0, "until": t1}))
@@ -350,10 +350,10 @@ TOWN_N, TOWN_E, TOWN_S, TOWN_W = off(B, 200, 600), off(B, 600, 100), off(B, 0, -
 NEFFE_W = (1250, 1680)          # where 1/501 met the fire west of Neffe, "about 2,000 yards from the city" [DERIVED]
 LINE_501_1 = (900, 1950)        # the high ground west of Neffe, the 501st's line from dusk on 19 Dec [DERIVED]
 LINE_501_2 = (1450, 3250)       # the high ground west of Bizory [DERIVED]
-LINE_327_2 = (100, -1000)       # 2/327 between Marvie and the Arlon road [DERIVED]
-F_COY = on_road(R_ARLON, 0.27)  # F Company 327th on the Arlon road above Remoifosse [DERIVED]
-LINE_326 = on_road(R_ASSENOIS, 0.55)  # the 326th Engineers' line on the Assenois road, where the relief came in [DERIVED]
-NEUF_RD = on_road(R_NEUF, 0.4)  # 1/327 and the 35th Engineers astride the Neufchâteau road [DERIVED]
+LINE_327_2 = (-300, -1300)      # 2/327 between Marvie and the Arlon road [DERIVED]
+F_COY = on_road([B, P['remoifosse']], 0.62)  # F Company 327th on the Arlon road above Remoifosse [DERIVED]
+LINE_326 = on_road([B, P['assenois']], 0.55)  # the 326th Engineers' line on the Assenois road, where the relief came in [DERIVED]
+NEUF_RD = on_road([B, P['isle_pre']], 0.85)  # 1/327 and the 35th Engineers astride the Neufchâteau road [DERIVED]
 SENON = P['senonchamps']
 LINE_327_3 = (-5300, 4000)      # 3/327 after "Plan A", the high ground west of Champs [DERIVED]
 DZ = quad(DZ_C, 420, 280, 30)   # the pathfinders' zone, a part of the mile-square zone [DERIVED]
@@ -436,7 +436,7 @@ lose("kg902_i", D(19, "08:20"), D(19, "09:30"), 80)
 at("p501_1", D(19, "09:30"), state="line")
 move("kg902_t", D(19, "09:01"), [off(NEFFE, 500, 250)], h=250)
 fire("cherry_hq", D(19, "10:05"), D(19, "17:00"), state="retreat")
-smoke("Neffe château", CHATEAU, D(19, "14:00"), D(19, "17:30"), rate=6, spread=150)
+smoke(CHATEAU, D(19, "14:00"), D(19, "17:30"), rate=6, spread=150)
 move("cherry_hq", D(19, "17:01"), [MONT], h=80, kmh=6)
 fire("kg902_i", D(19, "13:30"), D(19, "17:00"))
 move("kg902_t", D(19, "12:00"), east(last("kg902_t"), off(MAGERET, -300, -100)), h=250)
@@ -485,7 +485,7 @@ for id in ("pz2_t1", "pz2_t2", "pzg2_1", "pzg2_2"): fire(id, D(19, "14:40"), D(1
 lose("pz2_t1", D(19, "14:40"), D(19, "16:40"), 3); lose("desobry_t", D(19, "14:40"), D(19, "16:40"), 1)
 lose("p506_1", D(19, "13:30"), D(19, "17:30"), 90); lose("desobry_i", D(19, "05:30"), D(19, "17:30"), 50)
 for id, p in (("p506_1", off(NOV, -100, -300)), ("desobry_t", NOV)): go(id, D(19, "16:45"), D(19, "17:30"), [p], h=40, state="line", moving="retreat")
-smoke("Noville", off(NOV, 0, 50), D(19, "14:00"), D(20, "13:30"), rate=10, spread=250)
+smoke(off(NOV, 0, 50), D(19, "14:00"), D(20, "13:30"), rate=10, spread=250)
 # 2/501 takes Bizory at 12:03 and stops on Hill 510 against the 26th VGD's reconnaissance; 3/501 reaches Mont; Company I
 # to the woods west of Wardin, "no enemy" at 13:30; at 14:15 it is attacked in Wardin by seven tanks and a battalion of
 # Panzer Lehr and scattered, 45 men and 4 officers lost [M p39-46]
@@ -613,7 +613,7 @@ go("td705c", D(20, "14:00"), D(20, "14:30"), [off(FOY, 0, -100)], h=20, state="f
 go("gr78_1", D(20, "16:01"), D(20, "16:30"), [off(FOY, 700, 500)], h=230, state="line", moving="retreat")
 for id, p in (("p506_1", off(P['luzery'], 200, 300)), ("desobry_t", off(B, 500, 800)), ("desobry_i", off(B, 300, 900)), ("td705c", off(B, -200, 600))):
     go(id, D(20, "16:30"), D(20, "18:30") if id == "p506_1" else D(20, "17:30"), along(R_NORTH, last(id), B)[:-1] + [p], h=20, state="line")
-smoke("the ammunition dump at Noville", off(NOV, -150, -100), D(20, "13:25"), D(20, "16:00"), rate=14, spread=150)
+smoke(off(NOV, -150, -100), D(20, "13:25"), D(20, "16:00"), rate=14, spread=150)
 # 2d Panzer takes Noville "somewhere near the middle of the afternoon" [M-E p191]
 for id, p in (("pz2_t1", off(NOV, 0, 300)), ("pz2_t2", off(NOV, 300, 100)), ("pzg2_1", off(NOV, -200, 0)), ("pzg2_2", off(NOV, 200, -300)), ("pz2_recce", off(NOV, 600, -200))):
     go(id, D(20, "14:30"), D(20, "15:30"), [p], h=200, state="line")
@@ -649,8 +649,8 @@ TINT_FOG = "rgba(205,208,212,0.38)"
 TINTS += [dict(color=TINT_FOG, **{"from": D(19, "06:00"), "until": D(19, "10:30")}), dict(color=TINT_FOG, **{"from": D(19, "13:30"), "until": D(19, "17:00")}),
           dict(color=TINT_FOG, **{"from": D(20, "06:00"), "until": D(20, "10:00")}), dict(color=TINT_FOG, **{"from": D(20, "13:00"), "until": D(20, "17:00")}),
           dict(color=TINT_FOG, **{"from": D(21, "06:00"), "until": D(21, "11:00")}), dict(color=TINT_FOG, **{"from": D(25, "06:30"), "until": D(25, "09:00")}),
-          dict(color="rgba(236,238,242,0.22)", **{"from": D(20, "17:00"), "until": END}),
-          dict(color="rgba(228,231,236,0.30)", **{"from": D(22, "13:00"), "until": D(22, "17:00")}), dict(color="rgba(228,231,236,0.30)", **{"from": D(23, "17:00"), "until": D(23, "20:00")})]
+          dict(color="rgba(236,238,242,0.12)", **{"from": D(20, "17:00"), "until": END}),
+          dict(color="rgba(228,231,236,0.30)", **{"from": D(22, "13:00"), "until": D(22, "17:00")}), dict(color="rgba(228,231,236,0.12)", **{"from": D(23, "17:00"), "until": D(23, "20:00")})]
 
 # ---- Thursday 21 December ----
 # 04:00 to 11:00: D Company 506th finds its flank turned at 04:00; A and C Companies arrive about 08:15; "By about 1100 ...
@@ -692,7 +692,8 @@ appear("eng35", D(21, "14:00"), off(B, -200, -300), 220, "column"); move("eng35"
 move("eng326", D(21, "13:00"), [LINE_326], h=210)
 # The 39th astride the southern roads and the Assenois garrison [M-E p195; C21] [INF: the places]
 appear("assenois_g", D(21, "06:00"), off(ASSENOIS, 0, 150), 30)
-go("gr39_1", D(21, "09:00"), D(21, "10:00"), [off(F_COY, 0, -800)], h=0, state="line")
+go("gr39_1", D(21, "09:00"), D(21, "10:00"), [off(F_COY, 0, -600)], h=0, state="line")
+go("g327_2", D(21, "09:00"), D(21, "09:30"), [LINE_327_2], h=160, state="line")  # between Marvie and the Arlon road, covering Hill 500 [DERIVED]
 # 07:30: 1/502 east toward Recogne; Stopka's line pulled back south of Recogne at noon [M p150-151]
 go("p502_1", D(21, "07:30"), D(21, "08:45"), [off(P['recogne'], -1200, -600)], h=60, state="line")
 go("p502_3", D(21, "12:00"), D(21, "12:40"), [off(P['recogne'], -200, -700)], h=40, state="line")
@@ -793,7 +794,7 @@ fire("ryerson_t", D(23, "23:45"), D(24, "00:45")); lose("pl901_tk", D(23, "23:50
 drive("aa81", D(23, "23:00"), along(R_WILTZ, last("aa81"), MARVIE)[:-1] + [off(MARVIE, -350, 400)], h=150, kmh=8)
 fire("aa81", D(24, "00:00"), D(24, "01:00"))
 for id in ("pl901_1", "pl901_tk"): at(id, D(24, "01:00"), state="line")
-smoke("Marvie", off(MARVIE, 0, -150), D(23, "20:00"), D(24, "06:00"), rate=8, spread=200)
+smoke(off(MARVIE, 0, -150), D(23, "20:00"), D(24, "06:00"), rate=8, spread=200)
 # 20:00: twelve tanks come north up the Arlon road at F Company; two break through into Bastogne [M p123, p129]
 appear("arlon_t", D(23, "19:20"), on_road(R_ARLON, 0.55), 0, "column")
 go("arlon_t", D(23, "19:30"), D(23, "20:00"), along(R_ARLON, last("arlon_t"), off(F_COY, 0, -400)), h=0, state="firing")
@@ -806,7 +807,7 @@ hide("arlon_t", D(23, "21:30"))
 strike("P-47s on Marvie, in error", MARVIE, D(24, "13:40"), D(24, "13:50"), 350, h=300)
 strike("P-47s on Marvie again", MARVIE, D(24, "16:45"), D(24, "16:55"), 350, h=120)
 strike("The Luftwaffe over Bastogne", B, D(24, "19:45"), D(24, "20:00"), 600, h=240)
-smoke("Bastogne", off(B, 150, 100), D(24, "20:00"), D(25, "10:00"), rate=8, spread=350)
+smoke(off(B, 150, 100), D(24, "20:00"), D(25, "10:00"), rate=8, spread=350)
 drive("ryerson_t", D(24, "10:00"), along(R_WILTZ, last("ryerson_t"), B) + [off(B, 400, 300)], h=270, kmh=8)
 drive("ryerson_i", D(24, "10:05"), along(R_WILTZ, last("ryerson_i"), B) + [off(B, 300, 400)], h=270, kmh=8)
 drive("td705c", D(24, "14:00"), along(R_BERTOGNE, B, P['savy']) + [off(HEMROULLE, -300, 500)], h=260, kmh=8)
@@ -834,11 +835,11 @@ go("gr77_2", D(25, "09:01"), D(25, "10:00"), [off(CHAMPS, -1300, 300)], h=110, s
 # cleared up around Rolle"; all 18 tanks disabled; C Company 502d counted 67 dead and 35 prisoners, and 3/327's A Company,
 # 68 survivors, took 92 prisoners [M p160-169]
 BREAK = off(LINE_327_3, -150, -150)
-go("m115_t", D(25, "06:30"), D(25, "07:10"), [BREAK], h=60, state="firing"); go("m115_t7", D(25, "06:35"), D(25, "07:10"), [off(BREAK, 100, 200)], h=60, state="firing")
+go("m115_t", D(25, "06:30"), D(25, "07:10"), [BREAK], h=60, state="firing", moving="charge"); go("m115_t7", D(25, "06:35"), D(25, "07:10"), [off(BREAK, 100, 200)], h=60, state="firing", moving="charge")
 go("m115_1", D(25, "06:40"), D(25, "07:10"), [off(BREAK, -100, 100)], h=60, state="firing")
 fire("g327_3", D(25, "07:00"), D(25, "09:00")); lose("g327_3", D(25, "07:10"), D(25, "07:30"), 9)
-go("m115_t7", D(25, "07:15"), D(25, "07:45"), [off(ROLLEY, -500, -400)], h=30, state="firing")
-go("m115_t", D(25, "07:15"), D(25, "07:45"), [off(HEMROULLE, -500, 100)], h=80, state="firing")
+go("m115_t7", D(25, "07:15"), D(25, "07:45"), [off(ROLLEY, -500, -400)], h=30, state="firing", moving="charge")
+go("m115_t", D(25, "07:15"), D(25, "07:45"), [off(HEMROULLE, -500, 100)], h=80, state="firing", moving="charge")
 go("m115_1", D(25, "07:15"), D(25, "07:50"), [off(HEMROULLE, -700, 300)], h=70, state="firing")
 lose("m115_t7", D(25, "07:30"), D(25, "09:00"), 7); lose("m115_t", D(25, "07:30"), D(25, "09:00"), 11); lose("m115_1", D(25, "07:10"), D(25, "09:00"), 194)
 for id in ("td705c", "fa463"): fire(id, D(25, "07:30"), D(25, "09:00"))
@@ -970,7 +971,58 @@ for f in features:
         assert state_at(id, f["from"]) == "hidden" and rally and sec(rally["t"]) >= sec(f["until"]), (f["name"], id, "on the map before the last of its drop is down")
     if f.get("type") == "drop": assert all(on_land(p) for p in f["zone"]), (f["name"], "a drop zone corner off the map")
 
-events = []
+# ---- chapters: (time, title, text, camera centre, metres across, playback speed, when) ----
+# `when` holds the clock time the sources record, GMT+1. Where Marshall and Cole differ, Marshall's time is used.
+CHAPTERS = [
+    (D(18, "16:00"), "Three teams", "Monday 18 December 1944, the third day of the German offensive in the Ardennes. Bastogne is the hub of a radial road net. At four the 101st Airborne Division's party under Brig. Gen. A. C. McAuliffe reaches the VIII Corps command post, and Col. W. L. Roberts of Combat Command B, 10th Armored Division, ahead of his column, reports to Middleton at the same moment. Middleton's order: 'One team will go to the southeast of Wardin, one team to the vicinity of Longvilly and one team to the vicinity of Noville ... Hold these positions at all costs.' Teams Cherry and O'Hara get through the town in daylight; sunset is at 4:37.", (-1300, -1500), 11000, 300, "4:00 PM"),
+    (D(18, "19:20"), "Longvilly", "Team Cherry drives east on the Longvilly road. At 7:20 Lt. E. P. Hyduke's advance guard, four Shermans and seven light tanks, halts just short of Longvilly, whose streets are jammed with the vehicles of CCR 9th Armored. Beyond it CCR's Task Force Harper has been under fire at Allerborn since late afternoon; after dark German armour destroys two of its tank platoons and overruns it, and Lt. Col. Harper is killed. At 11:40 that night CCR begins to pull out of Longvilly, and its column freezes on the road until morning.", (7600, 4200), 5000, 300, "7:20 PM"),
+    (D(18, "23:00"), "Noville", "Team Desobry left the town after dark, the last of the three. At eleven it assembles at Noville with fifteen tanks, and Maj. W. R. Desobry posts three outposts 800 yards out on the Bourcy, Houffalize and Vaux roads. Noville lies under two ridges about 800 yards off and is 'a perfect sinkhole for fog'. The 101st has driven through the night from Mourmelon in 380 trucks; by midnight its 501st Parachute Infantry has closed into Mande-Saint-Étienne, half an hour early.", (1700, 8300), 3200, 300, "11:00 PM"),
+    (D(19, "02:00"), "Bayerlein at Mageret", "Tuesday. Panzer Lehr's advance guard, about fifteen tanks and four companies of the 902d, left Niederwampach at ten on a mud road, Lt. Gen. F. Bayerlein in a lead tank, and reached Benonchamps an hour after midnight, 'so dark was the night'. At two it is in Mageret, behind Team Cherry. A Belgian tells Bayerlein of 'fifty tanks and forty other armored vehicles' gone east, and he blocks the road east with three tanks, infantry and mines.", (3600, 2600), 4500, 300, "2:00 AM"),
+    (D(19, "06:00"), "Ewell moves out", "The 101st's advance party reached Bastogne at three. At six the 501st Parachute Infantry passes Ewell's command post 'on the minute', heading east on the Neffe road into fog. Bayerlein's column moved off from Mageret at 5:30; its lead tank hit a mine at Cherry's roadblock east of Neffe, and at 5:50 it came on with eleven tanks on the highway and a company south of the tracks toward the château. At six Cherry's reconnaissance platoon at the Neffe road junction is hit and breaks back. At Noville the outposts have fought half-tracks of the 2d Panzer Division's reconnaissance battalion on the Bourcy road since 5:30, and three tanks in the fog on the Houffalize road.", (600, 1700), 5000, 120, "6:00 AM"),
+    (D(19, "08:20"), "Contact at Neffe", "Fog limits sight to 500 yards. About 8:20, a little more than two hours after starting, the 1st Battalion 501st, Maj. R. V. Bottomly, is fired on west of Neffe. Bayerlein's tanks, which reached the Neffe station at seven and waited almost an hour, recoil, and his infantry will not move; about eighty Germans are killed or wounded at Neffe in the first hour or so. Team Cherry's headquarters holds the walled château 300 yards south of the village.", (1500, 1650), 2600, 120, "8:20 AM"),
+    (D(19, "10:30"), "The fog lifts at Noville", "At 8:30 two tanks Marshall calls Tigers nosed out of the fog into Noville and were destroyed by bazookas at 20 yards. At 10:30 'the fog lifted like a curtain going up': more than 30 tanks are in sight, fourteen in a line along the ridge short of Vaux, and nine are hit straightaway. The fight dies at 11:30. At 10:50 Higgins sends Lt. Col. J. L. LaPrade's 1st Battalion 506th to Noville, and the 506th's other two battalions to reserve north of the town.", (1600, 8800), 3200, 120, "10:30 AM"),
+    (D(19, "12:03"), "Bizory and Hill 510", "At 12:03 the 2d Battalion 501st, Maj. S. N. Homan, takes Bizory. Ordered on to Mageret, it meets the 26th Volksgrenadier Division's reconnaissance on the crest of Hill 510 and stops. The 3d Battalion reaches Mont, and its Company I goes on to the woods west of Wardin: 'no enemy' at 1:30. Battery B of the 907th Glider Field Artillery opened a few minutes after ten. At 11:40 O'Hara's screen met the head of a German column on the Wiltz road near Bras, two Mark IVs and a carrier.", (2200, 2300), 4600, 120, "12:03 PM"),
+    (D(19, "14:00"), "The Longvilly road", "At two the German armour puts direct fire on Hyduke's position at Longvilly. He is ordered back at 2:30, but the road is blocked. The 901st Panzergrenadiers, with about twenty tank destroyers and a battalion of guns, come up from Benonchamps to Hill 490 and fire at 1,500 to 2,000 yards; the 77th Volksgrenadiers' guns join from the south-east and 2d Panzer's 88s from the road junction below Chifontaine: 'all three divisions engaged at one time', for about two hours. Hyduke loses five of his seven light tanks and his mediums, and by three most of the survivors have joined Ryerson east of Mageret.", (6300, 3500), 5200, 60, "2:00 PM"),
+    (D(19, "14:15"), "Wardin", "Company I 501st is in Wardin when, at 2:15, 'seven tanks and one infantry battalion from Panzer Lehr' attack it. The company is scattered, losing 45 men and 4 officers, and Panzer Lehr's reconnaissance battalion holds the village.", (3200, 0), 2600, 60, "2:15 PM"),
+    (D(19, "14:30"), "Counterattack from Noville", "The 1st Battalion 506th reached Noville at 1:30. At 2:30 it attacks with Desobry's tanks: three tanks north up the Houffalize road, four east toward the high ground west of Bourcy, three paratroop companies fanned out between. They hold the slopes until dark, then fall back into Noville, which is burning. In the evening an 88 shell kills LaPrade and wounds Desobry; Maj. R. F. Harwick and Maj. C. L. Hustead take over. At 6:20 Sink asks to pull Noville back. Middleton: 'No; if we are to hold on to Bastogne, you cannot keep falling back.'", (2000, 8600), 3200, 300, "2:30 PM"),
+    (D(20, "07:30"), "Bizory holds", "Wednesday. At dusk on the 19th the 501st fell back to the high ground west of Bizory and Neffe, and Cherry led his men out of the burning château to Mont: 'We're not driven out ... we were burned out.' The 705th Tank Destroyer Battalion came in from the north-west at 8:30 that evening, and four of its B Company's TDs reached the south edge of Bizory at two. From 5:30 a battalion of the 26th Volksgrenadiers comes over the hill east of the village with a Mark IV, a Mark V and two self-propelled guns. Firing opens at 7:30, and in about two hours the attack is broken by the TDs and 'all the artillery that General McAuliffe could turn eastward'.", (2100, 3000), 3200, 120, "7:30 AM"),
+    (D(20, "11:25"), "Marvie", "The 2d Battalion 327th Glider Infantry marched into Bastogne at six and went straight on to Marvie, relieving the engineers. At 11:25 four tanks and six half-tracks attack from the woods south-east. O'Hara's Shermans kill two Mark IVs and a half-track broadside at 700 yards, and the glider infantry clears the houses: 20 prisoners and 30 German dead, and the village clear by about one, for 5 killed and 15 wounded. At Foy the 3d Battalion 506th, attacked by two companies and three tanks from eight, withdrew at 10:30 to the high ground south of the village.", (700, -500), 2600, 120, "11:25 AM"),
+    (D(20, "13:15"), "Out of Noville", "Radio contact with Noville is restored at one, with the order to withdraw. C Company 506th leaves at 1:15 and the vehicles at 1:25, the ammunition dump blown behind them, as the fog closes in again. A farmhouse 500 yards short of Foy hides an ambush; Shermans burn, and the infantry hooks right through the fields and takes 43 prisoners. Toms's tank destroyers enter Foy at 2:30, and at dusk the column finds its way through. Desobry's team went to Noville with fifteen tanks and comes back with four, and the 1st Battalion 506th has lost 13 officers and 199 men. 2d Panzer takes Noville in the middle of the afternoon.", (1300, 7000), 4200, 120, "1:15 PM"),
+    (D(20, "19:00"), "The dam of fire", "Heavy shelling falls along the 501st, and at seven Panzer Lehr's 902d charges down the road from Neffe. 'All the guns from the eleven artillery battalions in Bastogne dropped a dam of fire across the road one or two hundred yards west of Neffe'; two Panthers and a Tiger Royal are destroyed at the last houses. Until eleven the attack between Neffe and Mont dies on the barbed-wire fences of the pasture, five or six strands thirty to fifty yards apart, under the 3d Battalion 501st and Andrews's tank destroyers. To the north seven tanks and two companies of the 77th come down the railway at Halt, into Company A 501st's ambush in the fog.", (1300, 2300), 3600, 120, "7:00 PM"),
+    (D(20, "20:00"), "Sibret", "Since the afternoon Maj. Gen. H. Kokott's 39th Grenadier Regiment and his reconnaissance battalion have swung south and west round the town by Villers-la-Bonne-Eau and Hompré. 'Sibret was captured about 2000.' The 39th is checked a kilometre north of Remoifosse and in the wood a kilometre north of Assenois, the reconnaissance battalion at Chenogne. That night the Neufchâteau road is cut, isolating Bastogne; McAuliffe had driven it half an hour before. The first snow flurries fall.", (-4300, -2300), 9000, 300, "8:00 PM"),
+    (D(21, "08:15"), "The Halt woods", "Thursday, heavy with fog. The 77th's men who came down the railway in the night turned D Company 506th's flank at four. A and C Companies arrive about 8:15, and 'by about 1100 ... the envelopment was complete': the 506th captures about 100 and kills 55, and drives 80 more into the 501st. Kokott has moved his command post to Bras. Panzer Lehr leaves for Morhet and the west, its 901st staying under Kokott, and 2d Panzer is strung out from Bourcy west toward Tenneville. By noon the Germans have cut all seven roads into Bastogne.", (1200, 4300), 3000, 300, "8:15 AM"),
+    (D(22, "11:30"), "The surrender demand", "Friday. Since the 21st Team Pyle, 14 tanks and 200 men, has fought Kampfgruppe Kunkel into the Bois de Fragotte by Senonchamps, and by night Lt. Col. B. D. Browne held 4,000 yards there with 300 infantry and 19 tanks. At 11:30 four Germans with a white flag come up the road from Remoifosse to F Company 327th with Lüttwitz's demand for surrender. McAuliffe: 'Aw, nuts!' The reply goes back at 1:50: 'Nuts!' Two small attacks on F Company, at 3:55 and five, are beaten off by fire. That night the Luftwaffe begins bombing the town, and repeats it on the next four nights.", (-900, -1500), 3200, 300, "11:30 AM"),
+    (D(23, "09:35"), "The pathfinders", "Saturday 23 December is clear and cold, visibility unlimited. At 9:35 'several large planes were circling', and pathfinders jump into the 2d Battalion 327th's area to mark a drop zone. Its place is not recorded; it is drawn here, in that battalion's area.", DZ_C, 1400, 30, "9:35 AM"),
+    (D(23, "11:50"), "Supplies from the sky", "At 11:50 'men all along the front saw the planes coming in'. By 4:06, '241 planes had dropped 1,446 bundles weighing 144 tons by parachute into the mile-square drop zone', and 95 per cent are recovered. Kokott sees the drop and thinks it reinforcements. On the 24th 160 planes drop about 100 tons more.", DZ_C, 4000, 300, "11:50 AM"),
+    (D(23, "13:30"), "Chaumont", "III Corps attacked at six on the 22nd, its 4th Armored Division from north of Arlon by three separate routes; by noon its CCB, Brig. Gen. H. E. Dager, was in sight of Burnon, about seven miles from Bastogne. Today, after fighter-bomber strikes, CCB's 8th Tank Battalion, 22 Shermans fit to fight, and the 10th Armored Infantry assault Chaumont at 1:30, the Shermans churning in the mud of the afternoon thaw. Ten to fifteen assault guns of the 11th Brigade counterattack, and at dusk CCB is thrown back with eleven Shermans lost and about 65 men of A Company. In the west, twelve tanks and infantry in snow suits come out of the woods south of the St Hubert road toward Flamierge.", (-4800, -8300), 3800, 300, "1:30 PM"),
+    (D(23, "17:35"), "Hill 500", "At 5:25 tanks in a small plantation of firs above Martaimont shell Marvie, and at 5:35, in a light snow, tanks and snow-suited infantry of the 901st attack. After 6:40 a platoon of G Company 327th is surrounded on Hill 500 ('We're still holding on') and overwhelmed some time after seven. McAuliffe sent Team Cherry at 6:30. By eight German infantry are in the south end of Marvie, and twelve tanks come up the Arlon road at F Company, two of them breaking into the town. Near midnight the Shermans knock out the lead German tank, and twelve guns of the 81st close the gap. At dark the Flamierge roadblock was overrun, and the 327th's 3d Battalion fell back to the high ground west of Champs.", (300, -1100), 3000, 300, "5:35 PM"),
+    (D(25, "03:30"), "Christmas at Champs", "Sunday brought the second airdrop and, twice, six P-47s bombing Marvie in error; Bastogne was bombed at 7:45 that evening. At ten the forward elements of the 15th Panzergrenadier Division reached the sector facing Champs and Hemroulle, and Kokott set the attack for three, Bastogne to be taken by eight. Christmas morning: the 502d's officers turned in at 1:30 after midnight Mass at Rolley; at 2:45 comes 'an intense shelling', and at 3:30 two battalions of the 77th are in Champs, 'on top of' A Company 502d. They fight house to house, and B Company holds at the edge till light.", (-4700, 5400), 2600, 120, "3:30 AM"),
+    (D(25, "07:10"), "Eighteen tanks", "Eighteen tanks of Kampfgruppe Maucke formed just east of Mande-Saint-Étienne at five. At 7:10, in ground fog, the tanks and the 77th's infantry break through A and B Companies of 3/327, the 115th Panzergrenadiers with them, and split: seven north toward Rolley, the rest toward Hemroulle. C Company 502d falls back to the woods and fires into the riders, two hidden TDs of the 705th's C Company take the turning tanks in flank, and the 463d fires over open sights. 'By 0900, December 25, the action was cleared up around Rolle.' All eighteen tanks are disabled. Force Cherry comes through Hemroulle about eight. By ten Kokott knows his plan is lost.", (-4600, 4300), 3200, 120, "7:10 AM"),
+    (D(26, "15:20"), "Abrams turns for Assenois", "On Christmas Day CCB took Chaumont, and the 4th Armored's CCR, Col. W. Blanchard, came up by Vaux-lez-Rosières and Remonville to halt at a crater near Cobreville. Its drive began again about eleven today; the advance guard was checked at a creek near Cobreville about two, and by three it is on the high ground over Clochimont, ordered on to Sibret, with C-47s overhead. Lt. Col. C. W. Abrams's 37th Tank Battalion has no more than twenty Shermans in operation. At 3:20 he calls Capt. W. A. Dwight forward with a light team for Assenois.", (-5300, -4700), 4200, 120, "3:20 PM"),
+    (D(26, "16:50"), "The ring is broken", "Dwight's team moves at 4:20. At 4:34 Abrams calls down ten volleys from thirteen batteries on Assenois. At 4:50, ten minutes after sunset, 1st Lt. Charles P. Boggess drives the first vehicle of the 4th Armored Division into the lines of the 326th Airborne Engineer Battalion, and about 5:10 Abrams meets McAuliffe. Assenois is cleared by eight with 428 prisoners, and the convoys enter Bastogne after midnight. The 101st counted 105 officers and 1,536 men as battle casualties, CCB 10th Armored about 25 officers and 478 men, and the 4th Armored about 1,000 men in seven days. German losses for the siege were not found.", (-3400, -1800), 3600, 120, "4:50 PM"),
+]
+events = [dict(t=t, title=a, text=b, at=list(at_), view=v, speed=s, **({"when": w} if w else {})) for t, a, b, at_, v, s, w in CHAPTERS]
+for e in events:  # without `when` the card speaks the nearest hour (app.js chapterWhen), so it must be near the frame's clock
+    s = sec(e["t"]) % 86400; hh = [n % 12 or 12 for n in (int(s // 3600), int(s // 3600) + 1)]; num = re.search(r"\d+", e.get("when", ""))
+    assert not num or int(num[0]) in hh, (e["t"], e["when"], "the card's hour is not the frame's")
+    assert "when" in e or abs(s - math.floor(s / 3600 + 0.5) * 3600) <= 15 * 60, (e["t"], e["title"], "give it a when")
+    assert e["speed"] in (1, 2, 5, 10, 20, 30, 60, 120, 300, 600, 1800, 3600, 7200), (e["title"], e["speed"], "not a speed the menu offers (sim.js SPEEDS)")
+    assert on_map(e["at"], 500), (e["title"], e["at"])
+assert [sec(e["t"]) for e in events] == sorted(sec(e["t"]) for e in events)
+
+OUTCOME = {"result": "American victory: the 101st Airborne Division and CCB 10th Armored held Bastogne, and the 4th Armored Division broke the ring on 26 December", "losses": [
+    ["american", "The 101st Airborne Division: 105 officers and 1,536 men battle casualties (Cole). CCB 10th Armored: about 25 officers and 478 men. The 4th Armored Division: about 1,000 men in the seven days from 22 December, eleven Shermans at Chaumont on the 23rd alone. Wikipedia gives more than 3,000 for all Americans at Bastogne, 2,000 of them in the 101st. The perimeter battalions are drawn at full strength where the note gives no figure."],
+    ["german", "Not found for the siege. In the fights shown: about 80 at Neffe on the 19th; 20 to 30 tanks at Noville on the 19th and 20th; 20 prisoners and 30 dead at Marvie on the 20th; about 235 in the Halt woods on the 21st; on Christmas Day all 18 tanks on the 327th's front, 98 killed and 81 taken by A Company 502d, 67 dead and 35 taken by C Company, and 92 taken by A Company 3/327; at Assenois 428 prisoners (Cole: about 500)."]],
+    "note": "Clock times are GMT+1, the clock of every source. Where Marshall and Cole differ, Marshall's time is used: the first contact at Noville (5:30, Cole 7:20), the fog lifting there (10:30, Cole 10:00), the night attack at Marvie (5:35, Cole about 6:45) and the relief (4:50, Cole 4:45)."}
+SOURCES = [
+    "S. L. A. Marshall, <a href='https://www.govinfo.gov/content/pkg/GOVPUB-D114-PURL-gpo153609/pdf/GOVPUB-D114-PURL-gpo153609.pdf' target='_blank'><i>Bastogne: The Story of the First Eight Days</i></a> (Infantry Journal Press, 1946; CMH facsimile), written in 1945 from interviews with the 101st, CCB 10th Armored and the 705th TD Battalion: the clock times, the fights, the quotations. Its appendix 'The Enemy Story', from Marshall's 1945 conferences with Lüttwitz, Bayerlein and Kokott: the German side and its times. Chapter 18 and the plates were not read.",
+    "Hugh M. Cole, <i>The Ardennes: Battle of the Bulge</i> (US Army in World War II, 1965), chapters <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-Ardennes/USA-E-Ardennes-13.html' target='_blank'>XIII</a> (CCR 9th Armored, Longvilly), <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-Ardennes/USA-E-Ardennes-19.html' target='_blank'>XIX</a> (the Battle of Bastogne) and <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-Ardennes/USA-E-Ardennes-21.html' target='_blank'>XXI</a> (III Corps's counterattack): the 4th Armored's advance, the tank counts and the casualties.",
+    "Wikipedia, 'Siege of Bastogne' (read 7 November 2026), for its infobox figures; 'Panzer Lehr Division', '2nd Panzer Division' and historyofwar.org's Panzer Lehr page, as search summaries, for the German divisions; the 10th Armored Division Veterans' Bastogne plaque release for CCB's strength.",
+    "Places: OpenStreetMap contributors (ODbL) for the villages, the seminary, the Heintz Barracks, the Château de Rolley and the old railways. Neffe château, Hill 510, Hill 500, the Halt station, Flamizoulle and O'Hara's roadblock are placed from Marshall's text, 150 to 300 m out, and labelled 'about here'. Each road is drawn straight between the places it joins. Sunrise 8:33 and sunset 4:37 for 19 December from the NOAA formulae, GMT+1.",
+    "Terrain: " + T["source"] + ", 30 m, sampled to 32 m. A surface model: woods stand 15 to 25 m above the ground, and the modern town and the A26 motorway show. The brook from Mont past Neffe toward Wardin is traced from its valley floor.",
+    "Placed by inference, not from the sources: every battalion's and team's strength in men (TO&E figures for the 101st and CCB, 500 to 700 for each German battalion, 300 men for each artillery battalion); Team Cherry's and Team O'Hara's tank counts; the routes between recorded places, including 2d Panzer's night march to Noville, Panzer Lehr's road to Morhet, the 77th's to the north-west, and the 101st's arrival order after the 501st; the places of the guns, of Hill 490 and of the units round the perimeter; Marshall's 'second battalion of the 76th' at Bizory drawn as the 77th's; how the tanks Marshall counts at Noville, at Marvie, at Flamierge and on the Arlon road were split into units; when losses fell between the figures the sources give; Task Force Harper's losses; and, in the drop, the pathfinders' number (60), their three aircraft, the run-in heading, the zone and the rally on it. The supply drops are not drawn: the drop feature needs men, so the 23 and 24 December bundles are a caption.",
+]
+
 battle = dict(
     id="bastogne", name="Bastogne", date="1944-12-18", dateText="18 to 26 December 1944", place="Bastogne, Province of Luxembourg, Belgium",
     origin=dict(lat=LAT0, lon=LON0), extent=2 * HALF_EXTENT, start=START, end=END, sunrise="08:33", sunset="16:37", speed=300, lapse=14400, menPerDot=20,
@@ -978,8 +1030,18 @@ battle = dict(
     wind=dict(x=0.5, y=0.2), view=dict(x=0, y=0, width=2 * HALF_EXTENT),
     sides=dict(american=dict(name="Americans (101st Airborne Division, McAuliffe; CCB 10th Armored, Roberts; 4th Armored Division)", color="#1f55c4", light="#4a83e6", dark="#122c66"),
                german=dict(name="Germans (XLVII Panzer Corps, Lüttwitz)", color="#b8322a", light="#de5d50", dark="#5c1712")),
-    features=features, units=units, events=events, tints=TINTS,
-    sources=["Terrain: " + T["source"] + ", 30 m, sampled to 32 m."],
+    features=features, units=units, events=events, tints=TINTS, outcome=OUTCOME, sources=SOURCES,
 )
 json.dump(battle, open(HERE + "battle.json", "w"), indent=1, ensure_ascii=False)
 print(len(units), "units (", sum(u["side"] == "american" for u in units), "American,", sum(u["side"] == "german" for u in units), "German ),", len(events), "chapters,", len(features), "features")
+# Which units each chapter's frame holds at its moment, so a caption never names a unit the camera leaves out.
+def where(u, t):
+    ks = [k for k in u["keys"] if sec(k["t"]) <= sec(t)]
+    if not ks or next((k["state"] for k in reversed(ks) if "state" in k), None) == "hidden": return None
+    k = ks[-1]; nxt = [k2 for k2 in u["keys"] if sec(k2["t"]) > sec(t)]
+    if nxt and (k["x"], k["y"]) != (nxt[0]["x"], nxt[0]["y"]):
+        f = (sec(t) - sec(k["t"])) / (sec(nxt[0]["t"]) - sec(k["t"])); return (k["x"] + f * (nxt[0]["x"] - k["x"]), k["y"] + f * (nxt[0]["y"] - k["y"]))
+    return (k["x"], k["y"])
+for e in events:
+    r = e["view"] / 2; inside = [u["id"] for u in units if (p := where(u, e["t"])) and abs(p[0] - e["at"][0]) <= r and abs(p[1] - e["at"][1]) <= r]
+    print(f"{e['t']} {e['title']}: {' '.join(inside)}")
