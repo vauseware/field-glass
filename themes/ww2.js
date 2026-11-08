@@ -341,14 +341,14 @@ function plane(ctx, s, grow = 0) {
 const DAKOTA = [[0.12, -1, 0.04, -0.3, -0.1, 0.3, -0.1, 1, 0.04], [0.12, 0, -0.6, 0, 0.75], [0.08, -0.32, 0.68, 0.32, 0.68], [0.09, -0.28, -0.3, -0.28, -0.08], [0.09, 0.28, -0.3, 0.28, -0.08]];
 const HORSA = [[0.15, -1, -0.12, 1, -0.12], [0.13, 0, -0.62, 0, 0.74], [0.09, -0.3, 0.66, 0.3, 0.66]];
 const PASS = [{ stroke: 'rgba(0,0,0,0.28)', grow: 0, throwX: 22, throwY: 30 }, { stroke: 'rgba(236,235,226,0.55)', grow: 2.5, throwX: 0, throwY: 0 }, { stroke: '#262925', grow: 0, throwX: 0, throwY: 0 }];
-const XYH = 3, XYH_ALT = 4;
-function fleet(ctx, V, sh, buf, n, st, s, pass) {
+const XYH = 3, XYH_ALT = 4, HORSA_PX = 31;
+function fleet(ctx, V, sh, buf, n, st, s, pass, i0 = 0) {
   const k = s / 2;
   ctx.strokeStyle = pass.stroke;
   for (let j = 0; j < sh.length; j++) {
     const p = sh[j];
     ctx.lineWidth = p[0] * s + pass.grow; ctx.beginPath();
-    for (let i = 0; i < n; i++) {
+    for (let i = i0; i < i0 + n; i++) {
       const o = i * st, up = st === XYH_ALT ? 0.06 + buf[o + 3] : 1, a = (buf[o + 2] * Math.PI) / 180, c = Math.cos(a), sn = Math.sin(a);
       const x = V.sx(buf[o]) + pass.throwX * up, y = V.sy(buf[o + 1]) + pass.throwY * up;
       for (let q = 1; q < p.length; q += 2) { const u = p[q] * k, v = p[q + 1] * k; (q > 1 ? ctx.lineTo : ctx.moveTo).call(ctx, x + u * c - v * sn, y + u * sn + v * c); }
@@ -357,6 +357,7 @@ function fleet(ctx, V, sh, buf, n, st, s, pass) {
   }
 }
 const WING = new Float32Array(27), TOW = new Float32Array(27);
+let LANDED = new Float32Array(0);
 function drop(ctx, V, D) {
   const night = V.dark > 0.5, sx = V.sx, sy = V.sy, rc = Math.max(3, 5 * V.z), first = night ? 1 : 0;
   ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -366,7 +367,16 @@ function drop(ctx, V, D) {
     for (let i = 0; i < D.nChute; i++) { const x = sx(D.chutes[2 * i]), y = sy(D.chutes[2 * i + 1]); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); }
     ctx.lineWidth = Math.max(2, 3 * V.z); ctx.strokeStyle = 'rgba(236,235,226,0.55)'; ctx.stroke();
   }
-  for (let p = first; p < 3 && D.nGlider; p++) fleet(ctx, V, HORSA, D.gliders, D.nGlider, XYH_ALT, P.clamp(27 * V.z, 9, 30), PASS[p]);
+  if (D.nGlider) { // a glider aloft is drawn at a Dakota's size and shrinks to its size on the map as it comes down
+    const g = D.gliders, sg = P.clamp(27 * V.z, 9, 30);
+    if (LANDED.length < g.length) LANDED = new Float32Array(g.length);
+    let nl = 0;
+    for (let i = 0; i < D.nGlider; i++) if (!g[4 * i + 3]) { for (let q = 0; q < 4; q++) LANDED[4 * nl + q] = g[4 * i + q]; nl++; }
+    for (let p = first; p < 3; p++) {
+      fleet(ctx, V, HORSA, LANDED, nl, XYH_ALT, sg, PASS[p]);
+      for (let i = 0; i < D.nGlider; i++) if (g[4 * i + 3]) fleet(ctx, V, HORSA, g, 1, XYH_ALT, sg + (HORSA_PX - sg) * g[4 * i + 3], PASS[p], i);
+    }
+  }
   if (D.nMen) {
     const d = Math.max(2.2, 1.8 * V.z); ctx.fillStyle = night ? 'rgba(214,218,200,0.75)' : 'rgba(18,20,14,0.85)';
     for (let i = 0; i < D.nMen; i++) ctx.fillRect(sx(D.men[2 * i]) - d / 2, sy(D.men[2 * i + 1]) - d / 2, d, d);
@@ -393,7 +403,7 @@ function drop(ctx, V, D) {
       ctx.beginPath();
       for (let q = 0; q < 3 * n; q += 3) { ctx.moveTo(sx(WING[q]), sy(WING[q + 1])); ctx.lineTo(sx(TOW[q]), sy(TOW[q + 1])); }
       ctx.lineWidth = 0.8; ctx.strokeStyle = '#262925'; ctx.stroke();
-      for (let p = first; p < 3; p++) fleet(ctx, V, HORSA, TOW, n, XYH, 26, PASS[p]);
+      for (let p = first; p < 3; p++) fleet(ctx, V, HORSA, TOW, n, XYH, HORSA_PX, PASS[p]);
     }
     for (let p = first; p < 3; p++) fleet(ctx, V, DAKOTA, WING, n, XYH, 34, PASS[p]);
   }
