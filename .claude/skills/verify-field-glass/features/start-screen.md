@@ -30,7 +30,6 @@ Preconditions:
 - **Empty war.** Click `.tl-war[data-war="civil-war"]`. While no Civil War battle exists, `.empty` is present with `.go button[data-war]` links and there are no `.row`s.
 - **Open battle.** Click `.row[data-id="sidi-bou-zid"]`. `#splash` hides, the hash starts `#sidi-bou-zid`, `body` has `theme-ww2`, and `#play`'s `aria-label` is `Pause`.
 - **All battles.** From `#sidi-bou-zid`, click `#home`. The page reloads on `#ww2` showing the WW2 card. Press Back and the battle returns.
-- **Phone layout.** Run `fg.sh shot <dir> '#ww2' ww2-phone 390 844`. The timeline becomes three buttons in a row at the foot, and the card scrolls above it.
 
 ## Gotchas
 
