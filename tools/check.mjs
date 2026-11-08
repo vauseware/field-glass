@@ -70,17 +70,31 @@ assert.ok(down.nChute === 10 && [...down.chutes.slice(0, 20)].every((v, i, a) =>
 assert.equal(down.nMen, 8, 'eight dots of men walk in: 80 of the 100 formed, two dots were lost on the drop');
 assert.ok(toDots(dropAt(df, T('13:42'), 0), formedDots) > toDots(dropAt(df, T('13:52'), 0), formedDots), 'the men close on their places in the unit');
 assert.ok(toDots(dropAt(df, T('14:00') - 0.01, 0), formedDots) < 8 * 2, 'each man is at his own dot as the unit forms');
-assert.ok(dropAt(df, T('14:00'), 0) === null && unitAt(pu, T('14:00') - 0.01) === null && unitAt(pu, T('14:00')), 'the unit takes over from its men at the rally key');
+const rallied = dropAt(df, T('14:00'), 0, 60);
+assert.ok(!rallied?.nMen && !rallied?.nChute && !rallied?.nCanopy && unitAt(pu, T('14:00') - 0.01) === null && unitAt(pu, T('14:00')), 'the unit takes over from its men at the rally key');
 assert.ok(db.fallen.length === 2 && db.fallen.every(m => Math.abs(m.x) + Math.abs(m.y) <= ZONE_RADIUS && m.t >= T('13:30') && m.t <= T('13:40')), 'a fallen marker where and when each lost dot came down');
-assert.deepEqual(df.air, [T('13:30') - 90, T('14:00')], 'the air hook draws from the first canopy until the unit has formed');
+assert.deepEqual(df.air, [T('13:30') - 90, T('14:00')], 'the air hook draws from the first canopy until the unit has formed and the transports have flown out');
 assert.equal(activity(db, T('13:50'))[0], true, 'the rally is active: time-lapse waits for it');
+const offMap = (x, y) => Math.max(Math.abs(x), Math.abs(y)) > db.extent / 2;
+for (let c = 0, prev = null; c < 60; c += 0.05) {
+  const D = dropAt(df, T('13:35'), c, 60), cur = [...D.craft.slice(0, D.nCraft * 3)];
+  for (let v = 0; prev && v < D.nCraft; v++) {
+    const [x0, y0, x1, y1] = [prev[3 * v], prev[3 * v + 1], cur[3 * v], cur[3 * v + 1]];
+    assert.ok(Math.hypot(x1 - x0, y1 - y0) < 100 || (offMap(x0, y0) && offMap(x1, y1)), `a transport leaves the map before it starts its next pass, not at (${x0.toFixed(0)}, ${y0.toFixed(0)})`);
+  }
+  prev = cur;
+}
+assert.ok(dropAt(df, T('13:40') + 30, 0, 60).nCraft > 0, 'transports already on their pass fly on after the last man is down');
+assert.equal(dropAt(df, T('13:59'), 0, 60).nCraft, 0, 'and no transport starts a new pass');
 const gf = dropBattle({ kind: 'glider', craft: 4 }).features[0], count = (t, k) => dropAt(gf, T(t), 0, 60)[k];
 assert.ok(count('13:35', 'nGlider') > 0 && count('13:50', 'nGlider') === 4 && count('13:50', 'nMen') === 8 && count('13:50', 'nCanopy') === 0, 'gliders come down and their men get out');
 assert.equal(dropAt(gf, T('13:59'), 0, 60).nGlider, 4, 'the gliders stand until the unit has formed');
 const flying = D => [[...D.craft.slice(0, D.nCraft * 3)].filter((_, i) => i % 3 < 2), [...D.gliders.slice(0, D.nGlider * 4)].filter((_, i, a) => i % 4 < 2 && a[i - (i % 4) + 3] > 0)];
 const drift = (a, b) => { const d = []; for (let i = 0; i < a.length; i += 2) { let m = Infinity; for (let j = 0; j < b.length; j += 2) m = Math.min(m, Math.hypot(a[i] - b[j], a[i + 1] - b[j + 1])); d.push(m); } return d.sort((p, q) => p - q)[d.length >> 1]; };
 for (const rate of [10, 60]) {
-  const dt = 0.05, [ca, ga] = flying(dropAt(gf, T('13:35'), 0, rate)), [cb, gb] = flying(dropAt(gf, T('13:35') + rate * dt, dt, rate)), pace = drift(ga, gb) / drift(ca, cb);
+  let t = T('13:30');
+  while (t < T('13:40') && !flying(dropAt(gf, t, 0, rate))[1].length) t += 5;
+  const dt = 0.05, [ca, ga] = flying(dropAt(gf, t, 0, rate)), [cb, gb] = flying(dropAt(gf, t + rate * dt, dt, rate)), pace = drift(ga, gb) / drift(ca, cb);
   assert.ok(ga.length && pace > 0.75 && pace < 1.25, `a landing glider crosses the map at the transports' pace at ${rate}x, not ${pace.toFixed(2)} times it`);
 }
 const problems = (drop, units, more) => validate(dropBattle(drop, units, more));

@@ -78,8 +78,8 @@ export function normalizeBattle(b) {
       a.turnFirst = (a.x !== c.x || a.y !== c.y) && angleGap(c.h, m) < angleGap(a.h, m);
     }
   }
-  planAir(b);
   b.events = (b.events ?? []).map(e => ({ ...e, t: parseTime(e.t) })).sort((p, q) => p.t - q.t);
+  planAir(b);
   b.fallen = fallenMarkers(b);
   b.active = activeSpans(b);
   return b;
@@ -101,7 +101,7 @@ function activeSpans(b, lead = 90) {
     if (k.length && busy(k[k.length - 1].state)) raw.push([k[k.length - 1].t, b.endT]);
   }
   for (const f of [...(b.features ?? []), ...(b.tints ?? [])]) { if (f.from != null) raw.push([f.from, f.from + 300]); if (f.until != null) raw.push([f.until, f.until + 300]); }
-  for (const f of b.features ?? []) { const P = PLANS.get(f); if (P?.men) raw.push([P.t0, P.formed]); }
+  for (const f of b.features ?? []) { const P = PLANS.get(f); if (P?.men) raw.push([P.t0, P.end]); }
   raw.sort((p, q) => p[0] - q[0]);
   const out = [];
   for (const [s, e] of raw) {
@@ -262,7 +262,7 @@ const GATHER_MIN_S = 90, GATHER_MAX_S = 240;
 const WALK_M_PER_S = 1.2;
 const DRIFT_DOWNWIND_M = 150, THROW_ALONG_TRACK_M = 60;
 const STICK_LENGTH_M = 600;
-const STREAM = { vicsAtOnce: 3, realSecondsPerPass: 9, reachInZoneRadii: 1.8 };
+const STREAM = { mPerRealS: 300, spacingM: 800, pastEdgeM: 600, reachM: 5000 };
 const MAN = Object.freeze({ landX: 0, landY: 1, releaseX: 2, releaseY: 3, placeX: 4, placeY: 5, downAt: 6, setOffAt: 7, arriveAt: 8, formedAt: 9, lost: 10, stride: 11 });
 const GLIDER = Object.freeze({ approachX: 0, approachY: 1, touchX: 2, touchY: 3, stopX: 4, stopY: 5, touchAt: 6, heading: 7, stride: 8 });
 const PLANS = new WeakMap();
@@ -307,17 +307,19 @@ function planAir(b) {
 
     const h = ((f.h ?? 0) * Math.PI) / 180, alongX = Math.sin(h), alongY = Math.cos(h), acrossX = alongY, acrossY = -alongX;
     const ox = z.reduce((s, p) => s + p[0], 0) / z.length, oy = z.reduce((s, p) => s + p[1], 0) / z.length;
-    let aLo = Infinity, aHi = -Infinity, cLo = Infinity, cHi = -Infinity, x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity, spread = 0;
+    let aLo = Infinity, aHi = -Infinity, cLo = Infinity, cHi = -Infinity, x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
     for (const [x, y] of z) {
       const a = (x - ox) * alongX + (y - oy) * alongY, c = (x - ox) * acrossX + (y - oy) * acrossY;
       aLo = Math.min(aLo, a); aHi = Math.max(aHi, a); cLo = Math.min(cLo, c); cHi = Math.max(cHi, c);
-      x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); spread = Math.max(spread, Math.hypot(x - ox, y - oy));
+      x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
     }
     const rnd = mulberry32(hash(`${name}|${f.from}`)), wl = Math.hypot(b.wind?.x ?? 0, b.wind?.y ?? 0), wx = wl && b.wind.x / wl, wy = wl && b.wind.y / wl;
     const pointInZone = propose => {
       for (let i = 0; i < 64; i++) { const p = i < 32 ? propose() : [x0 + rnd() * (x1 - x0), y0 + rnd() * (y1 - y0)]; if (inZone(z, p[0], p[1])) return p; }
       return [ox, oy];
     };
+    const edge = s => { let d = Infinity; for (const [o, u] of [[ox, alongX * s], [oy, alongY * s]]) if (u) d = Math.min(d, ((u > 0 ? half : -half) - o) / u); return Math.min(d + STREAM.pastEdgeM, STREAM.reachM); };
+    const back = edge(-1), track = back + edge(1), vics = Math.ceil(track / STREAM.spacingM);
     const nl = Math.max(1, Math.min(f.craft, Math.round((cHi - cLo) / 120))), lanes = Float64Array.from({ length: nl }, (_, i) => 0.8 * (cLo + ((cHi - cLo) * (i + 0.5)) / nl));
     const K = para ? 0 : f.craft, gl = new Float64Array(K * GLIDER.stride);
     for (let g = 0; g < K; g++) {
@@ -357,12 +359,13 @@ function planAir(b) {
       }
       g.i1 = s;
     }
-    const formed = Math.max(f.until, ...groups.map(g => g.tu));
-    Object.assign(P, { para, until: f.until, t0: f.from - (para ? CANOPY_FALL_S : GLIDER_APPROACH_MAX_S), formed, ox, oy, alongX, alongY, acrossX, acrossY, h: f.h ?? 0,
-      reach: spread * STREAM.reachInZoneRadii, lanes, nl, gl, k: K, men, groups,
-      out: { kind: f.kind, craft: new Float32Array(STREAM.vicsAtOnce * 3), nCraft: 0, canopies: new Float32Array(N * 3), nCanopy: 0, chutes: new Float32Array(N * 2), nChute: 0,
+    // Transports still on their pass when the last man is down fly it out, at the speed the chapter then plays.
+    const formed = Math.max(f.until, ...groups.map(g => g.tu)), end = Math.max(formed, f.until + (track / STREAM.mPerRealS) * (eventAt(b, f.until)?.speed ?? defaultSpeed(b)));
+    Object.assign(P, { para, until: f.until, t0: f.from - (para ? CANOPY_FALL_S : GLIDER_APPROACH_MAX_S), formed, end, ox, oy, alongX, alongY, acrossX, acrossY, h: f.h ?? 0,
+      back, track, vics, lanes, nl, gl, k: K, men, groups,
+      out: { kind: f.kind, craft: new Float32Array(vics * 3), nCraft: 0, canopies: new Float32Array(N * 3), nCanopy: 0, chutes: new Float32Array(N * 2), nChute: 0,
         gliders: new Float32Array(K * 4), nGlider: 0, men: new Float32Array(N * 2), nMen: 0 } });
-    f.air = [P.t0, formed];
+    f.air = [P.t0, end];
   }
 }
 
@@ -372,7 +375,7 @@ function planAir(b) {
  * the transports' pace on screen, so at `rate` battle seconds a real second it takes that many more battle seconds, up to
  * GLIDER_APPROACH_MAX_S. Writes into the plan's own frame and returns it: read it before the next call for the same drop.
  * @typedef {{ kind: 'para'|'glider',
- *   craft: Float32Array, nCraft: number,       // [x, y, h] the lead aircraft of each vic, while the drop lasts
+ *   craft: Float32Array, nCraft: number,       // [x, y, h] the lead aircraft of each vic, until the last are out of sight
  *   canopies: Float32Array, nCanopy: number,   // [x, y, alt] a canopy in the air for each dot's men, alt 1 at release, 0 down
  *   chutes: Float32Array, nChute: number,      // [x, y] a canopy on the ground where its men came down
  *   gliders: Float32Array, nGlider: number,    // [x, y, h, alt] a glider on its final approach (alt > 0), rolling out or standing
@@ -381,14 +384,17 @@ function planAir(b) {
  */
 export function dropAt(f, t, clock, rate) {
   const P = PLANS.get(f);
-  if (!P?.out || t < P.t0 || t >= P.formed) return null;
-  const D = P.out, m = P.men, gl = P.gl, { vicsAtOnce, realSecondsPerPass } = STREAM;
+  if (!P?.out || t < P.t0 || t >= P.end) return null;
+  const D = P.out, m = P.men, gl = P.gl, pace = STREAM.mPerRealS, since = t > P.until ? (t - P.until) / rate : 0;
   D.nCraft = D.nCanopy = D.nChute = D.nGlider = D.nMen = 0;
-  if (t < P.until) for (let v = 0; v < vicsAtOnce; v++) {
-    const d = (((clock / realSecondsPerPass + v / vicsAtOnce) % 1) * 2 - 1) * P.reach, c = P.lanes[Math.floor(((v + 0.5) / vicsAtOnce) * P.nl)], w = D.nCraft++ * 3;
+  for (let v = 0; v < P.vics; v++) {
+    const s = (clock * pace + (v * P.track) / P.vics) % P.track;
+    if (since && s / pace <= since) continue;
+    const d = s - P.back, c = P.lanes[Math.floor(((v + 0.5) / P.vics) * P.nl)], w = D.nCraft++ * 3;
     D.craft[w] = P.ox + P.alongX * d + P.acrossX * c; D.craft[w + 1] = P.oy + P.alongY * d + P.acrossY * c; D.craft[w + 2] = P.h;
   }
-  const glide = Math.min(GLIDER_APPROACH_MAX_S, (GLIDER_APPROACH_M * realSecondsPerPass * rate) / (2 * P.reach));
+  if (t >= P.formed) return D;
+  const glide = Math.min(GLIDER_APPROACH_MAX_S, (GLIDER_APPROACH_M / pace) * rate);
   for (let g = 0; g < P.k; g++) {
     const o = g * GLIDER.stride, tk = gl[o + GLIDER.touchAt];
     if (t < tk - glide) continue;
