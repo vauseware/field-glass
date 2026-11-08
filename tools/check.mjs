@@ -74,9 +74,15 @@ assert.ok(dropAt(df, T('14:00'), 0) === null && unitAt(pu, T('14:00') - 0.01) ==
 assert.ok(db.fallen.length === 2 && db.fallen.every(m => Math.abs(m.x) + Math.abs(m.y) <= ZONE_RADIUS && m.t >= T('13:30') && m.t <= T('13:40')), 'a fallen marker where and when each lost dot came down');
 assert.deepEqual(df.air, [T('13:30') - 90, T('14:00')], 'the air hook draws from the first canopy until the unit has formed');
 assert.equal(activity(db, T('13:50'))[0], true, 'the rally is active: time-lapse waits for it');
-const gf = dropBattle({ kind: 'glider', craft: 4 }).features[0], count = (t, k) => dropAt(gf, T(t), 0)[k];
+const gf = dropBattle({ kind: 'glider', craft: 4 }).features[0], count = (t, k) => dropAt(gf, T(t), 0, 60)[k];
 assert.ok(count('13:35', 'nGlider') > 0 && count('13:50', 'nGlider') === 4 && count('13:50', 'nMen') === 8 && count('13:50', 'nCanopy') === 0, 'gliders come down and their men get out');
-assert.equal(dropAt(gf, T('13:59'), 0).nGlider, 4, 'the gliders stand until the unit has formed');
+assert.equal(dropAt(gf, T('13:59'), 0, 60).nGlider, 4, 'the gliders stand until the unit has formed');
+const flying = D => [[...D.craft.slice(0, D.nCraft * 3)].filter((_, i) => i % 3 < 2), [...D.gliders.slice(0, D.nGlider * 4)].filter((_, i, a) => i % 4 < 2 && a[i - (i % 4) + 3] > 0)];
+const drift = (a, b) => { const d = []; for (let i = 0; i < a.length; i += 2) { let m = Infinity; for (let j = 0; j < b.length; j += 2) m = Math.min(m, Math.hypot(a[i] - b[j], a[i + 1] - b[j + 1])); d.push(m); } return d.sort((p, q) => p - q)[d.length >> 1]; };
+for (const rate of [10, 60]) {
+  const dt = 0.05, [ca, ga] = flying(dropAt(gf, T('13:35'), 0, rate)), [cb, gb] = flying(dropAt(gf, T('13:35') + rate * dt, dt, rate)), pace = drift(ga, gb) / drift(ca, cb);
+  assert.ok(ga.length && pace > 0.75 && pace < 1.25, `a landing glider crosses the map at the transports' pace at ${rate}x, not ${pace.toFixed(2)} times it`);
+}
 const problems = (drop, units, more) => validate(dropBattle(drop, units, more));
 assert.deepEqual(problems({ units: ['para', 'nobody'] }), ['drop test: no unit nobody'], 'a drop names units that exist');
 assert.deepEqual(problems({}, [para()], [{ type: 'drop', kind: 'para', name: 'again', zone: [[0, 0], [100, 0], [0, 100]], h: 0, from: '13:30', until: '13:40', craft: 1, units: ['para'] }]),
