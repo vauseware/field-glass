@@ -125,7 +125,7 @@ battles add only the cues and extras they lack.
 - **Place on desktop.** Each source pans left or right by where its units sit across the screen (a
   `StereoPannerNode` per active cue), and its volume falls with distance from the centre of the view.
   Zoomed in, the near column's boots and the battery in front of it stand out; zoomed out, the field
-  blends into one sound. A phone plays the same cues in mono.
+  blends into one sound. Desktop only: phones are out of scope (ADR-0012).
 - **Real time, not battle time.** At 10× to 300× a unit fires many times a second of replay, so each
   sound plays at its natural pace and only the density follows the fighting. At most 8 one-shots sound
   at once.

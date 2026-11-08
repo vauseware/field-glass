@@ -1,13 +1,13 @@
 // The Chapters switch and the chapter title: the switch's start by chapter count, click, `c`, the stored choice and
 // blocked storage; the title on play, label click and page open, not on a drag or arrow key; its place at the laptop
-// and phone sizes; the bar on one row; no title during the opening shot, and one when it ends or is skipped.
+// sizes; the bar on one row; no title during the opening shot, and one when it ends or is skipped.
 // Run: bash fg.sh drive <dir> journeys/chapters.cjs
 // Timing checks read the page's own frames (per-frame opacity of #chapter-title), so a slow frame never fails them.
 const puppeteer = require('puppeteer-core');
 const [exe, base, dir] = process.argv.slice(2);
 const ok = (c, m) => console.log(`${c ? 'PASS' : 'FAIL'} ${m}`);
 const wait = ms => new Promise(r => setTimeout(r, ms));
-const LAPTOP = { width: 1536, height: 830, deviceScaleFactor: 1.25 }, SMALL = { width: 1280, height: 700, deviceScaleFactor: 1.5 }, PHONE = { width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true };
+const LAPTOP = { width: 1536, height: 830, deviceScaleFactor: 1.25 }, SMALL = { width: 1280, height: 700, deviceScaleFactor: 1.5 };
 const SBZ = 'sidi-bou-zid@1943-02-14T10:00';
 
 (async () => {
@@ -106,12 +106,11 @@ const SBZ = 'sidi-bou-zid@1943-02-14T10:00';
     const el = document.querySelector('#chapter-title'), r = el.getBoundingClientRect(), cut = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
     const panels = ['#top', '#bar', '#caption', '#card'].map(s => document.querySelector(s)).filter(e => +getComputedStyle(e).opacity > 0 && e.getBoundingClientRect().width);
     const marks = [...document.querySelectorAll('#marks button')].filter(b => !b.hidden && b.getBoundingClientRect().width).map(b => b.getBoundingClientRect());
-    const phone = innerWidth <= 640, cap = document.querySelector('#caption').getBoundingClientRect();
-    const anchor = phone ? cap.top : marks.length ? Math.min(...marks.map(m => m.top)) : document.querySelector('#bar').getBoundingClientRect().top;
+    const anchor = marks.length ? Math.min(...marks.map(m => m.top)) : document.querySelector('#bar').getBoundingClientRect().top;
     return { op: +getComputedStyle(el).opacity, box: [r.left, r.top, r.right, r.bottom].map(Math.round), gap: Math.round(anchor - r.bottom), marks: marks.length,
       over: [...panels.filter(e => cut(r, e.getBoundingClientRect())).map(e => '#' + e.id), ...marks.filter(m => cut(r, m)).map(() => 'label')] };
   });
-  for (const v of [LAPTOP, SMALL, PHONE]) {
+  for (const v of [LAPTOP, SMALL]) {
     await p.setViewport(v); const vt = `${v.width}x${v.height}`;
     for (const h of ['cowpens@07:45', SBZ]) {
       await p.evaluate(() => localStorage.clear()); await open(`${h},warp,title`);
@@ -119,7 +118,7 @@ const SBZ = 'sidi-bou-zid@1943-02-14T10:00';
       for (const turn of [false, true]) {
         if (turn) { await blur(); await p.keyboard.press('c'); await frames(2); }
         const a = await place(), sh = `9-${id}-${vt}-${a.marks ? 'on' : 'off'}`; await shot(sh);
-        ok(a.op === 1 && !a.over.length && a.gap >= 0 && a.gap <= 30, `${vt} ${id}, ${a.marks} labels: title ${a.box.join(',')}, ${a.gap} px above ${v === PHONE ? 'the story' : a.marks ? 'the labels' : 'the bar'}${a.over.length ? ', over ' + a.over.join(' ') : ', over nothing'}`);
+        ok(a.op === 1 && !a.over.length && a.gap >= 0 && a.gap <= 30, `${vt} ${id}, ${a.marks} labels: title ${a.box.join(',')}, ${a.gap} px above ${a.marks ? 'the labels' : 'the bar'}${a.over.length ? ', over ' + a.over.join(' ') : ', over nothing'}`);
       }
     }
   }
