@@ -255,7 +255,7 @@ function dropFallen(b) {
 
 // A drop is cosmetic: its units' keys alone say where and when each one has formed (docs/adr/0011-airborne-drops.md).
 const CANOPY_FALL_S = 90;
-const GLIDER_APPROACH_S = 90, GLIDER_APPROACH_M = 1500;
+const GLIDER_APPROACH_M = 1500, GLIDER_APPROACH_MAX_S = 900;
 const GLIDER_ROLL_M = 80, GLIDER_ROLL_S = 15;
 const GLIDER_STOP_TO_EXIT_S = 30;
 const GATHER_MIN_S = 90, GATHER_MAX_S = 240;
@@ -358,7 +358,7 @@ function planAir(b) {
       g.i1 = s;
     }
     const formed = Math.max(f.until, ...groups.map(g => g.tu));
-    Object.assign(P, { para, until: f.until, t0: f.from - (para ? CANOPY_FALL_S : GLIDER_APPROACH_S), formed, ox, oy, alongX, alongY, acrossX, acrossY, h: f.h ?? 0,
+    Object.assign(P, { para, until: f.until, t0: f.from - (para ? CANOPY_FALL_S : GLIDER_APPROACH_MAX_S), formed, ox, oy, alongX, alongY, acrossX, acrossY, h: f.h ?? 0,
       reach: spread * STREAM.reachInZoneRadii, lanes, nl, gl, k: K, men, groups,
       out: { kind: f.kind, craft: new Float32Array(STREAM.vicsAtOnce * 3), nCraft: 0, canopies: new Float32Array(N * 3), nCanopy: 0, chutes: new Float32Array(N * 2), nChute: 0,
         gliders: new Float32Array(K * 4), nGlider: 0, men: new Float32Array(N * 2), nMen: 0 } });
@@ -368,8 +368,9 @@ function planAir(b) {
 
 /**
  * Drop `f` at battle time t, in world metres, or null outside f.air. Everything on or over the ground is pure in t; only
- * the transports fly on `clock` (real seconds of play), as an air strike's aircraft do. Writes into the plan's own frame
- * and returns it: read it before the next call for the same drop.
+ * the transports fly on `clock` (real seconds of play), as an air strike's aircraft do. A glider flies its final approach at
+ * the transports' pace on screen, so at `rate` battle seconds a real second it takes that many more battle seconds, up to
+ * GLIDER_APPROACH_MAX_S. Writes into the plan's own frame and returns it: read it before the next call for the same drop.
  * @typedef {{ kind: 'para'|'glider',
  *   craft: Float32Array, nCraft: number,       // [x, y, h] the lead aircraft of each vic, while the drop lasts
  *   canopies: Float32Array, nCanopy: number,   // [x, y, alt] a canopy in the air for each dot's men, alt 1 at release, 0 down
@@ -378,7 +379,7 @@ function planAir(b) {
  *   men: Float32Array, nMen: number }} DropFrame // [x, y] a dot's men on the ground, from where they came down to their place
  * @returns {DropFrame | null}
  */
-export function dropAt(f, t, clock) {
+export function dropAt(f, t, clock, rate) {
   const P = PLANS.get(f);
   if (!P?.out || t < P.t0 || t >= P.formed) return null;
   const D = P.out, m = P.men, gl = P.gl, { vicsAtOnce, realSecondsPerPass } = STREAM;
@@ -387,10 +388,11 @@ export function dropAt(f, t, clock) {
     const d = (((clock / realSecondsPerPass + v / vicsAtOnce) % 1) * 2 - 1) * P.reach, c = P.lanes[Math.floor(((v + 0.5) / vicsAtOnce) * P.nl)], w = D.nCraft++ * 3;
     D.craft[w] = P.ox + P.alongX * d + P.acrossX * c; D.craft[w + 1] = P.oy + P.alongY * d + P.acrossY * c; D.craft[w + 2] = P.h;
   }
+  const glide = Math.min(GLIDER_APPROACH_MAX_S, (GLIDER_APPROACH_M * realSecondsPerPass * rate) / (2 * P.reach));
   for (let g = 0; g < P.k; g++) {
     const o = g * GLIDER.stride, tk = gl[o + GLIDER.touchAt];
-    if (t < tk - GLIDER_APPROACH_S) continue;
-    const alt = t < tk ? (tk - t) / GLIDER_APPROACH_S : 0, e = t < tk ? 0 : Math.min(1, (t - tk) / GLIDER_ROLL_S), w = D.nGlider++ * 4;
+    if (t < tk - glide) continue;
+    const alt = t < tk ? (tk - t) / glide : 0, e = t < tk ? 0 : Math.min(1, (t - tk) / GLIDER_ROLL_S), w = D.nGlider++ * 4;
     const tx = gl[o + GLIDER.touchX], ty = gl[o + GLIDER.touchY];
     D.gliders[w] = alt ? tx + (gl[o + GLIDER.approachX] - tx) * alt : tx + (gl[o + GLIDER.stopX] - tx) * e;
     D.gliders[w + 1] = alt ? ty + (gl[o + GLIDER.approachY] - ty) * alt : ty + (gl[o + GLIDER.stopY] - ty) * e;
