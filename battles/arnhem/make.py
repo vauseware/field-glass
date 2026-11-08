@@ -313,6 +313,9 @@ LOSS = {}  # id: [(t0, t1, men)], losses falling evenly over each span; a negati
 def lose(id, t0, t1, n): LOSS.setdefault(id, []).append((t0, t1, n))
 def smoke(at, t0, t1, rate=10, spread=400): features.append(dict(type="smoke", at=list(at), rate=rate, spread=spread, **{"from": t0, "until": t1}))
 def strike(name, at, t0, t1, spread=500, h=250): features.append(dict(type="airstrike", name=name, at=list(at), spread=spread, h=h, **{"from": t0, "until": t1}))
+def drop(name, kind, zone, t0, t1, units, h, craft):
+    assert all(on_land(p) and max(map(abs, p)) < HALF_EXTENT for p in zone), (name, "a drop zone corner in the river or off the map")
+    features.append(dict(type="drop", kind=kind, name=name, zone=[list(p) for p in zone], h=h, craft=craft, units=list(units), **{"from": t0, "until": t1}))
 for id in BASE: appear(id, START, (0, 0), 0, state="hidden")
 
 # Places the movements use, as local metres
@@ -328,31 +331,47 @@ def leopard(a, b): return along(AMSTERDAMSEWEG, a, b)
 SOUTH_EDGE_N = (2900, -7900)  # where the road to Nijmegen leaves the map, toward Elst
 
 # ---- 17 September: the first lift ----
-# The pathfinders at 12:40, a platoon to each zone; the company gathers on LZ-Z for the night.
-for id, zone, h in (("pf_z", LZZ, 90), ("pf_s", LZS, 90), ("pf_x", DZX, 90)): appear(id, D(17, "12:40"), zone, h, "skirmish")
+# No source read gives a run-in heading. The first lift turned in at 's-Hertogenbosch and "the stream
+# approached ARNHEM from the South West" (the glider pilots' diary); the bearing from its IP to Renkum Heath is 040 [INF].
+H1 = 40
+# The pathfinders at 12:40, a platoon to each zone, from twelve Stirlings, four to a zone [INF: the split is not recorded].
+# "Navigational Aids were immediately set out and 20 minutes later the first gliders appeared" (21 Ind Coy), so each
+# platoon is down in two minutes and formed, setting out its beacons, by 12:55 [INF]. The company gathers on LZ-Z for the night.
+for id, zone, zn in (("pf_z", LZZ, "LZ-Z"), ("pf_s", LZS, "LZ-S"), ("pf_x", DZX, "DZ-X")):
+    drop(f"21st Independent Parachute Company on {zn}", "para", ZONES[zn], D(17, "12:40"), D(17, "12:42"), [id], H1, 4)
+    appear(id, D(17, "12:55"), zone, 90, "skirmish")
 for id in ("pf_z", "pf_s", "pf_x"): at(id, D(17, "13:10"), state="line")
 for id in ("pf_s", "pf_x"): hide(id, plus(move(id, D(17, "15:00"), [off(LZZ, 150, -100)]), 1))
 lose("pf_z", D(17, "16:00"), D(17, "16:05"), -124)
-# The gliders: the airlanding brigade on LZ-S from 13:00, Div HQ, the Recce Squadron and two batteries on LZ-Z from 13:19.
-appear("st1", D(17, "13:00"), off(LZS, -200, 150), 120)
-appear("border_hq", D(17, "13:15"), off(LZS, 200, -150), 200); appear("border_a", D(17, "13:15"), off(LZS, 400, 100), 200)
-appear("border_b", D(17, "13:16"), off(LZS, -400, -100), 200); appear("border_c", D(17, "13:17"), off(LZS, 0, -300), 200); appear("border_d", D(17, "13:18"), off(LZS, -300, 300), 200)
-appear("kosb", D(17, "13:30"), off(LZS, 300, 350), 300); appear("gp1", D(17, "13:20"), off(LZS, -100, 400), 180)
-appear("divhq", D(17, "13:19"), off(LZZ, 100, 100), 90); appear("bty1", D(17, "13:15"), off(LZZ, -300, -100), 90); appear("bty3", D(17, "13:45"), off(LZZ, 300, -150), 90)
-appear("recce", D(17, "13:40"), off(LZZ, -150, 200), 90)
-# 1st Parachute Brigade on DZ-X, 13:50 to 14:08
-appear("p3", D(17, "14:00"), off(DZX, 300, 0), 90); appear("p1", D(17, "14:03"), off(DZX, 0, 250), 90)
-appear("p2", D(17, "13:55"), off(DZX, -200, -200), 120); appear("p2b", D(17, "13:56"), off(DZX, -450, -50), 120); appear("p2c", D(17, "13:57"), off(DZX, -50, -350), 120)
-appear("p3c", D(17, "14:01"), off(DZX, 500, 200), 90)
-for id in ("p1", "p2", "p2b", "p2c", "p3", "p3c"): at(id, D(17, "14:30"), state="column")
-move("divhq", D(17, "14:00"), [P['lz_z_hq']], h=90); move("bty1", D(17, "14:00"), [off(P['lz_z_hq'], -200, -250)], h=60); move("bty3", D(17, "14:20"), [off(P['lz_z_hq'], 200, -250)], h=80)
+# The gliders: the airlanding brigade on LZ-S from 13:00, 132 of them "on or very near that zone" (Warren); the 1st Border
+# down at 13:15; the KOSB released at 13:30, so the last down by 13:35 [INF]. Div HQ, the Recce Squadron and two batteries
+# on LZ-Z from 13:19 to 3 Battery's 13:45 (Light Regt), 143 on or very near it (Warren). Each unit forms where it stood
+# before it moves off [INF]; the Recce Squadron's glider element was unloaded at 15:00 and moved off at 15:40 (its diary),
+# and 3 Battery "collected in assembly area" at 15:00 (Light Regt).
+drop("1st Airlanding Brigade on LZ-S", "glider", ZONES['LZ-S'], D(17, "13:00"), D(17, "13:35"),
+     ["st1", "border_hq", "border_a", "border_b", "border_c", "border_d", "gp1", "kosb"], H1, 132)
+drop("Division HQ, the Reconnaissance Squadron and the Light Regiment on LZ-Z", "glider", ZONES['LZ-Z'], D(17, "13:19"), D(17, "13:45"),
+     ["bty1", "divhq", "recce", "bty3"], H1, 143)
+appear("st1", D(17, "13:40"), off(LZS, -200, 150), 120)
+appear("border_hq", D(17, "13:40"), off(LZS, 200, -150), 200); appear("border_a", D(17, "13:40"), off(LZS, 400, 100), 200)
+appear("border_b", D(17, "13:40"), off(LZS, -400, -100), 200); appear("border_c", D(17, "13:40"), off(LZS, 0, -300), 200); appear("border_d", D(17, "13:40"), off(LZS, -300, 300), 200)
+appear("kosb", D(17, "14:30"), off(LZS, 300, 350), 300); appear("gp1", D(17, "14:00"), off(LZS, -100, 400), 180)
+appear("divhq", D(17, "14:00"), off(LZZ, 100, 100), 90); appear("bty1", D(17, "14:00"), off(LZZ, -300, -100), 90); appear("bty3", D(17, "15:00"), off(P['lz_z_hq'], 200, -250), 80)
+appear("recce", D(17, "15:30"), off(LZZ, -150, 200), 90)
+# 1st Parachute Brigade on DZ-X, 13:50 to 14:08, from 143 C-47s (Warren); 2 Para first, 3 Para at 14:00, 1 Para 14:03 to
+# 14:08 (the diaries). At 14:45 Brigade HQ had "approx 80%" reported in, and 1 Para was "at full strength except for three
+# men" (the diaries). 1 Para forms at its RV north of LZ-Z, the others where they stood to march [INF: the places].
+drop("1st Parachute Brigade on DZ-X", "para", ZONES['DZ-X'], D(17, "13:50"), D(17, "14:08"), ["p2", "p2b", "p2c", "p3", "p3c", "p1"], H1, 143)
+for id, p, h in (("p2", off(DZX, -200, -200), 120), ("p2b", off(DZX, -450, -50), 120), ("p2c", off(DZX, -50, -350), 120), ("p3", off(DZX, 300, 0), 90), ("p3c", off(DZX, 500, 200), 90)):
+    appear(id, D(17, "14:45"), p, h, "column")
+appear("p1", D(17, "14:45"), (-2700, 900), 60)
+move("divhq", D(17, "14:00"), [P['lz_z_hq']], h=90); move("bty1", D(17, "14:00"), [off(P['lz_z_hq'], -200, -250)], h=60)
 move("gp1", D(17, "14:00"), [off(LZZ, 0, -350)], h=90)
 # 15:00: the three battalions march; the airlanding brigade goes to its rendezvous round the zones.
 move("border_hq", D(17, "13:40"), [P['jonkershoeve']], h=270); move("border_a", D(17, "13:40"), [G('6480')], h=270)
 move("border_b", D(17, "13:40"), [G('6377'), P['renkum']], h=250); move("border_c", D(17, "13:40"), [G('6579')], h=240); move("border_d", D(17, "13:40"), [G('633784')], h=270)
 move("st1", D(17, "13:40"), [off(P['jonkershoeve'], 250, 200)], h=270)
 move("kosb", D(17, "15:00"), along(RAIL, off(LZS, 0, 0), (-5000, 3600)) + [off(DZY, 900, 0)], h=230)
-move("p1", D(17, "14:35"), [(-2700, 900)], h=60, state="line")
 go("p1", D(17, "15:40"), D(17, "16:00"), [P['wolfheze']], h=60, state="column")
 move("recce", D(17, "15:40"), [(-2100, 1000)], h=60, state="column")
 at("recce", D(17, "16:00"), state="firing"); at("recce", D(17, "16:30"), state="line")
@@ -456,14 +475,27 @@ go("recce", D(18, "07:00"), D(18, "08:00"), [G("708782")], h=90, state="firing")
 # B Company 1 Border withdraws at two; D Company through C Company at five; the brigade to its Phase II line at night.
 move("border_b", D(18, "14:00"), [G('6477'), G('6576'), G('6677')], h=270)
 move("border_d", D(18, "15:00"), [G('665780')], h=270)
-# The second lift, 15:09: 4th Parachute Brigade on DZ-Y under fire; the gliders on LZ-S and LZ-X
-appear("p156", D(18, "15:09"), off(DZY, 300, 250), 90); appear("p10", D(18, "15:11"), off(DZY, -300, 0), 90); appear("p11", D(18, "15:13"), off(DZY, 500, -250), 120)
-appear("st2", D(18, "15:10"), off(LZS, 300, 0), 120); appear("gp2", D(18, "15:12"), off(DZX, 200, -200), 90); appear("bty2", D(18, "15:14"), off(DZX, -300, 100), 90)
-lose("p156", D(18, "15:09"), D(18, "15:20"), 10); lose("p10", D(18, "15:11"), D(18, "15:20"), 12); lose("p11", D(18, "15:13"), D(18, "15:20"), 10)
+# The second lift, 15:09: 4th Parachute Brigade on DZ-Y under fire, nine minutes, 32 killed on the drop. Warren's 126
+# aircraft "crossed DZ Y heading east"; the 315th Group lost two before the zone, so 124 dropped [DERIVED]. A flight that
+# dropped a mile or two off, near Bennekom and Opheusden, came down off the map. 156 reached its RV 611838 half an hour
+# after its jump, "well organised W. of D.Z."; 10's RV was in German hands and it set up another to the south; 11 was
+# "organising at their R.V. 634823" (4th Brigade's diary). The rally times are [INF]: the diaries' times for this drop
+# fall an hour apart (14:00 to 14:30, and 15:09 to 15:15), and this file keeps the division's.
+DZY_ON_MAP = [(max(x, 50 - HALF_EXTENT), y) for x, y in ZONES['DZ-Y']]  # the heath's outline runs a few metres past the west edge
+drop("4th Parachute Brigade on DZ-Y", "para", DZY_ON_MAP, D(18, "15:09"), D(18, "15:18"), ["p156", "p10", "p11"], 90, 124)
+appear("p156", D(18, "15:40"), RVY, 90, "column"); appear("p10", D(18, "15:40"), off(RVY, 400, -300), 90, "column"); appear("p11", D(18, "15:45"), G('634823'), 120)
+for id, t, n in (("p156", "15:40", 10), ("p10", "15:40", 12), ("p11", "15:45", 10)): lose(id, D(18, t), D(18, t), n)
+# The gliders from 15:00 (1st Border), all in "by 1530 hrs" (the Staffords): 69 on LZ-S and 204 on LZ-X (the Pegasus
+# Archive's 273), by the first lift's route ("light flak ... East of HERTOGENBOSCH", 48 Squadron) [INF: the heading]. No
+# source read places LZ-X: the Border's orders name it without a reference. Its gliders are drawn on Renkum Heath,
+# DZ-X's ground, where this file has always put the units they brought [DERIVED]. The second lift's pilots "arrived and
+# joined their Squadrons" from 15:00 (2 Wing); "The 2nd Glider Lift arrived with 2 Bty" at 17:00 (Light Regt).
+LZX = ZONES['DZ-X']
+drop("2nd South Staffords' second half on LZ-S", "glider", ZONES['LZ-S'], D(18, "15:00"), D(18, "15:30"), ["st2"], H1, 69)
+drop("The second lift's gliders on LZ-X", "glider", LZX, D(18, "15:00"), D(18, "15:30"), ["gp2", "bty2"], H1, 204)
+appear("st2", D(18, "16:00"), off(LZS, 300, 0), 120); appear("gp2", D(18, "16:00"), off(DZX, 200, -200), 90); appear("bty2", D(18, "17:00"), off(DZX, -300, 100), 90)
 fire("helle", D(18, "15:09"), D(18, "15:40"), state="retreat")
 move("helle", D(18, "15:41"), [(-3500, 2000)], h=90, state="line")
-for id in ("p156", "p10"): at(id, D(18, "15:40"), state="column")
-move("p156", D(18, "15:41"), [RVY], h=90); move("p10", D(18, "15:41"), [off(RVY, 400, -300)], h=90)
 go("kosb_d", D(18, "16:00"), D(18, "17:00"), [off(DZY, 1100, -300)], h=90, state="line"); hide("kosb_d", D(18, "17:01")); lose("kosb", D(18, "17:00"), D(18, "17:01"), -120)
 # 156 east along the north of the railway at five; 11 Para for Arnhem at 17:30; the Staffords' second half on the
 # railway route at 17:30; Div HQ at the Hartenstein; 1 and 2 Btys to 663793.
@@ -520,12 +552,15 @@ lose("p156", D(19, "08:30"), D(19, "10:00"), 280)
 go("p10", D(19, "05:00"), D(19, "07:30"), [(1000, 1500), (1450, 1450)], h=80, state="firing")
 lose("p10", D(19, "07:30"), D(19, "13:30"), 280)
 move("p156", D(19, "12:00"), [G('697797')], h=80)
-appear("pol_gl", D(19, "14:00"), off(LZL, 100, -50), 90); lose("pol_gl", D(19, "14:00"), D(19, "14:10"), 9)
+# The Polish gliders on LZ-L from 14:00 (the KOSB's diary): 30 (the Pegasus Archive; Warren counts 28 released there). No
+# route is recorded for them [INF: the heading, as the earlier lifts]. The last down by 14:10 and the element formed, nine
+# of it killed, by 14:30 [INF].
+drop("Polish gliders on LZ-L", "glider", ZONES['LZ-L'], D(19, "14:00"), D(19, "14:10"), ["pol_gl"], H1, 30)
+appear("pol_gl", D(19, "14:30"), off(LZL, 100, -50), 90, "column"); lose("pol_gl", D(19, "14:30"), D(19, "14:30"), 9)
 move("kosb", D(19, "08:00"), [off(LZL, -100, 300)], h=60)
 fire("kosb", D(19, "13:30"), D(19, "15:00"))
 fire("krafft", D(19, "13:30"), D(19, "15:00"))
 move("p10", D(19, "13:30"), [P['crossing']], h=230, state="line", moving="retreat", kmh=3)
-at("pol_gl", D(19, "14:30"), state="column")
 move("pol_gl", D(19, "15:00"), [off(P['crossing'], 300, -150), G('674792')], h=90, kmh=3)
 move("kosb", D(19, "15:15"), [(400, 1000), off(P['crossing'], 200, 100)], h=180, kmh=3)
 move("p156", D(19, "16:00"), [G('673804')], h=270, state="firing")
@@ -637,11 +672,13 @@ go("kosb", D(21, "17:00"), D(21, "17:15"), [off(P['dreyeroord'], 0, -100)], h=0,
 go("sp_n", D(21, "17:00"), D(21, "17:30"), [(1500, 600)], h=200, state="line", moving="retreat")
 move("kosb", D(21, "21:30"), [G('694787')], h=0); move("p10", D(21, "21:30"), [G('695788')], h=60)
 for id in ("border_a", "border_c"): fire(id, D(21, "19:00"), D(21, "19:45"))
-# The Poles drop on DZ-K from 17:15 under fire from the north bank; they find the ferry sunk
-appear("pol2", D(21, "17:15"), off(DZKC, -200, 300), 330); appear("pol3", D(21, "17:16"), off(DZKC, 400, -300), 330); appear("pol_hq", D(21, "17:18"), off(DZKC, 0, -100), 330)
-for id, n in (("pol2", 10), ("pol3", 10), ("pol_hq", 10)): lose(id, D(21, "17:20"), D(21, "17:45"), n)
-for id, dst in (("pol2", off(P['driel'], 400, 300)), ("pol3", off(P['driel'], 600, -300)), ("pol_hq", off(P['driel'], 0, 50))):
-    at(id, D(21, "17:50"), state="column"); move(id, D(21, "18:00"), [dst], h=0, kmh=2.5)
+# The Poles drop on DZ-K from 17:15 under fire from the north bank; they find the ferry sunk. 72 aircraft dropped (the
+# Polish diary). Warren has the serials over the zone at 17:08, 17:12 and 17:15, and the Polish diary Brigade HQ dropping at
+# 17:18: the last down by 17:25 on the division's clock [INF]. They "swung up the west side of the salient" and turned
+# south over Elst after the drop (Warren; the 315th Group) [INF: the heading]. Formed by 17:50 [INF].
+drop("1st Polish Independent Parachute Brigade on DZ-K", "para", DZK, D(21, "17:15"), D(21, "17:25"), ["pol2", "pol3", "pol_hq"], 60, 72)
+for id, p, dst in (("pol2", off(DZKC, -200, 300), off(P['driel'], 400, 300)), ("pol3", off(DZKC, 400, -300), off(P['driel'], 600, -300)), ("pol_hq", off(DZKC, 0, -100), off(P['driel'], 0, 50))):
+    appear(id, D(21, "17:50"), p, 330, "column"); lose(id, D(21, "17:50"), D(21, "17:50"), 10); move(id, D(21, "18:00"), [dst], h=0, kmh=2.5)
 move("pol2", D(21, "23:30"), [off(P['ferry_s'], 0, -250)], h=0)
 appear("ss10", D(21, "19:30"), (6250, -500), 180, "column")
 go("ss10", D(21, "19:31"), D(21, "20:15"), [RAMP, BRIDGE_S] + NIJMEGEN_RD[1:] + [SOUTH_EDGE_N], h=200, state="column"); hide("ss10", D(21, "20:16"))
@@ -739,12 +776,13 @@ def pose(id, t):  # where a unit is at time t between its keys
     if b is None: return (a["x"], a["y"])
     f = (sec(t) - sec(a["t"])) / (sec(b["t"]) - sec(a["t"])); return (a["x"] + f * (b["x"] - a["x"]), a["y"] + f * (b["y"] - a["y"]))
 def state_at(id, t): return next((k["state"] for k in reversed(KEYS[id]) if sec(k["t"]) <= sec(t) and "state" in k), None)
-def curve(pts, base):  # strength at a time, falling linearly through each span of losses
+def curve(pts, base):
     def f(s):
-        if s <= pts[0][0]: return base
-        for (s0, v0), (s1, v1) in zip(pts, pts[1:]):
-            if s0 <= s <= s1: return v1 if s1 == s0 else round(v0 + (s - s0) / (s1 - s0) * (v1 - v0))
-        return pts[-1][1]
+        if s < pts[0][0]: return base
+        on = [(a, b) for a, b in zip(pts, pts[1:]) if a[0] <= s <= b[0]]
+        if not on: return pts[-1][1]
+        (s0, v0), (s1, v1) = on[-1]
+        return v1 if s1 == s0 else round(v0 + (s - s0) / (s1 - s0) * (v1 - v0))
     return f
 for id in KEYS:
     KEYS[id].sort(key=lambda k: sec(k["t"]))
@@ -777,7 +815,7 @@ assert strength("grabner", D(18, "11:30")) == 10, "Gräbner: 12 of 22 vehicles l
 assert strength("pf_z", D(25, "21:00")) == 171, strength("pf_z", D(25, "21:00"))
 assert strength("dorsets", D(25, "08:00")) == 75, "about 75 Dorsets reach the perimeter"
 assert strength("pol_n", D(24, "05:05")) == 188, "35 and 153 Poles"
-assert strength("pol_gl", D(19, "14:10")) == 84, "nine of the Polish glider element killed"
+assert strength("pol_gl", D(19, "14:30")) == 84, "nine of the Polish glider element killed"
 assert strength("pz224", D(21, "09:40")) == 1, "three tanks destroyed at the Westerbouwing"
 assert set(KEYS) == set(BASE), set(KEYS) ^ set(BASE)
 for id in KEYS:
@@ -804,6 +842,9 @@ for id, side, short, name, commander, type, strength0, extra in OOB:
     units.append(dict(id=id, side=side, name=name, short=short, commander=commander, type=type, strength=strength0, keys=ks, **extra))
 for f in features:
     if f.get("type") in ("smoke", "airstrike"): assert on_land(f["at"]), (f.get("name"), f["at"])
+    for id in f["units"] if f.get("type") == "drop" else []:
+        rally = next((k for k in KEYS[id] if sec(k["t"]) > sec(f["from"]) and state_at(id, k["t"]) != "hidden"), None)
+        assert state_at(id, f["from"]) == "hidden" and rally and sec(rally["t"]) >= sec(f["until"]), (f["name"], id, "on the map before the last of its drop is down")
 
 # ---- chapters: (time, title, text, camera centre, metres across, playback speed, when) ----
 # `when` holds the clock time the sources record, on the British clock.
@@ -858,10 +899,11 @@ SOURCES = [
     "The battalions' and units' war diaries at <a href='https://www.pegasusarchive.org/arnhem/war.htm' target='_blank'>the Pegasus Archive</a>: 1st, 2nd, 3rd, 10th, 11th and 156th Parachute Battalions, 1st Border, 7th KOSB, 2nd South Staffords, the Reconnaissance Squadron, the Light Regiment RA, the 21st Independent Parachute Company, the Polish Brigade HQ and the 4th Dorsets: grid references, times and strengths.",
     "Mark Hickman, <a href='https://www.pegasusarchive.org/arnhem/' target='_blank'>The Pegasus Archive: Arnhem</a>, its narrative of each lift, day and sector, and its orders of battle for the 1st Airborne Division, the Polish brigade, II SS Panzer Corps and Kampfgruppe von Tettau.",
     "Charles B. MacDonald, <a href='https://www.ibiblio.org/hyperwar/USA/USA-E-Siegfried/USA-E-Siegfried-7.html' target='_blank'><i>The Siegfried Line Campaign</i></a> (US Army in World War II, 1963), chapters VI to VIII: the lifts, XXX Corps and the losses.",
+    "John C. Warren, <a href='https://archive.org/details/AirborneOperationsInWorldWarIIEuropeanTheater' target='_blank'><i>Airborne Operations in World War II, European Theater</i></a> (USAF Historical Study 97, 1956): the aircraft and gliders of each lift, their times over the zones and their routes. The diaries of the 1st Airlanding, 1st and 4th Parachute Brigades, the Glider Pilot Regiment's wings and the RAF squadrons at the Pegasus Archive, and the 315th Troop Carrier Group's history (315group.org): where the units rallied and when.",
     "Wikipedia, 'Battle of Arnhem' and 'Operation Market Garden' (read 6 November 2026), for Middlebrook's and Kershaw's casualty figures and the German units' names. Martin Middlebrook, <i>Arnhem 1944</i>, and Robert Kershaw, <i>It Never Snows in September</i>, were not consulted directly.",
     "Places: OpenStreetMap contributors (ODbL) for the bridges, churches, hotels, stations, roads and memorials; the diaries' six-figure references on sheet 'Ginkel 388' converted by an affine fit to seven of them (good to about 100 m). The zones' outlines (DZ-X, LZ-Z and LZ-L to 300 or 400 m), the railway between its stations, and the Amsterdamseweg west of Wolfheze are drawn from the text and are approximate. Sunrise 6:14 and sunset 6:47 PM for 17 September from the NOAA formulae, on the British clock.",
     "Terrain: " + T["source"] + ", 30 m, sampled to 32 m. A surface model: the woods stand 15 to 20 m above the ground, and the modern towns, the A50 and Papendal on LZ-L show. The Rhine is the model's own flat water, flattened below the water level; the flooded pits on the banks are kept as land.",
-    "Placed by inference, not from the sources: B and C Companies 2 Para and the KOSB's D Company drawn as 120 to 150 men; the split of Spindler's 1,400 between the Dreijenseweg and the town; Kampfgruppen Weber's, Brinkmann's and Worrowski's strengths and the German battalion at Driel; where von Tettau's battalions, the glider pilots, the Reconnaissance Squadron and the 21st Independent Company stood round the perimeter; the routes between recorded places; when the Staffords' and the 1st Battalion's strengths fell between the diaries' figures; the 1st Battalion's rise from 39 to about 200 as stragglers came in on the 19th; the crossing places on the nights of 22 and 23 September; and the order in which each unit crossed on the Berlin night. Tanks against the Staffords on the 19th are not drawn, since their unit is not recorded.",
+    "Placed by inference, not from the sources: B and C Companies 2 Para and the KOSB's D Company drawn as 120 to 150 men; the split of Spindler's 1,400 between the Dreijenseweg and the town; Kampfgruppen Weber's, Brinkmann's and Worrowski's strengths and the German battalion at Driel; where von Tettau's battalions, the glider pilots, the Reconnaissance Squadron and the 21st Independent Company stood round the perimeter; the routes between recorded places; when the Staffords' and the 1st Battalion's strengths fell between the diaries' figures; the 1st Battalion's rise from 39 to about 200 as stragglers came in on the 19th; the crossing places on the nights of 22 and 23 September; the order in which each unit crossed on the Berlin night; and in the drops, the run-in headings, how the pathfinders' Stirlings split between the zones, when the last glider came down, LZ-X's outline (drawn on DZ-X's ground), and when and where most units had formed. Tanks against the Staffords on the 19th are not drawn, since their unit is not recorded.",
 ]
 
 battle = dict(
