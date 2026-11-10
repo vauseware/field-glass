@@ -61,16 +61,30 @@ its title, for screenshots. See [ADR-0009](docs/adr/0009-opening-shot.md).
 
 ![Cowpens, the opening shot's title](docs/screenshots/cowpens-opening.jpg)
 
-The chapters sit above the scrubber as ticks, their titles slanting up over the map on leader lines
-so crowded chapters can be spread apart: click one to jump there (the camera follows again). **Chapters** in the bar
-(key `c`) hides the labels and keeps the ticks. It starts on for a battle of 15 chapters or fewer and off for more;
-once the viewer uses it, the browser keeps that choice for every battle (`localStorage` key `fieldglass.chapters`).
-Phones never show the labels, so the switch is hidden there. When play runs into a chapter, a label is clicked or
-the page opens, the chapter's name fades in just above the labels, or the bar when they are off, on a soft band of
-the skin's paper: 0.6 s in, 2 s held, 1 s out on the page's clock. A drag of the scrubber or an arrow key shows none,
-nor does the opening shot, which shows the chapter's name once as it ends or is skipped. See
-[ADR-0010](docs/adr/0010-chapter-titles.md). **Legend** in the
-top panel lists only the symbols the current battle uses. The story panel opens at each new chapter with the chapter's approximate hour; **Hide** folds it to the title. **Outcome** in the top panel opens to the result and each side's losses (`outcome` in `make.py`).
+The chrome keeps to the edges of the map (see [ADR-0014](docs/adr/0014-battle-chrome-lower-third.md)). The bar docks
+to the foot: Play, the scrubber and **Settings**. A tick above the groove marks each chapter, the current one taller in
+the skin's accent, and the pointer on the scrubber names the nearest chapter and its time in a tip just above the bar;
+a click still seeks. The battle's title sits in a chip at the top left. Its **Chapters** button opens a drawer down the
+left edge with the place and date, the sides, **Outcome** (the result and each side's losses, `outcome` in `make.py`),
+the chapter list, the hint line, and **All battles**, **Legend** and **Sources**. The list gives each chapter's time of
+day and name, under day headings for a battle of more than one day; a click jumps there and turns Follow back on, and
+the current row opens to its whole story. **Close**, Esc and Play close the drawer. A bare or `@time` link opens with it
+open, `,play` with it shut, and `,outcome` opens it on the Outcome. **Legend** lists only the symbols the battle uses.
+
+The story is a caption strip centred above the bar: the chapter's approximate hour and its name, then the story a page
+at a time, three lines a page of whole sentences, with a dot for each page. The pages turn on the battle clock, each
+getting its share of the chapter's playing time by its length (`captionPage` in `sim.js`), so scrubbing back shows the
+earlier page. A sentence too long for three lines breaks at a semicolon, or else the strip grows.
+
+The clock sits in the top right corner with the skin's dial, the time over its date, the speed and the **Time-lapse**
+switch; while time-lapse is hurrying, the speed reads `»` and the lapse rate in the accent. **Settings** holds **Follow
+the action** (key `f`), **Chapter titles** (key `c`) and **Captions**, and three volume sliders, Sound, Music and
+Narration, that only store their values until sound ships (`localStorage` key `fieldglass.volume`). The browser keeps
+Chapter titles and Captions for every battle (`fieldglass.titles`, `fieldglass.captions`). When play runs into a
+chapter, a row is clicked or the page opens, the chapter's name fades in just above the strip, or the bar with
+Captions off, on a soft band of the skin's paper: 0.6 s in, 2 s held, 1 s out on the page's clock. A drag of the
+scrubber or an arrow key shows none, nor does the opening shot, which shows the chapter's name once as it ends or is
+skipped. See [ADR-0010](docs/adr/0010-chapter-titles.md).
 Every unit carries its name when there is
 room; labels that would overlap are dropped, biggest unit first.
 
@@ -91,7 +105,7 @@ are clumped engraved canopies, fields are ruled with furrows, fences zig-zag, cr
 compass rose and scale of yards sit in a free corner. Each unit's path is engraved behind it as the battle plays, the
 last quarter hour darker than the rest. At night an umber dark falls over the map and a candle lights its middle. The
 scrubber is ruled as a scale of hours. Drifting cloud shadows, paper grain and the candle are page layers the browser
-composites, so the map canvas never redraws them.
+composites, so the map canvas never redraws them. The clock's dial is a brass watch with a cream face and blued hands.
 
 The Second World War skin (`ww2`) is a reconnaissance photo mosaic on a lamp-lit operations table. The ground is a
 sortie's overlapping prints, each a touch askew and differently exposed, its white border captioned only with the place,
@@ -105,7 +119,8 @@ and bombs bursting round it. The last side listed draws in red and the others in
 yellow, unless a side sets `wax` (and `tracer`) in `battle.json`. A hollow chinagraph arrow shows where each sizeable unit
 has come from since the chapter before, a dashed 1 km grid is numbered with its UTM kilometres in the window's margins,
 and every fifth round is a tracer. Night falls blue-black with the counters and fire still lit. The story is a yellow
-teleprinter strip that ends STOP, and the bar carries a red, yellow and blue sector clock beside a 24-hour clock. The lamp
+teleprinter tape in capitals whose last page ends STOP, and the clock is a red, yellow and blue sector dial beside a
+24-hour clock. The lamp
 swaying over the table is a page layer. See `docs/adr/0004-wwii-skin-before-its-battle.md`.
 
 ![The Second World War skin previewed on Guilford Courthouse](docs/screenshots/ww2-guilford.jpg)
@@ -116,7 +131,7 @@ downstream, worm fences, and a black square for each named building. A regiment 
 into companies, its front rank heavier, under a small flag (a swallow-tailed guidon for cavalry); a battery is a row of
 guns; small crosses mark the fallen. A meridian arrow and a scale of feet sit in a free corner. Colour a Civil War
 battle's sides Union blue and Confederate red in `battle.json`, as Bachelder did. Night falls blue-grey and a lantern
-lights the sheet. The panels are ruled linen and the bar blue cloth with a gilt rule, as on the start screen, whose
+lights the sheet. The panels are ruled linen and the bar and clock blue cloth with a gilt rule, the dial a gilt-rimmed watch, as on the start screen, whose
 backdrop is drawn from the same ground. See `docs/adr/0006-civil-war-skin.md`.
 
 ![The Civil War skin previewed on Guilford Courthouse](docs/screenshots/civil-war-guilford.jpg)
@@ -126,7 +141,8 @@ navy ink on cream, the land washed yellow along its shore, white water lined ins
 soundings in fathoms, hills as short hachures, woods as the chart's tree sign, rhumb lines fanning from a sixteen-point
 rose, and a graduated border with the blue backing beyond. A unit is a block in its side's colour under a navy rule
 with a pennant on its front; a pecked line marks where it has been. Under a `?theme=` preview the first side is blue
-and the last red. The start screen draws the war's backdrop from the same ground. See
+and the last red. The clock's dial is a chronometer, white with navy hands in a brass ring, and the bar and clock
+sit on the chart's blue backing. The start screen draws the war's backdrop from the same ground. See
 `docs/adr/0007-war-of-1812-skin.md`.
 
 ![The War of 1812 skin previewed on Fort Fisher](docs/screenshots/war-of-1812-fort-fisher.jpg)
@@ -136,7 +152,7 @@ paper, brown contours with every fourth heavier, woods as ring-on-stalk tree sig
 squares numbered 1 to 36 inside lettered 6000-yard squares. Every trench and work is red, stepped into fire bays and
 traverses, with wire as crosses before it. A unit is a block in its side's colour under an ink rule; a dashed line
 marks where it has been. A "SCALE 1:10,000" bar in yards sits in a free corner, the clock reads as the war diaries
-wrote it (2.15 p.m.), and at night a star shell drifts over the field. Under a `?theme=` preview the first side is
+wrote it (2.15 p.m.) beside a trench watch with luminous hands, and at night a star shell drifts over the field. Under a `?theme=` preview the first side is
 blue and the last red. The start screen draws the war's backdrop from the same ground, on Yorktown's siege works. See
 `docs/adr/0008-first-world-war-skin.md`.
 
