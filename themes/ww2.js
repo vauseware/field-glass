@@ -218,7 +218,7 @@ function arrowPath(c, x0, y0, x1, y1) {
 }
 
 // The grid's numbers, the last two figures of each kilometre, in the window's margins as a sheet numbers its grid at the
-// edge: eastings top and bottom, northings left and right, each left off where a panel or chapter name covers it.
+// edge: eastings top and bottom, northings left and right, each left off where a panel covers it.
 function over(ctx, V) {
   const S = V.sheet, bot = V.safe.bar - 12, free = (x, y) => !V.avoid.some(p => x > p.l - 6 && x < p.r + 6 && y > p.t - 10 && y < p.b + 10);
   const t = (text, x, y, align) => free(x, y) && P.haloText(ctx, text, x, y, `600 14px ${NUM}`, '#f1efe2', 'rgba(14,14,10,0.8)', 3.5, 0, align);
@@ -490,10 +490,12 @@ export default {
     const { h, day, month } = clockParts(t);
     return h === 0 && day != null ? `${day} ${mon(month)}` : `${pad2(h)}00`;
   },
-  when(ev, b) { // the teleprinter's header: about the hour, unless the sources record the time; TOO is its time of origin
-    const exact = ev.when != null, at = exact ? ev.t : Math.round(ev.t / 3600) * 3600, { h, m, day } = clockParts(at), hhmm = `${pad2(h)}${pad2(m)}`;
-    return [`FROM G-2  TO ALL STATIONS\n${exact && !/about/i.test(ev.when) ? '' : 'ABOUT '}${hhmm} HRS`, `TOO ${pad2(day ?? +(b.date ?? '').slice(8, 10))}${hhmm}`];
+  when(ev, b) { // the teleprinter's header: about the hour, unless the sources record the time
+    const exact = ev.when != null, at = exact ? ev.t : Math.round(ev.t / 3600) * 3600, { h, m, day, month } = clockParts(at);
+    const [, mo, d] = (b.date ?? '').split('-').map(Number), date = day != null ? `${day} ${mon(month)}` : d ? `${d} ${mon(mo - 1)}` : '';
+    return `${exact && !/about/i.test(ev.when) ? '' : 'ABOUT '}${pad2(h)}${pad2(m)} HRS${date ? ` · ${date}` : ''}`;
   },
+  time(t) { const { h, m } = clockParts(t); return `${pad2(h)}${pad2(m)}`; },
   legend: {
     text: {
       infantry: b => `Infantry: a chinagraph bracket along its front, in its side’s colour. Each dark speck is ${b.menPerDot} men.`,

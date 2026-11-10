@@ -96,7 +96,6 @@ export function rose(dpr) {
 const strips = (ctx, l, t, r, b, V, c) => { ctx.fillStyle = c; ctx.fillRect(0, 0, V.W, Math.max(0, t)); ctx.fillRect(0, b, V.W, Math.max(0, V.H - b)); ctx.fillRect(0, t, Math.max(0, l), b - t); ctx.fillRect(r, t, Math.max(0, V.W - r), b - t); };
 
 function over(ctx, V) {
-  if (V.W <= 640) return;
   const yd = 0.9144 * V.z, len = [50, 100, 200, 250, 500, 1000, 2000, 5000].findLast(n => n * yd <= 170) ?? 50, w = len * yd;
   const corner = P.freeCorner(V, 190, 230);
   if (!corner) return;
@@ -161,7 +160,7 @@ export default {
   },
   clock(t) {
     const { h, m, day, month } = clockParts(t);
-    return [`${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? period(h) : `${day} ${MONTHS[month]}, ${period(h).replace(/^in the /, '')}`];
+    return [`${P.dial(h, m)}${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? period(h) : `${day} ${MONTHS[month]}, ${period(h).replace(/^in the /, '')}`];
   },
   hours(t) { // the scale of hours under the scrubber
     const { h, day, month } = clockParts(t);

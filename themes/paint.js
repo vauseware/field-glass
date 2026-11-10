@@ -388,12 +388,18 @@ export function plate(layer, L, bySide, recent, style) {
 }
 
 // Where a w × h box of map furniture fits: the bottom right corner above the bar, or the clear part of the window's
-// corner, never under a panel, a chapter name or a unit. Its [right, bottom], or undefined when neither is clear.
+// corner, never under a panel or a unit. Its [right, bottom], or undefined when neither is clear.
 export function freeCorner(V, w, h) {
   const fits = (r, b) => r - w >= 0 && b - h >= 0 && !V.avoid.some(p => p.t < b - 4 && p.b > b - h && p.l < r && p.r > r - w) &&
     !V.B.units.some(u => u.pose && u.screen && Math.abs(u.screen.x - (r - w / 2)) < w / 2 + u.screen.w / 2 && Math.abs(u.screen.y - (b - h / 2)) < h / 2 + u.screen.w / 2);
   return [[V.W - 24, V.safe.bar - 14], [V.safe.r - 10, V.safe.b]].find(([r, b]) => fits(r, b));
 }
+
+// The watch face beside the clock: twelve marks, the quarters heavier, an hour and a minute hand at h:m. Each skin colours
+// it in CSS (index.html, --dial-*).
+const DIAL_MARKS = [...Array(12)].map((_, i) => `<line class="mark${i % 3 ? '' : ' q'}" y1="-38" y2="-30" transform="rotate(${i * 30})"/>`).join('');
+export const dial = (h, m) => `<svg class="dial" viewBox="-50 -50 100 100" aria-hidden="true"><circle class="rim" r="45"/><circle class="edge" r="49"/>${DIAL_MARKS}` +
+  `<line class="hand" y2="-22" stroke-width="6" transform="rotate(${(((h % 12) + m / 60) * 30).toFixed(1)})"/><line class="hand" y2="-35" stroke-width="3.5" transform="rotate(${m * 6})"/><circle class="pin" r="4.5"/></svg>`;
 
 // Text with a halo, the map-label staple.
 export function haloText(g, text, x, y, font, fill, halo, hw = 4, rot = 0, align = 'center') {

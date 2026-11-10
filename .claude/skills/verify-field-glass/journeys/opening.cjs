@@ -32,14 +32,15 @@ const f2 = v => (v == null ? '-' : v.toFixed(2));
     const f = () => {
       const s = fg.state();
       rec.push({ now: performance.now(), e: s.opening?.e ?? null, wide: s.opening?.wide, target: s.opening?.target, t: s.t, cam: s.cam, playing: s.playing,
-        op: title.hidden ? 0 : +getComputedStyle(title).opacity, text: document.querySelector('#op-name').textContent, cls: document.body.classList.contains('opening'), bar: getComputedStyle(bar).filter });
+        op: title.hidden ? 0 : +getComputedStyle(title).opacity, text: document.querySelector('#op-name').textContent, cls: document.body.classList.contains('opening'), bar: getComputedStyle(bar).filter,
+        drawer: document.querySelector('#top').classList.contains('open'), clock: getComputedStyle(document.querySelector('#clock-box')).filter });
       requestAnimationFrame(f);
     };
     requestAnimationFrame(f);
   });
   const log = () => p.evaluate(() => rec);
   const px = (a, b) => Math.max(Math.abs(a.x - b.x) * b.zoom, Math.abs(a.y - b.y) * b.zoom, Math.abs(a.zoom / b.zoom - 1) * 1536); // how far apart two frames are, in screen pixels at 1536 wide
-  const panelsBack = () => p.evaluate(() => ['#top', '#bar', '#caption'].map(s => getComputedStyle(document.querySelector(s))).every(cs => cs.filter === 'none' && cs.pointerEvents !== 'none'));
+  const panelsBack = () => p.evaluate(() => ['#top', '#clock-box', '#bar', '#caption'].map(s => getComputedStyle(document.querySelector(s))).every(cs => cs.filter === 'none' && cs.pointerEvents !== 'none'));
 
   // 1-3: from the start screen
   await p.goto(base, { waitUntil: 'networkidle0' });
@@ -73,11 +74,12 @@ const f2 = v => (v == null ? '-' : v.toFixed(2));
   await p.$eval('#scrub', el => { el.value = String(+el.min + (+el.max - +el.min) / 3); el.dispatchEvent(new Event('input', { bubbles: true })); });
   await p.click('#play'); await wait(1500); R = await log();
   const seeked = !R.some(r => r.e != null) && R.at(-1).t > R[0].t;
-  await open('#cowpens'); await record(); await p.click('#play'); await wait(500); R = await log();
-  const bare = R.some(r => r.e != null);
+  await open('#cowpens'); const drawer0 = await p.$eval('#top', t => t.classList.contains('open')); await record(); await p.click('#play'); await wait(500); R = await log();
+  const bare = R.some(r => r.e != null), shut = R.filter(r => r.e != null).every(r => !r.drawer && r.clock === 'opacity(0)');
   await open('#cowpens@07:45,play,warp'); await record(); await wait(500); R = await log();
   const warp = !R.some(r => r.e != null);
   ok(late && seeked && warp && bare, `#cowpens@07:45 + Play: no opening (${late}); Play after a seek: none (${seeked}); ,play,warp: none (${warp}); bare #cowpens + Play: runs (${bare})`);
+  ok(drawer0 && shut, `a bare link opens with the drawer open (${drawer0}); from Play's first opening frame the drawer is closed and the clock hidden (${shut})`);
 
   // 5: a click skips it
   await open('#cowpens'); await p.click('#play');

@@ -91,7 +91,6 @@ function build(b, T) {
 
 // The scale bar in yards on a patch of paper, so it reads over the grid figures and the night, in a free corner.
 function over(ctx, V) {
-  if (V.W <= 640) return;
   const yd = YD * V.z, len = [100, 200, 500, 1000, 2000, 5000].findLast(n => n * yd <= 200) ?? 100, w = len * yd, c = P.freeCorner(V, 240, 90);
   if (!c) return;
   const x0 = c[0] - 20 - w, y0 = c[1] - 30;
@@ -151,8 +150,9 @@ export default {
   },
   clock(t) { // as the war diaries wrote the time: 2.15 p.m.
     const { h, m, day, month } = clockParts(t);
-    return [`${h % 12 || 12}.${String(m).padStart(2, '0')}`, day == null ? ampm(h) : `${day} ${MONTHS[month]}, ${ampm(h)}`];
+    return [`${P.dial(h, m)}${h % 12 || 12}.${String(m).padStart(2, '0')}`, day == null ? ampm(h) : `${day} ${MONTHS[month]}, ${ampm(h)}`];
   },
+  time(t) { const { h, m } = clockParts(t); return `${h % 12 || 12}.${String(m).padStart(2, '0')} ${ampm(h)}`; },
   hours(t) { // the scale of hours under the scrubber
     const { h, day, month } = clockParts(t);
     if (h === 0 && day != null) return `${day} ${MONTHS[month]}`;

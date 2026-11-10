@@ -96,9 +96,8 @@ function rose(dpr) {
 }
 
 // The rose and a scale of yards in the bottom right corner above the bar, or the clear part of the window's corner, or
-// nowhere: never under a panel, a chapter name or a unit.
+// nowhere: never under a panel or a unit.
 function over(ctx, V) {
-  if (V.W <= 640) return;
   const yd = 0.9144 * V.z, len = [50, 100, 200, 250, 500, 1000, 2000, 5000].findLast(n => n * yd <= 170) ?? 50, w = len * yd;
   const corner = P.freeCorner(V, 190, 230);
   if (!corner) return;
@@ -171,7 +170,7 @@ export default {
   },
   clock(t) {
     const { h, m, day, month } = clockParts(t);
-    return [`${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? period(h) : `${day} ${MONTHS[month]}, ${period(h).replace(/^in the /, '')}`];
+    return [`${P.dial(h, m)}${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? period(h) : `${day} ${MONTHS[month]}, ${period(h).replace(/^in the /, '')}`];
   },
   hours(t) { // the scale of hours under the scrubber
     const { h, day, month } = clockParts(t);

@@ -107,9 +107,8 @@ function build(b, T) {
 }
 
 // A meridian arrow and a scale of feet on a slip of paper, in the bottom right corner above the bar or the clear part of
-// the window's corner: never under a panel, a chapter name or a unit.
+// the window's corner: never under a panel or a unit.
 function over(ctx, V) {
-  if (V.W <= 640) return;
   const c = P.freeCorner(V, 250, 150);
   if (!c) return;
   const ft = FT * V.z, len = [100, 200, 500, 1000, 2000, 5000, 10000].findLast(n => n * ft <= 180) ?? 100, w = len * ft, x0 = c[0] - 60 - w, y0 = c[1] - 44;
@@ -198,7 +197,7 @@ export default {
   },
   clock(t) {
     const { h, m, day, month } = clockParts(t);
-    return [`${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? ampm(h) : `${day} ${MONTHS[month]}, ${ampm(h)}`];
+    return [`${P.dial(h, m)}${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? ampm(h) : `${day} ${MONTHS[month]}, ${ampm(h)}`];
   },
   hours(t) {
     const { h, day, month } = clockParts(t);

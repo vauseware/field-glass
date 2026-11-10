@@ -139,6 +139,92 @@ export function playTime(b, dt = 1 / 30) {
   return Math.round(secs);
 }
 
+// ---------- the caption strip ----------
+
+// Which page of a chapter's story shows at battle time t. The chapter's playing time, counted as playTime counts it
+// (1/30 s steps of advance() at the chapter's speed, Time-lapse on), is shared among its pages by `weights`, their
+// character counts. 0 at the chapter's start, the last page just before the next chapter, never falling as t rises.
+// The viewer's own speed and switches do not change it: the page depends on the battle time alone.
+export function captionPage(b, ev, t, weights) {
+  const starts = pageStarts(b, ev, weights);
+  let i = 0;
+  while (i < starts.length && t >= starts[i]) i++;
+  return i;
+}
+
+// The battle times at which pages 1..n-1 begin, worked out once per chapter and weights. The step grid starts at the
+// chapter's start, so a chapter's pages do not depend on the chapters before it.
+const STARTS = new WeakMap(); // ev -> { weights, key, starts }
+export function pageStarts(b, ev, weights) {
+  let m = STARTS.get(ev);
+  if (m?.weights !== weights) { // a new array with the same counts reuses the work
+    const key = weights.join(',');
+    STARTS.set(ev, (m = { weights, key, starts: m?.key === key ? m.starts : startsOf(b, ev, weights) }));
+  }
+  return m.starts;
+}
+function startsOf(b, ev, weights, dt = 1 / 30) {
+  const next = b.events[b.events.indexOf(ev) + 1], end = Math.min(b.endT, next?.t ?? b.endT), speed = ev.speed ?? defaultSpeed(b);
+  if (weights.length < 2 || !(end > ev.t)) return [];
+  const xs = [ev.t]; // the battle time after each step
+  while (xs[xs.length - 1] < end) xs.push(advance(b, xs[xs.length - 1], dt, speed, true)[0]);
+  const n = xs.length - 1, steps = n - 1 + (end - xs[n - 1]) / (xs[n] - xs[n - 1]); // the chapter's length in steps, to `end`
+  const total = weights.reduce((a, w) => a + w, 0), out = [];
+  let acc = 0;
+  for (let k = 0; k + 1 < weights.length; k++) {
+    acc += weights[k];
+    const r = (steps * acc) / total, s = Math.floor(r); // 0 < r < steps, so the start lies before `end`
+    out.push(xs[s] + (xs[s + 1] - xs[s]) * (r - s));
+  }
+  return out;
+}
+
+// A story cut into sentences. A full stop, ! or ? ends one only before a capital, a digit or an opening quote, and never
+// after a single capital ("S. D. Lee"), a dotted initialism ("U.S.", "p.m.") or a rank or title ("Brig. Gen."); an
+// ellipsis never ends one. A missed break only makes a page longer, so the rules err that way.
+const ABBR = new Set(['Gen', 'Brig', 'Maj', 'Lt', 'Col', 'Capt', 'Sgt', 'Cpl', 'Pvt', 'Adm', 'Cdr', 'Gov', 'Pres', 'Sen', 'Hon', 'Rev', 'Dr',
+  'Mr', 'Mrs', 'Messrs', 'St', 'Ft', 'Mt', 'No', 'Co', 'Jr', 'Sr', 'Bn', 'Regt', 'Div', 'Bde', 'Bty', 'vs', 'c']);
+export function sentences(text) {
+  const out = [], re = /([.!?]+)(['’”")\]]*)\s+(?=['‘“"(]?[A-Z0-9])/g;
+  let from = 0, m;
+  while ((m = re.exec(text))) {
+    const word = text.slice(from, m.index).match(/(\S*)$/)[1].replace(/^[^A-Za-z0-9]+/, '');
+    if (m[1].length > 1 || (m[1] === '.' && (/^[A-Z]$/.test(word) || /^(?:[A-Za-z]\.)+[A-Za-z]$/.test(word) || ABBR.has(word)))) continue;
+    out.push(text.slice(from, m.index + m[0].trimEnd().length)); from = re.lastIndex;
+  }
+  if (from < text.length) out.push(text.slice(from).trim());
+  return out.filter(Boolean);
+}
+
+// Whole sentences per page, as many as `fits` allows. A sentence that does not fit alone breaks after its semicolons;
+// a clause that still does not fit keeps a page to itself (the strip grows, nothing is clipped). A page under `min`
+// characters then joins a neighbour when the pair fits, or takes the last sentence of the page before.
+export function paginate(text, fits, min = 25) {
+  const units = sentences(text).flatMap(s => (fits(s) ? [s] : s.split(/(?<=;)\s+/))), say = p => p.join(' '), pages = [];
+  for (const u of units) { const p = pages.at(-1); if (p && fits(say([...p, u]))) p.push(u); else pages.push([u]); }
+  for (let j = 0; j < pages.length && pages.length > 1; j++) {
+    const p = pages[j], prev = pages[j - 1], next = pages[j + 1];
+    if (say(p).length >= min) continue;
+    if (prev && fits(say([...prev, ...p]))) { prev.push(...p); pages.splice(j--, 1); }
+    else if (next && fits(say([...p, ...next]))) { next.unshift(...p); pages.splice(j--, 1); }
+    else if (prev?.length > 1 && say(prev.slice(0, -1)).length >= min && fits(say([prev.at(-1), ...p]))) p.unshift(prev.pop());
+  }
+  return pages.map(say);
+}
+
+// The time of day for the chapter list and the tick tip when a skin has no `time` hook: "6:30 AM", "8 AM".
+export function timeOfDay(t) {
+  const { h, m } = clockParts(t);
+  return `${h % 12 || 12}${m ? `:${String(m).padStart(2, '0')}` : ''} ${h < 12 ? 'AM' : 'PM'}`;
+}
+
+// The index of the x in xs nearest to x, or -1 when none lies within `within`.
+export function nearest(xs, x, within) {
+  let best = -1, d = within;
+  xs.forEach((v, i) => { if (Math.abs(v - x) <= d) { best = i; d = Math.abs(v - x); } });
+  return best;
+}
+
 const TURN = 50; // battle seconds a formation takes to wheel to a new facing, at the start or end of a segment (see turnFirst)
 // Pose of a unit at battle time t, or null while hidden. State is a step function of the previous key.
 export function unitAt(u, t) {
