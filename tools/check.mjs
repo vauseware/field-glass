@@ -1,7 +1,8 @@
 // Self-check for sim.js plus validation of every battle in battles/index.json. Run: npm run check
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import assert from 'node:assert/strict';
-import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, playTime, actionBox, tracks, shape, dropAt } from '../sim.js';
+import { normalizeBattle, validate, unitAt, lerpAngle, dots, parseTime, fmtTime, activity, advance, playTime, actionBox, tracks, shape, dropAt,
+  captionPage, sentences, paginate, timeOfDay, nearest } from '../sim.js';
 import { WARS } from '../splash.js';
 
 const u = { id: 'x', side: 'a', type: 'infantry', strength: 100, keys: [
@@ -108,6 +109,36 @@ assert.deepEqual(problems({}, [para([{ t: '13:00', x: 0, y: 0, state: 'hidden' }
 assert.deepEqual(problems({ zone: [[0, 0], [100, 0]] }), ['drop test needs a zone of three or more corners'], 'a zone is a polygon');
 assert.deepEqual(problems({ zone: [[0, 0], [2500, 0], [0, 100]] }), ['drop test: zone corner off map (2500, 0)'], 'a zone on the map');
 assert.deepEqual(problems({ kind: 'balloon', until: '13:20', craft: 0 }), ['drop test: kind must be para or glider', 'drop test needs from before until', 'drop test needs craft'], 'a kind, its times and its aircraft');
+const pb = normalizeBattle({ start: '07:00', end: '09:00', speed: 10, lapse: 60, units: [{ id: 'p', type: 'infantry', strength: 100, keys: [
+  { t: '07:00', x: 0, y: 0 }, { t: '07:20', x: 0, y: 0 }, { t: '07:30', x: 100, y: 0 }, { t: '07:40', x: 100, y: 0 }] }],
+  events: [{ t: '07:00', at: [0, 0], view: 400 }, { t: '07:50', at: [0, 0], view: 400, speed: 20 }, { t: '08:30', at: [0, 0], view: 400 }] });
+const [e0, e1, e2] = pb.events, w = [60, 120, 60];
+assert.equal(captionPage(pb, e0, e0.t, w), 0, 'page 0 at the chapter start');
+assert.equal(captionPage(pb, e0, e1.t - 0.01, w), 2, 'the last page just before the next chapter');
+assert.equal(captionPage(pb, e2, pb.endT - 0.01, [30, 30]), 1, 'the last chapter turns to its last page before the end');
+assert.equal(captionPage(pb, e0, e0.t + 600, [80]), 0, 'one page is always page 0');
+for (const [ev, end] of [[e0, e1.t], [e1, e2.t]]) {
+  let last = 0;
+  for (let x = ev.t; x < end; x += 5) { const p = captionPage(pb, ev, x, w); assert.ok(p >= last, `never falls (at ${x - ev.t} s)`); last = p; }
+  const per = [0, 0, 0], sp = ev.speed ?? 10;
+  for (let x = ev.t; x < end; [x] = advance(pb, x, 1 / 30, sp, true)) per[captionPage(pb, ev, x, w)]++; // real steps each page shows, as playTime counts them
+  const n = per.reduce((a, c) => a + c);
+  assert.ok(per.every((c, i) => Math.abs(c - (n * w[i]) / 240) <= 1), `each page's share of the chapter's playing time is its share of the characters (${per} of ${n} steps)`);
+}
+assert.deepEqual(sentences('Maj. Gen. S. D. Lee opened fire. Brig. Gen. Hood advanced; he was stopped. The U.S. Army held at 7.30 p.m. Then it rained... Night fell.'),
+  ['Maj. Gen. S. D. Lee opened fire.', 'Brig. Gen. Hood advanced; he was stopped.', 'The U.S. Army held at 7.30 p.m. Then it rained... Night fell.'], 'sentences keep names, ranks, initialisms and ellipses whole');
+assert.deepEqual(sentences('“Hold!” he cried. ‘Fire,’ said Col. Smith. 3,000 men fell.'), ['“Hold!” he cried.', '‘Fire,’ said Col. Smith.', '3,000 men fell.'], 'a sentence may end in a quote or open with one or a figure');
+const fit60 = s => s.length <= 60;
+assert.deepEqual(paginate('The first line holds here. The second line follows it. And then a third one comes.', fit60),
+  ['The first line holds here. The second line follows it.', 'And then a third one comes.'], 'pages pack whole sentences');
+const long = 'The brigade crossed the creek under fire and went on up the slope; the guns on the ridge tore it apart. They fell back.';
+assert.deepEqual(paginate(long, fit60), ['The brigade crossed the creek under fire and went on up the slope;', 'the guns on the ridge tore it apart. They fell back.'], 'a sentence too long breaks after its semicolon');
+assert.ok(paginate('A sentence that runs well past sixty characters with no semicolon at all in it. Short.', fit60).length === 2, 'a clause too long keeps a page to itself');
+for (const pages of [paginate('First sentence is long enough to stand alone here. Tiny. Then a long one that fills the rest of a page well.', fit60),
+  paginate('A fairly long opening sentence of some length. It ends. Final short bit.', fit60)])
+  assert.ok(pages.every(p => p.length >= 25 && fit60(p)), `no page under 25 characters when a neighbour has room (${JSON.stringify(pages)})`);
+assert.deepEqual([timeOfDay(parseTime('06:30')), timeOfDay(parseTime('08:00')), timeOfDay(parseTime('1862-09-17 12:05')), timeOfDay(parseTime('00:00'))], ['6:30 AM', '8 AM', '12:05 PM', '12 AM'], 'the default time of day');
+assert.deepEqual([nearest([10, 50, 53], 52, 12), nearest([10, 50], 30, 12), nearest([], 5, 12), nearest([10, 50], 62, 12)], [2, -1, -1, 1], 'the nearest tick within 12 px');
 console.log('sim.js: ok');
 
 let bad = 0;
