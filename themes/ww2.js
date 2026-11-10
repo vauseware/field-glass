@@ -490,10 +490,12 @@ export default {
     const { h, day, month } = clockParts(t);
     return h === 0 && day != null ? `${day} ${mon(month)}` : `${pad2(h)}00`;
   },
-  when(ev, b) { // the teleprinter's header: about the hour, unless the sources record the time; TOO is its time of origin
-    const exact = ev.when != null, at = exact ? ev.t : Math.round(ev.t / 3600) * 3600, { h, m, day } = clockParts(at), hhmm = `${pad2(h)}${pad2(m)}`;
-    return [`FROM G-2  TO ALL STATIONS\n${exact && !/about/i.test(ev.when) ? '' : 'ABOUT '}${hhmm} HRS`, `TOO ${pad2(day ?? +(b.date ?? '').slice(8, 10))}${hhmm}`];
+  when(ev, b) { // the teleprinter's header: about the hour, unless the sources record the time
+    const exact = ev.when != null, at = exact ? ev.t : Math.round(ev.t / 3600) * 3600, { h, m, day, month } = clockParts(at);
+    const date = day == null ? (b.date ?? '').slice(8, 10).replace(/^0/, '') : `${day} ${mon(month)}`;
+    return `${exact && !/about/i.test(ev.when) ? '' : 'ABOUT '}${pad2(h)}${pad2(m)} HRS${date ? ` · ${date}` : ''}`;
   },
+  time(t) { const { h, m } = clockParts(t); return `${pad2(h)}${pad2(m)}`; },
   legend: {
     text: {
       infantry: b => `Infantry: a chinagraph bracket along its front, in its side’s colour. Each dark speck is ${b.menPerDot} men.`,

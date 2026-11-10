@@ -197,7 +197,7 @@ export default {
   },
   clock(t) {
     const { h, m, day, month } = clockParts(t);
-    return [`${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? ampm(h) : `${day} ${MONTHS[month]}, ${ampm(h)}`];
+    return [`${P.dial(h, m)}${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? ampm(h) : `${day} ${MONTHS[month]}, ${ampm(h)}`];
   },
   hours(t) {
     const { h, day, month } = clockParts(t);

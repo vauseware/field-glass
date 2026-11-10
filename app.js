@@ -1,4 +1,5 @@
-import { SPEEDS, STATE_TEXT, normalizeBattle, unitAt, shape, dots, dropAt, eventAt, actionBox, advance, defaultSpeed, fmtTime, parseTime, mod } from './sim.js';
+import { SPEEDS, STATE_TEXT, MONTHS, normalizeBattle, unitAt, shape, dots, dropAt, eventAt, actionBox, advance, defaultSpeed, fmtTime, parseTime, mod, clockParts,
+  captionPage, paginate, timeOfDay, nearest } from './sim.js';
 import { themeFor } from './themes.js';
 import { WARS, showSplash } from './splash.js';
 import { isStatic, canvas as newCanvas } from './themes/paint.js';
@@ -12,7 +13,9 @@ const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $(
   outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body'),
   card: $('#card'), cardSwatch: $('#card-swatch'), cardName: $('#card-name'), cardCmd: $('#card-cmd'), cardKind: $('#card-kind'), cardLive: $('#card-live'), cardClose: $('#card-close'),
   fx: $('#fx'), fonts: $('#theme-fonts'), kicker: $('#kicker'), hours: $('#hours'), loading: $('#loading'),
-  opening: $('#opening'), opName: $('#op-name'), opDate: $('#op-date'), chTitle: $('#chapter-title') };
+  opening: $('#opening'), opName: $('#op-name'), opDate: $('#op-date'), chTitle: $('#chapter-title'),
+  clockBox: $('#clock-box'), speedBox: $('#clock-box .speed'), chaptersBtn: $('#chapters-btn'), topClose: $('#top-close'), chCount: $('#ch-count'), chList: $('#chapter-list'),
+  capPips: $('#cap-pips'), track: $('#track'), tickTip: $('#tick-tip'), settingsBtn: $('#settings-btn'), settings: $('#settings'), titles: $('#titles'), captions: $('#captions') };
 
 let B = null, skin = null, sheet = null, buildMs = 0; // the battle, its skin (themes.js), what the skin built for it and how long that took
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
@@ -50,8 +53,9 @@ async function loadBattle(id) {
   for (const s of SPEEDS) if (s <= 120 || dur / s >= 120) ui.speed.add(new Option(`${s}×`, s)); // the big speeds only when the battle lasts
   ui.speed.value = speed;
   ui.scrub.min = b.startT; ui.scrub.max = b.endT;
+  ui.speedBox.dataset.lapse = `» ${b.lapse}×`;
   sizeClock();
-  buildLegend(b);
+  buildChapters(b); buildLegend(b); layoutTrack();
   ui.title.textContent = b.name; ui.kicker.textContent = skin.kicker;
   ui.sub.textContent = `${b.place} · ${b.dateText ?? b.date}`;
   ui.legend.innerHTML = Object.values(b.sides).map(s => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');
@@ -72,20 +76,20 @@ async function loadBattle(id) {
   const [link, , at, play, pickId, warp, shotTitle, legend, outcome, shotOpening, bench] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(?:,select=([^,]+))?(,warp)?(,title)?(,legend)?(,outcome)?(,opening)?(,bench)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
   openingDue = link === `#${id}`; // a bare link opens on the first Play; any time or flag goes straight to the battle
-  setPlaying(!!play);
+  setPlaying(!!play); setDrawer(!play || !!outcome);
   if (legend) ui.legendDlg.showModal(); // screenshots
   if (outcome) ui.outcome.open = true;
   if (pickId) select(b.units.find(u => u.id === pickId) ?? null); // screenshots: the card open on this unit
   document.body.classList.toggle('nofade', !!warp); // screenshots: skip the caption and card fades, and the chapter title unless ,title holds it
   if (warp) { // five seconds of frames for screenshots, framed around the caption, with the card beside its unit
-    await document.fonts.ready; rects = null; // the Fell faces resize the panels
+    await document.fonts.ready; rects = null; capWeights = null; // the Fell faces resize the panels
     step(0); updateHud();
     for (let i = 0; i < 300; i++) step(1 / 60);
     draw(); updateHud();
     if (shotTitle) { showTitle(curEvent); ui.chTitle.classList.add('held'); }
   }
   if (shotOpening) { // screenshots: the opening held at its title
-    await document.fonts.ready; rects = null;
+    await document.fonts.ready; rects = null; capWeights = null;
     startOpening(); opening.e = opening.hold = 3.2; step(0); draw();
   }
   if (bench) (await import('./tools/bench.js')).bench(skin.id, ctx, draw, buildMs); // per-frame draw cost; tools/bench.sh
@@ -122,9 +126,9 @@ function safeRect() {
   return clear;
 }
 function measureSafe() {
-  const m = 10, panels = [ui.top, ui.bar, ...(ui.caption.classList.contains('show') ? [ui.caption] : [])].map(el => el.getBoundingClientRect());
+  const m = 10, panels = [...document.querySelectorAll('[data-clear]')].filter(el => el !== ui.caption || captionShows()).map(el => el.getBoundingClientRect());
   V.avoid = panels.map(p => ({ l: p.left, t: p.top, r: p.right, b: p.bottom })); // for the skin's map furniture
-  const out = [], bar = panels[1].top;
+  const out = [], bar = ui.bar.getBoundingClientRect().top;
   const trim = (i, s) => {
     if (s.r - s.l < 80 || s.b - s.t < 80) return;
     if (i === panels.length) return out.push(s);
@@ -136,8 +140,15 @@ function measureSafe() {
   trim(0, { l: 0, t: 0, r: W, b: H, bar });
   return out.length ? out : [{ l: 0, t: 0, r: W, b: H, bar }];
 }
-const panelSizes = new ResizeObserver(() => { rects = null; });
-for (const el of [ui.top, ui.caption, ui.bar]) panelSizes.observe(el);
+// A panel that changes size moves the clear rect and the chapter title; a caption strip that changes width re-pages.
+let capWidth = 0;
+const panelSizes = new ResizeObserver(es => {
+  rects = null;
+  for (const e of es) if (e.target === ui.caption && e.contentRect.width !== capWidth) { capWidth = e.contentRect.width; capWeights = null; }
+  if (B) placeTitle();
+});
+for (const el of document.querySelectorAll('[data-clear]')) panelSizes.observe(el);
+document.fonts.addEventListener('loadingdone', () => { rects = null; capWeights = null; }); // a face that arrives late rewraps the story
 
 const minZoom = () => { const s = safeRect(); return Math.min(s.r - s.l, s.b - s.t) / B.extent; }; // out to the whole map in the clear rect
 
@@ -285,6 +296,7 @@ const easeAt = ({ e, beats: b }) => (b.easeFor ? smooth((e - b.ease) / b.easeFor
 
 // The target is where Follow settles for the first chapter, worked out now against the panels play will show.
 function startOpening() {
+  setDrawer(false); // first, so the landing is worked out against the closed drawer and the strip as play shows it
   openingDue = false;
   step(0); updateHud(0);
   for (let i = 0; i < 400; i++) updateCamera(0.1);
@@ -500,19 +512,66 @@ function drawNight() {
 
 // ---------- the timeline and legend ----------
 
+// A tick a chapter above the groove (CSS places them by --f) and a row a chapter in the drawer's list, under day headings
+// when the battle runs over more than one day. A row's click jumps there and turns Follow back on; the drawer stays open.
+let tickXs = []; // each tick's screen x, for the tip; measured when the track changes size
+const frac = t => Math.min(1, Math.max(0, (t - B.startT) / (B.endT - B.startT)));
+const dayOf = t => { const { day, month } = clockParts(t); return day == null ? '' : `${day} ${MONTHS[month]}`; };
+function buildChapters(b) {
+  const time = skin.time ?? timeOfDay, multi = new Set(b.events.map(ev => dayOf(ev.t))).size > 1, rows = [];
+  let day = null;
+  for (const ev of b.events) {
+    if (multi && dayOf(ev.t) !== day) rows.push(Object.assign(document.createElement('h3'), { className: 'day', textContent: (day = dayOf(ev.t)) }));
+    const row = document.createElement('div'), go = document.createElement('button'), when = document.createElement('span'), story = document.createElement('p');
+    row.className = 'ch'; when.className = 'time'; when.textContent = time(ev.t); story.textContent = ev.text;
+    go.append(when, ev.title); go.onclick = () => { ui.follow.checked = true; seek(ev.t); };
+    row.append(go, story); rows.push(row);
+  }
+  ui.chList.replaceChildren(...rows); ui.chList.scrollTop = 0;
+  ui.marks.replaceChildren(...b.events.map(ev => { const i = document.createElement('i'); i.style.setProperty('--f', frac(ev.t).toFixed(5)); return i; }));
+  markOn();
+}
+// The current chapter's tick, row and count; the list scrolls to the row when the drawer is open.
+function markOn() {
+  const i = B.events.indexOf(curEvent), n = B.events.length;
+  [...ui.marks.children].forEach((m, j) => m.classList.toggle('on', j === i));
+  ui.chList.querySelectorAll('.ch').forEach((r, j) => r.classList.toggle('on', j === i));
+  ui.chCount.innerHTML = i < 0 ? `${n} chapters` : `Chapters <em>${i + 1} of ${n}</em>`;
+  if (ui.top.classList.contains('open')) showRow();
+}
+function showRow() {
+  const r = ui.chList.querySelector('.ch.on'), L = ui.chList, head = L.querySelector('.day')?.offsetHeight ?? 0;
+  if (!r) return;
+  if (r.offsetTop - head < L.scrollTop) L.scrollTop = r.offsetTop - head;
+  else if (r.offsetTop + r.offsetHeight > L.scrollTop + L.clientHeight) L.scrollTop = Math.min(r.offsetTop - head, r.offsetTop + r.offsetHeight - L.clientHeight);
+}
 function layoutTrack() {
-  layoutHours(ui.scrub.clientWidth - 26, B.endT - B.startT); // the thumb's travel
+  const r = ui.scrub.getBoundingClientRect(), th = parseFloat(getComputedStyle(ui.track).getPropertyValue('--thumb'));
+  tickXs = B.events.map(ev => r.left + th / 2 + frac(ev.t) * (r.width - th));
+  layoutHours(r.width - th, B.endT - B.startT, th);
   placeTitle();
 }
+// The pointer over the scrubber names the nearest chapter within 12 px. Hover only: a click seeks as it always has.
+ui.scrub.addEventListener('pointermove', e => {
+  const i = nearest(tickXs, e.clientX, 12), tip = ui.tickTip;
+  if (i < 0) { tip.hidden = true; return; }
+  if (!tip.hidden && tip.dataset.i === String(i)) return;
+  const ev = B.events[i], day = new Set(B.events.map(e => dayOf(e.t))).size > 1 ? `${dayOf(ev.t)}, ` : '';
+  const when = document.createElement('small'); when.textContent = day + (skin.time ?? timeOfDay)(ev.t);
+  tip.replaceChildren(ev.title, when); tip.dataset.i = i; tip.hidden = false;
+  tip.style.left = `${tickXs[i]}px`; tip.style.setProperty('--f', frac(ev.t).toFixed(4));
+});
+ui.scrub.addEventListener('pointerleave', () => { ui.tickTip.hidden = true; });
 
-// The chapter title: the name fading in just above the timeline, on the page's clock (index.html). Centred in the map
-// less 48 px each side, narrowed past a panel that reaches down level with it. Showing one restarts its animation; null clears it.
+// The chapter title: the name fading in just above the caption strip, or the bar when no strip shows, on the page's clock
+// (index.html). Centred in the map less 48 px each side, narrowed past a panel that reaches down level with it, such as the
+// open drawer. Showing one restarts its animation; null clears it.
 function placeTitle() {
-  const el = ui.chTitle, box = e => e.getBoundingClientRect(), story = ui.caption.classList.contains('show') ? [ui.caption] : [];
-  const bottom = box(ui.bar).top - 14, top = bottom - el.offsetHeight;
+  const el = ui.chTitle, box = e => e.getBoundingClientRect();
+  const bottom = box(captionShows() ? ui.caption : ui.bar).top - 14, top = bottom - el.offsetHeight;
   let l = 48, r = W - 48;
-  for (const p of [ui.top, ...story].map(box)) {
-    if (p.bottom <= top || p.top >= bottom) continue;
+  for (const p of [ui.top, ui.clockBox, ui.settings].map(box)) {
+    if (!p.width || p.bottom <= top || p.top >= bottom) continue;
     if (p.left + p.right < W) l = Math.max(l, p.right + 24); else r = Math.min(r, p.left - 24);
   }
   Object.assign(el.style, { bottom: `${H - bottom}px`, left: `${(l + r) / 2}px`, maxWidth: `${Math.max(0, r - l)}px` });
@@ -528,7 +587,7 @@ function showTitle(ev) {
 
 // The scale of hours under the scrubber, for a skin that rules one: alternate inked and blank segments of a round number
 // of hours (or days) at least 40 px wide, named every 70 px or so. --seg and --seg0 size and place the segments.
-function layoutHours(tw, dur) {
+function layoutHours(tw, dur, th) {
   ui.hours.replaceChildren();
   if (!skin.hours) return;
   const unit = [900, 1800, 3600, 7200, 10800, 21600, 43200, 86400, 172800, 604800].find(u => (tw * u) / dur >= 40) ?? 604800;
@@ -536,7 +595,7 @@ function layoutHours(tw, dur) {
   let named = unit * Math.ceil(70 / seg); // a name every 70 px or so, on the hour
   if (named < 3600) named = 3600; else if (named < 86400) named = Math.ceil(named / 3600) * 3600;
   ui.scrub.style.setProperty('--seg', `${seg.toFixed(2)}px`);
-  ui.scrub.style.setProperty('--seg0', `${(13 + ((first - B.startT) / dur) * tw).toFixed(2)}px`);
+  ui.scrub.style.setProperty('--seg0', `${(th / 2 + ((first - B.startT) / dur) * tw).toFixed(2)}px`);
   for (let tb = first; tb <= B.endT; tb += unit) {
     if (mod(tb, named)) continue;
     const el = document.createElement('span');
@@ -644,17 +703,19 @@ function showClock(at) {
   if (s !== clockShown) ui.clock.innerHTML = clockShown = s;
 }
 function updateHud(dt) {
-  showClock(t); ui.clock.classList.toggle('lapsing', playing && lapsing);
-  ui.scrub.value = t; ui.scrub.style.setProperty('--p', `${((t - B.startT) / (B.endT - B.startT)) * 100}%`);
-  if (curEvent !== shownEvent) {
+  showClock(t); ui.clockBox.classList.toggle('lapsing', playing && lapsing);
+  ui.scrub.value = t; ui.scrub.style.setProperty('--p', `${frac(t) * 100}%`);
+  const turned = curEvent !== shownEvent;
+  if (turned) {
     shownEvent = curEvent;
     ui.capTitle.textContent = curEvent?.title ?? '';
-    ui.capText.textContent = curEvent?.text ?? '';
-    const [when, tag] = !curEvent ? [''] : skin.when?.(curEvent, B) ?? [chapterWhen(curEvent)]; // a skin may word the time its own way
-    ui.capWhen.textContent = when; ui.caption.dataset.tag = tag ?? '';
-    ui.caption.classList.toggle('show', !!curEvent); rects = null;
-    if (!quiet && !opening) showTitle(curEvent);
+    ui.capWhen.textContent = !curEvent ? '' : skin.when?.(curEvent, B) ?? chapterWhen(curEvent); // a skin may word the time its own way
+    ui.caption.classList.toggle('show', !!curEvent); rects = null; capWeights = null;
+    markOn();
   }
+  if (!capWeights) pageCaption(curEvent);
+  if (curEvent) turnPage(captionPage(B, curEvent, t, capWeights));
+  if (turned && !quiet && !opening) showTitle(curEvent);
   quiet = false;
   const under = mouse && !ptrs.size ? pick(mouse[0], mouse[1]) : null, best = under !== selected && under;
   if (canvas.style.cursor !== (under ? 'pointer' : '')) canvas.style.cursor = under ? 'pointer' : '';
@@ -730,11 +791,74 @@ function chapterWhen(ev) {
   const when = ev.when ?? `about ${hh === 0 ? 'midnight' : hh === 12 ? 'noon' : `${hh % 12} ${hh < 12 ? 'AM' : 'PM'}`}`;
   return d.includes(', ') ? `${d.split(', ')[0]}, ${when}` : when[0].toUpperCase() + when.slice(1);
 }
+// The story cut into pages of whole sentences, as many as fit three lines of the strip, measured on the real element so
+// the skin's face, case and suffix count. Run when the chapter or the strip's width changes, never per frame. The strip
+// is held at its tallest page, so a page turn never moves the clear rect.
+let capWeights = null; // the pages' character counts; null re-pages on the next frame
+const captionShows = () => ui.caption.classList.contains('show') && ui.captions.checked;
+function pageCaption(ev) {
+  const probe = document.createElement('p');
+  ui.capText.style.minHeight = ''; ui.capText.replaceChildren(probe); // the probe is the last child, as the last page is
+  const max = 3 * parseFloat(getComputedStyle(probe).lineHeight) + 1, h = s => { probe.textContent = s; return probe.offsetHeight; };
+  const pages = ev ? paginate(ev.text, s => h(s) <= max) : [], tall = Math.max(0, ...pages.map(h));
+  ui.capText.replaceChildren(...pages.map((s, i) => Object.assign(document.createElement('p'), { textContent: s, hidden: i > 0 })));
+  ui.capText.style.minHeight = `${tall}px`;
+  ui.capPips.replaceChildren(...pages.map((_, i) => Object.assign(document.createElement('i'), { className: i ? '' : 'on' })));
+  capWeights = pages.map(s => s.length); rects = null;
+}
+function turnPage(i) {
+  const p = ui.capText.children[i];
+  if (!p?.hidden) return;
+  for (const q of ui.capText.children) q.hidden = q !== p;
+  [...ui.capPips.children].forEach((d, j) => d.classList.toggle('on', j === i));
+}
+
+// The drawer: the chip's Chapters opens it, Close and Esc close it, and so does Play when play starts. Instant, so a
+// measure straight after sees the final layout.
+function setDrawer(v) {
+  ui.top.classList.toggle('open', v); ui.chaptersBtn.setAttribute('aria-expanded', v);
+  rects = null; capWeights = null;
+  if (!B) return;
+  placeTitle();
+  if (v) showRow(); else if (ui.top.contains(document.activeElement)) ui.chaptersBtn.focus();
+}
+ui.chaptersBtn.onclick = () => { setDrawer(true); ui.topClose.focus(); };
+ui.topClose.onclick = () => setDrawer(false);
+function setSettings(v) { ui.settings.hidden = !v; ui.settingsBtn.setAttribute('aria-expanded', v); placeTitle(); }
+ui.settingsBtn.onclick = () => setSettings(ui.settings.hidden);
+addEventListener('pointerdown', e => { if (!ui.settings.hidden && !ui.settings.contains(e.target) && !ui.settingsBtn.contains(e.target)) setSettings(false); }, { capture: true });
+ui.captions.addEventListener('change', () => { rects = null; placeTitle(); });
+
+// The settings the browser keeps for every battle. An element's markup value is its default, replaced at boot by a stored
+// one. Storage may be blocked, so every read and write is inside try. Elements sharing a key with data-field store one
+// JSON object of them all, so the stored object is always whole.
+function bindPrefs() {
+  const byKey = Map.groupBy(document.querySelectorAll('[data-pref]'), el => el.dataset.pref);
+  for (const [key, els] of byKey) {
+    let raw = null;
+    try { raw = localStorage.getItem(key); } catch {}
+    const fields = !!els[0].dataset.field, fill = el => el.style.setProperty('--p', `${el.value}%`);
+    let stored = null;
+    if (fields) try { stored = JSON.parse(raw); } catch {}
+    for (const el of els) {
+      if (!fields) { if (raw === 'on' || raw === 'off') el.checked = raw === 'on'; }
+      else { const n = stored?.[el.dataset.field]; if (Number.isInteger(n) && n >= 0 && n <= 100) el.value = n; fill(el); }
+      el.addEventListener(fields ? 'input' : 'change', () => {
+        if (fields) fill(el);
+        const v = fields ? JSON.stringify(Object.fromEntries(els.map(e => [e.dataset.field, +e.value]))) : el.checked ? 'on' : 'off';
+        try { localStorage.setItem(key, v); } catch {}
+      });
+    }
+  }
+}
+bindPrefs();
+
 const nudge = () => Math.max(30, (B.endT - B.startT) / 240); // arrow keys: 30 s, or 1/240 of a long battle
 function setPlaying(v) { playing = v; ui.play.textContent = v ? '❚❚' : '▶'; ui.play.setAttribute('aria-label', v ? 'Pause' : 'Play'); }
 function seek(v) { t = Math.max(B.startT, Math.min(B.endT, v)); smoke.length = 0; popN = 0; openingDue = false; }
 
 ui.play.onclick = () => {
+  if (!playing) setDrawer(false);
   if (!playing && openingDue) return startOpening();
   if (!playing && t >= B.endT) seek(B.startT);
   setPlaying(!playing);
@@ -744,13 +868,18 @@ ui.scrub.oninput = () => { quiet = true; seek(+ui.scrub.value); };
 ui.srcBtn.onclick = () => ui.sources.showModal();
 ui.legendBtn.onclick = () => ui.legendDlg.showModal();
 addEventListener('keydown', e => {
-  if (e.key === 'Escape' && selected && !document.querySelector('dialog[open]')) return select(null);
+  if (e.key === 'Escape' && !document.querySelector('dialog[open]')) { // one layer a press, innermost first; a dialog closes itself
+    if (!ui.settings.hidden) return setSettings(false);
+    if (ui.top.classList.contains('open')) return setDrawer(false);
+    if (selected) return select(null);
+  }
   if (['INPUT', 'SELECT', 'BUTTON'].includes(e.target.tagName)) return;
   if (e.code === 'Space') { e.preventDefault(); ui.play.click(); }
   else if (e.key === 'ArrowRight') { quiet = true; seek(t + nudge()); }
   else if (e.key === 'ArrowLeft') { quiet = true; seek(t - nudge()); }
   else if (e.key === 'f') ui.follow.click();
   else if (e.key === 't') ui.lapse.click();
+  else if (e.key === 'c') ui.titles.click();
 });
 
 function resize() {
@@ -769,7 +898,7 @@ function sizeClock() {
   ui.clock.style.width = `${w + 4}px`;
 }
 addEventListener('resize', () => { resize(); if (opening) endOpening(); if (B) { clampCam(); sizeClock(); } if (selected) fillCard(selected); });
-new ResizeObserver(() => B && layoutTrack()).observe(ui.scrub); // the track also narrows when the clock text widens
+new ResizeObserver(() => B && layoutTrack()).observe(ui.track);
 resize();
 
 function frame(now) {

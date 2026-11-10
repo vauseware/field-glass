@@ -395,6 +395,12 @@ export function freeCorner(V, w, h) {
   return [[V.W - 24, V.safe.bar - 14], [V.safe.r - 10, V.safe.b]].find(([r, b]) => fits(r, b));
 }
 
+// The watch face beside the clock: twelve marks, the quarters heavier, an hour and a minute hand at h:m. Each skin colours
+// it in CSS (index.html, --dial-*).
+const DIAL_MARKS = [...Array(12)].map((_, i) => `<line class="mark${i % 3 ? '' : ' q'}" y1="-38" y2="-30" transform="rotate(${i * 30})"/>`).join('');
+export const dial = (h, m) => `<svg class="dial" viewBox="-50 -50 100 100" aria-hidden="true"><circle class="rim" r="45"/><circle class="edge" r="49"/>${DIAL_MARKS}` +
+  `<line class="hand" y2="-22" stroke-width="6" transform="rotate(${(((h % 12) + m / 60) * 30).toFixed(1)})"/><line class="hand" y2="-35" stroke-width="3.5" transform="rotate(${m * 6})"/><circle class="pin" r="4.5"/></svg>`;
+
 // Text with a halo, the map-label staple.
 export function haloText(g, text, x, y, font, fill, halo, hw = 4, rot = 0, align = 'center') {
   g.save(); g.translate(x, y); if (rot) g.rotate(rot);

@@ -10,7 +10,8 @@
 // unit(ctx, U), label: { place?(l), measure(ctx, l), draw(ctx, l) }, under?(ctx, V), over?(ctx, V), fire?(ctx, V, pops, n),
 // air?(ctx, V, f, clock, D) (the aircraft of an air strike `f`, D null; or an airborne drop, D its sim.dropAt frame in world
 // metres: transports, canopies, gliders and the men walking in; clock is real seconds of play),
-// ambient(el, sheet), clock(t) => [main html, small], hours?(t), when?(event, b) => [caption time, tag],
+// ambient(el, sheet), clock(t) => [main html (its dial, then the time), small], hours?(t), when?(event, b) => caption time,
+// time?(t) => the time of day for the chapter list and the tick tip (else "6:30 AM"),
 // preview?(b) (recolours another war's battle shown in this skin), legend: { text, swatch, extra(b, sheet) } }.
 import revolution from './themes/revolution.js';
 import civilWar from './themes/civil-war.js';

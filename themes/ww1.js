@@ -150,8 +150,9 @@ export default {
   },
   clock(t) { // as the war diaries wrote the time: 2.15 p.m.
     const { h, m, day, month } = clockParts(t);
-    return [`${h % 12 || 12}.${String(m).padStart(2, '0')}`, day == null ? ampm(h) : `${day} ${MONTHS[month]}, ${ampm(h)}`];
+    return [`${P.dial(h, m)}${h % 12 || 12}.${String(m).padStart(2, '0')}`, day == null ? ampm(h) : `${day} ${MONTHS[month]}, ${ampm(h)}`];
   },
+  time(t) { const { h, m } = clockParts(t); return `${h % 12 || 12}.${String(m).padStart(2, '0')} ${ampm(h)}`; },
   hours(t) { // the scale of hours under the scrubber
     const { h, day, month } = clockParts(t);
     if (h === 0 && day != null) return `${day} ${MONTHS[month]}`;

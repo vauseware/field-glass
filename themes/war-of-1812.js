@@ -160,7 +160,7 @@ export default {
   },
   clock(t) {
     const { h, m, day, month } = clockParts(t);
-    return [`${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? period(h) : `${day} ${MONTHS[month]}, ${period(h).replace(/^in the /, '')}`];
+    return [`${P.dial(h, m)}${h % 12 || 12}:${String(m).padStart(2, '0')}`, day == null ? period(h) : `${day} ${MONTHS[month]}, ${period(h).replace(/^in the /, '')}`];
   },
   hours(t) { // the scale of hours under the scrubber
     const { h, day, month } = clockParts(t);
