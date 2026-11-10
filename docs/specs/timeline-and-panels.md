@@ -1,6 +1,6 @@
 # Timeline, clock and panels — Spec
 
-**Status:** draft · **Target repo:** vauseware/field-glass · **Sources:** issue #73 and its comments; the mock Dave chose on 2026-11-09 (option B of three; its renders are in the build issue)
+**Status:** active · **Target repo:** vauseware/field-glass · **Sources:** issue #73 and its comments; the mock Dave chose on 2026-11-09 (option B of three; its renders are in the build issue)
 
 ## Summary
 
@@ -209,7 +209,8 @@ Frozen for the build and its journeys:
 - Reading time. A chapter that plays in a few seconds turns its pages faster than they can be read. This is true
   of the story panel today; the drawer holds the whole text.
 - Dense ticks. The Somme has 13 chapters in 3% of its length, about 3 px apart. The tip names the nearest; the
-  list is the sure way to pick one.
+  list is the sure way to pick one. Dave doubts the hover works where chapters bunch; the build PR's screenshots
+  show it on the Somme for him to judge.
 - Silent sliders. Until sound ships, a viewer who moves Sound hears nothing. Dave chose to build them now.
 - `docs/specs/battle-sound.md` still describes a speaker button in the bar with a slide-out slider and an `m` key.
   That control conflicts with the sliders here. This spec does not edit the sound spec; mute and `m` are its to
@@ -219,13 +220,13 @@ Frozen for the build and its journeys:
 
 ## Assumptions
 
-- Key `c` turns Chapter titles on and off, under a new storage key, and the 15-chapter rule goes — PENDING
-- A Captions switch replaces the story panel's Hide button — PENDING
+- Key `c` turns Chapter titles on and off, under a new storage key, and the 15-chapter rule goes — APPROVED (Dave, 2026-11-10)
+- A Captions switch replaces the story panel's Hide button — APPROVED (Dave, 2026-11-10)
 - The volume sliders are built now and only set stored values — APPROVED (Dave, 2026-11-09)
-- The sliders start at Sound 60, Music 40, Narration 80, under one storage key — PENDING
-- Pages follow the battle clock by the rule above until narration gives them cue times — PENDING
-- The hint line moves into the drawer — PENDING
-- Tick hover names the chapter but a click does not snap to it — PENDING
+- The sliders start at Sound 60, Music 40, Narration 80, under one storage key — APPROVED (Dave, 2026-11-10)
+- Pages follow the battle clock by the rule above until narration gives them cue times — APPROVED (Dave, 2026-11-10)
+- The hint line moves into the drawer — APPROVED (Dave, 2026-11-10)
+- Tick hover names the chapter but a click does not snap to it — APPROVED (Dave, 2026-11-10)
 
 ## Decisions log
 
@@ -235,5 +236,7 @@ Frozen for the build and its journeys:
 - 2026-11-09: The clock at top centre covers the middle of the map. → It moves to the top-right corner, smaller.
 - 2026-11-09: Does Time-lapse stay in the bar? → No. It sits with the clock and the speed.
 - 2026-11-09: Wait for sound before building volume controls? → No. Build them now.
+- 2026-11-10: The six pending assumptions? → All approved. Tick hover stays on trial: Dave will judge it on the
+  build PR where chapters bunch.
 - Issue #73 comments: chapters are ticks with a hover function; the clickable list goes in the info panel; Follow
   the action goes in a settings panel with the volume controls to come; each skin may have its own clock.
