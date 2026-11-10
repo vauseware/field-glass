@@ -6,17 +6,17 @@ import { isStatic, canvas as newCanvas } from './themes/paint.js';
 const $ = s => document.querySelector(s);
 const canvas = $('#map'), ctx = canvas.getContext('2d');
 const ui = { play: $('#play'), speed: $('#speed'), scrub: $('#scrub'), clock: $('#clock'), follow: $('#follow'), bar: $('#bar'),
-  top: $('#top'), topFold: $('#top-fold'), title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'), capWhen: $('#cap-when'), capFold: $('#cap-fold'),
+  top: $('#top'), title: $('#title'), sub: $('#sub'), legend: $('#legend'), caption: $('#caption'), capTitle: $('#cap-title'), capText: $('#cap-text'), capWhen: $('#cap-when'),
   hover: $('#hover'), sources: $('#sources'), srcBtn: $('#src-btn'), srcList: $('#src-list'), lapse: $('#lapse'),
   marks: $('#marks'), splash: $('#splash'), home: $('#home'), legendBtn: $('#legend-btn'), legendDlg: $('#legend-dlg'), legendList: $('#legend-list'),
   outcome: $('#outcome'), outResult: $('#out-result'), outBody: $('#out-body'),
   card: $('#card'), cardSwatch: $('#card-swatch'), cardName: $('#card-name'), cardCmd: $('#card-cmd'), cardKind: $('#card-kind'), cardLive: $('#card-live'), cardClose: $('#card-close'),
   fx: $('#fx'), fonts: $('#theme-fonts'), kicker: $('#kicker'), hours: $('#hours'), loading: $('#loading'),
-  opening: $('#opening'), opName: $('#op-name'), opDate: $('#op-date'), chapters: $('#chapters'), chTitle: $('#chapter-title') };
+  opening: $('#opening'), opName: $('#op-name'), opDate: $('#op-date'), chTitle: $('#chapter-title') };
 
 let B = null, skin = null, sheet = null, buildMs = 0; // the battle, its skin (themes.js), what the skin built for it and how long that took
 let t = 0, playing = false, speed = 10, curEvent = null, shownEvent = null;
-let cam = { x: 0, y: 0, zoom: 0.5 }, follow = true, lapse = true, lapsing = false, chapterLabels = true;
+let cam = { x: 0, y: 0, zoom: 0.5 }, lapsing = false;
 let quiet = false; // the scrubber or an arrow key moved the clock since the last frame: a chapter it lands in gets no title
 let W = 0, H = 0, DPR = 1, last = performance.now();
 let airClock = 0; // real seconds of play, which fly the aircraft of an air strike
@@ -51,8 +51,7 @@ async function loadBattle(id) {
   ui.speed.value = speed;
   ui.scrub.min = b.startT; ui.scrub.max = b.endT;
   sizeClock();
-  chapterLabels = ui.chapters.checked = storedChapters() ?? b.events.length <= 15; // past 15 the labels take a large share of the map
-  buildMarks(b); buildLegend(b);
+  buildLegend(b);
   ui.title.textContent = b.name; ui.kicker.textContent = skin.kicker;
   ui.sub.textContent = `${b.place} · ${b.dateText ?? b.date}`;
   ui.legend.innerHTML = Object.values(b.sides).map(s => `<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');
@@ -68,12 +67,12 @@ async function loadBattle(id) {
   ui.srcList.innerHTML = (b.sources ?? []).map(s => `<li>${s}</li>`).join('');
   const v = b.view ?? { x: 0, y: 0, width: b.extent };
   cam = { x: v.x, y: v.y, zoom: Math.min(W, H) / v.width };
-  follow = true; ui.follow.checked = true; lapse = true; ui.lapse.checked = true;
+  ui.follow.checked = ui.lapse.checked = true;
   clampCam();
   const [link, , at, play, pickId, warp, shotTitle, legend, outcome, shotOpening, bench] = location.hash.match(/^#([^@,]*)(?:@([^,]+))?(,play)?(?:,select=([^,]+))?(,warp)?(,title)?(,legend)?(,outcome)?(,opening)?(,bench)?$/) ?? [];
   seek(at ? parseTime(at) : b.startT);
   openingDue = link === `#${id}`; // a bare link opens on the first Play; any time or flag goes straight to the battle
-  setPlaying(!!play); foldTop(!!play);
+  setPlaying(!!play);
   if (legend) ui.legendDlg.showModal(); // screenshots
   if (outcome) ui.outcome.open = true;
   if (pickId) select(b.units.find(u => u.id === pickId) ?? null); // screenshots: the card open on this unit
@@ -111,8 +110,7 @@ const w2sx = x => (x - cam.x) * cam.zoom + W / 2;
 const w2sy = y => (cam.y - y) * cam.zoom + H / 2;
 
 // Screen rects {l,t,r,b} the panels leave clear: each panel is cut away by trimming one side, every combination of trims
-// giving one candidate. The chapter labels slanting up from the bar count as one more panel. Measured only when a panel,
-// the labels or the window change. `clear` is the candidate in use; the camera moves it to whichever shows the action
+// giving one candidate. Measured only when a panel or the window changes. `clear` is the candidate in use; the camera moves it to whichever shows the action
 // biggest, and a re-measure keeps the nearest new one, so a panel growing a few pixels never swings the view across.
 let rects = null, clear = null;
 const area = r => (r.r - r.l) * (r.b - r.t), gap = (r, c) => Math.abs(r.l - c.l) + Math.abs(r.t - c.t) + Math.abs(r.r - c.r) + Math.abs(r.b - c.b);
@@ -125,9 +123,7 @@ function safeRect() {
 }
 function measureSafe() {
   const m = 10, panels = [ui.top, ui.bar, ...(ui.caption.classList.contains('show') ? [ui.caption] : [])].map(el => el.getBoundingClientRect());
-  const labels = marks.filter(el => !el.hidden).map(el => el.getBoundingClientRect()).filter(r => r.width);
-  V.avoid = [...panels, ...labels].map(p => ({ l: p.left, t: p.top, r: p.right, b: p.bottom })); // for the skin's map furniture
-  if (labels.length) panels.push({ left: Math.min(...labels.map(r => r.left)), right: Math.max(...labels.map(r => r.right)), top: Math.min(...labels.map(r => r.top)), bottom: panels[1].top });
+  V.avoid = panels.map(p => ({ l: p.left, t: p.top, r: p.right, b: p.bottom })); // for the skin's map furniture
   const out = [], bar = panels[1].top;
   const trim = (i, s) => {
     if (s.r - s.l < 80 || s.b - s.t < 80) return;
@@ -160,11 +156,11 @@ function zoomAt(sx, sy, f) {
   cam.zoom = nz; cam.x = wx - (sx - W / 2) / nz; cam.y = wy + (sy - H / 2) / nz;
   clampCam();
 }
-function userMoved() { if (follow) { follow = false; ui.follow.checked = false; } }
+function userMoved() { ui.follow.checked = false; }
 
 // Ease toward the action box fitted into the clear rect. It looks four real seconds ahead at the current clock rate.
 function updateCamera(dt) {
-  if (!follow) return;
+  if (!ui.follow.checked) return;
   const bx = actionBox(B, t, (lapsing ? B.lapse : speed) * 4);
   if (!bx) return;
   const fitZ = r => Math.min((r.r - r.l) / (bx.x1 - bx.x0), (r.b - r.t) / (bx.y1 - bx.y0));
@@ -238,7 +234,7 @@ canvas.addEventListener('wheel', e => { e.preventDefault(); zoomAt(e.clientX, e.
 function step(dt) {
   if (opening) return stepOpening(dt);
   if (playing) {
-    [t, lapsing] = advance(B, t, dt, speed, lapse);
+    [t, lapsing] = advance(B, t, dt, speed, ui.lapse.checked);
     if (t >= B.endT) setPlaying(false);
     let w = 0; // flashes age in real time; spent ones swap to the back of the pool
     for (let i = 0; i < popN; i++) { const q = pops[i]; q.age += dt; if (q.age < q.life) { pops[i] = pops[w]; pops[w++] = q; } }
@@ -247,7 +243,7 @@ function step(dt) {
   const ev = eventAt(B, t);
   if (ev !== curEvent) { // a chapter may set its own pace while the story is being followed
     curEvent = ev;
-    if (follow) { speed = ev?.speed ?? defaultSpeed(B); ui.speed.value = speed; }
+    if (ui.follow.checked) { speed = ev?.speed ?? defaultSpeed(B); ui.speed.value = speed; }
   }
   updateCamera(dt);
   for (const u of B.units) {
@@ -502,62 +498,20 @@ function drawNight() {
   }
 }
 
-// ---------- chapter marks and legend ----------
+// ---------- the timeline and legend ----------
 
-// One tick per chapter above the scrubber. Each label slants up over the map from the top edge of the bar,
-// joined to its tick by a leader line, so neighbours can be spread sideways without losing their place in time.
-let marks = [], leads = [];
-function buildMarks(b) {
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  ui.marks.replaceChildren(svg);
-  leads = []; marks = b.events.map(ev => {
-    const el = document.createElement('button');
-    el.textContent = ev.title; el.title = `${ev.title} · ${chapterWhen(ev)}`;
-    el.onclick = () => { follow = true; ui.follow.checked = true; seek(ev.t); };
-    ui.marks.append(el);
-    leads.push(svg.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'path')));
-    return el;
-  });
-  layoutMarks();
-}
-function layoutMarks() {
-  const tw = ui.marks.clientWidth, dur = B.endT - B.startT, gap = 29; // a 22 px pill at 50° clears its neighbour at 29 px (29·sin 50° > 22)
-  rects = null;
-  const px = B.events.map(ev => ((ev.t - B.startT) / dur) * tw);
-  const k = Math.max(1, Math.ceil((marks.length * gap) / Math.max(1, tw))); // too many for the width: label every k-th
-  const idx = chapterLabels ? [...marks.keys()].filter(i => i % k === 0) : [], ax = idx.map(i => px[i]);
-  for (let j = 1; j < ax.length; j++) ax[j] = Math.max(ax[j], ax[j - 1] + gap); // push crowded labels right…
-  if (ax.length) ax[ax.length - 1] = Math.min(ax[ax.length - 1], tw);
-  for (let j = ax.length - 2; j >= 0; j--) ax[j] = Math.min(ax[j], ax[j + 1] - gap); // …then back from the end
-  marks.forEach((el, i) => { el.hidden = true; leads[i].setAttribute('d', `M${px[i]} 23V15`); });
-  idx.forEach((i, j) => {
-    marks[i].hidden = false; marks[i].style.left = `${ax[j]}px`;
-    leads[i].setAttribute('d', `M${px[i]} 23V15L${ax[j]} 0`);
-  });
-  layoutHours(ui.scrub.clientWidth - 26, dur); // the thumb's travel; the marks are hidden on a phone
+function layoutTrack() {
+  layoutHours(ui.scrub.clientWidth - 26, B.endT - B.startT); // the thumb's travel
   placeTitle();
 }
 
-// The Chapters switch. The viewer's choice holds for every battle in this browser; until they make one, the chapter
-// count decides. Storage may be blocked, so it is read and written inside try.
-const CHAPTERS_KEY = 'fieldglass.chapters';
-function storedChapters() { try { return { on: true, off: false }[localStorage.getItem(CHAPTERS_KEY)]; } catch { return undefined; } }
-function setChapterLabels(v) {
-  chapterLabels = ui.chapters.checked = v;
-  try { localStorage.setItem(CHAPTERS_KEY, v ? 'on' : 'off'); } catch {}
-  layoutMarks();
-}
-
-// The chapter title: the name fading in just above the timeline, on the page's clock (index.html), over the tallest
-// label still showing or, on a phone, over the story panel. Centred in the map less 48 px each side (a phone's 17 px
-// gutter there), narrowed past a panel that reaches down level with it. Showing one restarts its animation; null clears it.
+// The chapter title: the name fading in just above the timeline, on the page's clock (index.html). Centred in the map
+// less 48 px each side, narrowed past a panel that reaches down level with it. Showing one restarts its animation; null clears it.
 function placeTitle() {
   const el = ui.chTitle, box = e => e.getBoundingClientRect(), story = ui.caption.classList.contains('show') ? [ui.caption] : [];
-  const under = [ui.bar, ...marks.filter(m => !m.hidden), ...(W <= 640 ? story : [])].map(box).filter(r => r.width);
-  const bottom = Math.min(...under.map(r => r.top)) - 14, top = bottom - el.offsetHeight;
-  const m = W <= 640 ? 17 : 48;
-  let l = m, r = W - m;
-  if (W > 640) for (const p of [ui.top, ...story].map(box)) {
+  const bottom = box(ui.bar).top - 14, top = bottom - el.offsetHeight;
+  let l = 48, r = W - 48;
+  for (const p of [ui.top, ...story].map(box)) {
     if (p.bottom <= top || p.top >= bottom) continue;
     if (p.left + p.right < W) l = Math.max(l, p.right + 24); else r = Math.min(r, p.left - 24);
   }
@@ -699,8 +653,6 @@ function updateHud(dt) {
     const [when, tag] = !curEvent ? [''] : skin.when?.(curEvent, B) ?? [chapterWhen(curEvent)]; // a skin may word the time its own way
     ui.capWhen.textContent = when; ui.caption.dataset.tag = tag ?? '';
     ui.caption.classList.toggle('show', !!curEvent); rects = null;
-    foldCaption(false); // every new chapter opens with its story showing
-    marks.forEach((m, i) => { m.classList.toggle('on', B.events[i] === curEvent); leads[i].classList.toggle('on', B.events[i] === curEvent); });
     if (!quiet && !opening) showTitle(curEvent);
   }
   quiet = false;
@@ -744,7 +696,6 @@ function select(u) {
 ui.cardClose.onclick = () => select(null);
 
 // The card rides beside its unit on whichever side covers the unit least, inside the clear rect, easing after it.
-// On a phone it docks above the bar instead.
 function placeCard(dt) {
   const u = selected, s = u?.screen;
   if (!u) return;
@@ -753,23 +704,20 @@ function placeCard(dt) {
   if (!ui.card.classList.contains('swap')) { const live = liveText(u); if (live !== cardLive) ui.cardLive.textContent = cardLive = live; }
   const [cw, ch] = cardSize, S = safeRect(), g = 14, c = Math.cos(s.a), n = Math.sin(s.a), mid = s.h / 2;
   let target;
-  if (W <= 640) target = [(W - cw) / 2, S.bar - ch - 12];
-  else {
-    const cx = s.x - n * mid, cy = s.y + c * mid; // centre of the body, whose ranks run back from the front edge
-    const ex = Math.abs((s.w / 2) * c) + Math.abs(mid * n) + 10, ey = Math.abs((s.w / 2) * n) + Math.abs(mid * c) + 10;
-    const fit = (v, lo, hi) => Math.max(Math.min(lo, hi), Math.min(Math.max(lo, hi), v));
-    const xl = [S.l, S.r - cw], yl = [S.t, S.b - ch];
-    if (xl[1] < xl[0]) xl.splice(0, 2, 8, W - cw - 8);
-    if (yl[1] < yl[0]) yl.splice(0, 2, 8, H - ch - 8);
-    let best = Infinity, side = cardSide;
-    [[cx + ex + g, cy - ch / 2], [cx - ex - g - cw, cy - ch / 2], [cx - cw / 2, cy - ey - g - ch], [cx - cw / 2, cy + ey + g]].forEach(([x, y], i) => {
-      const px = fit(x, ...xl), py = fit(y, ...yl);
-      const cover = Math.max(0, Math.min(px + cw, cx + ex) - Math.max(px, cx - ex)) * Math.max(0, Math.min(py + ch, cy + ey) - Math.max(py, cy - ey));
-      const score = cover + Math.hypot(px - x, py - y) + i * 5 - (i === cardSide ? 60 : 0); // stick to the current side unless another is clearly better
-      if (score < best) { best = score; target = [px, py]; side = i; }
-    });
-    cardSide = side;
-  }
+  const cx = s.x - n * mid, cy = s.y + c * mid; // centre of the body, whose ranks run back from the front edge
+  const ex = Math.abs((s.w / 2) * c) + Math.abs(mid * n) + 10, ey = Math.abs((s.w / 2) * n) + Math.abs(mid * c) + 10;
+  const fit = (v, lo, hi) => Math.max(Math.min(lo, hi), Math.min(Math.max(lo, hi), v));
+  const xl = [S.l, S.r - cw], yl = [S.t, S.b - ch];
+  if (xl[1] < xl[0]) xl.splice(0, 2, 8, W - cw - 8);
+  if (yl[1] < yl[0]) yl.splice(0, 2, 8, H - ch - 8);
+  let best = Infinity, side = cardSide;
+  [[cx + ex + g, cy - ch / 2], [cx - ex - g - cw, cy - ch / 2], [cx - cw / 2, cy - ey - g - ch], [cx - cw / 2, cy + ey + g]].forEach(([x, y], i) => {
+    const px = fit(x, ...xl), py = fit(y, ...yl);
+    const cover = Math.max(0, Math.min(px + cw, cx + ex) - Math.max(px, cx - ex)) * Math.max(0, Math.min(py + ch, cy + ey) - Math.max(py, cy - ey));
+    const score = cover + Math.hypot(px - x, py - y) + i * 5 - (i === cardSide ? 60 : 0); // stick to the current side unless another is clearly better
+    if (score < best) { best = score; target = [px, py]; side = i; }
+  });
+  cardSide = side;
   const k = cardAt && dt ? 1 - Math.exp(-dt * 8) : 1;
   cardAt = cardAt ? [cardAt[0] + (target[0] - cardAt[0]) * k, cardAt[1] + (target[1] - cardAt[1]) * k] : target;
   ui.card.style.transform = `translate(${cardAt[0].toFixed(1)}px, ${cardAt[1].toFixed(1)}px)`;
@@ -782,17 +730,6 @@ function chapterWhen(ev) {
   const when = ev.when ?? `about ${hh === 0 ? 'midnight' : hh === 12 ? 'noon' : `${hh % 12} ${hh < 12 ? 'AM' : 'PM'}`}`;
   return d.includes(', ') ? `${d.split(', ')[0]}, ${when}` : when[0].toUpperCase() + when.slice(1);
 }
-function fold(panel, btn, what, v) {
-  panel.classList.toggle('folded', v);
-  btn.textContent = v ? 'Show' : 'Hide';
-  btn.setAttribute('aria-expanded', String(!v));
-  btn.title = btn.ariaLabel = `${v ? 'Show' : 'Hide'} ${what}`;
-}
-const foldCaption = v => fold(ui.caption, ui.capFold, 'the story', v);
-const foldTop = v => fold(ui.top, ui.topFold, 'the battle details', v); // folded to the title row while playing, so it hides fewer men
-ui.capFold.onclick = () => foldCaption(!ui.caption.classList.contains('folded'));
-ui.topFold.onclick = () => foldTop(!ui.top.classList.contains('folded'));
-
 const nudge = () => Math.max(30, (B.endT - B.startT) / 240); // arrow keys: 30 s, or 1/240 of a long battle
 function setPlaying(v) { playing = v; ui.play.textContent = v ? '❚❚' : '▶'; ui.play.setAttribute('aria-label', v ? 'Pause' : 'Play'); }
 function seek(v) { t = Math.max(B.startT, Math.min(B.endT, v)); smoke.length = 0; popN = 0; openingDue = false; }
@@ -804,9 +741,6 @@ ui.play.onclick = () => {
 };
 ui.speed.onchange = () => { speed = +ui.speed.value; };
 ui.scrub.oninput = () => { quiet = true; seek(+ui.scrub.value); };
-ui.follow.onchange = () => { follow = ui.follow.checked; };
-ui.lapse.onchange = () => { lapse = ui.lapse.checked; };
-ui.chapters.onchange = () => setChapterLabels(ui.chapters.checked);
 ui.srcBtn.onclick = () => ui.sources.showModal();
 ui.legendBtn.onclick = () => ui.legendDlg.showModal();
 addEventListener('keydown', e => {
@@ -815,9 +749,8 @@ addEventListener('keydown', e => {
   if (e.code === 'Space') { e.preventDefault(); ui.play.click(); }
   else if (e.key === 'ArrowRight') { quiet = true; seek(t + nudge()); }
   else if (e.key === 'ArrowLeft') { quiet = true; seek(t - nudge()); }
-  else if (e.key === 'f') { follow = !follow; ui.follow.checked = follow; }
-  else if (e.key === 't') { lapse = !lapse; ui.lapse.checked = lapse; }
-  else if (e.key === 'c') setChapterLabels(!chapterLabels);
+  else if (e.key === 'f') ui.follow.click();
+  else if (e.key === 't') ui.lapse.click();
 });
 
 function resize() {
@@ -836,7 +769,7 @@ function sizeClock() {
   ui.clock.style.width = `${w + 4}px`;
 }
 addEventListener('resize', () => { resize(); if (opening) endOpening(); if (B) { clampCam(); sizeClock(); } if (selected) fillCard(selected); });
-new ResizeObserver(() => B && layoutMarks()).observe(ui.marks); // the track also narrows when the clock text widens
+new ResizeObserver(() => B && layoutTrack()).observe(ui.scrub); // the track also narrows when the clock text widens
 resize();
 
 function frame(now) {
@@ -852,13 +785,13 @@ const named = () => location.hash.slice(1).split(/[@,]/)[0]; // a battle, a war 
 if (list.some(b => b.id === named())) await loadBattle(named());
 else showSplash(list, WARS.some(w => w.id === named()) ? named() : WARS[0].id, async id => {
   ui.splash.hidden = true;
-  await loadBattle(id); foldTop(true); startOpening(); // loadBattle puts the battle in the hash
+  await loadBattle(id); startOpening(); // loadBattle puts the battle in the hash
 });
 // The battles and the war lists are hashes of one page, so All battles, Back and Forward change only the hash: load what it names.
 addEventListener('hashchange', () => { if (named() !== B?.id) location.reload(); });
 ui.home.onclick = () => { location.hash = WARS.find(w => w.war === list.find(e => e.id === B.id).war).id; };
 requestAnimationFrame(frame);
 if (navigator.webdriver) window.fg = { // journeys only: read the camera and clock, and hold the opening at a moment for a frame
-  state: () => ({ cam: { ...cam }, t, playing, follow, opening: opening && { e: opening.e, wide: opening.wide, target: opening.target } }),
+  state: () => ({ cam: { ...cam }, t, playing, follow: ui.follow.checked, opening: opening && { e: opening.e, wide: opening.wide, target: opening.target } }),
   hold: e => { if (opening) opening.hold = opening.e = e; },
 };

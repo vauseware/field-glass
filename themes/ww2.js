@@ -218,7 +218,7 @@ function arrowPath(c, x0, y0, x1, y1) {
 }
 
 // The grid's numbers, the last two figures of each kilometre, in the window's margins as a sheet numbers its grid at the
-// edge: eastings top and bottom, northings left and right, each left off where a panel or chapter name covers it.
+// edge: eastings top and bottom, northings left and right, each left off where a panel covers it.
 function over(ctx, V) {
   const S = V.sheet, bot = V.safe.bar - 12, free = (x, y) => !V.avoid.some(p => x > p.l - 6 && x < p.r + 6 && y > p.t - 10 && y < p.b + 10);
   const t = (text, x, y, align) => free(x, y) && P.haloText(ctx, text, x, y, `600 14px ${NUM}`, '#f1efe2', 'rgba(14,14,10,0.8)', 3.5, 0, align);

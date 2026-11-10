@@ -91,7 +91,6 @@ function build(b, T) {
 
 // The scale bar in yards on a patch of paper, so it reads over the grid figures and the night, in a free corner.
 function over(ctx, V) {
-  if (V.W <= 640) return;
   const yd = YD * V.z, len = [100, 200, 500, 1000, 2000, 5000].findLast(n => n * yd <= 200) ?? 100, w = len * yd, c = P.freeCorner(V, 240, 90);
   if (!c) return;
   const x0 = c[0] - 20 - w, y0 = c[1] - 30;

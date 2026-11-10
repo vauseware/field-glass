@@ -388,7 +388,7 @@ export function plate(layer, L, bySide, recent, style) {
 }
 
 // Where a w × h box of map furniture fits: the bottom right corner above the bar, or the clear part of the window's
-// corner, never under a panel, a chapter name or a unit. Its [right, bottom], or undefined when neither is clear.
+// corner, never under a panel or a unit. Its [right, bottom], or undefined when neither is clear.
 export function freeCorner(V, w, h) {
   const fits = (r, b) => r - w >= 0 && b - h >= 0 && !V.avoid.some(p => p.t < b - 4 && p.b > b - h && p.l < r && p.r > r - w) &&
     !V.B.units.some(u => u.pose && u.screen && Math.abs(u.screen.x - (r - w / 2)) < w / 2 + u.screen.w / 2 && Math.abs(u.screen.y - (b - h / 2)) < h / 2 + u.screen.w / 2);

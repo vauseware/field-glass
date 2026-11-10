@@ -44,7 +44,6 @@
   #top { left: 21px; top: 21px; z-index: 1; padding: 12px 18px 14px; max-width: min(490px, calc(100vw - 42px)); max-height: calc(100vh - 170px); overflow-y: auto; scrollbar-color: var(--rule) transparent; }
   #top h1 { margin: 0; font: 400 30px/1.1 var(--fell); letter-spacing: 0.01em; }
   .top-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
-  #top.folded { padding-bottom: 12px; } #top.folded > :not(.top-head) { display: none; }
   #sub { color: var(--muted); font: italic 18px/1.3 var(--fell); margin-top: 3px; }
   #hint { color: var(--muted); font-size: 16px; margin-top: 6px; }
   #legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(107,74,42,0.45); font: 18px var(--fell); }
@@ -88,8 +87,6 @@
   #cap-text { font-size: 20px; line-height: 1.5; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(107,74,42,0.45); }
   .cap-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
   #cap-when { color: var(--muted); font: 19px/1.3 var(--sc); }
-  #cap-fold, #top-fold { flex: none; min-height: 44px; padding: 4px 12px; font-size: 17px; }
-  #caption.folded #cap-text { display: none; }
   #bar { left: 21px; right: 21px; bottom: 21px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; }
   #play { width: 56px; min-width: 56px; font-size: 22px; }
   #speed { font-family: var(--text); font-size: 18px; } /* Fell numerals read 10 as Io */
@@ -101,12 +98,6 @@
   #scrub::-moz-range-progress { height: 8px; border-radius: 4px; background: var(--muted); }
   #scrub::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: -10px; border-radius: 50%; border: 2px solid var(--ink); background: radial-gradient(circle at 35% 30%, #fbf1d6, #c49a55 70%, #8a6430); box-shadow: 0 1px 3px rgba(40,25,10,0.5); }
   #scrub::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--ink); background: radial-gradient(circle at 35% 30%, #fbf1d6, #c49a55 70%, #8a6430); box-shadow: 0 1px 3px rgba(40,25,10,0.5); }
-  /* Chapter marks: ticks inside the bar, leaders up to its top edge (23 px: marks + padding + border), labels slanting over the map. */
-  #marks { position: absolute; left: 13px; right: 13px; bottom: 48px; height: 12px; }
-  #marks svg { position: absolute; left: 0; bottom: 0; width: 100%; height: 23px; overflow: visible; pointer-events: none; }
-  #marks path { fill: none; stroke: var(--rule); stroke-width: 1.5; } #marks path.on { stroke: var(--accent); stroke-width: 2.5; }
-  #marks button { position: absolute; bottom: 23px; min-height: 0; height: 22px; padding: 0 8px; border-radius: 2px; background: var(--paper-solid); box-shadow: 0 1px 3px rgba(40,25,10,0.4); font-size: 16px; line-height: 20px; white-space: nowrap; transform-origin: 0 100%; transform: rotate(-50deg); }
-  #marks button:hover, #marks button.on { color: var(--accent); } #marks button.on { border-color: var(--accent); border-width: 2px; line-height: 18px; }
   #clock { flex: none; position: relative; margin-left: 12px; font-variant-numeric: tabular-nums lining-nums; text-align: left; font-size: 21px; font-weight: 700; white-space: nowrap; }
   #clock.lapsing::before { content: "»"; position: absolute; right: 100%; padding-right: 4px; } /* time-lapse running; outside the width so it never shifts the bar */
   #bar label { display: inline-flex; align-items: center; min-height: 44px; gap: 7px; white-space: nowrap; font: 19px var(--fell); cursor: pointer; }
@@ -318,14 +309,12 @@
   .theme-civil-war #clock { font: 400 27px/1 var(--fell); } .theme-civil-war #clock small { color: var(--gilt); }
   .theme-civil-war #hours { color: #c9bfa3; }
   .theme-civil-war #bar input[type=checkbox] { accent-color: var(--gilt); }
-  .theme-civil-war #marks path { stroke: #c9bfa3; } .theme-civil-war #marks path.on { stroke: var(--gilt); } /* the ticks sit on the blue cloth */
   .theme-civil-war #scrub::-webkit-slider-runnable-track { border-color: var(--gilt); background: linear-gradient(var(--gilt), var(--gilt)) 0 / var(--p, 0%) 100% no-repeat, #121a2e; }
   .theme-civil-war #scrub::-moz-range-track { border-color: var(--gilt); background: #121a2e; }
   .theme-civil-war #scrub::-moz-range-progress { background: var(--gilt); }
   .theme-civil-war #loading { color: var(--ink); font: italic 28px var(--fell); background: radial-gradient(ellipse at 50% 45%, #f6f2e8, #f1ece0 60%, #cfc6b0); }
   body.theme-civil-war #opening #op-name { font-family: var(--sc); font-weight: 700; }
   body.theme-civil-war #chapter-title { font-family: var(--sc); font-weight: 700; }
-  @media (max-width: 640px) { .theme-civil-war #top h1 { font-size: 21px; } .theme-civil-war #cap-title { font-size: 20px; } .theme-civil-war #clock { font-size: 20px; } }
 
   /* Second World War: an operations room. Dark boards with chalk stencilling, the story as a yellow teleprinter strip that
      ends STOP, an amber scrubber, a sector clock in the bar, and a lamp swaying over the table (#fx). */
@@ -369,7 +358,6 @@
   .theme-ww2 #cap-title { color: #1f1c14; font: 700 22px/1.2 var(--text); text-transform: uppercase; margin-top: 2px; }
   .theme-ww2 #cap-text { margin: 8px 18px 0; padding-top: 8px; border-top: 1px dashed rgba(31,28,20,0.4); font: 16px/1.55 var(--text); text-transform: uppercase; }
   .theme-ww2 #cap-text::after { content: " STOP"; font-weight: 700; }
-  .theme-ww2 #caption #cap-fold { background: #1f1c14; color: var(--tape); border-color: #1f1c14; box-shadow: none; font-size: 16px; }
   .theme-ww2 #bar { padding: 8px 18px; gap: 14px; }
   .theme-ww2 #scrub::-webkit-slider-runnable-track { height: 6px; border: 0; border-radius: 3px; box-shadow: inset 0 1px 2px #000, 0 1px 0 rgba(255,255,255,0.07);
     background: linear-gradient(90deg, rgba(240,181,60,0.3), var(--accent)) 0 / var(--p, 0%) 100% no-repeat, #0d0f0b; }
@@ -377,9 +365,6 @@
   .theme-ww2 #scrub::-moz-range-progress { height: 6px; border-radius: 3px; background: linear-gradient(90deg, rgba(240,181,60,0.3), var(--accent)); }
   .theme-ww2 #scrub::-webkit-slider-thumb { width: 20px; height: 20px; margin-top: -7px; border: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff1c8, var(--accent) 60%, #8a5a10); box-shadow: 0 0 10px rgba(240,181,60,0.75); }
   .theme-ww2 #scrub::-moz-range-thumb { width: 18px; height: 18px; border: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff1c8, var(--accent) 60%, #8a5a10); box-shadow: 0 0 10px rgba(240,181,60,0.75); }
-  .theme-ww2 #marks path { stroke: #7d826f; } .theme-ww2 #marks path.on { stroke: var(--accent); }
-  .theme-ww2 #bar #marks button { font: 16px/20px var(--fell); letter-spacing: 0.08em; color: #c3c7b4; background: #1d211b; box-shadow: 0 2px 4px rgba(0,0,0,0.6); }
-  .theme-ww2 #bar #marks button:hover, .theme-ww2 #bar #marks button.on { color: var(--accent); } .theme-ww2 #bar #marks button.on { border-color: var(--accent); line-height: 18px; }
   .theme-ww2 #hours { font: 16px/16px var(--num); letter-spacing: 0.06em; color: #8b907c; }
   .theme-ww2 #clock { display: grid; grid-template-columns: auto auto; column-gap: 12px; align-items: center; font: 600 30px/1 var(--num); letter-spacing: 0.04em; color: var(--chalk); }
   .theme-ww2 #clock .dial { grid-row: 1 / span 2; width: 60px; height: 60px; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.6)); }
@@ -397,26 +382,6 @@
   .theme-ww2 #loading p::after { content: "_"; animation: blink 1s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
 
-  @media (max-width: 640px) {
-    .theme-ww2 #top h1 { font-size: 20px; } .theme-ww2 #sub { font-size: 13px; } .theme-ww2 #kicker { font-size: 10px; margin-bottom: 4px; }
-    .theme-ww2 :is(#top, #bar, #card, #caption, dialog) :is(button, select) { font-size: 13px; }
-    .theme-ww2 #bar #play { width: 44px; min-width: 44px; height: 44px; } .theme-ww2 #speed { font-size: 16px; }
-    .theme-ww2 #clock { font-size: 20px; column-gap: 6px; } .theme-ww2 #clock .dial { width: 36px; height: 36px; } .theme-ww2 #clock small { font-size: 10px; }
-    .theme-ww2 #cap-title { font-size: 17px; } .theme-ww2 #cap-text { font-size: 14px; } .theme-ww2 #cap-when { font-size: 12px; }
-  }
-  @media (max-width: 640px) {
-    #hours { display: none; }
-    #top { left: 17px; right: 17px; top: 17px; max-width: none; max-height: 42vh; padding: 8px 12px 10px; }
-    #top h1 { font-size: 22px; } #sub { font-size: 15px; } #hint, #legend { display: none; }
-    select, button { min-height: 44px; padding: 6px 10px; font-size: 17px; }
-    #hover { display: none; } #card { width: calc(100vw - 34px); z-index: 3; }
-    #bar { left: 17px; right: 17px; bottom: 17px; gap: 0 6px; padding: 8px 10px 0; flex-wrap: wrap; } #clock { margin-left: auto; } #bar label span { display: none; } #speed { padding: 6px 0 6px 4px; font-size: 16px; }
-    #play { width: 44px; min-width: 44px; font-size: 18px; } #clock { font-size: 15px; }
-    #track { order: 1; flex: 1 0 100%; padding-top: 0; } #marks { display: none; } /* the scrubber takes its own row; no room for chapters */
-    #opening { padding: 40px 28px; } #opening #op-name { font-size: 40px; } #opening #op-date { font-size: 18px; }
-    #chapter-title { font-size: 30px; } #bar label.chapters { display: none; }
-    #caption { top: auto; bottom: 150px; left: 17px; right: 17px; width: auto; max-height: 40vh; padding: 10px 14px; } #cap-title { font-size: 21px; } #cap-when { font-size: 15px; } #cap-text { font-size: 17px; margin-top: 6px; padding-top: 6px; }
-  }
 </style>
 </head>
 <body>
@@ -426,7 +391,6 @@
 <section id="top" class="panel">
   <div class="top-head">
     <div><div id="kicker"></div><h1 id="title">Loading…</h1></div>
-    <button id="top-fold" aria-expanded="true" aria-label="Hide the battle details" title="Hide the battle details">Hide</button>
   </div>
   <div id="sub"></div>
   <div id="legend"></div>
@@ -454,7 +418,6 @@
 <div id="caption" class="panel">
   <div class="cap-head">
     <div><div id="cap-when"></div><div id="cap-title"></div></div>
-    <button id="cap-fold" aria-expanded="true" aria-label="Hide the story" title="Hide the story">Hide</button>
   </div>
   <div id="cap-text"></div>
 </div>
@@ -468,7 +431,6 @@
   <span id="clock"></span>
   <label title="Camera follows the story"><input id="follow" type="checkbox" checked> <span>Follow the action</span></label>
   <label title="Hurry through the quiet stretches"><input id="lapse" type="checkbox" checked> <span>Time-lapse</span></label>
-  <label class="chapters" title="Show the chapter names over the map"><input id="chapters" type="checkbox" checked> <span>Chapters</span></label>
 </footer>
 
 <div id="loading" hidden><p>Drawing the map…</p></div>
