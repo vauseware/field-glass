@@ -1,0 +1,272 @@
+/* Field Glass issue #73 mockups: the chrome over a still of the map.
+   .fg is the 1536x830 stage. t-<skin> dresses it, o-a | o-b | o-c lays it out, s-watch | s-open is the state. */
+.fg { position: relative; overflow: hidden; box-sizing: border-box; font: 17px/1.4 var(--read); color: var(--ink);
+  --paper: #f3e7cb; --panel: var(--paper); --ink: #34210f; --muted: #6b4a2a; --rule: #6b4a2a; --accent: #8a2617; --on: #8a2617;
+  --hair: rgba(107,74,42,0.45); --tint: rgba(138,38,23,0.1); --inner: transparent;
+  --head: "IM Fell English", Georgia, serif; --sc: "IM Fell English SC", Georgia, serif; --read: Georgia, "Times New Roman", serif; --fig: Georgia, serif; --num: var(--head);
+  --frame: 0 0 0 4px var(--paper), 0 0 0 5px var(--rule), 0 8px 24px rgba(40,25,10,0.45);
+  --groove: #e4d2a6; --groove-rule: var(--rule); --fill: linear-gradient(#6b4a2a, #6b4a2a);
+  --knob: radial-gradient(circle at 35% 30%, #fbf1d6, #c49a55 70%, #8a6430); --knob-rim: #34210f;
+  --btn: linear-gradient(#faf3e2, #e7d6ad); --btn-ink: var(--ink); --btn-rule: var(--rule); --sw-off: #e4d2a6; }
+.fg * { box-sizing: border-box; }
+.fg :is(p, h2, h3) { margin: 0; }
+.fg .map { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* A panel: the skin's paper, ruled and framed. */
+.fg .pn { position: absolute; color: var(--ink); background: var(--panel); border: 1px solid var(--rule); box-shadow: var(--frame); }
+.fg .pn::before { content: ""; position: absolute; inset: 5px; border: 1px solid var(--inner); pointer-events: none; }
+.fg button { font: 17px/1.2 var(--head); color: var(--btn-ink); background: var(--btn); border: 1px solid var(--btn-rule); border-radius: 3px; min-height: 44px; padding: 6px 14px;
+  cursor: pointer; white-space: nowrap; box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 1px 2px rgba(40,25,10,0.3); }
+
+/* The clock, top centre: a dial in the skin's dress, the time over its date, and the rate the clock runs at. */
+.fg .clock { top: 14px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; padding: 7px 16px 7px 10px; white-space: nowrap; }
+.fg .clock p { display: flex; flex-direction: column; }
+.fg .clock b { font: 400 30px/1 var(--num); font-variant-numeric: tabular-nums lining-nums; }
+.fg .clock small { margin-top: 2px; font: italic 16px/1.15 var(--head); color: var(--muted); }
+.fg .dial { position: relative; flex: none; width: 48px; height: 48px; border-radius: 50%; background: var(--dial); border: var(--dial-rim); box-shadow: var(--dial-sh); }
+.fg .dial::before, .fg .dial::after { content: ""; position: absolute; left: 50%; bottom: 50%; transform-origin: 50% 100%; background: var(--hand); border-radius: 2px; }
+.fg .dial::before { width: 3px; height: 27%; margin-left: -1.5px; transform: rotate(var(--hh)); }
+.fg .dial::after { width: 2px; height: 41%; margin-left: -1px; transform: rotate(var(--mm)); }
+.fg .rate { align-self: stretch; display: flex; align-items: center; gap: 6px; margin-left: 2px; padding-left: 12px; border-left: 1px solid var(--hair); font: 17px/1 var(--fig); color: var(--muted); font-variant-numeric: lining-nums; }
+.fg .rate.on { color: var(--on); font-weight: 700; }
+.fg button.rate { min-height: 44px; padding: 0 2px 0 12px; background: none; border: 0; border-left: 1px solid var(--hair); border-radius: 0; box-shadow: none; text-transform: none; letter-spacing: 0; }
+.fg :is(button.rate, .speed)::after { content: ""; margin-top: 4px; border: 5px solid transparent; border-top: 6px solid currentColor; border-bottom: 0; }
+
+/* The battle's details, and the chapters as a list to click. */
+.fg .info { left: 20px; top: 20px; width: 420px; padding: 10px 16px 12px; }
+.fg .head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.fg .kick { display: block; font: 16px/1.25 var(--sc); letter-spacing: 0.2em; color: var(--muted); }
+.fg h2 { font: var(--title, 400 28px/1.1 var(--head)); }
+.fg .sub { margin-top: 3px; font: italic 17px/1.3 var(--head); color: var(--muted); }
+.fg .sides { display: flex; flex-wrap: wrap; gap: 2px 16px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--hair); font: 17px/1.35 var(--head); }
+.fg .sides i { display: inline-block; width: 18px; height: 13px; margin-right: 7px; border: 1px solid var(--ink); vertical-align: -1px; }
+.fg button.fold { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; margin-top: 8px; padding: 0; text-align: left; white-space: normal; background: none;
+  border: 0; border-top: 1px solid var(--hair); border-radius: 0; box-shadow: none; color: var(--ink); font: 18px/1.2 var(--head); text-transform: none; letter-spacing: 0; }
+.fg .fold::before { content: ""; flex: none; border: 5px solid transparent; border-left: 7px solid var(--muted); border-right: 0; }
+.fg .fold.open::before { border: 5px solid transparent; border-top: 7px solid var(--muted); border-bottom: 0; }
+.fg .fold em { font-style: normal; color: var(--accent); }
+.fg .fold + .fold { margin-top: 0; }
+.fg .chs { overflow: hidden; -webkit-mask-image: linear-gradient(#000 calc(100% - 36px), transparent); mask-image: linear-gradient(#000 calc(100% - 36px), transparent); }
+.fg .day { padding: 4px 8px 2px; font: 16px/1.2 var(--sc); letter-spacing: 0.14em; color: var(--muted); }
+.fg button.ch { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 0 8px; text-align: left; white-space: normal; background: none; border: 0; border-radius: 2px;
+  box-shadow: none; color: var(--ink); font: 18px/1.15 var(--head); }
+.fg .ch small { flex: none; width: 92px; font: 16px/1.1 var(--read); color: var(--muted); }
+.fg .ch.on { color: var(--accent); background: var(--tint); }
+.fg .ch.on small { color: var(--accent); }
+.fg .row { display: flex; gap: 8px; margin-top: 10px; }
+
+/* The story of the chapter now playing. */
+.fg .when { display: block; font: 17px/1.3 var(--sc); color: var(--muted); }
+.fg .story h3 { font: 400 25px/1.15 var(--head); color: var(--accent); }
+.fg .story p { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--hair); font: 18px/1.5 var(--read); }
+
+/* The timeline: play, the time-lapse switch, the scrubber with a tick for each chapter over a scale of hours. */
+.fg .bar { position: absolute; display: flex; align-items: center; gap: 14px; }
+.fg .play { position: relative; flex: none; width: 46px; height: 46px; min-height: 0; padding: 0; border-radius: 50%; }
+.fg .play::before { content: ""; position: absolute; inset: 0; margin: auto; width: 14px; height: 16px; border: solid currentColor; border-width: 0 5px; }
+.fg .play.go::before { left: 5px; width: 0; height: 0; border: 9px solid transparent; border-left: 15px solid currentColor; border-right: 0; }
+.fg button.sw { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 0; background: none; border: 0; border-radius: 0; box-shadow: none; color: var(--ink); font: 18px/1.2 var(--head); }
+.fg .sw i { position: relative; flex: none; width: 46px; height: 24px; border-radius: 12px; background: var(--sw-off); border: 1px solid var(--groove-rule); box-shadow: inset 0 1px 2px rgba(0,0,0,0.35); }
+.fg .sw i::after { content: ""; position: absolute; top: 50%; left: 1px; width: 20px; height: 20px; margin-top: -10px; border-radius: 50%; background: var(--knob); border: 1px solid var(--knob-rim); box-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+.fg .sw.on i { background: var(--on); }
+.fg .sw.on i::after { left: 23px; }
+.fg .track { position: relative; flex: 1; min-width: 0; height: 48px; }
+.fg .track > i { position: absolute; top: 3px; width: 1.5px; height: 10px; margin-left: -0.75px; background: var(--muted); }
+.fg .track > i.now { top: 0; width: 3px; height: 13px; margin-left: -1.5px; background: var(--on); }
+.fg .groove { position: absolute; left: 0; right: 0; top: 16px; height: 8px; border: 1px solid var(--groove-rule); border-radius: 4px; background: var(--groove); }
+.fg .fill { position: relative; display: block; height: 100%; border-radius: 3px; background: var(--fill); }
+.fg .fill::after { content: ""; position: absolute; right: -12px; top: 50%; width: 24px; height: 24px; margin-top: -12px; border-radius: 50%; border: 2px solid var(--knob-rim); background: var(--knob); box-shadow: 0 1px 3px rgba(40,25,10,0.5); }
+.fg .hours { position: absolute; left: 0; right: 0; top: 30px; height: 16px; font: italic 16px/16px var(--head); color: var(--muted); }
+.fg .hours span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.fg .speed { display: inline-flex; align-items: center; gap: 6px; font-family: var(--fig); }
+.fg .gear { position: relative; padding-left: 44px; }
+.fg .gear::before { content: ""; position: absolute; left: 12px; top: 50%; width: 22px; height: 20px; margin-top: -10px; background:
+  radial-gradient(circle, currentColor 0 3.5px, transparent 4px) 75% 0 / 9px 9px no-repeat, radial-gradient(circle, currentColor 0 3.5px, transparent 4px) 22% 100% / 9px 9px no-repeat,
+  linear-gradient(currentColor, currentColor) 0 3.5px / 100% 2px no-repeat, linear-gradient(currentColor, currentColor) 0 calc(100% - 3.5px) / 100% 2px no-repeat; }
+/* The name of a chapter, over the tick the pointer is on. */
+.fg .tip { position: absolute; bottom: calc(100% + 16px); transform: translateX(-50%); padding: 6px 14px 7px; text-align: center; white-space: nowrap; color: var(--ink); background: var(--panel);
+  border: 1px solid var(--rule); box-shadow: 0 3px 10px rgba(0,0,0,0.4); font: 19px/1.2 var(--head); }
+.fg .tip small { display: block; font: 16px/1.2 var(--read); color: var(--muted); }
+.fg .tip::after { content: ""; position: absolute; left: 50%; top: 100%; width: 1.5px; height: 20px; margin-left: -0.75px; background: var(--muted); }
+
+/* The settings: what is not the timeline. */
+.fg .set { width: 320px; padding: 12px 18px 14px; }
+.fg .set h3 { margin-bottom: 2px; font: 400 21px/1.3 var(--sc); letter-spacing: 0.06em; }
+.fg .set button.sw { display: flex; flex-direction: row-reverse; justify-content: space-between; width: 100%; }
+.fg .vol { display: flex; align-items: center; min-height: 36px; font: 18px/1.2 var(--head); }
+.fg .vol span { width: 104px; }
+.fg .vol i { flex: 1; height: 6px; border-radius: 3px; border: 1px solid var(--groove-rule); background: var(--groove); }
+.fg .vol b { position: relative; display: block; height: 100%; border-radius: 3px; background: var(--fill); }
+.fg .vol b::after { content: ""; position: absolute; right: -8px; top: 50%; width: 16px; height: 16px; margin-top: -8px; border-radius: 50%; background: var(--knob); border: 1px solid var(--knob-rim); }
+.fg .set .vols { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--hair); }
+
+/* ---------- Option A, slim bar: the panels in the corners as now, the bar one row. ---------- */
+.o-a .bar { left: 20px; right: 20px; bottom: 20px; height: 64px; padding: 0 12px 0 10px; }
+.o-a .story { right: 20px; top: 20px; width: 432px; padding: 12px 18px 16px; }
+.o-a .chs { max-height: 256px; }
+.o-a .set { right: 20px; bottom: 102px; }
+
+/* ---------- Option B, lower third: the story as a caption over a docked bar, the details in a drawer. ---------- */
+.o-b :is(.bar, .clock, .info)::before { display: none; }
+.o-b .bar { left: 0; right: 0; bottom: 0; height: 58px; padding: 0 20px; border-width: 1px 0 0; box-shadow: 0 -4px 18px rgba(0,0,0,0.3); }
+.o-b .clock { top: 14px; left: auto; right: 16px; transform: none; padding: 6px 14px 6px 8px; gap: 10px; }
+.o-b .clock .dial { width: 40px; height: 40px; }
+.o-b .clock b { font-size: 25px; }
+.fg .clock .sw { align-self: stretch; margin-left: 2px; padding-left: 12px; border-left: 1px solid var(--hair); }
+.fg.o-b .cur p { font-size: 16px; line-height: 1.45; }
+.fg .pips { display: flex; justify-content: center; gap: 7px; margin-top: 8px; }
+.fg .pips i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--muted); }
+.fg .pips i.on { background: var(--accent); border-color: var(--accent); }
+.o-b .info { left: 16px; top: 14px; width: auto; padding: 5px 6px 5px 14px; }
+.o-b.s-watch .info .head { align-items: center; }
+.o-b.s-watch .info h2 { font-size: 23px; }
+.o-b.s-watch .kick { display: none; }
+.o-b.s-open .info { left: 0; top: 0; bottom: 58px; width: 404px; padding: 16px 18px 12px; border-width: 0 1px 0 0; box-shadow: 6px 0 24px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
+.o-b.s-open .chs { flex: 1; min-height: 0; }
+.o-b .story { left: 50%; bottom: 106px; transform: translateX(-50%); width: max-content; max-width: 900px; padding: 9px 26px 12px; text-align: center; }
+.o-b.s-open .story { left: 802px; max-width: 750px; }
+.o-b .story :is(.when, h3) { display: inline; font-size: 19px; }
+.o-b .story .when { margin-right: 10px; }
+.o-b .story p { margin-top: 3px; padding: 0; border: 0; font-size: 20px; line-height: 1.4; }
+.o-b .set { right: 16px; bottom: 106px; }
+.o-b .tip { bottom: calc(100% + 10px); padding: 4px 14px 5px; }
+.o-b .tip small { display: inline; margin-left: 12px; }
+.o-b .tip::after { height: 14px; }
+
+/* ---------- Option C, quiet field: a hairline and a slug while it plays; the bar and the record when it stops. ---------- */
+.o-c .clock { padding: 6px 14px 6px 8px; gap: 10px; }
+.o-c .clock .dial { width: 40px; height: 40px; }
+.o-c .clock b { font-size: 25px; }
+.fg .hairline { position: absolute; left: 0; right: 0; bottom: 0; height: 30px; background: linear-gradient(transparent, color-mix(in srgb, var(--paper) 85%, transparent)); }
+.fg .hairline .track { position: absolute; left: 0; right: 0; bottom: 0; height: 15px; }
+.fg .hairline .track > i { top: 0; height: 9px; background: var(--ink); }
+.fg .hairline .track > i.now { background: var(--accent); }
+.fg .hairline .groove { top: auto; bottom: 0; height: 5px; border: 0; border-radius: 0; background: color-mix(in srgb, var(--ink) 35%, transparent); }
+.fg .hairline .fill { border-radius: 0; background: var(--accent); }
+.fg .hairline .fill::after { right: -6px; top: auto; bottom: 0; width: 12px; height: 12px; margin: 0; border: 1px solid var(--ink); border-radius: 50%; clip-path: none; background: var(--accent); box-shadow: none; }
+.fg .slug { position: absolute; left: 0; bottom: 24px; padding: 7px 110px 8px 22px; color: var(--ink); background: linear-gradient(90deg, color-mix(in srgb, var(--paper) 90%, transparent) 55%, transparent); }
+.fg .slug b { font: 400 25px/1.15 var(--head); color: var(--accent); }
+.fg .slug small { margin-left: 14px; font: 17px/1.2 var(--sc); color: var(--muted); }
+.o-c .bar { left: 0; right: 0; bottom: 0; display: block; padding: 10px 20px 6px; border-width: 1px 0 0; box-shadow: 0 -4px 18px rgba(0,0,0,0.3); }
+.o-c .bar::before { display: none; }
+.o-c .ctl { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.o-c .ctl .sp { flex: 1; }
+.o-c .rec { left: 20px; top: 20px; bottom: 140px; width: 430px; padding: 10px 16px 12px; display: flex; flex-direction: column; }
+.o-c .rec .chs { flex: 1; min-height: 0; margin-top: 2px; }
+.fg .cur { margin: 2px 0; border-radius: 2px; background: var(--tint); }
+.fg .cur .ch.on { background: none; }
+.fg .cur p { padding: 0 12px 12px; font: 17px/1.5 var(--read); }
+.o-c .set { right: 20px; bottom: 140px; }
+
+/* ---------- Revolution: an engraved plan. Brass, a scale of hours, a red index on the time. ---------- */
+.t-revolution { --paper: #f3e7cb; --panel: radial-gradient(ellipse at 30% 20%, #f8eed6, #f3e7cb 60%, #ead9b3); --read: "IM Fell DW Pica", Georgia, serif; --inner: rgba(107,74,42,0.35);
+  --frame: 0 0 0 3px #f3e7cb, 0 0 0 4px var(--rule), 0 10px 28px rgba(30,18,6,0.5);
+  --dial: radial-gradient(circle, #f8eed6 0 60%, transparent 61%), repeating-conic-gradient(from -2deg, #34210f 0 4deg, #f8eed6 0 30deg); --dial-rim: 3px solid #a47c3c;
+  --dial-sh: 0 0 0 1px #5b4018, 0 1px 3px rgba(0,0,0,0.4); --hand: #1c2a4a; --hh: 62deg; --mm: 24deg; }
+.t-revolution .play { border: 1.5px solid var(--ink); background: radial-gradient(circle at 35% 30%, #fbf1d6, #c9a35e 70%, #8a6430); }
+.t-revolution .bar .groove { height: 7px; border-radius: 0; border-color: var(--ink); background: repeating-linear-gradient(90deg, var(--ink) 0 6.667%, #f6ecd2 0 13.333%); }
+.t-revolution .bar .fill { border-radius: 0; background: linear-gradient(#a3202f, #a3202f) bottom / 100% 2px no-repeat; }
+.t-revolution .bar .fill::after { right: -10px; top: auto; bottom: 100%; width: 20px; height: 23px; margin: 0; border: 0; border-radius: 0; box-shadow: none; background: #a3202f;
+  clip-path: polygon(50% 100%, 5% 45%, 32% 45%, 32% 0, 68% 0, 68% 45%, 95% 45%); }
+.t-revolution .when { font-size: 16px; letter-spacing: 0.12em; }
+
+/* ---------- War of 1812: a blue-back chart. Cream panels ruled in navy, the bar and clock on the blue backing. ---------- */
+.t-1812 { --paper: #eee9d8; --ink: #1e2a38; --muted: #4e5a68; --rule: #1e2a38; --accent: #b3331f; --on: #b3331f; --hair: rgba(30,42,56,0.35); --tint: rgba(179,51,31,0.1); --inner: #1e2a38;
+  --head: Cardo, Georgia, serif; --sc: Cardo, Georgia, serif; --read: Cardo, Georgia, serif; --fig: Cardo, Georgia, serif; --title: 400 28px/1.1 Cardo, Georgia, serif;
+  --btn: #eee9d8; --knob-rim: #1e2a38; --fill: linear-gradient(#4e5a68, #4e5a68); --sw-off: #dcd7c6;
+  --dial: radial-gradient(circle, #fbf8ee 0 60%, transparent 61%), repeating-conic-gradient(from -2deg, #1e2a38 0 4deg, #fbf8ee 0 30deg); --dial-rim: 2px solid #1e2a38;
+  --dial-sh: 0 0 0 3px #c2a25a, 0 0 0 4px #1e2a38; --hand: #1e2a38; --hh: 196deg; --mm: 192deg; }
+.t-1812 :is(.bar, .clock) { --panel: #9fb3bd; --ink: #141c26; --muted: #2c3a4a; --hair: rgba(20,28,38,0.4); --fill: linear-gradient(#2c3a4a, #2c3a4a); --sw-off: #eee9d8; }
+.t-1812 :is(h2, .story h3) { letter-spacing: 0.04em; }
+.t-1812 .sw i { border-radius: 3px; }
+.t-1812 .sw i::after { border-radius: 2px; background: #eee9d8; }
+.t-1812 .clock { gap: 16px; padding-left: 13px; }
+.t-1812.o-c .clock { padding-left: 12px; gap: 14px; }
+
+/* ---------- Civil War: an engineer's survey sheet. Ruled linen panels, the bar and clock in blue cloth with a gilt rule. ---------- */
+.t-civil { --paper: #f1ece0; --panel: repeating-linear-gradient(0deg, rgba(60,50,30,0.035) 0 1px, transparent 1px 2px), repeating-linear-gradient(90deg, rgba(60,50,30,0.03) 0 1px, transparent 1px 2px), #f1ece0;
+  --ink: #1d2230; --muted: #4c5160; --rule: #1d2230; --accent: #8c2a1c; --on: #8c2a1c; --hair: rgba(29,34,48,0.35); --tint: rgba(140,42,28,0.1);
+  --head: "Old Standard TT", Georgia, serif; --sc: "Playfair Display SC", Georgia, serif; --read: "Old Standard TT", Georgia, serif; --fig: "Old Standard TT", Georgia, serif;
+  --title: 700 27px/1.12 "Playfair Display SC", Georgia, serif; --frame: inset 0 0 0 4px #f1ece0, inset 0 0 0 5px rgba(29,34,48,0.55), 0 10px 28px rgba(8,10,20,0.45);
+  --groove: #ddd6c4; --sw-off: #ddd6c4; --knob-rim: #1d2230; --fill: linear-gradient(#4c5160, #4c5160); --btn: linear-gradient(#f8f4ea, #e2dac6);
+  --dial: radial-gradient(circle, #f1ece0 0 60%, transparent 61%), repeating-conic-gradient(from -2deg, #1d2230 0 4deg, #f1ece0 0 30deg); --dial-rim: 3px solid #c9a961;
+  --dial-sh: 0 0 0 1px #0d1322; --hand: #1d2230; --hh: 244.5deg; --mm: 54deg; }
+.t-civil :is(.bar, .clock) { --panel: repeating-linear-gradient(45deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 4px), #1f2a44; --ink: #efe6cc; --muted: #c9bfa3; --rule: #0d1322;
+  --accent: #c9a961; --on: #c9a961; --hair: rgba(201,169,97,0.5); --frame: inset 0 0 0 3px #1f2a44, inset 0 0 0 4px #c9a961, 0 10px 26px rgba(8,10,20,0.55);
+  --groove: #121a2e; --groove-rule: #c9a961; --fill: linear-gradient(#c9a961, #c9a961); --knob-rim: #0d1322; --btn: #2a3657; --btn-ink: #efe6cc; --btn-rule: #c9a961; --sw-off: #121a2e; }
+.t-civil .bar button:not(.sw) { box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 1px 2px rgba(0,0,0,0.5); }
+.t-civil .story h3 { font: 700 24px/1.15 var(--sc); }
+.t-civil .when { font: italic 18px/1.3 var(--read); }
+.t-civil :is(.set h3, .tip) { font-family: var(--sc); font-weight: 700; }
+.t-civil.o-b .story :is(.when, h3) { font-size: 19px; }
+
+/* ---------- First World War: a trench map. Cream panels ruled in ink, spaced capitals, a trench watch. ---------- */
+.t-ww1 { font-size: 18px; --paper: #f2eee2; --ink: #1f1d1a; --muted: #55524a; --rule: #1f1d1a; --accent: #c3162b; --on: #c3162b; --hair: rgba(31,29,26,0.3); --tint: rgba(195,22,43,0.08); --inner: #1f1d1a;
+  --head: "Crimson Pro", Georgia, serif; --sc: "Archivo Narrow", "Arial Narrow", sans-serif; --read: "Crimson Pro", Georgia, serif; --fig: "Crimson Pro", Georgia, serif;
+  --groove: #dcd6c4; --sw-off: #f2eee2; --knob-rim: #1f1d1a; --fill: linear-gradient(#55524a, #55524a); --btn: linear-gradient(#f8f5ec, #e4dfce);
+  --dial: radial-gradient(circle, #23211d 0 60%, transparent 61%), repeating-conic-gradient(from -2.5deg, #d9e2b0 0 5deg, #23211d 0 30deg); --dial-rim: 3px solid #8d8a80;
+  --dial-sh: 0 0 0 1px #1f1d1a; --hand: #d9e2b0; --hh: 227deg; --mm: 204deg; }
+.t-ww1 .pn::before { inset: 4px; }
+.t-ww1 :is(.kick, .day) { letter-spacing: 0.3em; text-transform: uppercase; }
+.t-ww1 .clock b { font-weight: 600; }
+.t-ww1 :is(.ch, .fold, .sw, .vol, .sides, .tip, button) { font-size: 19px; }
+.t-ww1 .play { border-radius: 3px; }
+.t-ww1 .sw i { border-radius: 0; }
+.t-ww1 .sw i::after { border-radius: 0; background: #8d8a80; }
+.t-ww1 .sw.on i { background: var(--sw-off); }
+.t-ww1 .sw.on i::after { background: var(--accent); }
+.t-ww1 .set h3 { letter-spacing: 0.2em; text-transform: uppercase; font-size: 18px; }
+
+/* ---------- Second World War: an operations room. Dark boards, chalk stencil, amber lamps, a sector clock, the story on teleprinter tape. ---------- */
+.t-ww2 { font-size: 16px; --paper: #1d211b; --panel: radial-gradient(ellipse at 30% 0%, rgba(255,255,255,0.05), transparent 60%), #1d211b; --ink: #e9e4d2; --muted: #a9ad9b; --rule: #000;
+  --accent: #f0b53c; --on: #0d0f0b; --hair: #3a4035; --tint: rgba(240,181,60,0.13); --tape: #f2e6b4;
+  --head: "Stardos Stencil", Impact, sans-serif; --sc: "Stardos Stencil", Impact, sans-serif; --read: "Courier Prime", "Courier New", monospace; --fig: Oswald, "Arial Narrow", sans-serif; --num: Oswald, "Arial Narrow", sans-serif;
+  --title: 700 29px/1.02 "Stardos Stencil", Impact, sans-serif; --frame: inset 0 0 0 1px rgba(255,255,255,0.06), 0 14px 34px rgba(0,0,0,0.7);
+  --groove: #0d0f0b; --groove-rule: #000; --fill: linear-gradient(90deg, rgba(240,181,60,0.3), #f0b53c); --knob: radial-gradient(circle at 35% 30%, #fff1c8, #f0b53c 60%, #8a5a10); --knob-rim: transparent;
+  --btn: linear-gradient(#2f352b, #1a1e17); --btn-ink: #e9e4d2; --btn-rule: #000; --sw-off: #0d0f0b;
+  --dial: radial-gradient(circle, #ece6d2 0 60%, transparent 61%), repeating-conic-gradient(#c8372a 0 30deg, #e4b532 0 60deg, #2d5fa8 0 90deg); --dial-rim: 2px solid #111;
+  --dial-sh: 0 3px 4px rgba(0,0,0,0.6); --hand: #111; --hh: 322.5deg; --mm: 270deg; }
+.t-ww2 button { font: 16px/1.2 var(--head); letter-spacing: 0.1em; text-transform: uppercase; box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 2px 3px rgba(0,0,0,0.6); }
+.t-ww2 :is(h2, .kick, .sub, .sides, .day, .tip, .slug, .vol, .set h3, .clock small, .hours) { text-transform: uppercase; }
+.t-ww2 h2 { letter-spacing: 0.03em; }
+.t-ww2 .kick { letter-spacing: 0.15em; color: #9da38f; }
+.t-ww2 button.fold { text-transform: uppercase; }
+.t-ww2 .sub { font: 16px/1.4 var(--read); letter-spacing: 0.04em; }
+.t-ww2 .sides { font: 16px/1.5 var(--head); letter-spacing: 0.08em; }
+.t-ww2 .sides i { width: 30px; height: 16px; border: 0; border-radius: 2px; box-shadow: 0 3px 4px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.25); vertical-align: -2px; }
+.t-ww2 :is(button.fold, button.ch, button.sw, .vol) { font: 16px/1.2 var(--head); letter-spacing: 0.08em; }
+.t-ww2 button.rate, .t-ww2 .rate { font: 500 18px/1 var(--fig); letter-spacing: 0.04em; }
+.t-ww2 .speed { font: 600 18px/1 var(--fig); letter-spacing: 0.04em; }
+.t-ww2 .ch small { font: 500 17px/1 var(--fig); letter-spacing: 0.04em; width: 64px; }
+.t-ww2 .day { letter-spacing: 0.15em; color: #9da38f; }
+.t-ww2 .clock b { font-weight: 600; letter-spacing: 0.04em; }
+.t-ww2 .clock small { font: 16px/1.15 var(--sc); letter-spacing: 0.12em; color: #9da38f; }
+.t-ww2 .dial { width: 52px; height: 52px; }
+.t-ww2 .play { color: var(--accent); }
+.t-ww2 .sw i::after { background: #5a5f52; border-color: #000; }
+.t-ww2 .sw.on i::after { background: var(--knob); box-shadow: 0 0 10px rgba(240,181,60,0.75); }
+.t-ww2 .rate.on { color: var(--accent); }
+.t-ww2 .track > i { background: #7d826f; }
+.t-ww2 .track > i.now { background: var(--accent); }
+.t-ww2 .bar .groove { top: 17px; height: 6px; border: 0; box-shadow: inset 0 1px 2px #000, 0 1px 0 rgba(255,255,255,0.07); }
+.t-ww2 .bar .fill::after { right: -10px; width: 20px; height: 20px; margin-top: -10px; border: 0; box-shadow: 0 0 10px rgba(240,181,60,0.75); }
+.t-ww2 .hours { font: 16px/16px var(--fig); letter-spacing: 0.06em; color: #8b907c; }
+.t-ww2 .vol b::after { border: 0; box-shadow: 0 0 8px rgba(240,181,60,0.7); }
+.t-ww2 .set h3 { font: 700 19px/1.4 var(--head); letter-spacing: 0.1em; }
+.t-ww2 .tip { font: 17px/1.25 var(--head); letter-spacing: 0.06em; }
+.t-ww2 .tip small { font: 500 16px/1.2 var(--fig); letter-spacing: 0.06em; }
+.t-ww2 .slug b { font-weight: 700; letter-spacing: 0.04em; color: var(--ink); }
+.t-ww2 .slug small { font: 500 18px/1.2 var(--fig); letter-spacing: 0.06em; }
+.t-ww2 .hairline .fill::after { border-color: #000; }
+/* The story is a strip of teleprinter tape that ends STOP. */
+.t-ww2 :is(.story, .cur) { --panel: #f2e6b4; --ink: #1f1c14; --muted: #1f1c14; --accent: #1f1c14; --hair: rgba(31,28,20,0.4); --frame: 0 14px 30px rgba(0,0,0,0.65); --btn: #1f1c14; --btn-ink: #f2e6b4; color: #1f1c14; }
+.t-ww2 .story h3 { font: 700 21px/1.2 var(--read); text-transform: uppercase; }
+.t-ww2 .when { font: 700 16px/1.3 var(--read); letter-spacing: 0.06em; text-transform: uppercase; }
+.t-ww2 :is(.story, .cur) p { font: 16px/1.55 var(--read); text-transform: uppercase; }
+.t-ww2 .story p { border-top-style: dashed; }
+.t-ww2 :is(.story, .cur) p::after { content: " STOP"; font-weight: 700; }
+.t-ww2 .story button { box-shadow: none; }
+.t-ww2.o-b .story :is(.when, h3) { font-size: 17px; }
+.t-ww2.o-b .story p { font-size: 17px; }
+.t-ww2 .cur { background: #f2e6b4; }
+.t-ww2 .cur .ch, .t-ww2 .cur .ch small { color: #1f1c14; }
