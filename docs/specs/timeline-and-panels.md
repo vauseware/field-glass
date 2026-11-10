@@ -21,7 +21,7 @@ Measures are the mock's, at 1536 x 830. The build issue shows each piece in all 
 | Clock cluster (`#clock-box`) | top right, 14 px down, 16 px in | one row, 400 to 470 px wide by skin | a 40 px dial, the time over its date, the speed, the Time-lapse switch |
 | Caption strip (`#caption`) | centred on the map, 48 px above the bar | at most 900 px wide | the chapter's time and name on one line, up to three lines of story at 20 px, page dots |
 | Bar (`#bar`) | docked to the bottom edge, full width | 58 px high | Play, the scrubber, **Settings** |
-| Settings (`#settings`) | over the Settings button | 320 px wide | Follow the action, Chapter titles, Captions |
+| Settings (`#settings`) | over the Settings button | 320 px wide | Follow the action, Chapter titles, Captions; Sound, Music and Narration volume |
 
 ### The timeline
 
@@ -76,7 +76,11 @@ Measures are the mock's, at 1536 x 830. The build issue shows each piece in all 
 - Follow the action (key `f`). Chapter titles (key `c`): the name that fades in over the map when a chapter begins
   (ADR-0010). Captions: the caption strip.
 - Chapter titles and Captions start on, and the browser keeps the viewer's choice for every battle.
-- Sound, music and narration volume go here when they exist. This spec builds no volume control.
+- Three volume sliders under a rule: Sound, Music, Narration. Each is an `<input type="range">` from 0 to 100 with
+  its name beside it, dressed as the skin's scrubber is. Zero is silent.
+- The sliders are built now, before there is anything to hear. They set stored values and do nothing else; sound
+  and narration read those values when they ship.
+- They start at Sound 60, Music 40, Narration 80, and the browser keeps the viewer's choice for every battle.
 
 ### The switches
 
@@ -121,6 +125,8 @@ Checkboxes become switches: a track with a knob, the knob to the right when on. 
   rises — check: cases in `tools/check.mjs`.
 - Keys `f`, `t`, `c`, Space, the arrows and Esc work; Chapter titles and Captions survive a reload — check:
   `playback.cjs` and `chapters.cjs`.
+- Each volume slider moves with the pointer and the arrow keys, and its value survives a reload — check:
+  `chrome.cjs`.
 - No scroll, nothing covered, text 16 px or more, controls 44 px or more, in every skin at both laptop sizes —
   check: `laptop.cjs` over one battle per skin.
 - The hover tip and unit card stay on top — check: `stacking.cjs`, rewritten for the caption strip and tick tip.
@@ -131,7 +137,8 @@ Checkboxes become switches: a track with a knob, the knob to the right when on. 
 
 ## Non-goals
 
-- Sound, music, narration and their volume controls (#88, `docs/specs/battle-sound.md`).
+- Sound, music and narration themselves (#88, `docs/specs/battle-sound.md`). The volume sliders are built; nothing
+  plays.
 - The unit list (#83).
 - Phones (ADR-0012, #90). The narrow-screen rules may go; nothing is checked under 1280 px wide.
 - The start screen, the map, the skins' canvas drawing and the battles' data.
@@ -166,7 +173,7 @@ Frozen for the build and its journeys:
   `#caption`, `#cap-when`, `#cap-title`, `#cap-text`, `#chapter-title`, `#bar`, `#play`, `#speed`, `#scrub`,
   `#hours`, `#marks` (ticks only), `#clock`, `#follow`, `#lapse`.
 - New ids: `#clock-box` (the cluster), `#chapters-btn`, `#top-close`, `#chapter-list`, `#cap-pips`, `#tick-tip`,
-  `#settings-btn`, `#settings`, `#titles`, `#captions`.
+  `#settings-btn`, `#settings`, `#titles`, `#captions`, `#vol-sound`, `#vol-music`, `#vol-narration`.
 - Removed ids: `#top-fold`, `#cap-fold`, `#chapters`.
 - `#top` carries class `open` when the drawer is open. The current chapter's row carries class `on`.
 - `sim.js`: `captionPage(b, ev, t, weights) => index`, DOM-free. `weights` are the pages' character counts.
@@ -174,6 +181,10 @@ Frozen for the build and its journeys:
   and the tick tip. Without it: `6:30 AM`, `8 AM`.
 - `localStorage`: `fieldglass.titles` and `fieldglass.captions`, each `on` or `off`, read and written inside
   `try`. `fieldglass.chapters` is no longer read.
+- `localStorage`: `fieldglass.volume`, JSON `{ "sound": 60, "music": 40, "narration": 80 }`, each 0 to 100, read
+  and written inside `try`. This is the interface sound and narration read. It replaces the speaker button and
+  the `fieldglass.sound` key in `docs/specs/battle-sound.md`, which is a draft and must be brought into line
+  before it is built.
 - No change to battle data, `battles/index.json` or the link hash.
 
 ## Human-only work
@@ -199,6 +210,10 @@ Frozen for the build and its journeys:
   of the story panel today; the drawer holds the whole text.
 - Dense ticks. The Somme has 13 chapters in 3% of its length, about 3 px apart. The tip names the nearest; the
   list is the sure way to pick one.
+- Silent sliders. Until sound ships, a viewer who moves Sound hears nothing. Dave chose to build them now.
+- `docs/specs/battle-sound.md` still describes a speaker button in the bar with a slide-out slider and an `m` key.
+  That control conflicts with the sliders here. This spec does not edit the sound spec; mute and `m` are its to
+  settle.
 - The widest clock cluster (about 470 px) and the longest title's chip share the top row at 1280 px wide.
   `laptop.cjs` must prove they do not meet.
 
@@ -206,7 +221,8 @@ Frozen for the build and its journeys:
 
 - Key `c` turns Chapter titles on and off, under a new storage key, and the 15-chapter rule goes — PENDING
 - A Captions switch replaces the story panel's Hide button — PENDING
-- No volume controls until sound ships — PENDING
+- The volume sliders are built now and only set stored values — APPROVED (Dave, 2026-11-09)
+- The sliders start at Sound 60, Music 40, Narration 80, under one storage key — PENDING
 - Pages follow the battle clock by the rule above until narration gives them cue times — PENDING
 - The hint line moves into the drawer — PENDING
 - Tick hover names the chapter but a click does not snap to it — PENDING
@@ -218,5 +234,6 @@ Frozen for the build and its journeys:
 - 2026-11-09: Where does a long story go? → Both: paged in the strip, whole in the drawer under the current chapter.
 - 2026-11-09: The clock at top centre covers the middle of the map. → It moves to the top-right corner, smaller.
 - 2026-11-09: Does Time-lapse stay in the bar? → No. It sits with the clock and the speed.
+- 2026-11-09: Wait for sound before building volume controls? → No. Build them now.
 - Issue #73 comments: chapters are ticks with a hover function; the clickable list goes in the info panel; Follow
   the action goes in a settings panel with the volume controls to come; each skin may have its own clock.
