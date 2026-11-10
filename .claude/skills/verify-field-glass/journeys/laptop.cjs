@@ -1,8 +1,9 @@
 // The target laptop: no page scroll, every control on screen, text 16 px or more, hit targets 44 px or more, and a canvas
-// backed at the full device pixel ratio. Runs the start screen and one battle per skin at each viewport.
+// backed at the full device pixel ratio. Runs the start screen and one battle per skin at each viewport, each with the
+// drawer open (a bare link), closed, and with Settings open; the title chip and the clock never meet.
 // Run: bash fg.sh drive <dir> journeys/laptop.cjs [battle ids, comma separated]
 const puppeteer = require('puppeteer-core');
-const [exe, base, dir, ids = 'cowpens,first-manassas,sidi-bou-zid'] = process.argv.slice(2);
+const [exe, base, dir, ids = 'cowpens,new-orleans,first-manassas,somme,sidi-bou-zid'] = process.argv.slice(2);
 const ok = (c, m) => console.log(`${c ? 'PASS' : 'FAIL'} ${m}`);
 const VIEWS = [{ width: 1536, height: 830, deviceScaleFactor: 1.25 }, { width: 1280, height: 700, deviceScaleFactor: 1.5 }];
 const MIN_TEXT = 16, MIN_HIT = 44;
@@ -10,8 +11,15 @@ const MIN_TEXT = 16, MIN_HIT = 44;
 const audit = (MIN_TEXT, MIN_HIT) => {
   const W = innerWidth, H = innerHeight, de = document.documentElement;
   const splash = document.querySelector('#splash:not([hidden])'); // while it is up, the battle's controls lie unused behind it
+  const inside = (r, el) => { // not scrolled out of a scrolling box, such as a row below the fold of the chapter list
+    for (let a = el.parentElement; a && a !== document.body; a = a.parentElement) {
+      if (getComputedStyle(a).overflowY === 'visible') continue;
+      const b = a.getBoundingClientRect(); if (r.top < b.top - 0.5 || r.bottom > b.bottom + 0.5) return false;
+    }
+    return true;
+  };
   const shown = el => { const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
-    return r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.pointerEvents !== 'none' && !el.closest('[hidden]') && (!splash || splash.contains(el)); };
+    return r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.pointerEvents !== 'none' && !el.closest('[hidden]') && (!splash || splash.contains(el)) && inside(r, el); };
   const name = el => el.id ? `#${el.id}` : `${el.tagName.toLowerCase()}${el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/)[0] : ''}`;
   const small = new Map();
   const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
@@ -21,12 +29,11 @@ const audit = (MIN_TEXT, MIN_HIT) => {
     const px = parseFloat(getComputedStyle(el).fontSize);
     if (px < MIN_TEXT - 0.01) { const k = `${name(el)} ${px}px`; if (!small.has(k)) small.set(k, t.slice(0, 30)); }
   }
-  const hits = [...document.querySelectorAll('button, select, input:not([type=checkbox]), a[href], summary, [role=button], #splash .row, #bar label')].filter(shown).map(el => {
+  const hits = [...document.querySelectorAll('button, select, input:not([type=checkbox]), a[href], summary, [role=button], #splash .row, .switch')].filter(shown).map(el => {
     const r = el.getBoundingClientRect();
     const over = [[0.5, 0.5], [0.25, 0.25], [0.75, 0.25], [0.25, 0.75], [0.75, 0.75]].map(([fx, fy]) => document.elementFromPoint(r.left + r.width * fx, r.top + r.height * fy))
       .find(t => t && !el.contains(t) && !t.contains(el));
-    // the chapter marks slant at 50°, so their box samples bare map, and they overlap each other by design
-    return { el: name(el), w: Math.round(r.width), h: Math.round(r.height), off: r.left < 0 || r.top < 0 || r.right > W + 0.5 || r.bottom > H + 0.5, hid: over && !el.closest('#marks') ? name(over) : null };
+    return { el: name(el), w: Math.round(r.width), h: Math.round(r.height), off: r.left < 0 || r.top < 0 || r.right > W + 0.5 || r.bottom > H + 0.5, hid: over ? name(over) : null };
   });
   // #fx holds soft ambient textures, stretched on purpose
   const cv = [...document.querySelectorAll('canvas')].filter(c => shown(c) && !c.closest('#fx')).map(c => ({ el: name(c), want: Math.round(c.clientWidth * devicePixelRatio), have: c.width }));
@@ -58,7 +65,15 @@ const audit = (MIN_TEXT, MIN_HIT) => {
       await p.waitForFunction(() => document.querySelector('#splash').hidden && document.querySelector('#title').textContent !== 'Loading…', { timeout: 60000 });
       await new Promise(r => setTimeout(r, 1500));
       await p.screenshot({ path: `${dir}/laptop-${vt}-${id}.png` });
-      report(`${vt} ${id} (opened in ${Date.now() - t0} ms)`, await p.evaluate(audit, MIN_TEXT, MIN_HIT));
+      report(`${vt} ${id}, drawer open (opened in ${Date.now() - t0} ms)`, await p.evaluate(audit, MIN_TEXT, MIN_HIT));
+      await p.click('#top-close'); await new Promise(r => setTimeout(r, 300));
+      const meet = await p.evaluate(() => { const a = document.querySelector('#top').getBoundingClientRect(), b = document.querySelector('#clock-box').getBoundingClientRect(); return { gap: Math.round(b.left - a.right) }; });
+      ok(meet.gap > 0, `${vt} ${id}: the title chip ends ${meet.gap} px before the clock`);
+      await p.screenshot({ path: `${dir}/laptop-${vt}-${id}-closed.png` });
+      report(`${vt} ${id}, drawer closed`, await p.evaluate(audit, MIN_TEXT, MIN_HIT));
+      await p.click('#settings-btn'); await new Promise(r => setTimeout(r, 300));
+      await p.screenshot({ path: `${dir}/laptop-${vt}-${id}-settings.png` });
+      report(`${vt} ${id}, Settings open`, await p.evaluate(audit, MIN_TEXT, MIN_HIT));
     }
   }
   ok(!errs.length, `no page errors${errs.length ? ': ' + errs.join(' | ') : ''}`);

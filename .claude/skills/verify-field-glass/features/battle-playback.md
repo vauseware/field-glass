@@ -1,6 +1,6 @@
 # Battle playback
 
-A battle link opens paused at its first moment with its map, the top panel (title, sides, outcome, All battles, Legend, Sources) and the story caption. The bar at the foot plays and pauses, sets the speed, scrubs time across chapter marks, and toggles Follow the action and Time-lapse. The clock and the caption follow the battle's time.
+A battle link opens paused at its first moment with its map, the drawer (title, sides, outcome, chapters, All battles, Legend, Sources) and the caption strip. The bar at the foot plays and pauses and scrubs time across the chapter ticks; the clock in the top right corner sets the speed and toggles Time-lapse; Settings toggles Follow the action. The clock and the caption follow the battle's time.
 
 ## Sub-features
 
@@ -8,7 +8,7 @@ A battle link opens paused at its first moment with its map, the top panel (titl
 - `pb-scrub` seeks with the scrubber; the caption changes to that moment's chapter.
 - `pb-step` steps forward and back with the arrow keys.
 - `pb-speed` sets the speed from the Speed menu.
-- `pb-toggles` turns Follow the action (`f`), Time-lapse (`t`) and Chapters (`c`, see `chapters.md`) on and off.
+- `pb-toggles` turns Follow the action (`f`), Time-lapse (`t`) and Chapter titles (`c`, see `chapters.md`) on and off.
 - `pb-legend` opens the Legend dialog with the skin's key.
 - `pb-sources` opens the Sources dialog listing the battle's sources.
 
@@ -16,7 +16,7 @@ A battle link opens paused at its first moment with its map, the top panel (titl
 
 - Choose a battle on the start screen.
 - Open a battle link such as `#cowpens`.
-- Use the bar at the foot, the top panel's buttons, or the keys Space, ←, →, `f` and `t`.
+- Use the bar at the foot, the clock's speed and switch, the drawer's buttons, or the keys Space, ←, →, `f` and `t`.
 
 ## Driving it with fg.sh
 
@@ -31,7 +31,8 @@ Preconditions:
 - **Scrub.** Set `#scrub` halfway and fire `input`. `#clock` and `#cap-title` change to the chapter at that time.
 - **Arrow keys.** Blur, then press ArrowRight. `#scrub` moves forward by at least 30 s.
 - **Speed.** Choose the last option in `#speed`. Its value is that option. The options are `1, 2, 5, 10, 20, 30, 60, 120`.
-- **Legend.** Click `#legend-btn`. `#legend-dlg` is open and `#legend-list` has entries. Press Escape to close it.
+- **Follow and Time-lapse.** Blur, then press `f` and `t`. `fg.state().follow` and `#lapse.checked` flip.
+- **Legend.** Play closes the drawer, so click `#chapters-btn` first. Click `#legend-btn`. `#legend-dlg` is open and `#legend-list` has entries. Press Escape to close it.
 - **Sources.** Click `#src-btn`. `#sources` is open and `#src-list` has entries.
 
 ## Gotchas

@@ -1,4 +1,5 @@
-// Battle playback: play and pause, Space, the scrubber, the arrow keys, speed, and the Legend and Sources dialogs.
+// Battle playback: play and pause, Space, the scrubber, the arrow keys, speed, Follow and Time-lapse by key, and the Legend
+// and Sources dialogs in the drawer.
 // Run: bash fg.sh drive <dir> journeys/playback.cjs [battle id, default cowpens]
 const puppeteer = require('puppeteer-core');
 const [exe, base, dir, id = 'cowpens'] = process.argv.slice(2);
@@ -33,7 +34,11 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
   const speeds = await p.$$eval('#speed option', o => o.map(x => x.value));
   await p.select('#speed', speeds.at(-1));
   ok(await p.$eval('#speed', el => el.value) === speeds.at(-1), `Speed offers ${speeds.join(', ')} and takes ${speeds.at(-1)}`);
-  await p.click('#legend-btn'); await wait(300);
+  await blur(); const fol = await p.evaluate(() => fg.state().follow); await p.keyboard.press('f'); const fol2 = await p.evaluate(() => fg.state().follow);
+  const lap = await p.$eval('#lapse', el => el.checked); await p.keyboard.press('t'); const lap2 = await p.$eval('#lapse', el => el.checked);
+  ok(fol !== fol2 && lap !== lap2, `f turns Follow ${fol2 ? 'on' : 'off'} (from ${fol ? 'on' : 'off'}); t turns Time-lapse ${lap2 ? 'on' : 'off'} (from ${lap ? 'on' : 'off'})`);
+  ok(!(await p.$eval('#top', t => t.classList.contains('open'))), 'Play closed the drawer');
+  await p.click('#chapters-btn'); await p.click('#legend-btn'); await wait(300);
   ok(await p.$eval('#legend-dlg', d => d.open && document.querySelector('#legend-list').children.length > 0), 'Legend opens a dialog with entries'); await shot('3-legend');
   await p.keyboard.press('Escape'); await p.click('#src-btn'); await wait(300);
   ok(await p.$eval('#sources', d => d.open && document.querySelector('#src-list').children.length > 0), 'Sources opens a dialog listing the sources'); await shot('4-sources');

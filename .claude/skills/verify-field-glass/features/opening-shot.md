@@ -1,6 +1,6 @@
 # Opening shot
 
-A battle started from its beginning opens on the whole map with every unit in its starting place and no panels, bar or chapter labels. The battle's name over its date fades in, holds and fades out. The camera then eases in over four seconds to the frame Follow the action gives the first chapter, the panels fade back as it settles, and only then does the clock start. A battle that opens before sunrise keeps its night wash at a dawn level until the ease begins.
+A battle started from its beginning opens on the whole map with every unit in its starting place and no panels, clock or bar; the drawer closes first. The battle's name over its date fades in, holds and fades out. The camera then eases in over four seconds to the frame Follow the action gives the first chapter, the panels fade back as it settles, and only then does the clock start. A battle that opens before sunrise keeps its night wash at a dawn level until the ease begins.
 
 ## Sub-features
 
@@ -23,7 +23,7 @@ Preconditions:
 
 - The baseline from `README.md` holds.
 
-- **Whole journey.** Run `bash .claude/skills/verify-field-glass/fg.sh drive <dir> .claude/skills/verify-field-glass/journeys/opening.cjs [ids] [clip]`. Every line is `PASS`. `<dir>/opening-<id>-field.png`, `-title.png` and `-landing.png` show the three beats at 1536x830, and `opening-<first id>-title-phone.png` the title at 390x844. With `clip`, `<dir>/clip/f000.jpg` to `f150.jpg` are 15 fps frames of the first battle's opening; `ffmpeg -framerate 15 -i <dir>/clip/f%03d.jpg -pix_fmt yuv420p out.mp4` makes the clip.
+- **Whole journey.** Run `bash .claude/skills/verify-field-glass/fg.sh drive <dir> .claude/skills/verify-field-glass/journeys/opening.cjs [ids] [clip]`. Every line is `PASS`. `<dir>/opening-<id>-field.png`, `-title.png` and `-landing.png` show the three beats at 1536x830. With `clip`, `<dir>/clip/f000.jpg` to `f150.jpg` are 15 fps frames of the first battle's opening; `ffmpeg -framerate 15 -i <dir>/clip/f%03d.jpg -pix_fmt yuv420p out.mp4` makes the clip.
 - **Title still.** Run `fg.sh shot <dir> '#sidi-bou-zid,opening' sbz-title 1536 830`. The map fills the window's height with no panels, and "SIDI BOU ZID" sits over "14 TO 17 FEBRUARY 1943" on a dark band.
 - **State.** Under puppeteer, `navigator.webdriver` is true and the page exposes `window.fg`: `fg.state()` returns `{ cam, t, playing, follow, opening }`, where `opening` is `{ e, wide, target }` or `null`, and `fg.hold(e)` holds a running opening at `e` seconds.
 

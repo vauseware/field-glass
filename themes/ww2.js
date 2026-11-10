@@ -492,7 +492,7 @@ export default {
   },
   when(ev, b) { // the teleprinter's header: about the hour, unless the sources record the time
     const exact = ev.when != null, at = exact ? ev.t : Math.round(ev.t / 3600) * 3600, { h, m, day, month } = clockParts(at);
-    const date = day == null ? (b.date ?? '').slice(8, 10).replace(/^0/, '') : `${day} ${mon(month)}`;
+    const [, mo, d] = (b.date ?? '').split('-').map(Number), date = day != null ? `${day} ${mon(month)}` : d ? `${d} ${mon(mo - 1)}` : '';
     return `${exact && !/about/i.test(ev.when) ? '' : 'ABOUT '}${pad2(h)}${pad2(m)} HRS${date ? ` · ${date}` : ''}`;
   },
   time(t) { const { h, m } = clockParts(t); return `${pad2(h)}${pad2(m)}`; },

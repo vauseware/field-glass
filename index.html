@@ -40,7 +40,7 @@
   #chapter-title::before { content: ""; position: absolute; inset: -34px -190px; z-index: -1;
     background: radial-gradient(closest-side, color-mix(in srgb, var(--paper-solid) 80%, transparent), color-mix(in srgb, var(--paper-solid) 55%, transparent) 50%, transparent 75%); }
   #chapter-title.run { animation: chapter-title 3.6s both; }
-  #chapter-title.held { opacity: 1; }
+  #chapter-title.held { opacity: 1; animation: none; } /* ,warp,title: held for as long as a screenshot takes */
   .nofade #chapter-title:not(.held) { visibility: hidden; }
   @keyframes chapter-title { 0% { opacity: 0; } 16.67%, 72.22% { opacity: 1; } 100% { opacity: 0; } }
   @keyframes chapter-title-still { from { opacity: 1; } to { opacity: 0; } }
@@ -401,6 +401,7 @@
   .theme-civil-war #top.open h1 { font-size: 27px; line-height: 1.12; } .theme-civil-war #cap-title { font-size: 19px; }
   .theme-civil-war #cap-when { font: italic 18px/1.3 var(--text); }
   .theme-civil-war :is(#settings h2, #tick-tip) { font-family: var(--sc); font-weight: 700; }
+  .theme-civil-war :is(#top h1, #cap-title, #card-name, #hover b, dialog h2, #settings h2, #tick-tip, #chapter-title, #op-name) { font-variant-ligatures: no-common-ligatures; } /* the SC face's fi is lower case */
   /* A gilt-rimmed watch with a cream face. Switches: a brass knob, the track gilt when on (on the cloth). */
   body.theme-civil-war { --hair: rgba(29,34,48,0.35); --tint: rgba(140,42,28,0.1); --groove: #ddd6c4; --sw-off: #ddd6c4; --knob-rim: #1d2230; --fill: linear-gradient(#4c5160, #4c5160);
     --dial-face: #f1ece0; --dial-mark: #1d2230; --dial-hand: #1d2230; --dial-rim: #c9a961; --dial-edge: #0d1322; }
