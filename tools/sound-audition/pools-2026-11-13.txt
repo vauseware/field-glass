@@ -1,0 +1,33 @@
+wind       synth + wind-1-593817 + wind-2-482254   (blind 0/1 right)
+rumble     synth + rumble-1-184275 + rumble-2-581123
+whistle    whistle-2a-324539 + whistle-2b-324539
+cannon     synth + cannon-1-162626 + cannon-2-351963 + cannon-3-125348
+shell      synth + shell-1-82682 + shell-3-108640
+volley     volley-3-162625 + volley-1-675623 + volley-2-125346
+scatter    synth + scatter-1-538795 + scatter-2-347647 + scatter-3-675622
+mg         undecided
+transport  transport-1-143557 + transport-3-110737
+stuka      stuka-1-143558 + stuka-2-143562 + stuka-3-96210
+hooves     hooves-1b-479738 + hooves-2a-479736
+A1         A1-1-freesound437839-t + A1-2-freesound437841-t + A1-4-freesound256049-t
+A2         A2-1-freesound437771-t + A2-2-freesound437780-t
+A3         A3-1-freesound143560 + A3-2-freesound437795-t
+A4         A4-1-freesound325563 + A4-3-freesound195412
+US1        US1-1-freesound460851
+US2        US2-1-freesound675588
+US3        US3-1-commonssherman-tank-rijden-soundcloud-beeld-en--t
+US4        US4-1-freesound486031-t + US4-2-freesound675587-t
+US5        US5-1-freesound486029-t
+US6        undecided
+US7        US7-2-freesound675605
+UK1        UK1-2-freesound450853
+UK2        UK2-1-freesound675590 + UK2-2-freesound675591
+UK3        UK3-2-freesound702455-t
+DE1        DE1-1-freesound802675
+W5         W5-1-freesound486023-t
+W6         W6-1-freesound169261
+W9         W9-3-freesound160771-t
+W10        W10-1-freesound332935
+W12        W12-1-freesound258203 + W12-2-freesound486030-t + W12-3-freesound674897-t
+
+Notes: synth in shell and rumble serves flintlock and percussion only; World War battles use recordings.

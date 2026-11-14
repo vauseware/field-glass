@@ -1,0 +1,588 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Synth Audition</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a bench of channel strips. One card per cue, each with its recipe, waveform, transport and verdict. */
+:root {
+  --bg: #eceee7; --panel: #f8f9f4; --ink: #1c221b; --muted: #5a6456; --line: #cdd3c5;
+  --brass: #86661a; --brass-ink: #ffffff; --good: #2c6a38; --warn: #8a5a12; --bad: #9a3a2a;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #131712; --panel: #1b211a; --ink: #e5e9de; --muted: #98a291; --line: #303a2e;
+  --brass: #d2aa4c; --brass-ink: #17130a; --good: #80c28b; --warn: #dcb060; --bad: #e38c7a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #131712; --panel: #1b211a; --ink: #e5e9de; --muted: #98a291; --line: #303a2e;
+  --brass: #d2aa4c; --brass-ink: #17130a; --good: #80c28b; --warn: #dcb060; --bad: #e38c7a; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body);
+  padding-block: 28px 48px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+h1 { font: 600 34px/1.05 var(--display); letter-spacing: .01em; margin: 0; text-wrap: balance; }
+h2 { font: 600 22px/1.1 var(--display); margin: 0; }
+p { margin: 0; max-width: 68ch; }
+.lede { display: flex; flex-direction: column; gap: 10px; }
+.muted { color: var(--muted); }
+.bar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; }
+.bar label { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+input[type=range] { accent-color: var(--brass); width: 160px; max-width: 100%; }
+button { font: 500 13px var(--body); color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 7px 11px; cursor: pointer; }
+button:hover:not(:disabled) { border-color: var(--brass); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+button:disabled { opacity: .45; cursor: default; }
+button.primary, button.on { background: var(--brass); border-color: var(--brass); color: var(--brass-ink); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px; }
+.card { min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; }
+.cue { font: 500 12px var(--mono); color: var(--brass); }
+.chip { font: 500 11px var(--body); letter-spacing: .06em; text-transform: uppercase; margin-left: auto; }
+.chip.pass { color: var(--good); } .chip.far { color: var(--warn); } .chip.fail { color: var(--bad); }
+.recipe, .stats { font: 400 12px/1.45 var(--mono); color: var(--muted); overflow-wrap: anywhere; }
+.stats { font-variant-numeric: tabular-nums; }
+canvas { width: 100%; height: 52px; display: block; border: 1px solid var(--line); border-radius: 3px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ref { font-size: 12px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; }
+.ref input, .ref select { font: 12px var(--body); color: var(--ink); max-width: 100%; }
+.ref select { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; width: 100%; }
+.credit { font-size: 12px; overflow-wrap: anywhere; }
+.credit a { color: var(--brass); }
+[hidden] { display: none !important; }
+.blind { font-size: 13px; border-top: 1px dashed var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.verdict { border-top: 1px solid var(--line); padding-top: 10px; }
+.verdict span { font-size: 12px; color: var(--muted); margin-right: 4px; }
+.pool { display: flex; flex-direction: column; gap: 8px; }
+.opts { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
+.opts label { display: flex; gap: 6px; align-items: baseline; overflow-wrap: anywhere; min-width: 0; }
+.opts input { accent-color: var(--brass); flex: none; }
+pre { font: 12px/1.6 var(--mono); margin: 0; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; overflow-x: auto; white-space: pre; }
+.sum { display: flex; flex-direction: column; gap: 10px; }
+</style>
+
+<div class="wrap">
+  <div class="lede">
+    <h1>Battle sound: synth audition</h1>
+    <p>Eleven sounds built from Web Audio nodes, with no files. Each is meant to be heard from far off, the way the replay hears a fight across the field. Each card comes with freesound recordings of the same thing. Play both, then run the blind test. Then tick every source you want in that sound's pool, synth and recordings together.</p>
+    <p class="muted">Synth and recording are levelled to the same RMS and cut to the same length, so judge the timbre. Use headphones or monitors. Observer distance, on by default, plays everything as the viewer above the map would hear it: highs rolled off at 1.4 kHz and a long field reverb. Turn it off to hear the raw recording. Re-roll builds a new take from fresh random values. Hear the mix plays the pool the way the replay would: random picks, never the same one twice running, each shifted up to 5% in rate and 2 dB in level. The wind and rumble beds layer their pool instead.</p>
+  </div>
+
+  <div class="bar">
+    <label for="vol">Volume <input type="range" id="vol" min="0" max="100" value="60"></label>
+    <label for="observer"><input type="checkbox" id="observer" checked> Observer distance</label>
+    <button id="stop">Stop</button>
+    <button id="rerollAll">Re-roll all</button>
+    <span class="muted" id="status">Rendering…</span>
+  </div>
+
+  <div class="grid" id="cards"></div>
+
+  <div class="lede">
+    <h2>World War recordings</h2>
+    <p>Real recordings of the equipment each side used, by nation and weapon family. No synths. A card marked stand-in is the closest real relative of what the row names, because no usable recording of the exact equipment turned up.</p>
+    <p class="muted">Empty after a full search of freesound, Wikimedia Commons and archive.org: German MG 42 or MG 34, German tank engine, 8.8 cm gun, Nebelwerfer, Vickers, Lewis, 18-pounder, Chauchat or Hotchkiss, and any WW1 tank.</p>
+  </div>
+  <div class="grid" id="wwcards"></div>
+
+  <div class="sum">
+    <h2>Your pools</h2>
+    <p class="muted">Copy this back into the conversation. In the blind test, about half right means you can't tell synth from recording.</p>
+    <pre id="summary"></pre>
+    <div class="row"><button id="copy">Copy pools</button><span class="muted" id="copied"></span></div>
+  </div>
+</div>
+
+<script>
+const SR = 48000;
+const rnd = (a, b) => a + Math.random() * (b - a);
+const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
+const dB = x => 20 * Math.log10(Math.max(x, 1e-9));
+
+function noiseBuffer(c, kind, secs) {
+  const b = c.createBuffer(1, SR * secs, SR), d = b.getChannelData(0);
+  let b0 = 0, b1 = 0, b2 = 0, last = 0;
+  for (let i = 0; i < d.length; i++) {
+    const w = Math.random() * 2 - 1;
+    if (kind === 'white') d[i] = w;
+    else if (kind === 'pink') { b0 = 0.99765 * b0 + w * 0.0990460; b1 = 0.96300 * b1 + w * 0.2965164; b2 = 0.57000 * b2 + w * 1.0526913; d[i] = (b0 + b1 + b2 + w * 0.1848) * 0.25; }
+    else { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; }
+  }
+  return b;
+}
+
+function impulse(c) {
+  const n = SR * 3, b = c.createBuffer(2, n, SR);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = b.getChannelData(ch); let y = 0;
+    for (let i = 0; i < n; i++) {
+      const t = i / SR, a = 0.25 * Math.exp(-t * 1.2) + 0.02;
+      y += a * ((Math.random() * 2 - 1) - y);
+      d[i] = y * Math.exp(-t * 1.8) * Math.min(1, t / 0.02) * 3;
+    }
+    for (let k = 0; k < 4; k++) {
+      const at = Math.floor(SR * rnd(0.18, 0.7));
+      for (let j = 0; j < 500; j++) d[at + j] += (Math.random() * 2 - 1) * 0.3 * Math.exp(-j / 130);
+    }
+  }
+  return b;
+}
+
+function kit(c) {
+  const bufs = {};
+  const verb = c.createConvolver(); verb.buffer = impulse(c); verb.connect(c.destination);
+  return {
+    c,
+    nz(kind) { if (!bufs[kind]) bufs[kind] = noiseBuffer(c, kind, 4); const s = c.createBufferSource(); s.buffer = bufs[kind]; s.loop = true; return s; },
+    send(node, pan, wet) {
+      const p = c.createStereoPanner(); p.pan.value = pan; node.connect(p); p.connect(c.destination);
+      const w = c.createGain(); w.gain.value = wet; p.connect(w); w.connect(verb); return p;
+    },
+    filt(type, f, q) { const b = c.createBiquadFilter(); b.type = type; b.frequency.value = f; if (q) b.Q.value = q; return b; },
+    gain(v) { const g = c.createGain(); g.gain.value = v; return g; },
+    lfo(f, depth, param) { const o = c.createOscillator(); o.frequency.value = f * rnd(0.8, 1.2); const g = c.createGain(); g.gain.value = depth; o.connect(g); g.connect(param); o.start(0); }
+  };
+}
+
+function env(p, t, a, peak, d) {
+  p.setValueAtTime(0.0001, t); p.exponentialRampToValueAtTime(peak, t + a); p.exponentialRampToValueAtTime(0.0001, t + a + d);
+}
+
+function boom(k, t, o) {
+  const c = k.c, out = k.gain(o.gain ?? 1);
+  const s = c.createOscillator(); s.frequency.setValueAtTime(o.f0 ?? 70, t); s.frequency.exponentialRampToValueAtTime(o.f1 ?? 32, t + 0.5);
+  const sg = k.gain(0); env(sg.gain, t, 0.015, o.sub ?? 0.9, o.dur * 0.6); s.connect(sg); sg.connect(out); s.start(t); s.stop(t + o.dur + 0.2);
+  const n = k.nz('pink'), lp = k.filt('lowpass', o.cut);
+  lp.frequency.setValueAtTime(o.cut, t); lp.frequency.exponentialRampToValueAtTime(Math.max(60, o.cut / 5), t + o.dur * 0.7);
+  const ng = k.gain(0); env(ng.gain, t, o.att ?? 0.02, 0.9, o.dur); n.connect(lp); lp.connect(ng); ng.connect(out); n.start(t, rnd(0, 3)); n.stop(t + o.dur + 0.3);
+  if (o.crack) {
+    const w = k.nz('white'), bp = k.filt('bandpass', 1800, 0.7), wg = k.gain(0);
+    env(wg.gain, t, 0.002, o.crack, 0.06); w.connect(bp); bp.connect(wg); wg.connect(out); w.start(t, rnd(0, 3)); w.stop(t + 0.2);
+  }
+  k.send(out, o.pan ?? 0, o.wet ?? 0.5);
+}
+
+function pop(k, t, o) {
+  const out = k.gain(o.gain);
+  const w = k.nz('white'), bp = k.filt('bandpass', o.f, 0.9), wg = k.gain(0);
+  env(wg.gain, t, 0.002, 1, o.dec); w.connect(bp); bp.connect(wg); wg.connect(out); w.start(t, rnd(0, 3)); w.stop(t + o.dec + 0.1);
+  const n = k.nz('pink'), lp = k.filt('lowpass', 250), ng = k.gain(0);
+  env(ng.gain, t, 0.004, 0.8, o.dec * 1.6); n.connect(lp); lp.connect(ng); ng.connect(out); n.start(t, rnd(0, 3)); n.stop(t + o.dec * 1.6 + 0.1);
+  k.send(out, o.pan, o.wet ?? 0.45);
+}
+
+function musketVolley(k, t0, n, spread) {
+  for (let i = 0; i < n; i++) {
+    const t = t0 + (i < n * 0.7 ? Math.abs(gauss()) * spread * 0.35 : rnd(0.3, spread));
+    pop(k, t, { f: rnd(450, 1000), dec: rnd(0.05, 0.12), gain: rnd(0.3, 1), pan: rnd(-0.6, 0.6) });
+  }
+  boom(k, t0 + 0.05, { cut: 220, sub: 0.25, dur: 1.2, gain: 0.5, wet: 0.6 });
+}
+
+function thud(k, t, gain, pan) {
+  const c = k.c, out = k.gain(gain);
+  const s = c.createOscillator(); s.frequency.setValueAtTime(110, t); s.frequency.exponentialRampToValueAtTime(55, t + 0.06);
+  const sg = k.gain(0); env(sg.gain, t, 0.004, 0.9, 0.07); s.connect(sg); sg.connect(out); s.start(t); s.stop(t + 0.15);
+  const n = k.nz('pink'), lp = k.filt('lowpass', 500), ng = k.gain(0);
+  env(ng.gain, t, 0.003, 0.7, 0.05); n.connect(lp); lp.connect(ng); ng.connect(out); n.start(t, rnd(0, 3)); n.stop(t + 0.12);
+  const w = k.nz('white'), bp = k.filt('bandpass', 2500, 1.5), wg = k.gain(0);
+  env(wg.gain, t, 0.001, 0.12, 0.012); w.connect(bp); bp.connect(wg); wg.connect(out); w.start(t, rnd(0, 3)); w.stop(t + 0.05);
+  k.send(out, pan, 0.2);
+}
+
+const CUES = [
+  { id: 'wind', cue: 'field', name: 'Wind bed', expect: 'pass', dur: 12, loop: true,
+    recipe: 'pink noise, bandpass 420 Hz drifting on two LFOs; gust band at 1.4 kHz; leaf hiss above 3 kHz',
+    build(k) {
+      const n = k.nz('pink'), bp = k.filt('bandpass', 420, 0.6), g = k.gain(0.5);
+      k.lfo(0.07, 180, bp.frequency); k.lfo(0.11, 120, bp.frequency); k.lfo(0.05, 0.25, g.gain); k.lfo(0.13, 0.15, g.gain);
+      n.connect(bp); bp.connect(g); n.start(0, rnd(0, 3)); k.send(g, 0, 0.1);
+      const w = k.nz('white'), b2 = k.filt('bandpass', 1400, 4), g2 = k.gain(0.04);
+      k.lfo(0.04, 0.035, g2.gain); k.lfo(0.09, 300, b2.frequency); w.connect(b2); b2.connect(g2); w.start(0, rnd(0, 3)); k.send(g2, 0.3, 0.1);
+      const w3 = k.nz('white'), hp = k.filt('highpass', 3000), g3 = k.gain(0.012);
+      k.lfo(0.06, 0.01, g3.gain); w3.connect(hp); hp.connect(g3); w3.start(0, rnd(0, 3)); k.send(g3, -0.3, 0.05);
+    } },
+  { id: 'rumble', cue: 'field', name: 'Far rumble', expect: 'pass', dur: 12, loop: true,
+    recipe: 'brown noise under 60 Hz; random guns beyond the horizon, lowpass 120 Hz, long tail',
+    build(k, dur) {
+      const n = k.nz('brown'), lp = k.filt('lowpass', 60), g = k.gain(0.3);
+      k.lfo(0.08, 0.15, g.gain); n.connect(lp); lp.connect(g); n.start(0, rnd(0, 3)); k.send(g, 0, 0.3);
+      for (let t = rnd(0.3, 1.5); t < dur - 3; t += rnd(0.8, 3)) boom(k, t, { cut: 120, f0: 55, f1: 28, dur: 2.5, gain: rnd(0.3, 0.7), pan: rnd(-0.5, 0.5), wet: 0.7, att: 0.05 });
+    } },
+  { id: 'whistle', cue: 'bugle', name: 'Trench whistle (WW1)', expect: 'pass', dur: 3.2,
+    recipe: 'two sines at 2180 and 2420 Hz, pea warble at 26 Hz, breath noise, lowpass 3.5 kHz',
+    build(k) {
+      const c = k.c, t = 0.2, len = 1.5, g = k.gain(0), amp = k.gain(0.7), lp = k.filt('lowpass', 3500);
+      for (const f of [2180, 2420]) {
+        const o = c.createOscillator(); o.frequency.setValueAtTime(f * 0.96, t); o.frequency.linearRampToValueAtTime(f, t + 0.08);
+        o.frequency.setValueAtTime(f, t + len - 0.1); o.frequency.linearRampToValueAtTime(f * 0.97, t + len);
+        k.lfo(26, 35, o.frequency); o.connect(amp); o.start(t); o.stop(t + len + 0.1);
+      }
+      const w = k.nz('white'), bp = k.filt('bandpass', 2300, 2), wg = k.gain(0.15); w.connect(bp); bp.connect(wg); wg.connect(amp); w.start(t, rnd(0, 3)); w.stop(t + len + 0.1);
+      k.lfo(26, 0.25, amp.gain); amp.connect(g);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(1, t + 0.03); g.gain.setValueAtTime(1, t + len); g.gain.linearRampToValueAtTime(0, t + len + 0.05);
+      g.connect(lp); k.send(lp, 0, 0.35);
+    } },
+  { id: 'cannon', cue: 'gun', name: 'Field gun, far', expect: 'far', dur: 4,
+    recipe: 'sine 70 to 32 Hz; pink noise, lowpass 500 to 100 Hz, 30 ms attack, 2.2 s tail',
+    build(k) { boom(k, 0.2, { cut: 500, dur: 2.2, att: 0.03, wet: 0.55 }); } },
+  { id: 'shell', cue: 'heavy', name: 'Shell burst or naval gun, far', expect: 'far', dur: 5,
+    recipe: 'sine 60 to 26 Hz; crack at 1.8 kHz for 60 ms; pink noise, lowpass 800 to 160 Hz, 3 s tail',
+    build(k) { boom(k, 0.2, { cut: 800, f0: 60, f1: 26, dur: 3, crack: 0.35, wet: 0.65 }); } },
+  { id: 'volley', cue: 'volley', name: 'Musket volley, far', expect: 'far', dur: 6.5,
+    recipe: '40 noise pops per volley, bandpass 450 to 1000 Hz, ragged over 0.6 s with stragglers; two volleys',
+    build(k) { musketVolley(k, 0.2, 40, 1.6); musketVolley(k, 3.4, 34, 1.6); } },
+  { id: 'scatter', cue: 'scatter', name: 'Skirmish fire, far', expect: 'far', dur: 8,
+    recipe: '9 single pops over 7 s, same pop as the volley',
+    build(k) { for (let i = 0; i < 9; i++) pop(k, rnd(0.2, 6.5), { f: rnd(450, 1000), dec: rnd(0.06, 0.12), gain: rnd(0.4, 1), pan: rnd(-0.7, 0.7), wet: 0.55 }); } },
+  { id: 'mg', cue: 'mg', name: 'Machine gun, far (Vickers, 500 rpm)', expect: 'far', dur: 7,
+    recipe: 'pops at 0.12 s spacing with 4 ms jitter, bandpass 800 Hz, 45 ms decay; bursts of 10, 6 and 14',
+    build(k) { for (const [t0, n] of [[0.2, 10], [2.2, 6], [3.6, 14]]) for (let i = 0; i < n; i++) pop(k, t0 + i * 0.12 + rnd(-0.004, 0.004), { f: 800, dec: 0.045, gain: rnd(0.7, 0.9), pan: 0.2, wet: 0.5 }); } },
+  { id: 'transport', cue: 'transport', name: 'C-47 pass overhead', expect: 'far', dur: 16,
+    recipe: 'two engines, saws at 58 and 59.2 Hz blade-pass plus 239 Hz firing; lowpass opens overhead; 3% Doppler fall',
+    build(k, dur) {
+      const c = k.c, out = k.gain(0.03), mid = dur / 2;
+      out.gain.setValueAtTime(0.03, 0); out.gain.exponentialRampToValueAtTime(1, mid); out.gain.exponentialRampToValueAtTime(0.03, dur);
+      const lp = k.filt('lowpass', 250); lp.frequency.setValueAtTime(250, 0); lp.frequency.exponentialRampToValueAtTime(900, mid); lp.frequency.exponentialRampToValueAtTime(200, dur);
+      for (const m of [1, 1.021]) for (const [f, g] of [[58 * m, 0.5], [239 * m, 0.12]]) {
+        const o = c.createOscillator(); o.type = 'sawtooth';
+        o.frequency.setValueAtTime(f * 1.03, 0); o.frequency.setValueAtTime(f * 1.03, mid - 2); o.frequency.linearRampToValueAtTime(f * 0.97, mid + 2);
+        const og = k.gain(g); o.connect(og); og.connect(lp); o.start(0);
+      }
+      const n = k.nz('pink'), bp = k.filt('bandpass', 180, 1), ng = k.gain(0.3); n.connect(bp); bp.connect(ng); ng.connect(lp); n.start(0, rnd(0, 3));
+      lp.connect(out); const p = k.send(out, -0.6, 0.15); p.pan.setValueAtTime(-0.6, 0); p.pan.linearRampToValueAtTime(0.6, dur);
+    } },
+  { id: 'stuka', cue: 'air', name: 'Dive bomber with siren', expect: 'far', dur: 9.5,
+    recipe: 'two saw sirens 380 to 1050 Hz over 5.5 s, bandpass 1.2 kHz; engine saw 95 to 140 Hz; bomb at 6.6 s',
+    build(k) {
+      const c = k.c, out = k.gain(0.05);
+      out.gain.setValueAtTime(0.05, 0); out.gain.exponentialRampToValueAtTime(0.7, 5.5); out.gain.exponentialRampToValueAtTime(0.01, 7.8);
+      const bp = k.filt('bandpass', 1200, 0.8);
+      for (const m of [1, 1.013]) {
+        const o = c.createOscillator(); o.type = 'sawtooth';
+        o.frequency.setValueAtTime(380 * m, 0); o.frequency.exponentialRampToValueAtTime(1050 * m, 5.5); o.frequency.exponentialRampToValueAtTime(600 * m, 7.5);
+        o.connect(bp); o.start(0); o.stop(8);
+      }
+      bp.connect(out);
+      const e = c.createOscillator(); e.type = 'sawtooth'; e.frequency.setValueAtTime(95, 0); e.frequency.exponentialRampToValueAtTime(140, 5.5); e.frequency.exponentialRampToValueAtTime(100, 7.5);
+      const elp = k.filt('lowpass', 500), eg = k.gain(0.4); e.connect(elp); elp.connect(eg); eg.connect(out); e.start(0); e.stop(8);
+      k.send(out, 0.2, 0.3);
+      boom(k, 6.6, { cut: 700, dur: 2.2, crack: 0.3, wet: 0.6, pan: 0.2 });
+    } },
+  { id: 'hooves', cue: 'hooves', name: 'Three horses at the gallop', expect: 'fail', dur: 5,
+    recipe: 'four-beat gallop, 0.43 s stride; each beat a sine 110 to 55 Hz, pink thump under 500 Hz and a short click',
+    build(k, dur) {
+      for (let h = 0; h < 3; h++) {
+        const stride = rnd(0.41, 0.46), pan = rnd(-0.5, 0.5), g = rnd(0.5, 1);
+        for (let t = rnd(0.1, 0.4); t < dur - 0.6; t += stride) for (const off of [0, 0.10, 0.17, 0.27]) thud(k, t + off + rnd(-0.008, 0.008), g * rnd(0.7, 1), pan);
+      }
+    } }
+];
+
+const EXPECT = { pass: 'Should pass', far: 'Far only', fail: 'Expected to fail' };
+const KEY = 'synthAudition.v2';
+let saved = { pool: {}, score: {} };
+try { saved = Object.assign(saved, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) {}
+const DEFAULT_POOLS = {"wind": ["synth", "wind-1-593817.mp3", "wind-2-482254.mp3"], "rumble": ["synth", "rumble-1-184275.mp3", "rumble-2-581123.mp3"], "whistle": ["whistle-2a-324539.mp3", "whistle-2b-324539.mp3"], "cannon": ["synth", "cannon-1-162626.mp3", "cannon-2-351963.mp3", "cannon-3-125348.mp3"], "shell": ["synth", "shell-1-82682.mp3", "shell-3-108640.mp3"], "volley": ["volley-3-162625.mp3", "volley-1-675623.mp3", "volley-2-125346.mp3"], "scatter": ["synth", "scatter-1-538795.mp3", "scatter-2-347647.mp3", "scatter-3-675622.mp3"], "mg": [], "transport": ["transport-1-143557.mp3", "transport-3-110737.mp3"], "stuka": ["stuka-1-143558.mp3", "stuka-2-143562.mp3", "stuka-3-96210.mp3"], "hooves": ["hooves-1b-479738.mp3", "hooves-2a-479736.mp3"], "A1": ["A1-1-freesound437839-t.mp3", "A1-2-freesound437841-t.mp3", "A1-4-freesound256049-t.mp3"], "A2": ["A2-1-freesound437771-t.mp3", "A2-2-freesound437780-t.mp3"], "A3": ["A3-1-freesound143560.mp3", "A3-2-freesound437795-t.mp3"], "A4": ["A4-1-freesound325563.mp3", "A4-3-freesound195412.mp3"], "US1": ["US1-1-freesound460851.mp3"], "US2": ["US2-1-freesound675588.mp3"], "US3": ["US3-1-commonssherman-tank-rijden-soundcloud-beeld-en--t.mp3"], "US4": ["US4-1-freesound486031-t.mp3", "US4-2-freesound675587-t.mp3"], "US5": ["US5-1-freesound486029-t.mp3"], "US6": [], "US7": ["US7-2-freesound675605.mp3"], "UK1": ["UK1-2-freesound450853.mp3"], "UK2": ["UK2-1-freesound675590.mp3", "UK2-2-freesound675591.mp3"], "UK3": ["UK3-2-freesound702455-t.mp3"], "DE1": ["DE1-1-freesound802675.mp3"], "W5": ["W5-1-freesound486023-t.mp3"], "W6": ["W6-1-freesound169261.mp3"], "W9": ["W9-3-freesound160771-t.mp3"], "W10": ["W10-1-freesound332935.mp3"], "W12": ["W12-1-freesound258203.mp3", "W12-2-freesound486030-t.mp3", "W12-3-freesound674897-t.mp3"]};
+if (!Object.keys(saved.pool || {}).length) saved.pool = DEFAULT_POOLS;
+const WW = new Set(['mg', 'whistle', 'transport', 'stuka']);
+for (const id of WW) if (saved.pool[id]) saved.pool[id] = saved.pool[id].filter(k => k !== 'synth');
+const DROPPED = new Set(["US3-2-commonssherman-tank-starten-en-rijden-soundclou.mp3", "US3-3-freesound438118.mp3"]);
+const RENAMED = {"A1-1-freesound437839.mp3": "A1-1-freesound437839-t.mp3", "A1-2-freesound437841.mp3": "A1-2-freesound437841-t.mp3", "A1-4-freesound256049.mp3": "A1-4-freesound256049-t.mp3", "A2-1-freesound437771.mp3": "A2-1-freesound437771-t.mp3", "A2-2-freesound437780.mp3": "A2-2-freesound437780-t.mp3", "A3-2-freesound437795.mp3": "A3-2-freesound437795-t.mp3", "US3-1-commonssherman-tank-rijden-soundcloud-beeld-en-.mp3": "US3-1-commonssherman-tank-rijden-soundcloud-beeld-en--t.mp3", "US4-1-freesound486031.mp3": "US4-1-freesound486031-t.mp3", "US4-2-freesound675587.mp3": "US4-2-freesound675587-t.mp3", "US5-1-freesound486029.mp3": "US5-1-freesound486029-t.mp3", "UK3-2-freesound702455.mp3": "UK3-2-freesound702455-t.mp3", "W5-1-freesound486023.mp3": "W5-1-freesound486023-t.mp3", "W9-3-freesound160771.mp3": "W9-3-freesound160771-t.mp3", "W12-2-freesound486030.mp3": "W12-2-freesound486030-t.mp3", "W12-3-freesound674897.mp3": "W12-3-freesound674897-t.mp3"};
+for (const id in saved.pool) saved.pool[id] = saved.pool[id].map(k => RENAMED[k] || k).filter(k => !DROPPED.has(k));
+const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} };
+
+function level(buf, loop) {
+  const chans = []; for (let ch = 0; ch < buf.numberOfChannels; ch++) chans.push(buf.getChannelData(ch));
+  let sum = 0, peak = 0, n = 0;
+  for (const d of chans) for (let i = 0; i < d.length; i++) { sum += d[i] * d[i]; const a = Math.abs(d[i]); if (a > peak) peak = a; n++; }
+  const rms = Math.sqrt(sum / n) || 1e-9;
+  const scale = Math.min(0.07 / rms, 0.89 / (peak || 1e-9));
+  const fade = loop ? Math.floor(SR * 0.4) : Math.floor(SR * 0.01);
+  for (const d of chans) for (let i = 0; i < d.length; i++) {
+    let f = 1; if (i < fade) f = i / fade; else if (i > d.length - fade) f = (d.length - i) / fade;
+    d[i] *= scale * f;
+  }
+  return { peak: dB(peak * scale), rms: dB(rms * scale) };
+}
+
+async function synthTake(cue) {
+  const c = new OfflineAudioContext(2, SR * cue.dur, SR);
+  cue.build(kit(c), cue.dur);
+  const buf = await c.startRendering();
+  return { buf, stat: level(buf, cue.loop) };
+}
+async function render(cue) {
+  const t = await synthTake(cue); cue.buf = t.buf; cue.stat = t.stat;
+  draw(cue); showStats(cue);
+}
+
+function draw(cue) {
+  const cv = cue.el.querySelector('canvas'), w = cv.width = cv.clientWidth * 2 || 600, h = cv.height = 104, g = cv.getContext('2d');
+  const d = cue.buf.getChannelData(0), step = Math.max(1, Math.floor(d.length / w));
+  g.clearRect(0, 0, w, h); g.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--brass');
+  for (let x = 0; x < w; x++) {
+    let lo = 0, hi = 0; for (let i = x * step; i < (x + 1) * step && i < d.length; i += 8) { if (d[i] < lo) lo = d[i]; if (d[i] > hi) hi = d[i]; }
+    g.fillRect(x, h / 2 - hi * h / 2, 1, Math.max(1, (hi - lo) * h / 2));
+  }
+}
+
+function showStats(cue) {
+  cue.el.querySelector('.stats').textContent = `peak ${cue.stat.peak.toFixed(1)} dBFS · RMS ${cue.stat.rms.toFixed(1)} dB · ${cue.dur.toFixed(1)} s`;
+}
+
+let actx, master, cur;
+const volEl = document.getElementById('vol');
+let obs;
+// The observer hears the field from above: highs roll off with distance and the field's reverb takes over.
+function setObserver(on) {
+  if (!obs) return;
+  const t = actx.currentTime;
+  obs.lp.frequency.setTargetAtTime(on ? 1400 : 20000, t, 0.05);
+  obs.wet.gain.setTargetAtTime(on ? 0.45 : 0, t, 0.05);
+  obs.dry.gain.setTargetAtTime(on ? 0.8 : 1, t, 0.05);
+}
+function live() {
+  if (!actx) {
+    actx = new AudioContext({ sampleRate: SR }); master = actx.createGain();
+    const lp = actx.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 0.5;
+    const dry = actx.createGain(), wet = actx.createGain(), verb = actx.createConvolver();
+    verb.buffer = impulse(actx);
+    master.connect(lp); lp.connect(dry); dry.connect(actx.destination); lp.connect(verb); verb.connect(wet); wet.connect(actx.destination);
+    obs = { lp, dry, wet }; setObserver(obsEl.checked);
+  }
+  master.gain.value = Math.pow(volEl.value / 100, 2); actx.resume(); return actx;
+}
+function stop() { if (cur) { for (const s of cur.list) { s.onended = null; try { s.stop(); } catch (e) {} } if (cur.btn) cur.btn.classList.remove('on'); cur = null; } }
+function track(list, btn) {
+  cur = { list, btn }; if (btn) btn.classList.add('on'); let left = list.length;
+  for (const s of list) s.onended = () => { if (--left === 0 && cur && cur.list === list) { if (btn) btn.classList.remove('on'); cur = null; } };
+}
+function play(buf, maxDur, btn) {
+  stop(); const s = live().createBufferSource(); s.buffer = buf; s.connect(master); s.start(0, 0, maxDur || buf.duration);
+  track([s], btn);
+}
+// Plays the pool the way the replay would: random picks, never the same twice running, each varied in rate and level.
+async function mix(cue, btn) {
+  const pool = saved.pool[cue.id] || []; if (!pool.length) return;
+  stop(); const c = live(); btn.disabled = true; btn.textContent = 'Building…';
+  try {
+    const bufs = {};
+    for (const k of pool) if (k !== 'synth') { const r = (cue.rows || []).find(r => r.file === k); if (r) bufs[k] = await cue.loadRow(r); }
+    const members = pool.filter(k => k === 'synth' || bufs[k]), list = [];
+    const add = (buf, at, rate, g, maxLen) => {
+      const s = c.createBufferSource(), gn = c.createGain(), len = Math.min(buf.duration / rate, maxLen);
+      s.buffer = buf; s.playbackRate.value = rate;
+      gn.gain.setValueAtTime(g, at); gn.gain.setValueAtTime(g, at + Math.max(0, len - 0.3)); gn.gain.linearRampToValueAtTime(0, at + len);
+      s.connect(gn); gn.connect(master); s.start(at); s.stop(at + len + 0.05); list.push(s); return len;
+    };
+    if (cue.loop) {
+      const t = c.currentTime + 0.1, g = 1 / Math.sqrt(members.length);
+      for (const k of members) add(k === 'synth' ? cue.buf : bufs[k], t, 1, g, 20);
+    } else {
+      const n = cue.dur > 10 ? 3 : 8, takes = [];
+      if (members.includes('synth')) for (let i = 0; i < 3; i++) takes.push((await synthTake(cue)).buf);
+      let t = c.currentTime + 0.1, last = null;
+      for (let i = 0; i < n; i++) {
+        let k; do { k = members[Math.floor(Math.random() * members.length)]; } while (members.length > 1 && k === last); last = k;
+        const len = add(k === 'synth' ? takes[i % 3] : bufs[k], t, rnd(0.95, 1.05), Math.pow(10, rnd(-2, 2) / 20), cue.dur > 10 ? cue.dur : 8);
+        t += Math.max(1.2, len * rnd(0.6, 0.9));
+      }
+    }
+    cue.lastMix = list.length; track(list, btn);
+  } finally { btn.disabled = false; btn.textContent = 'Hear the mix'; }
+}
+const obsEl = document.getElementById('observer');
+try { const v = localStorage.getItem('synthAudition.observer'); if (v !== null) obsEl.checked = v === '1'; } catch (e) {}
+obsEl.addEventListener('change', () => { try { localStorage.setItem('synthAudition.observer', obsEl.checked ? '1' : '0'); } catch (e) {} setObserver(obsEl.checked); });
+volEl.addEventListener('input', () => { if (master) master.gain.value = Math.pow(volEl.value / 100, 2); });
+document.getElementById('stop').addEventListener('click', stop);
+
+function summary() {
+  const lines = CUES.concat(WWROWS).map(c => {
+    const pool = saved.pool[c.id] || [], s = saved.score[c.id];
+    const label = pool.length ? pool.map(k => k.replace('.mp3', '')).join(' + ') : 'undecided';
+    return `${c.id.padEnd(10)} ${label}${s && s.total ? `   (blind ${s.right}/${s.total} right)` : ''}`;
+  });
+  document.getElementById('summary').textContent = lines.join('\n');
+}
+
+function card(cue) {
+  const el = document.createElement('div'); el.className = 'card'; cue.el = el;
+  el.innerHTML = `
+    <div class="head"><h2></h2><span class="cue"></span><span class="chip ${cue.expect}">${EXPECT[cue.expect]}</span></div>
+    <div class="recipe"></div>
+    <canvas aria-hidden="true"></canvas>
+    <div class="stats">rendering…</div>
+    <div class="row"><button class="primary" data-a="synth">Play synth</button><button data-a="reroll">Re-roll</button><button data-a="ref" disabled>Play recording</button><button data-a="blind" disabled>Blind test</button></div>
+    <label class="ref" for="pick-${cue.id}">Recording to compare against<select id="pick-${cue.id}"><option value="">Loading recordings…</option></select></label>
+    <div class="credit muted"></div>
+    <label class="ref" for="ref-${cue.id}">Or load your own file<input type="file" id="ref-${cue.id}" accept="audio/*"></label>
+    <div class="blind" hidden><span class="q">Which did you hear?</span><div class="row"><button data-g="synth">Synth</button><button data-g="ref">Recording</button><button data-a="again">Hear it again</button></div></div>
+    <div class="muted score"></div>
+    <div class="verdict pool"><span>${WW.has(cue.id) ? 'Use in the game. A World War sound, so recordings only.' : 'Use in the game. Tick every source you want in this sound\'s pool.'}</span><div class="opts"></div><div class="row"><button data-a="mix" disabled>Hear the mix</button></div></div>`;
+  el.querySelector('h2').textContent = cue.name;
+  el.querySelector('.cue').textContent = cue.cue;
+  el.querySelector('.recipe').textContent = cue.recipe;
+  const $ = s => el.querySelector(s), blindEl = $('.blind');
+  const paintPool = () => {
+    const box = $('.opts'), mixBtn = $('[data-a=mix]'); box.textContent = '';
+    const items = (WW.has(cue.id) ? [] : [['synth', 'Synth, a fresh take each time']]).concat((cue.rows || []).map((r, i) => [r.file, `${i + 1}. ${r.name}`]));
+    for (const [k, label] of items) {
+      const l = document.createElement('label'), cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.id = `use-${cue.id}-${k.replace(/\W/g, '')}`; cb.checked = (saved.pool[cue.id] || []).includes(k);
+      cb.addEventListener('change', () => {
+        const p = new Set(saved.pool[cue.id] || []); if (cb.checked) p.add(k); else p.delete(k);
+        saved.pool[cue.id] = items.map(x => x[0]).filter(x => p.has(x)); persist(); summary(); mixBtn.disabled = !saved.pool[cue.id].length;
+      });
+      l.append(cb, ' ' + label); box.append(l);
+    }
+    mixBtn.disabled = !(saved.pool[cue.id] || []).length;
+  };
+  const paintScore = msg => { const s = saved.score[cue.id]; $('.score').textContent = (msg ? msg + ' ' : '') + (s && s.total ? `Blind test: ${s.right} of ${s.total} right.` : ''); };
+  const shared = () => Math.min(cue.buf.duration, cue.ref.duration);
+  const blindPlay = () => play(cue.pick === 'synth' ? cue.buf : cue.ref, shared());
+  el.addEventListener('click', async e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const a = b.dataset.a;
+    if (a === 'synth' && cue.buf) play(cue.buf, cue.ref ? null : null, b);
+    if (a === 'reroll') { stop(); await render(cue); play(cue.buf, null, $('[data-a=synth]')); }
+    if (a === 'ref' && cue.ref) play(cue.ref, null, b);
+    if (a === 'blind' && cue.ref) { cue.pick = Math.random() < 0.5 ? 'synth' : 'ref'; blindEl.hidden = false; paintScore(); blindPlay(); }
+    if (a === 'again' && cue.pick) blindPlay();
+    if (b.dataset.g && cue.pick) {
+      const s = saved.score[cue.id] || (saved.score[cue.id] = { right: 0, total: 0 });
+      const ok = b.dataset.g === cue.pick; s.total++; if (ok) s.right++;
+      paintScore(`${ok ? 'Right.' : 'Wrong.'} That was the ${cue.pick === 'synth' ? 'synth' : 'recording'}.`);
+      cue.pick = null; blindEl.hidden = true; stop(); persist(); summary();
+    }
+    if (a === 'mix') mix(cue, b);
+  });
+  const decode = async bytes => { const buf = await new OfflineAudioContext(2, 1, SR).decodeAudioData(bytes); level(buf, false); return buf; };
+  cue.refBufs = {};
+  cue.loadRow = async r => {
+    if (!cue.refBufs[r.file]) { const res = await fetch('refs/' + r.file); if (!res.ok) throw new Error(res.status); cue.refBufs[r.file] = await decode(await res.arrayBuffer()); }
+    return cue.refBufs[r.file];
+  };
+  const setRef = (buf, label) => {
+    cue.ref = buf; cue.pick = null; blindEl.hidden = true;
+    $('[data-a=ref]').disabled = false; $('[data-a=blind]').disabled = false;
+    paintScore(`Loaded ${label}, ${buf.duration.toFixed(1)} s.`);
+  };
+  $('input[type=file]').addEventListener('change', async e => {
+    const f = e.target.files[0]; if (!f) return;
+    try { setRef(await decode(await f.arrayBuffer()), f.name); $('.credit').textContent = 'Your own file.'; }
+    catch (err) { paintScore('That file did not decode. Try WAV, MP3 or M4A.'); }
+  });
+  const sel = $('select');
+  cue.useRef = async r => {
+    const credit = $('.credit');
+    try {
+      setRef(await cue.loadRow(r), r.name);
+      credit.textContent = '';
+      const a = document.createElement('a'); a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = r.name;
+      credit.append(a, ` by ${r.username}, ${r.licence}. ${r.note}`);
+    } catch (err) { paintScore('That recording did not load. Load your own file instead.'); }
+  };
+  cue.setRefs = rows => {
+    cue.rows = rows; sel.textContent = ''; paintPool();
+    if (!rows.length) { sel.append(new Option('No recording bundled', '')); sel.disabled = true; return; }
+    rows.forEach((r, i) => sel.append(new Option(`${r.name} (${r.duration_s.toFixed(0)} s, ${r.licence})`, i)));
+    return cue.useRef(rows[0]);
+  };
+  sel.addEventListener('change', () => { if (cue.rows && cue.rows[sel.value]) { stop(); cue.useRef(cue.rows[sel.value]); } });
+  paintPool(); paintScore();
+  return el;
+}
+
+async function renderAll() {
+  const st = document.getElementById('status'); st.textContent = 'Rendering…';
+  let bad = 0;
+  for (const cue of CUES) { try { await render(cue); } catch (e) { bad++; cue.el.querySelector('.stats').textContent = 'render failed: ' + e.message; } }
+  st.textContent = bad ? `${bad} of ${CUES.length} failed to render` : `${CUES.length} sounds rendered`;
+  document.body.dataset.ready = bad ? 'error' : 'ok';
+}
+
+const WWROWS = [
+  ['A1', 'transport', 'C-47 Skytrain', 'ww2 · us'], ['A2', 'air', 'Ju 87 Stuka dive', 'ww2 · de'], ['A3', 'air', 'P-47 Thunderbolt', 'ww2 · us'], ['A4', 'transport', 'British four-engine tug', 'ww2 · uk'],
+  ['US1', 'volley', 'M1 Garand', 'ww2 · us'], ['US2', 'mg', 'Browning machine gun', 'ww2 · us'], ['US3', 'engine', 'M4 Sherman moving', 'ww2 · us'], ['US4', 'gun', 'US tank or anti-tank gun', 'ww2 · us'],
+  ['US5', 'gun', '105 mm howitzer', 'ww2 · us'], ['US6', 'wheels', 'Jeep and army truck', 'ww2 · us'], ['US7', 'heavy', 'Naval guns', 'ww2 · us'],
+  ['UK1', 'volley', 'Lee-Enfield', 'both wars · uk'], ['UK2', 'mg', 'Bren gun', 'ww2 · uk'], ['UK3', 'gun', '25-pounder', 'ww2 · uk'],
+  ['DE1', 'volley', 'Mauser 98k and Gewehr 98', 'both wars · de'], ['W5', 'gun', 'French 75 mm', 'great-war · fr'], ['W6', 'volley', 'Springfield M1903', 'great-war · us'],
+  ['W9', 'mg', 'Maxim, for the MG 08', 'great-war · de'], ['W10', 'gun', 'WW1 field gun', 'great-war'], ['W12', 'heavy', 'Heavy guns and shell bursts', 'great-war'],
+  ['DE2', 'mg', 'MG 42 and MG 34', 'ww2 · de'], ['DE3', 'engine', 'German tank moving', 'ww2 · de'], ['DE4', 'gun', '8.8 cm and German guns', 'ww2 · de'], ['DE5', 'heavy', 'Nebelwerfer', 'ww2 · de'],
+  ['W2', 'mg', 'Vickers', 'great-war · uk'], ['W3', 'mg', 'Lewis gun', 'great-war · uk'], ['W4', 'gun', '18-pounder and 13-pounder', 'great-war · uk'], ['W7', 'mg', 'Chauchat and Hotchkiss', 'great-war · fr, us'], ['W11', 'engine', 'WW1 tank', 'great-war']
+].map(([id, cue, name, kit]) => ({ id, cue, name, kit, ww: true, loop: false, dur: ['A1', 'A2', 'A3', 'A4', 'US3', 'US6'].includes(id) ? 30 : 8 }));
+for (const r of WWROWS) WW.add(r.id);
+
+function wwCard(row) {
+  const el = document.createElement('div'); el.className = 'card'; row.el = el; row.refBufs = {};
+  el.innerHTML = `
+    <div class="head"><h2></h2><span class="cue"></span><span class="chip"></span></div>
+    <label class="ref" for="pick-${row.id}">Recording<select id="pick-${row.id}"></select></label>
+    <div class="credit muted"></div>
+    <div class="row"><button class="primary" data-a="play">Play</button><button data-a="stop">Stop</button></div>
+    <div class="muted score"></div>
+    <div class="verdict pool"><span>Use in the game. Recordings only.</span><div class="opts"></div><div class="row"><button data-a="mix" disabled>Hear the mix</button></div></div>`;
+  el.querySelector('h2').textContent = row.name;
+  el.querySelector('.cue').textContent = `${row.cue} · ${row.kit}`;
+  const $ = s => el.querySelector(s), sel = $('select');
+  const exact = row.rows.some(r => r.exact);
+  $('.chip').textContent = exact ? 'Exact' : 'Stand-in'; $('.chip').classList.add(exact ? 'pass' : 'far');
+  row.loadRow = async r => {
+    if (!row.refBufs[r.file]) {
+      const res = await fetch(r.dir + '/' + r.file); if (!res.ok) throw new Error(res.status);
+      const buf = await new OfflineAudioContext(2, 1, SR).decodeAudioData(await res.arrayBuffer()); level(buf, false); row.refBufs[r.file] = buf;
+    }
+    return row.refBufs[r.file];
+  };
+  row.rows.forEach((r, i) => sel.append(new Option(`${r.dir === 'refs3' ? 'New. ' : ''}${r.exact ? '' : 'Stand-in: '}${r.equipment} (${Math.round(r.duration_s)} s)`, i)));
+  const credit = () => {
+    const r = row.rows[sel.value], c = $('.credit'); c.textContent = '';
+    const a = document.createElement('a'); a.href = r.page; a.target = '_blank'; a.rel = 'noopener'; a.textContent = r.title;
+    c.append(a, ` by ${r.author}, ${r.licence}. ${r.note}`);
+  };
+  sel.addEventListener('change', () => { stop(); credit(); }); credit();
+  const box = $('.opts'), mixBtn = $('[data-a=mix]');
+  for (const r of row.rows) {
+    const l = document.createElement('label'), cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.id = 'use-' + r.file.replace(/\W/g, ''); cb.checked = (saved.pool[row.id] || []).includes(r.file);
+    cb.addEventListener('change', () => {
+      const p = new Set(saved.pool[row.id] || []); if (cb.checked) p.add(r.file); else p.delete(r.file);
+      saved.pool[row.id] = row.rows.map(x => x.file).filter(x => p.has(x)); persist(); summary(); mixBtn.disabled = !saved.pool[row.id].length;
+    });
+    l.append(cb, ' ' + (r.dir === 'refs3' ? 'New. ' : '') + (r.exact ? '' : 'Stand-in: ') + r.equipment + (r.distance && r.distance !== 'unknown' ? ` (${r.distance})` : '')); box.append(l);
+  }
+  mixBtn.disabled = !(saved.pool[row.id] || []).length;
+  el.addEventListener('click', async e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.a === 'stop') stop();
+    if (b.dataset.a === 'play') {
+      $('.score').textContent = 'Loading…';
+      try { const buf = await row.loadRow(row.rows[sel.value]); $('.score').textContent = ''; play(buf, null, b); }
+      catch (err) { $('.score').textContent = 'That recording did not load.'; }
+    }
+    if (b.dataset.a === 'mix') mix(row, b);
+  });
+  return el;
+}
+const getRows = dir => fetch(dir + '/manifest.json').then(r => r.ok ? r.json() : []).catch(() => []).then(rows => rows.map(r => Object.assign(r, { dir })));
+Promise.all([getRows('refs2'), getRows('refs3')]).then(([a, b]) => a.concat(b)).then(rows => {
+  const host = document.getElementById('wwcards');
+  for (const row of WWROWS) { row.rows = rows.filter(r => r.row === row.id); if (row.rows.length) host.appendChild(wwCard(row)); }
+  summary(); document.body.dataset.ww = 'ok';
+});
+
+const cards = document.getElementById('cards');
+for (const cue of CUES) cards.appendChild(card(cue));
+summary();
+renderAll();
+fetch('refs/manifest.json').then(r => r.ok ? r.json() : []).catch(() => [])
+  .then(rows => Promise.all(CUES.map(c => c.setRefs(rows.filter(r => r.prefix === c.id)))))
+  .then(() => { document.body.dataset.refs = 'ok'; });
+document.getElementById('rerollAll').addEventListener('click', () => { stop(); renderAll(); });
+document.getElementById('copy').addEventListener('click', async () => {
+  const pre = document.getElementById('summary'), note = document.getElementById('copied');
+  try { await navigator.clipboard.writeText(pre.textContent); note.textContent = 'Copied.'; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); note.textContent = 'Selected. Press copy.'; }
+});
+</script>
