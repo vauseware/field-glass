@@ -219,7 +219,8 @@ builds that era's library. Later battles add only the cues and extras they lack.
 - **Pools.** A one-shot cue picks a member of its pool at random, never the same one twice running. A
   synth member is built from Web Audio nodes and rendered ahead of need with `OfflineAudioContext`, a
   few takes at a time, so each play of it is a new take. A bed (`field`) layers its members instead of
-  picking one: synthesized wind and rumble under the recorded birds.
+  picking one: synthesized wind and rumble under the recorded birds. In the World Wars the rumble is a
+  recording of real distant guns, per Accuracy in the World Wars.
 - **Loops.** AAC pads the ends of a file, so a looped `.m4a` can click. Each loop plays as two
   overlapping sources that crossfade, not with `loop = true`.
 - **Real time, not battle time.** At 10× to 300× a unit fires many times a second of replay, so each
@@ -255,7 +256,9 @@ builds that era's library. Later battles add only the cues and extras they lack.
   `common`, every `synth` name matches a generator in the page, and no file is over 10 s or 200 KB,
   except an `air` or `transport` pass, which may run to 30 s and 500 KB. In `great-war` and `ww2` it
   also checks that no entry is a synth except the `field` wind, that every side of a battle maps to a
-  kit, and that every entry names its equipment.
+  kit, that every entry names its equipment, and that each kit a battle uses has its own takes for
+  `volley`, `mg` and `gun` (exact or a labelled stand-in), so a German line never falls back to a
+  generic or other nation's rifle.
 - A journey, `journeys/sound.cjs`, records which cues fire and how loud, through a hook available only
   under `navigator.webdriver`. It checks: silence while paused and during the opening; `volley` and `gun`
   during Cowpens's main line; `march` and `drum` as Tarleton's column comes on before dawn;
