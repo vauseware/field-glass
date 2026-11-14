@@ -89,6 +89,9 @@ pre { font: 12px/1.6 var(--mono); margin: 0; padding: 12px 14px; background: var
     <p class="muted">Copy this back into the conversation. In the blind test, about half right means you can't tell synth from recording.</p>
     <pre id="summary"></pre>
     <div class="row"><button id="copy">Copy pools</button><span class="muted" id="copied"></span></div>
+    <p class="muted">Picks live in this browser at this address only. Save picks writes them to a file; Load picks reads one back here or on another address. Merge takes each sound in the file and keeps the rest; Replace clears every pick first.</p>
+    <div class="row"><button id="savePicks">Save picks</button><button id="loadPicks">Load picks</button><input type="file" id="picksFile" accept=".json,application/json" hidden>
+      <label class="muted" for="replacePicks" style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="checkbox" id="replacePicks" style="accent-color:var(--brass)"> Replace instead of merge</label><span class="muted" id="picksNote"></span></div>
   </div>
 </div>
 
@@ -285,10 +288,15 @@ try { saved = Object.assign(saved, JSON.parse(localStorage.getItem(KEY) || '{}')
 const DEFAULT_POOLS = {"wind": ["synth", "wind-1-593817.mp3", "wind-2-482254.mp3"], "rumble": ["synth", "rumble-1-184275.mp3", "rumble-2-581123.mp3"], "whistle": ["whistle-2a-324539.mp3", "whistle-2b-324539.mp3"], "cannon": ["synth", "cannon-1-162626.mp3", "cannon-2-351963.mp3", "cannon-3-125348.mp3"], "shell": ["synth", "shell-1-82682.mp3", "shell-3-108640.mp3"], "volley": ["volley-3-162625.mp3", "volley-1-675623.mp3", "volley-2-125346.mp3"], "scatter": ["synth", "scatter-1-538795.mp3", "scatter-2-347647.mp3", "scatter-3-675622.mp3"], "mg": [], "transport": ["transport-1-143557.mp3", "transport-3-110737.mp3"], "stuka": ["stuka-1-143558.mp3", "stuka-2-143562.mp3", "stuka-3-96210.mp3"], "hooves": ["hooves-1b-479738.mp3", "hooves-2a-479736.mp3"], "A1": ["A1-1-freesound437839-t.mp3", "A1-2-freesound437841-t.mp3", "A1-4-freesound256049-t.mp3"], "A2": ["A2-1-freesound437771-t.mp3", "A2-2-freesound437780-t.mp3"], "A3": ["A3-1-freesound143560.mp3", "A3-2-freesound437795-t.mp3"], "A4": ["A4-1-freesound325563.mp3", "A4-3-freesound195412.mp3"], "US1": ["US1-1-freesound460851.mp3"], "US2": ["US2-1-freesound675588.mp3"], "US3": ["US3-1-commonssherman-tank-rijden-soundcloud-beeld-en--t.mp3"], "US4": ["US4-1-freesound486031-t.mp3", "US4-2-freesound675587-t.mp3"], "US5": ["US5-1-freesound486029-t.mp3"], "US6": [], "US7": ["US7-2-freesound675605.mp3"], "UK1": ["UK1-2-freesound450853.mp3"], "UK2": ["UK2-1-freesound675590.mp3", "UK2-2-freesound675591.mp3"], "UK3": ["UK3-2-freesound702455-t.mp3"], "DE1": ["DE1-1-freesound802675.mp3"], "W5": ["W5-1-freesound486023-t.mp3"], "W6": ["W6-1-freesound169261.mp3"], "W9": ["W9-3-freesound160771-t.mp3"], "W10": ["W10-1-freesound332935.mp3"], "W12": ["W12-1-freesound258203.mp3", "W12-2-freesound486030-t.mp3", "W12-3-freesound674897-t.mp3"]};
 if (!Object.keys(saved.pool || {}).length) saved.pool = DEFAULT_POOLS;
 const WW = new Set(['mg', 'whistle', 'transport', 'stuka']);
-for (const id of WW) if (saved.pool[id]) saved.pool[id] = saved.pool[id].filter(k => k !== 'synth');
 const DROPPED = new Set(["US3-2-commonssherman-tank-starten-en-rijden-soundclou.mp3", "US3-3-freesound438118.mp3"]);
 const RENAMED = {"A1-1-freesound437839.mp3": "A1-1-freesound437839-t.mp3", "A1-2-freesound437841.mp3": "A1-2-freesound437841-t.mp3", "A1-4-freesound256049.mp3": "A1-4-freesound256049-t.mp3", "A2-1-freesound437771.mp3": "A2-1-freesound437771-t.mp3", "A2-2-freesound437780.mp3": "A2-2-freesound437780-t.mp3", "A3-2-freesound437795.mp3": "A3-2-freesound437795-t.mp3", "US3-1-commonssherman-tank-rijden-soundcloud-beeld-en-.mp3": "US3-1-commonssherman-tank-rijden-soundcloud-beeld-en--t.mp3", "US4-1-freesound486031.mp3": "US4-1-freesound486031-t.mp3", "US4-2-freesound675587.mp3": "US4-2-freesound675587-t.mp3", "US5-1-freesound486029.mp3": "US5-1-freesound486029-t.mp3", "UK3-2-freesound702455.mp3": "UK3-2-freesound702455-t.mp3", "W5-1-freesound486023.mp3": "W5-1-freesound486023-t.mp3", "W9-3-freesound160771.mp3": "W9-3-freesound160771-t.mp3", "W12-2-freesound486030.mp3": "W12-2-freesound486030-t.mp3", "W12-3-freesound674897.mp3": "W12-3-freesound674897-t.mp3"};
-for (const id in saved.pool) saved.pool[id] = saved.pool[id].map(k => RENAMED[k] || k).filter(k => !DROPPED.has(k));
+// Brings a pool map up to date: World War cues lose 'synth', renamed clips take their new name, dropped clips go.
+function cleanPools(pool) {
+  const out = {};
+  for (const id in pool) if (Array.isArray(pool[id])) out[id] = pool[id].map(k => RENAMED[k] || k).filter(k => !DROPPED.has(k) && !(WW.has(id) && k === 'synth'));
+  return out;
+}
+saved.pool = cleanPools(saved.pool);
 const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} };
 
 function level(buf, loop) {
@@ -491,6 +499,7 @@ function card(cue) {
   };
   sel.addEventListener('change', () => { if (cue.rows && cue.rows[sel.value]) { stop(); cue.useRef(cue.rows[sel.value]); } });
   paintPool(); paintScore();
+  cue.repaint = () => { paintPool(); paintScore(); };
   return el;
 }
 
@@ -542,7 +551,7 @@ function wwCard(row) {
     c.append(a, ` by ${r.author}, ${r.licence}. ${r.note}`);
   };
   sel.addEventListener('change', () => { stop(); credit(); }); credit();
-  const box = $('.opts'), mixBtn = $('[data-a=mix]');
+  const box = $('.opts'), mixBtn = $('[data-a=mix]'), boxes = [];
   for (const r of row.rows) {
     const l = document.createElement('label'), cb = document.createElement('input');
     cb.type = 'checkbox'; cb.id = 'use-' + r.file.replace(/\W/g, ''); cb.checked = (saved.pool[row.id] || []).includes(r.file);
@@ -550,9 +559,15 @@ function wwCard(row) {
       const p = new Set(saved.pool[row.id] || []); if (cb.checked) p.add(r.file); else p.delete(r.file);
       saved.pool[row.id] = row.rows.map(x => x.file).filter(x => p.has(x)); persist(); summary(); mixBtn.disabled = !saved.pool[row.id].length;
     });
+    boxes.push([cb, r.file]);
     l.append(cb, ' ' + (r.dir === 'refs3' ? 'New. ' : '') + (r.exact ? '' : 'Stand-in: ') + r.equipment + (r.distance && r.distance !== 'unknown' ? ` (${r.distance})` : '')); box.append(l);
   }
   mixBtn.disabled = !(saved.pool[row.id] || []).length;
+  row.repaint = () => {
+    const p = saved.pool[row.id] || [];
+    for (const [cb, f] of boxes) cb.checked = p.includes(f);
+    mixBtn.disabled = !p.length;
+  };
   el.addEventListener('click', async e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.dataset.a === 'stop') stop();
@@ -580,6 +595,35 @@ fetch('refs/manifest.json').then(r => r.ok ? r.json() : []).catch(() => [])
   .then(rows => Promise.all(CUES.map(c => c.setRefs(rows.filter(r => r.prefix === c.id)))))
   .then(() => { document.body.dataset.refs = 'ok'; });
 document.getElementById('rerollAll').addEventListener('click', () => { stop(); renderAll(); });
+const picksNote = document.getElementById('picksNote');
+document.getElementById('savePicks').addEventListener('click', async () => {
+  const filename = `synth-audition-picks-${new Date().toISOString().slice(0, 10)}.json`, data = JSON.stringify(saved, null, 2);
+  // On claude.ai the page runs in a frame that cannot download; the downloads capability asks the viewer instead.
+  const dl = window.claude && window.claude.use ? await window.claude.use('downloads').catch(() => null) : null;
+  if (dl) {
+    try { await dl.save({ filename, data }); picksNote.textContent = 'Saved ' + filename + '.'; }
+    catch (e) { picksNote.textContent = e && e.code === 'declined' ? 'Not saved.' : 'Saving is not available here. Use Copy pools.'; }
+    return;
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = filename;
+  document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  picksNote.textContent = 'Saved ' + filename + '.';
+});
+const picksFile = document.getElementById('picksFile');
+document.getElementById('loadPicks').addEventListener('click', () => picksFile.click());
+picksFile.addEventListener('change', async () => {
+  const f = picksFile.files[0]; picksFile.value = ''; if (!f) return;
+  let got;
+  try { got = JSON.parse(await f.text()); } catch (e) { picksNote.textContent = `${f.name} is not a picks file.`; return; }
+  if (!got || typeof got.pool !== 'object' || Array.isArray(got.pool)) { picksNote.textContent = `${f.name} is not a picks file.`; return; }
+  const pool = cleanPools(got.pool), score = {};
+  for (const id in got.score || {}) { const s = got.score[id]; if (s && Number.isFinite(s.right) && Number.isFinite(s.total)) score[id] = { right: s.right, total: s.total }; }
+  const replace = document.getElementById('replacePicks').checked;
+  saved = replace ? { pool, score } : { pool: Object.assign({}, saved.pool, pool), score: Object.assign({}, saved.score, score) };
+  persist(); summary();
+  for (const c of CUES.concat(WWROWS)) if (c.repaint) c.repaint();
+  picksNote.textContent = `${replace ? 'Replaced with' : 'Merged'} ${f.name}: ${Object.keys(pool).length} sounds.`;
+});
 document.getElementById('copy').addEventListener('click', async () => {
   const pre = document.getElementById('summary'), note = document.getElementById('copied');
   try { await navigator.clipboard.writeText(pre.textContent); note.textContent = 'Copied.'; }
