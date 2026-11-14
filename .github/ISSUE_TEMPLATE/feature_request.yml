@@ -1,0 +1,16 @@
+name: Idea or new battle
+description: Suggest a feature or a battle to add.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What you'd like
+      description: For a battle, name it and the war. For a feature, say what problem it solves for someone watching.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: For a battle, the best accounts and maps you know of.

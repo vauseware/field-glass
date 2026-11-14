@@ -1,0 +1,24 @@
+name: Historical error
+description: A unit, time, position, strength or caption that the record contradicts.
+labels: [accuracy]
+body:
+  - type: input
+    id: link
+    attributes:
+      label: Link
+      description: The battle and time, such as https://fieldglass.vause.io/#gettysburg@15:30
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What the app shows, and what the record says
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source
+      description: Book, page or map sheet, or a link. A claim without a source can't be acted on.
+    validations:
+      required: true

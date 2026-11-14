@@ -13,7 +13,7 @@ export const meta = {
 }
 
 const SKILL = '.claude/skills/battle-pipeline/SKILL.md'
-const POTETO = '/Users/claw/.claude/plugins/cache/cursor-plugins/pstack/0.15.25/skills/poteto-mode/SKILL.md'
+const POTETO = '~/.claude/plugins/cache/cursor-plugins/pstack/0.15.25/skills/poteto-mode/SKILL.md'
 const AGENT = 'pstack:poteto-agent'
 const issues = args?.issues ?? []
 if (!issues.length) throw new Error('battle-loop needs args.issues, the issue numbers to run')
