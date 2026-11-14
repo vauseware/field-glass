@@ -41,12 +41,17 @@ does not appear.
 
 The page saves ticks and blind-test results in the browser's localStorage under `synthAudition.v2`,
 and the observer switch under `synthAudition.observer`. localStorage belongs to one browser and one
-address: picks made on the artifact URL do not show on `localhost:8000`, and the reverse. Use "Copy
-pools" under the summary to move them, or keep them in a dated `pools-*.txt` file here.
+address: picks made on the artifact URL do not show on `localhost:8000`, and the reverse. To move
+them, use "Save picks" under the summary: it downloads `synth-audition-picks-<date>.json`, the saved
+object as is. "Load picks" reads such a file on the other address. By default it merges: each sound
+in the file replaces that sound's picks and score, and other sounds stay. Tick "Replace instead of
+merge" to clear every pick first. On claude.ai the page saves through the artifact's `downloads`
+capability, so the viewer confirms each save. "Copy pools" still copies the summary as text, for a
+dated `pools-*.txt` file here.
 
-Two maps near the top of the script keep old saves working. `RENAMED` points an old file name at its
-trimmed `-t` version. `DROPPED` removes clips taken out of the pools. When you rename or remove a clip
-that someone may have ticked, add it to one of these maps. Never change the storage key.
+Two maps near the top of the script keep old saves working, on page load and on Load picks.
+`RENAMED` points an old file name at its trimmed `-t` version. `DROPPED` removes clips taken out of the
+pools. When you rename or remove a clip that someone may have ticked, add it to one of these maps. Never change the storage key.
 
 ## Licences and credits
 
