@@ -8,13 +8,16 @@ muffled, never incoming. The rules it serves are in `docs/specs/battle-sound.md`
 This folder is a research tool. `tools/build.sh` does not copy it into `dist/`, so it never deploys
 with Field Glass.
 
-The page is also published at https://claude.ai/artifact/Kqb6bgTnHbCAgHESw8b7ZU. Republish to that
-URL after a change, so saved picks and the link stay the same.
+The page is also published as a claude.ai artifact. Its link stays out of the repo; maintainers have it
+in the project notes. Republish to that same artifact after a change, so saved picks and the link stay
+the same.
 
 ## Run it
 
+From the repo root:
+
 ```bash
-cd /Users/claw/dev/gh/vauseware/field-glass/tools/sound-audition && python3 -m http.server 8000
+cd tools/sound-audition && python3 -m http.server 8000
 ```
 
 Open http://localhost:8000/. From another machine over SSH, forward the port first
@@ -80,8 +83,10 @@ licence with link, source page, the cues that use it, and any trim or cut made h
 CC BY-SA clips also get a ready attribution line, which marks the clip as modified when it was
 trimmed or converted. Ship that file with the sounds wherever Field Glass uses them.
 
+From the repo root:
+
 ```bash
-cd /Users/claw/dev/gh/vauseware/field-glass/tools/sound-audition && python3 -I make_credits.py pools-2026-11-13.txt
+cd tools/sound-audition && python3 -I make_credits.py pools-2026-11-13.txt
 ```
 
 It writes `CREDITS-2026-11-13.md` next to the pools file (`-o` picks another path). It stops with an
@@ -115,5 +120,4 @@ and add the old name to `RENAMED`.
 ## Not committed
 
 Untrimmed originals (`refs2/orig/`, `refs3/orig/`), the search caches (`candidates*.json`) and the
-run's decision log stay out of git. A copy of the whole working folder from 2026-11-13 is on the mini
-at `~/Backups/field-glass-sound-audition-2026-11-14`.
+run's decision log stay out of git.
