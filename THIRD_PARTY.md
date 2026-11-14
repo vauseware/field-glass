@@ -45,15 +45,25 @@ Old Standard TT, Oswald, Playfair Display SC, Stardos Stencil.
 
 ## Sound
 
-The repo holds no sound files yet. [docs/specs/battle-sound.md](docs/specs/battle-sound.md) allows only CC0,
-public domain, CC BY and CC BY-SA clips, from freesound, Wikimedia Commons and the USC collection on archive.org.
-Each clip added must get a row here before it merges:
+[docs/specs/battle-sound.md](docs/specs/battle-sound.md) allows only CC0, public domain, CC BY and CC BY-SA clips,
+from freesound, Wikimedia Commons and the USC collection on archive.org.
 
-| File | Title | Author | Source URL | Licence | Changes |
-| --- | --- | --- | --- | --- | --- |
+The audition tool in `tools/sound-audition/` holds 109 third-party recordings, as MP3 previews or trims. It is a
+research tool and does not deploy with the app. Each folder's `manifest.json` is the credit for each clip: file,
+title, author, source page, licence, and any trim or cut in its `note`. Keep the manifest with the clips when you
+copy them.
 
-A clip under CC BY-SA stays CC BY-SA after editing, and so does any mix built from it. Keep such mixes in their own
-files, not inside MIT code.
+| Folder | Clips | Licences |
+| --- | --- | --- |
+| `tools/sound-audition/refs/` | 36 | CC0 1.0 (22), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (10), [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/) (4) |
+| `tools/sound-audition/refs2/`, `tools/sound-audition/refs3/` | 73 | CC0 1.0 (47), CC BY 4.0 (16), CC BY 3.0 (4), [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) (5), public domain (1) |
+
+The CC BY-SA 3.0 clips are by Beeld en Geluid and LouiseBrown1981. The public-domain clip is a United States Army
+recording.
+
+A new clip needs a manifest entry with the same fields before it merges. A clip under CC BY-SA stays CC BY-SA after
+editing, and so does any mix built from it. Keep such mixes in their own files, not inside MIT code. Sound that
+ships in the app gets the same credit in the app.
 
 ## Trademarks
 

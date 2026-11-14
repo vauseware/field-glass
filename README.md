@@ -210,7 +210,7 @@ Positions between keys are straight-line interpolation, so add keys where a unit
 ## Licence
 
 The code and Field Glass's own text and images are under the [MIT licence](LICENSE), copyright Dave Vause.
-Terrain, map data and fonts from others keep their own licences, and the Field Glass, Vauseware and Vause
+Terrain, map data, fonts and sound recordings from others keep their own licences, and the Field Glass, Vauseware and Vause
 Consulting names and icons are trademarks, not MIT: see [THIRD_PARTY.md](THIRD_PARTY.md). Contributions are
 welcome under the DCO in [CONTRIBUTING.md](CONTRIBUTING.md); please follow the
 [Code of Conduct](CODE_OF_CONDUCT.md) and report security problems as [SECURITY.md](SECURITY.md) describes.
