@@ -42,6 +42,12 @@ Dave chose this split on 2026-11-13. Synthesis in the page sounds real only for 
 viewer zooms in. So files carry the sound itself, and code varies it and places it at a distance
 (see Playback).
 
+Each cue plays from a **pool**. A pool member is either a file take or a synth, which is a named
+generator in the page that renders a new take every time. A pool can hold both, and the aim is a sound
+that never repeats: the synth gives endless takes at no download cost, and the recordings give the
+detail a synth lacks. The table gives each cue's main source. Any cue may also carry a synth member
+when Dave ticks it on the audition page.
+
 | Cue | Source | How |
 |---|---|---|
 | `field` wind and far rumble | Synthesized in the page | Filtered noise with a slow LFO. No file. |
@@ -54,8 +60,9 @@ viewer zooms in. So files carry the sound itself, and code varies it and places 
 | `cheer`, the rebel yell, shouted orders | Dave, in Logic | His voice layered 30 to 50 times, pitch and formant shifted, low-passed until no word can be made out. |
 | `drum`, fife, `bugle` calls | Dave, in Logic | Played. Every call and tune is public domain. |
 
-A synthesized cue goes on the audition page beside a recording of the same thing. Dave keeps it only if
-he can't tell which is which. If it fails, the cue becomes a file.
+The audition page shows each synth beside recordings of the same thing, with a blind test and a
+preview of the mixed pool. Dave ticks the members each pool gets. A synth he does not tick is dropped,
+and that cue plays from files alone.
 
 ## The library
 
@@ -76,8 +83,8 @@ in `ww2`). That is about 36 sounds and 100 files in all, against 59 sounds with 
 
 Files live in `sounds/<era>/<cue>-<n>.m4a`, beside `sounds/<era>/manifest.json`, with `common` as one
 more folder of the same shape. Each cue has 2 to 4
-takes. The page varies each play (see Playback), so repeats don't sound looped. Synthesized cues have
-no files and no manifest entry.
+takes. The page varies each play (see Playback), so repeats don't sound looped. A synth member has no
+file. Its manifest entry names the generator instead: `{ "cue": "volley", "synth": "far-volley" }`.
 
 ### Cues
 
@@ -166,8 +173,10 @@ builds that era's library. Later battles add only the cues and extras they lack.
 - **Variation and distance.** Each one-shot plays at a random rate within 5% of natural and a random
   gain within 2 dB, and never the same take twice running. A far source passes through a lowpass
   filter that closes with distance and sends more to one shared `ConvolverNode` reverb.
-- **Synthesized cues.** The wind and far rumble of `field` and the WW1 whistle are built from Web Audio
-  nodes, with no files.
+- **Pools.** A one-shot cue picks a member of its pool at random, never the same one twice running. A
+  synth member is built from Web Audio nodes and rendered ahead of need with `OfflineAudioContext`, a
+  few takes at a time, so each play of it is a new take. A bed (`field`) layers its members instead of
+  picking one: synthesized wind and rumble under the recorded birds.
 - **Loops.** AAC pads the ends of a file, so a looped `.m4a` can click. Each loop plays as two
   overlapping sources that crossfade, not with `loop = true`.
 - **Real time, not battle time.** At 10× to 300× a unit fires many times a second of replay, so each
@@ -189,15 +198,17 @@ builds that era's library. Later battles add only the cues and extras they lack.
 ## Verification
 
 - `npm run check` validates every manifest: the files exist, every licence is on the allowed list, every
-  file cue a battle can trigger has at least 2 takes in its era or in `common`, and no file is over 10 s or 200 KB.
+  cue a battle can trigger has a pool of at least 2 file takes, or a synth member, in its era or in
+  `common`, every `synth` name matches a generator in the page, and no file is over 10 s or 200 KB.
 - A journey, `journeys/sound.cjs`, records which cues fire and how loud, through a hook available only
   under `navigator.webdriver`. It checks: silence while paused and during the opening; `volley` and `gun`
   during Cowpens's main line; `march` and `drum` as Tarleton's column comes on before dawn;
   `hooves` during Washington's charge; `wheels` when a battery limbers up and moves; `fallback` during a
   rout; `transport` during an Arnhem lift; `air` during Sidi Bou Zid's dive bombers; no movement cue
   while every unit in view stands; a source at the left edge pans left; a far source has a lower filter
-  cutoff than a near one; two plays of one cue differ in rate; the synthesized `field` bed sounds with
-  no file loaded; nothing while scrubbing; nothing
+  cutoff than a near one; two plays of one cue differ in rate; a pool of three never plays one member
+  twice running; a pool with a synth and a file plays both over 20 plays; the synthesized `field` bed
+  sounds with no file loaded; nothing while scrubbing; nothing
   after `m`; the slider scales the master gain and its value survives a reload.
 - `laptop.cjs` still passes with the speaker button and its slider open, and the bar does not wrap at
   1280x700.
@@ -222,6 +233,9 @@ Dave chose on 2026-11-13:
    bugles in Logic. The rest is downloaded.
 
 6. Sounds that don't change between wars are shared in `common`.
+7. Immersive, not repetitive. A cue plays from a pool that can mix a synth with recordings. This widens
+   item 5: a synth may join any cue's pool, not only wind, rumble and the whistle, when Dave ticks it
+   on the audition page.
 
 ## Open: music
 
