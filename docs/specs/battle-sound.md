@@ -24,8 +24,13 @@ of a battle.
 - **What we never take.** Nothing with agony, pain, screaming, the wounded, dying, crying or gore, and no
   distressed animals. No modern sounds in the clip: traffic, an aircraft over a re-enactment, a PA, or
   talk between shots. No speech a viewer can make out, since it would be in the wrong voice.
+- **The observer's ear.** The viewer watches the field from above, as the map shows it, and is never in
+  the fight. Every sound is heard from there: distant, low and muffled. Nothing is incoming: no shell
+  whistle or whine closing on the listener, no bullet crack or ricochet passing by. A recording made close
+  to the source is fine only if the page's distance filter and reverb (see Playback) can push it back.
 - **Licences.** Dave's own recordings need none and are marked `own`. For downloads: CC0 first. CC BY
-  3.0 or 4.0 when nothing CC0 fits, with the credit shown in the Sources dialog. Never NC
+  or CC BY-SA when nothing CC0 fits, with the credit and licence shown in the Sources dialog. A
+  share-alike clip stays under its own licence after we trim and level it. Never NC
   (non-commercial), ND (no derivatives: every clip is trimmed and levelled), Sampling+, or "all rights
   reserved". An archive.org item counts only when its page states one of these licences or public
   domain. An upload with no licence is out. The BBC Sound Effects archive is non-commercial, so it is out.
@@ -52,7 +57,7 @@ when Dave ticks it on the audition page.
 |---|---|---|
 | `field` wind and far rumble | Synthesized in the page | Filtered noise with a slow LFO. No file. |
 | `field` birds | Download | One shared loop, mixed under the wind. |
-| `bugle` in WW1 (the whistle) | Synthesized in the page | Two close sine tones with a pea warble. |
+| `bugle` in WW1 (the whistle) | Download | A real army whistle, cut to one or two blasts. |
 | `volley`, `scatter`, `gun`, `heavy`, `mg` | Download | Black-powder and live-fire recordings. |
 | `hooves`, `engine`, `air`, `transport` | Download | Horses, tanks and warbirds can't be faked. |
 | `wheels` | Download, plus Dave | Wagons downloaded. Chain and harness as foley. |
@@ -64,6 +69,39 @@ The audition page shows each synth beside recordings of the same thing, with a b
 preview of the mixed pool. Dave ticks the members each pool gets. A synth he does not tick is dropped,
 and that cue plays from files alone.
 
+## Accuracy in the World Wars
+
+Dave's father is a pilot, and Dave wants the First and Second World Wars as accurate as the record
+allows. For the `great-war` and `ww2` eras:
+
+- **Real recordings only.** No pool in these eras has a synth member. The one exception is the wind
+  of `field`. The far rumble is a recording of real distant guns.
+- **Aircraft are never synthesized, in any era.** `air` and `transport` play recordings of the right
+  aircraft: a C-47 for the transports, a Ju 87 for the dive bombers.
+- **By nation and weapon family.** A German machine gun is an MG 42 or MG 34 and an American one is a
+  Browning, because they do not sound alike. Exact model within a family is not required: one German
+  tank engine serves the Panzer IV, the Panther and the Tiger.
+- **Stand-ins are real and labelled.** When no usable recording of the right equipment exists, the
+  closest real relative plays, and the Sources dialog says what it is. Never a synth, a film dub or a
+  game effect.
+- **Found recordings only.** Dave will not make field recordings of aircraft, vehicles or weapons.
+
+A battle maps each of its sides to a **kit** in battle.json, since side names vary (`us`, `american`,
+`allied`): `"sound": { "kit": { "american": "us", "german": "de" } }`. A cue resolves to the takes for
+the unit's kit, then to the era's takes with no kit, then to `common`.
+
+| Era | Kit | Rifle (`volley`, `scatter`) | `mg` | `gun` and `heavy` | `engine`, `wheels` | Aircraft |
+|---|---|---|---|---|---|---|
+| `great-war` | `uk` | Lee-Enfield | Vickers, Lewis | 18-pounder | | |
+| `great-war` | `fr` | | | 75 mm | Schneider or Renault tank | |
+| `great-war` | `us` | Springfield M1903 | Chauchat, Hotchkiss | | | |
+| `great-war` | `de` | Gewehr 98 | MG 08 | 7.7 cm field gun | | |
+| `ww2` | `us` | M1 Garand | Browning M1919, M2 | Sherman 75 mm, 105 mm howitzer, naval guns | Sherman | C-47, P-47 |
+| `ww2` | `uk` | Lee-Enfield | Bren | 25-pounder | | Stirling or Halifax tug |
+| `ww2` | `de` | Karabiner 98k | MG 42, MG 34 | 8.8 cm, tank gun, Nebelwerfer | German tank | Ju 87 with siren |
+
+Heavy shell bursts are shared within an era. An empty cell means that kit uses the era's shared take.
+
 ## The library
 
 Sound belongs to a war's weapons, not to one battle, so the library is shared by era and each battle
@@ -74,12 +112,13 @@ draws on it:
 | `common` | every war | `march`, `advance`, `fallback`, `cheer`, the bird bed of `field`, `hooves` at the walk, trot and gallop, horse-drawn `wheels` |
 | `flintlock` | Revolution, War of 1812 | smoothbore musket volleys, skirmish pops, field guns, ship and battery guns, fife and drum, bugle and horn calls |
 | `percussion` | Civil War | rifle-musket volleys, skirmish, rifled and smoothbore guns, naval guns (Fort Fisher), drums, bugle calls, the rebel yell |
-| `great-war` | First World War | bolt-action rifles, machine guns, field guns and shell bursts |
-| `ww2` | Second World War | rifles, machine guns, tank guns and engines, artillery, aircraft and bombs, transport aircraft, trucks and half-tracks |
+| `great-war` | First World War | per kit: rifles, machine guns, field guns, tank engines; shared: shell bursts and the whistle |
+| `ww2` | Second World War | per kit: rifles, machine guns, tank guns and engines, artillery, aircraft; shared: shell bursts, bombs and the vehicle din |
 
 Sounds that don't change between wars live once, in `common`. A cue resolves to the era's takes when
-the era has any, and to `common` otherwise, so an era can override a shared cue (trucks for `wheels`
-in `ww2`). That is about 36 sounds and 100 files in all, against 59 sounds with no sharing.
+the era has any, and to `common` otherwise, so an era can override a shared cue (a tank engine for `engine`
+in `ww2`). That is about 50 sounds in all: 9 shared, 13 for the two black-powder eras, and about 30 for the
+World Wars, where each nation has its own.
 
 Files live in `sounds/<era>/<cue>-<n>.m4a`, beside `sounds/<era>/manifest.json`, with `common` as one
 more folder of the same shape. Each cue has 2 to 4
@@ -109,7 +148,7 @@ such as `ship`, `battery` and `airstrike`. The cues map onto those, so nothing n
 | `march` | infantry-type units in `column` on the move, every era: boots on the road, kit | loop, its volume set by the men moving in view |
 | `drum` | flintlock and percussion infantry moving in `column` or `line` | loop, with `march` |
 | `advance` | infantry-type units moving in `line` or `skirmish`: feet in grass, kit, an order shouted now and then | loop, quieter than `march` |
-| `wheels` | artillery moving: limbers, caissons and teams; trucks and tows in WW2 | loop |
+| `wheels` | artillery moving: limbers, caissons and teams | loop |
 | `fallback` | units in `retreat` or `rout`: hurried feet and hooves, no voices in distress | loop, faster than `march` |
 | `field` | always while playing: wind, birds, a distant rumble | loop, a very quiet bed |
 
@@ -130,7 +169,9 @@ era's library with a `battles` list in its manifest entry. Its battle.json names
   "licence": "CC0-1.0", "trim": [1.20, 4.60], "gainDb": -3.1, "battles": null }
 ```
 
-`licence` is one of `own`, `CC0-1.0`, `CC-BY-3.0`, `CC-BY-4.0` or `PD`. `trim` and `gainDb` record what
+`licence` is one of `own`, `CC0-1.0`, `PD`, or a `CC-BY-` or `CC-BY-SA-` licence with its version.
+A World War entry also has `"kit": "de"` and `"equipment": "MG 42"`, and `"standIn": true` when the
+recording is a relative of what the kit names. `trim` and `gainDb` record what
 the tool did, so a reviewer can redo it from the source. An `own` entry has `"source": "own"` and Dave
 as `author`. Its WAV master and Logic project stay with Dave, outside the repo.
 
@@ -147,7 +188,9 @@ builds that era's library. Later battles add only the cues and extras they lack.
 2. **Search.** For each missing download cue, query freesound (`license:"Creative Commons 0"` first, then
    Attribution) and archive.org. Rank by duration (1 to 10 s), rating and downloads. Read every
    candidate's title, tags and description, and drop any that names a banned sound: scream, agony,
-   pain, wounded, dying, death, moan, groan, cry, gore, injured, or a modern noise.
+   pain, wounded, dying, death, moan, groan, cry, gore, injured, a modern noise, or anything incoming
+   (incoming, whistle, whine, whizz, ricochet, flyby of a shell or bullet). Prefer recordings described
+   as distant.
 3. **Fetch and prepare.** `tools/fetch_sound.py` downloads the original, or takes a local WAV from
    Dave, trims to the event, makes it mono, levels it to -18 LUFS (`ffmpeg loudnorm`), fades the ends
    and writes AAC at 96 kbit/s as `.m4a`. It records `trim` and `gainDb` in the manifest. Dave bounces
@@ -176,12 +219,23 @@ builds that era's library. Later battles add only the cues and extras they lack.
 - **Pools.** A one-shot cue picks a member of its pool at random, never the same one twice running. A
   synth member is built from Web Audio nodes and rendered ahead of need with `OfflineAudioContext`, a
   few takes at a time, so each play of it is a new take. A bed (`field`) layers its members instead of
-  picking one: synthesized wind and rumble under the recorded birds.
+  picking one: synthesized wind and rumble under the recorded birds. In the World Wars the rumble is a
+  recording of real distant guns, per Accuracy in the World Wars.
 - **Loops.** AAC pads the ends of a file, so a looped `.m4a` can click. Each loop plays as two
   overlapping sources that crossfade, not with `loop = true`.
 - **Real time, not battle time.** At 10× to 300× a unit fires many times a second of replay, so each
-  sound plays at its natural pace and only the density follows the fighting. At most 8 one-shots sound
-  at once.
+  sound plays at its natural pace and only the density follows the fighting.
+- **Sparse by design.** Variety comes from the pools, not from more sound. At most 4 one-shots sound at
+  once, and at most 3 movement loops plus the `field` bed. Each cue waits at least 1.5 s after it
+  plays before it can play again, so a heavy fight reads as a steady rumble with distinct shots, not a
+  wall of noise. These numbers are a first guess, to be set by ear in the build.
+- **Vehicles are din.** In the World Wars, jeeps, trucks and half-tracks have no cue of their own. At
+  the observer's distance they blur, so they are a low layer in the `field` bed while WW2 vehicles move
+  in view, set well under the guns. Tanks keep their `engine` cue.
+- **Narration ducks the battle.** While the narrator (issue #88) speaks, every battle sound, the bed
+  included, drops by about 12 dB over 150 ms and comes back over 600 ms after the line ends. One gain
+  node between the battle mix and the master does it, so nothing else needs to know narration exists.
+  A battle with narration on must keep every line clear; the figures are a first guess.
 - **Quiet when nothing happens.** Paused: silent. Time-lapse over a quiet stretch: only the `field` bed.
   Scrubbing or arrow keys: silent until play resumes. The opening shot: the `field` bed fading up, and
   battle sound only once it ends.
@@ -199,7 +253,12 @@ builds that era's library. Later battles add only the cues and extras they lack.
 
 - `npm run check` validates every manifest: the files exist, every licence is on the allowed list, every
   cue a battle can trigger has a pool of at least 2 file takes, or a synth member, in its era or in
-  `common`, every `synth` name matches a generator in the page, and no file is over 10 s or 200 KB.
+  `common`, every `synth` name matches a generator in the page, and no file is over 10 s or 200 KB,
+  except an `air` or `transport` pass, which may run to 30 s and 500 KB. In `great-war` and `ww2` it
+  also checks that no entry is a synth except the `field` wind, that every side of a battle maps to a
+  kit, that every entry names its equipment, and that each kit a battle uses has its own takes for
+  `volley`, `mg` and `gun` (exact or a labelled stand-in), so a German line never falls back to a
+  generic or other nation's rifle.
 - A journey, `journeys/sound.cjs`, records which cues fire and how loud, through a hook available only
   under `navigator.webdriver`. It checks: silence while paused and during the opening; `volley` and `gun`
   during Cowpens's main line; `march` and `drum` as Tarleton's column comes on before dawn;
@@ -236,6 +295,15 @@ Dave chose on 2026-11-13:
 7. Immersive, not repetitive. A cue plays from a pool that can mix a synth with recordings. This widens
    item 5: a synth may join any cue's pool, not only wind, rumble and the whistle, when Dave ticks it
    on the audition page.
+8. The World Wars are as accurate as the record allows: real recordings only, matched by nation and
+   weapon family. Aircraft are never synthesized. This narrows item 7 for those two eras.
+9. With no usable recording of the right equipment, the closest real relative plays, labelled.
+10. CC BY-SA is allowed, with credit.
+11. Dave will not make field recordings. Found recordings only.
+12. Every sound is heard as an observer above the field would hear it: distant, low, muffled. Nothing
+    incoming.
+13. Keep it simple. Variety, but no sound playing constantly. Jeeps and trucks are only low din.
+14. Ducking under narration is key.
 
 ## Open: music
 
@@ -254,5 +322,5 @@ Dave decides: whether music is in, and which option.
 
 ## Out of scope
 
-- Narration, which issue #88 covers. It will share this spec's control and `AudioContext`, and battle
-  sound ducks while the narrator speaks.
+- Narration itself, which issue #88 covers. It will share this spec's control and `AudioContext`. The
+  ducking it needs is in scope (see Playback).
