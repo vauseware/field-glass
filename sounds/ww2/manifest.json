@@ -1,0 +1,523 @@
+[
+ {
+  "file": "air-1.m4a",
+  "cue": "air",
+  "kit": "de",
+  "equipment": "Messerschmitt Bf 109E, for the Ju 87",
+  "standIn": true,
+  "seconds": 11.64,
+  "source": "https://freesound.org/s/143558/",
+  "title": "Bf-109 Flyby",
+  "author": "Fight2FlyPhoto",
+  "licence": "CC-BY-3.0",
+  "trim": [
+   0.0,
+   11.64
+  ],
+  "gainDb": 0.8,
+  "battles": null
+ },
+ {
+  "file": "air-2.m4a",
+  "cue": "air",
+  "kit": "de",
+  "equipment": "Focke-Wulf Fw 190, for the Ju 87",
+  "standIn": true,
+  "seconds": 8.34,
+  "source": "https://freesound.org/s/143562/",
+  "title": "Fw-190 Flyby",
+  "author": "Fight2FlyPhoto",
+  "licence": "CC-BY-3.0",
+  "trim": [
+   0.0,
+   8.34
+  ],
+  "gainDb": 5.2,
+  "battles": null
+ },
+ {
+  "file": "air-3.m4a",
+  "cue": "air",
+  "kit": "de",
+  "equipment": "Junkers Ju 87 Stuka, steady engine drone, no siren",
+  "standIn": true,
+  "seconds": 30.0,
+  "source": "https://freesound.org/s/437771/",
+  "title": "G04-07-WWII Stuka engine drone.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   30.0
+  ],
+  "gainDb": 10.7,
+  "battles": null
+ },
+ {
+  "file": "air-4.m4a",
+  "cue": "air",
+  "kit": "de",
+  "equipment": "Unnamed WW2 fighter diving with whine",
+  "standIn": true,
+  "seconds": 26.78,
+  "source": "https://freesound.org/s/437780/",
+  "title": "G04-16-WWII Fighter Dives.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   26.78
+  ],
+  "gainDb": 9.8,
+  "battles": null
+ },
+ {
+  "file": "air-5.m4a",
+  "cue": "air",
+  "kit": "us",
+  "equipment": "US aircraft diving, Iwo Jima film",
+  "standIn": true,
+  "seconds": 7.07,
+  "source": "https://freesound.org/s/96210/",
+  "title": "Bombers diving.wav",
+  "author": "CGEffex",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   7.07
+  ],
+  "gainDb": -2.8,
+  "battles": null
+ },
+ {
+  "file": "air-6.m4a",
+  "cue": "air",
+  "kit": "us",
+  "equipment": "Republic P-47D Thunderbolt low pass overhead",
+  "seconds": 11.38,
+  "source": "https://freesound.org/s/143560/",
+  "title": "P-47 Flyby",
+  "author": "Fight2FlyPhoto",
+  "licence": "CC-BY-3.0",
+  "trim": [
+   0.2,
+   11.58
+  ],
+  "gainDb": 0.1,
+  "battles": null
+ },
+ {
+  "file": "air-7.m4a",
+  "cue": "air",
+  "kit": "us",
+  "equipment": "Republic P-47 fighters, several varied passes overhead",
+  "seconds": 30.0,
+  "source": "https://freesound.org/s/437795/",
+  "title": "G04-28_P-47 Fighters Pass Overhead.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   30.0
+  ],
+  "gainDb": 5.9,
+  "battles": null
+ },
+ {
+  "file": "engine-1.m4a",
+  "cue": "engine",
+  "kit": "us",
+  "equipment": "M4 Sherman approaching from far off and driving past on a concrete road",
+  "seconds": 10.0,
+  "source": "https://commons.wikimedia.org/wiki/File:Sherman_tank,_rijden_-_SoundCloud_-_Beeld_en_Geluid.ogg",
+  "title": "File:Sherman tank, rijden - SoundCloud - Beeld en Geluid.ogg",
+  "author": "Beeld en Geluid",
+  "licence": "CC-BY-SA-3.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 17.6,
+  "battles": null
+ },
+ {
+  "file": "field-1.m4a",
+  "cue": "field",
+  "equipment": "Tank guns on a range, distant",
+  "standIn": true,
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/184275/",
+  "title": "Distant Tank Shots.flac",
+  "author": "qubodup",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": -0.6,
+  "battles": null
+ },
+ {
+  "file": "field-2.m4a",
+  "cue": "field",
+  "equipment": "Distant thunder, for far guns",
+  "standIn": true,
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/581123/",
+  "title": "Distant Thunder 2",
+  "author": "Fission9",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.58,
+   10.58
+  ],
+  "gainDb": 8.6,
+  "battles": null
+ },
+ {
+  "file": "gun-1.m4a",
+  "cue": "gun",
+  "kit": "uk",
+  "equipment": "Ordnance QF 6-pounder anti-tank gun firing",
+  "standIn": true,
+  "seconds": 2.58,
+  "source": "https://freesound.org/s/702455/",
+  "title": "6 Pdr gun.wav",
+  "author": "AdamHarvester",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   2.58
+  ],
+  "gainDb": -9.1,
+  "battles": null
+ },
+ {
+  "file": "gun-2.m4a",
+  "cue": "gun",
+  "kit": "us",
+  "equipment": "75 mm gun firing three times",
+  "standIn": true,
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/486031/",
+  "title": "R12-37-75mm Gun Firing.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 7.1,
+  "battles": null
+ },
+ {
+  "file": "gun-3.m4a",
+  "cue": "gun",
+  "kit": "us",
+  "equipment": "Squad firing 37 mm anti-tank guns",
+  "standIn": true,
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/675587/",
+  "title": "S20-48 A squad firing 37mm anti tank guns.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 7.0,
+  "battles": null
+ },
+ {
+  "file": "gun-4.m4a",
+  "cue": "gun",
+  "kit": "us",
+  "equipment": "105 mm howitzer firing twice",
+  "seconds": 9.38,
+  "source": "https://freesound.org/s/486029/",
+  "title": "R12-35-105mm Howitzer in Battle.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   9.38
+  ],
+  "gainDb": 13.0,
+  "battles": null
+ },
+ {
+  "file": "heavy-1.m4a",
+  "cue": "heavy",
+  "equipment": "Quarry blast at 800 m, for a shell burst",
+  "standIn": true,
+  "seconds": 8.4,
+  "source": "https://freesound.org/s/82682/",
+  "title": "Quarry blasting.wav",
+  "author": "juskiddink",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   3.84,
+   12.24
+  ],
+  "gainDb": -0.5,
+  "battles": null
+ },
+ {
+  "file": "heavy-2.m4a",
+  "cue": "heavy",
+  "equipment": "Distant explosion, source not named",
+  "standIn": true,
+  "seconds": 4.01,
+  "source": "https://freesound.org/s/108640/",
+  "title": "Distant explosion.wav",
+  "author": "juskiddink",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   4.01
+  ],
+  "gainDb": -0.6,
+  "battles": null
+ },
+ {
+  "file": "heavy-3.m4a",
+  "cue": "heavy",
+  "kit": "us",
+  "equipment": "6-inch naval gun fired close up",
+  "standIn": true,
+  "seconds": 6.14,
+  "source": "https://freesound.org/s/675605/",
+  "title": "S20-16 6 inch navel cannon fired up close.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   6.14
+  ],
+  "gainDb": 8.2,
+  "battles": null
+ },
+ {
+  "file": "mg-1.m4a",
+  "cue": "mg",
+  "kit": "uk",
+  "equipment": "Bren gun firing, canyon echo",
+  "seconds": 6.4,
+  "source": "https://freesound.org/s/675590/",
+  "title": "S20-24 Bren machine gun with canyon echo.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   6.4
+  ],
+  "gainDb": 7.1,
+  "battles": null
+ },
+ {
+  "file": "mg-2.m4a",
+  "cue": "mg",
+  "kit": "uk",
+  "equipment": "Bren gun firing, distant",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/675591/",
+  "title": "S20-23 distant sound of a Bren machine gun.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 8.1,
+  "battles": null
+ },
+ {
+  "file": "mg-3.m4a",
+  "cue": "mg",
+  "kit": "us",
+  "equipment": "Browning .50 calibre machine gun firing",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/675588/",
+  "title": "S20-45 50 cal Browning machine gun.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 5.2,
+  "battles": null
+ },
+ {
+  "file": "transport-1.m4a",
+  "cue": "transport",
+  "equipment": "Grumman F7F Tigercat, for the C-47",
+  "standIn": true,
+  "seconds": 23.82,
+  "source": "https://freesound.org/s/143557/",
+  "title": "F7F-3 Tigercat Flyby",
+  "author": "Fight2FlyPhoto",
+  "licence": "CC-BY-3.0",
+  "trim": [
+   0.0,
+   23.82
+  ],
+  "gainDb": -0.0,
+  "battles": null
+ },
+ {
+  "file": "transport-2.m4a",
+  "cue": "transport",
+  "equipment": "Lockheed Super Constellation, for a four-engine tug",
+  "standIn": true,
+  "seconds": 12.21,
+  "source": "https://freesound.org/s/110737/",
+  "title": "Super Constellation Flypast.wav",
+  "author": "doubletrigger",
+  "licence": "CC-BY-3.0",
+  "trim": [
+   0.0,
+   12.21
+  ],
+  "gainDb": -0.9,
+  "battles": null
+ },
+ {
+  "file": "transport-3.m4a",
+  "cue": "transport",
+  "kit": "uk",
+  "equipment": "Avro Lancaster fly-by over Toronto",
+  "standIn": true,
+  "seconds": 30.0,
+  "source": "https://freesound.org/s/325563/",
+  "title": "AIR Lancaster By1.wav",
+  "author": "Geldart",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   30.0
+  ],
+  "gainDb": 5.7,
+  "battles": null
+ },
+ {
+  "file": "transport-4.m4a",
+  "cue": "transport",
+  "kit": "uk",
+  "equipment": "Avro Lancaster with Hurricane and Spitfire, low fly-past",
+  "standIn": true,
+  "seconds": 26.88,
+  "source": "https://freesound.org/s/195412/",
+  "title": "LancSPtHur_flypast_mono.wav",
+  "author": "beerbelly38",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   26.88
+  ],
+  "gainDb": 2.4,
+  "battles": null
+ },
+ {
+  "file": "transport-5.m4a",
+  "cue": "transport",
+  "kit": "us",
+  "equipment": "Douglas C-47, slow pass overhead with long fly-away",
+  "seconds": 30.0,
+  "source": "https://freesound.org/s/437839/",
+  "title": "G06-19_C-47 2 Engine Prop Slow Overhead.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   30.0
+  ],
+  "gainDb": 7.6,
+  "battles": null
+ },
+ {
+  "file": "transport-6.m4a",
+  "cue": "transport",
+  "kit": "us",
+  "equipment": "Douglas C-47 take-off",
+  "seconds": 30.0,
+  "source": "https://freesound.org/s/437841/",
+  "title": "G06-21_C-47 2 Engine Prop Takeoff.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   30.0
+  ],
+  "gainDb": 9.0,
+  "battles": null
+ },
+ {
+  "file": "transport-7.m4a",
+  "cue": "transport",
+  "kit": "us",
+  "equipment": "Douglas DC-3 (Dakota) taxi to runway end, take-off, climb away",
+  "seconds": 26.11,
+  "source": "https://freesound.org/s/256049/",
+  "title": "Lentokone, potkurikone, rullaus, nousu, lähtö / An aeroplane, passenger plane, propeller aircfaft, DC-3, Dakota, taxing, taking off",
+  "author": "YleArkisto",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   26.11
+  ],
+  "gainDb": -3.4,
+  "battles": null
+ },
+ {
+  "file": "volley-1.m4a",
+  "cue": "volley",
+  "kit": "de",
+  "equipment": "Mauser Karabiner 98k firing",
+  "seconds": 2.09,
+  "source": "https://freesound.org/s/802675/",
+  "title": "Mauser 98k Shooting",
+  "author": "Walking.With.Microphones",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   2.09
+  ],
+  "gainDb": -1.2,
+  "battles": null
+ },
+ {
+  "file": "volley-2.m4a",
+  "cue": "volley",
+  "kit": "uk",
+  "equipment": "Lee-Enfield .303 single clean shot",
+  "seconds": 2.67,
+  "source": "https://freesound.org/s/450853/",
+  "title": "gun lee enfield 303 rifle clean shot.wav",
+  "author": "kyles",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   2.67
+  ],
+  "gainDb": -0.5,
+  "battles": null
+ },
+ {
+  "file": "volley-3.m4a",
+  "cue": "volley",
+  "kit": "us",
+  "equipment": "M1 Garand single shot",
+  "seconds": 5.05,
+  "source": "https://freesound.org/s/460851/",
+  "title": "GUNRif_M1 GARAND GUNSHOT_MP.wav",
+  "author": "MPierluissi",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   5.05
+  ],
+  "gainDb": -4.0,
+  "battles": null
+ }
+]

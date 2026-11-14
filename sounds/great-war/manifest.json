@@ -1,0 +1,254 @@
+[
+ {
+  "file": "bugle-1.m4a",
+  "cue": "bugle",
+  "equipment": "Army whistle, old",
+  "seconds": 2.0,
+  "source": "https://freesound.org/s/324539/",
+  "title": "Whistle army old, one blast",
+  "author": "deleted_user_2104797",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   2.0
+  ],
+  "gainDb": -5.4,
+  "battles": null
+ },
+ {
+  "file": "bugle-2.m4a",
+  "cue": "bugle",
+  "equipment": "Army whistle, old",
+  "seconds": 3.14,
+  "source": "https://freesound.org/s/324539/",
+  "title": "Whistle army old, two blasts",
+  "author": "deleted_user_2104797",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   3.14
+  ],
+  "gainDb": -4.4,
+  "battles": null
+ },
+ {
+  "file": "field-1.m4a",
+  "cue": "field",
+  "equipment": "Tank guns on a range, distant",
+  "standIn": true,
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/184275/",
+  "title": "Distant Tank Shots.flac",
+  "author": "qubodup",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": -0.6,
+  "battles": null
+ },
+ {
+  "file": "field-2.m4a",
+  "cue": "field",
+  "equipment": "Distant thunder, for far guns",
+  "standIn": true,
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/581123/",
+  "title": "Distant Thunder 2",
+  "author": "Fission9",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.58,
+   10.58
+  ],
+  "gainDb": 8.6,
+  "battles": null
+ },
+ {
+  "file": "gun-1.m4a",
+  "cue": "gun",
+  "equipment": "76 mm field gun, single shots",
+  "standIn": true,
+  "seconds": 9.99,
+  "source": "https://freesound.org/s/332935/",
+  "title": "Tykki, laukaus / Big gun, cannon, 76 mm, single shots, gunshots",
+  "author": "YleArkisto",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.64,
+   10.63
+  ],
+  "gainDb": -0.3,
+  "battles": null
+ },
+ {
+  "file": "gun-2.m4a",
+  "cue": "gun",
+  "kit": "fr",
+  "equipment": "75 mm gun: fires, shell in flight, burst",
+  "standIn": true,
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/486023/",
+  "title": "R12-15-75mm Gun Sequence.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 9.1,
+  "battles": null
+ },
+ {
+  "file": "heavy-1.m4a",
+  "cue": "heavy",
+  "equipment": "Quarry blast at 800 m, for a shell burst",
+  "standIn": true,
+  "seconds": 8.4,
+  "source": "https://freesound.org/s/82682/",
+  "title": "Quarry blasting.wav",
+  "author": "juskiddink",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   3.84,
+   12.24
+  ],
+  "gainDb": -0.5,
+  "battles": null
+ },
+ {
+  "file": "heavy-2.m4a",
+  "cue": "heavy",
+  "equipment": "Distant explosion, source not named",
+  "standIn": true,
+  "seconds": 4.01,
+  "source": "https://freesound.org/s/108640/",
+  "title": "Distant explosion.wav",
+  "author": "juskiddink",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   4.01
+  ],
+  "gainDb": -0.6,
+  "battles": null
+ },
+ {
+  "file": "heavy-3.m4a",
+  "cue": "heavy",
+  "equipment": "Obukhov 305 mm gun, 1911-1915 model, two echoing shots at a distance",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/258203/",
+  "title": "Tykki, vanha, laukaus / An old gun, cannon shooting, two echoing gunshots, Obuhff, a Russian cannon, 305 mm, a 1911-1915 model",
+  "author": "YleArkisto",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": -3.8,
+  "battles": null
+ },
+ {
+  "file": "heavy-4.m4a",
+  "cue": "heavy",
+  "equipment": "155 mm howitzer firing several times, shells bursting in the background",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/486030/",
+  "title": "R12-36-155mm Howitzer Fires.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 8.9,
+  "battles": null
+ },
+ {
+  "file": "heavy-5.m4a",
+  "cue": "heavy",
+  "equipment": "Incoming shells and explosions",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/674897/",
+  "title": "S18-01 Incoming shells; explosions.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.3,
+   10.3
+  ],
+  "gainDb": 4.6,
+  "battles": null
+ },
+ {
+  "file": "mg-1.m4a",
+  "cue": "mg",
+  "kit": "de",
+  "equipment": "Russian Maxim machine gun at about 200 m",
+  "standIn": true,
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/160771/",
+  "title": "Maxim Russian machinegun distant",
+  "author": "poissonmort",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 2.0,
+  "battles": null
+ },
+ {
+  "file": "volley-1.m4a",
+  "cue": "volley",
+  "kit": "de",
+  "equipment": "Mauser Karabiner 98k firing",
+  "seconds": 2.09,
+  "source": "https://freesound.org/s/802675/",
+  "title": "Mauser 98k Shooting",
+  "author": "Walking.With.Microphones",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   2.09
+  ],
+  "gainDb": -1.2,
+  "battles": null
+ },
+ {
+  "file": "volley-2.m4a",
+  "cue": "volley",
+  "kit": "uk",
+  "equipment": "Lee-Enfield .303 single clean shot",
+  "seconds": 2.67,
+  "source": "https://freesound.org/s/450853/",
+  "title": "gun lee enfield 303 rifle clean shot.wav",
+  "author": "kyles",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   2.67
+  ],
+  "gainDb": -0.5,
+  "battles": null
+ },
+ {
+  "file": "volley-3.m4a",
+  "cue": "volley",
+  "kit": "us",
+  "equipment": "Springfield M1903 .30-06 single shot",
+  "seconds": 3.7,
+  "source": "https://freesound.org/s/169261/",
+  "title": "1903 Springfield .30-06 Gun Shot Blast",
+  "author": "tm1000",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.55,
+   4.25
+  ],
+  "gainDb": 5.7,
+  "battles": null
+ }
+]

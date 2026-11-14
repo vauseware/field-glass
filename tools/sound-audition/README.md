@@ -33,6 +33,7 @@ blocks.
 | `refs3/` | Third pass: thin and empty World War rows, distant recordings first. Its README lists every search per row, and the rows that still have nothing. |
 | `fetch_refs.py`, `fetch_refs2.py`, `fetch_refs3.py` | The scripts that searched for and fetched each pass. |
 | `pools-2026-11-13.txt` | Dave's picks per cue, copied from the page's summary on 2026-11-13. |
+| `export_pools.py` | Writes the picks into `sounds/<era>/` with each era's `manifest.json`. See below. |
 
 Each `refs*/manifest.json` is the list the page loads. A clip on disk but missing from its manifest
 does not appear.
@@ -47,6 +48,47 @@ pools" under the summary to move them, or keep them in a dated `pools-*.txt` fil
 Two maps near the top of the script keep old saves working. `RENAMED` points an old file name at its
 trimmed `-t` version. `DROPPED` removes clips taken out of the pools. When you rename or remove a clip
 that someone may have ticked, add it to one of these maps. Never change the storage key.
+
+## Export the picks to the library
+
+`export_pools.py` turns a pools file into Field Glass's sound library, in the shape
+`docs/specs/battle-sound.md` sets: `sounds/<era>/<cue>-<n>.m4a` beside `sounds/<era>/manifest.json`.
+
+```bash
+cd /Users/claw/dev/gh/vauseware/field-glass/tools/sound-audition && python3 -I export_pools.py pools-2026-11-13.txt --dry-run
+```
+
+Drop `--dry-run` to write the files. To export the page's summary instead of a dated file, save it
+to a file and pass `- < summary.txt`. It needs `ffmpeg` and `ffprobe`.
+
+What it does:
+
+- Reads the pool ids and cues from `CUES` and `WWROWS` in `index.html`, and applies `RENAMED` and
+  `DROPPED` to the picked names, so old picks still resolve.
+- Places each pick by its row. A World War row names its era and kit (`ww2 · us`; `both wars` means
+  `great-war` and `ww2`; `fr, us` means one entry per kit). The first-pass rows in `refs/` name
+  neither, so `REFS_ERAS` in the script places them. Dave accepted that mapping on 2026-11-14:
+  `wind` and `hooves` go to `common`; `cannon`, `volley`, `scatter` and the `shell` and `rumble`
+  synths go to `flintlock` and `percussion`; the `whistle` goes to `great-war` `bugle`; the `shell`
+  and `rumble` recordings go to both World Wars; `transport` and `stuka` go to `ww2` as labelled
+  stand-ins. `REFS_WW` gives those World War entries their equipment and stand-in flag.
+- Prepares each take: trims silence below -50 dB off both ends, cuts it to 10 s (30 s for `air`
+  and `transport`), sums to mono, levels it to -18 LUFS, fades the ends over 50 ms, and writes
+  AAC at 96 kbit/s, 48 kHz. `trim`, `gainDb` and `seconds` go in the manifest entry.
+- Levels with a plain gain, measured by `loudnorm`, never a limiter. When -18 LUFS would push the
+  true peak over -1 dBTP, the gain stops there and the run prints `peak-capped` with the loudness
+  reached. Those takes need a hand trim or Dave's ear.
+- Writes a synth member as `{ "cue": "gun", "synth": "cannon" }`, named by its recipe id on the
+  page. It refuses a synth in `great-war` or `ww2`, except the `wind`, which lands in `common`.
+- Skips undecided pools and lists them.
+- Checks each World War kit for its own `volley`, `mg` and `gun` takes, the rule `npm run check`
+  will enforce.
+- Prints a battle.json `"sound": { "kit": … }` block for each World War battle. It maps only side
+  names that need no judgment (`american`, `us`, `british`, `german`, `french`); it lists the others
+  for Dave. It does not edit battle.json.
+
+It builds the library from scratch and stops if an era's `manifest.json` already exists. Move the
+old folder aside first. `tools/build.sh` does not copy `sounds/` yet; the playback build will.
 
 ## Licences and credits
 

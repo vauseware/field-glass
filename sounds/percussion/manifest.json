@@ -1,0 +1,153 @@
+[
+ {
+  "cue": "field",
+  "synth": "rumble"
+ },
+ {
+  "file": "gun-1.m4a",
+  "cue": "gun",
+  "seconds": 6.13,
+  "source": "https://freesound.org/s/162626/",
+  "title": "CW_Cannon_Single1.wav",
+  "author": "richardemoore",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   6.13
+  ],
+  "gainDb": 4.5,
+  "battles": null
+ },
+ {
+  "file": "gun-2.m4a",
+  "cue": "gun",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/351963/",
+  "title": "CannonFireFromAlamance.wav",
+  "author": "CLaforet",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.2,
+   10.2
+  ],
+  "gainDb": -2.2,
+  "battles": null
+ },
+ {
+  "file": "gun-3.m4a",
+  "cue": "gun",
+  "seconds": 2.5,
+  "source": "https://freesound.org/s/125348/",
+  "title": "civl war canon fire.wav",
+  "author": "adeluc4",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   2.5
+  ],
+  "gainDb": -1.3,
+  "battles": null
+ },
+ {
+  "cue": "gun",
+  "synth": "cannon"
+ },
+ {
+  "cue": "heavy",
+  "synth": "shell"
+ },
+ {
+  "file": "scatter-1.m4a",
+  "cue": "scatter",
+  "seconds": 3.56,
+  "source": "https://freesound.org/s/538795/",
+  "title": "old musket bang.wav",
+  "author": "bruno.auzet",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   3.56
+  ],
+  "gainDb": 1.4,
+  "battles": null
+ },
+ {
+  "file": "scatter-2.m4a",
+  "cue": "scatter",
+  "seconds": 2.04,
+  "source": "https://freesound.org/s/347647/",
+  "title": "musket.wav",
+  "author": "fennelliott",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   2.04
+  ],
+  "gainDb": -10.2,
+  "battles": null
+ },
+ {
+  "file": "scatter-3.m4a",
+  "cue": "scatter",
+  "seconds": 3.41,
+  "source": "https://freesound.org/s/675622/",
+  "title": "S21-01 Musket shots.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   3.41
+  ],
+  "gainDb": 0.7,
+  "battles": null
+ },
+ {
+  "cue": "scatter",
+  "synth": "scatter"
+ },
+ {
+  "file": "volley-1.m4a",
+  "cue": "volley",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/162625/",
+  "title": "Rifles and Cannons, Farther Off",
+  "author": "richardemoore",
+  "licence": "CC-BY-4.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 17.6,
+  "battles": null
+ },
+ {
+  "file": "volley-2.m4a",
+  "cue": "volley",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/675623/",
+  "title": "S21-03 Musket volley.wav",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": -0.4,
+  "battles": null
+ },
+ {
+  "file": "volley-3.m4a",
+  "cue": "volley",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/125346/",
+  "title": "civil war battle noise.wav",
+  "author": "adeluc4",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": -1.5,
+  "battles": null
+ }
+]

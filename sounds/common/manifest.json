@@ -1,0 +1,66 @@
+[
+ {
+  "file": "field-1.m4a",
+  "cue": "field",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/593817/",
+  "title": "In the grass.m4a",
+  "author": "JeanetteDominguez",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 18.1,
+  "battles": null
+ },
+ {
+  "file": "field-2.m4a",
+  "cue": "field",
+  "seconds": 10.0,
+  "source": "https://freesound.org/s/482254/",
+  "title": "windinTreeStrong_OneBird.wav",
+  "author": "RepDac3",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   10.0
+  ],
+  "gainDb": 8.4,
+  "battles": null
+ },
+ {
+  "cue": "field",
+  "synth": "wind"
+ },
+ {
+  "file": "hooves-1.m4a",
+  "cue": "hooves",
+  "seconds": 9.4,
+  "source": "https://freesound.org/s/479738/",
+  "title": "Horses Galloping, from 6.5 s",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   9.4
+  ],
+  "gainDb": 10.6,
+  "battles": null
+ },
+ {
+  "file": "hooves-2.m4a",
+  "cue": "hooves",
+  "seconds": 9.28,
+  "source": "https://freesound.org/s/479736/",
+  "title": "Small Herd of Horses Running, from 4.5 s",
+  "author": "craigsmith",
+  "licence": "CC0-1.0",
+  "trim": [
+   0.0,
+   9.28
+  ],
+  "gainDb": 9.6,
+  "battles": null
+ }
+]
