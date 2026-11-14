@@ -33,6 +33,7 @@ blocks.
 | `refs3/` | Third pass: thin and empty World War rows, distant recordings first. Its README lists every search per row, and the rows that still have nothing. |
 | `fetch_refs.py`, `fetch_refs2.py`, `fetch_refs3.py` | The scripts that searched for and fetched each pass. |
 | `pools-2026-11-13.txt` | Dave's picks per cue, copied from the page's summary on 2026-11-13. |
+| `make_credits.py`, `CREDITS-2026-11-13.md` | Credits for every clip in a pools file, and the file it wrote for the 2026-11-13 picks. |
 
 Each `refs*/manifest.json` is the list the page loads. A clip on disk but missing from its manifest
 does not appear.
@@ -66,6 +67,23 @@ The licence and credit for each clip are recorded in two places in its folder:
 Sources: freesound.org (HQ MP3 previews), Wikimedia Commons, and the USC Cinema / Sunset Editorial
 sound-effects collection on archive.org (CC0). An author shown as `None` is the USC library, which
 names no recordist.
+
+### CREDITS file
+
+`make_credits.py` writes one credits file for every recorded clip a pools file uses: title, author,
+licence with link, source page, the cues that use it, and any trim or cut made here. CC BY and
+CC BY-SA clips also get a ready attribution line, which marks the clip as modified when it was
+trimmed or converted. Ship that file with the sounds wherever Field Glass uses them.
+
+```bash
+cd /Users/claw/dev/gh/vauseware/field-glass/tools/sound-audition && python3 -I make_credits.py pools-2026-11-13.txt
+```
+
+It writes `CREDITS-2026-11-13.md` next to the pools file (`-o` picks another path). It stops with an
+error if a pool names a clip that no `refs*/manifest.json` lists, or a clip has a licence outside the
+allowed four. Re-run it after a new pools file or a manifest change; never edit the output by hand.
+The USC library's authors (`None`, or `USC sound library (archive.org)`) are credited as the
+USC Cinema / Sunset Editorial sound-effects library.
 
 ## Add clips
 
